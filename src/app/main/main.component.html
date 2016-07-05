@@ -1,0 +1,54 @@
+<!--TOP NAVIGATION BAR-->
+<nav>
+    <button type="button" (click)="toggleSideMenu()" [class.active]="isActiveSideMenu" class="menu-toggle">
+        <i class="fa fa-bars"></i>
+    </button>
+    <a routerLink="/main" class="brand-name"> NSFO <span>Online</span></a>
+    <span class="subtitle">{{'ADMIN' | translate}}</span>
+    <div class="empty-block"></div>
+    <button type="button" (click)="toggleUserMenu()" [class.active]="isActiveUserMenu" class="profile-toggle">
+        <i class="fa fa-user"><span class="show-for-large"></span></i>
+    </button>
+</nav>
+
+<!--SIDE MENU-->
+<div class="side-menu" [class.enabled]="isActiveSideMenu">
+    <ul>
+        <li>
+            <a routerLink="">{{ 'DASHBOARD' | translate }}</a>
+        </li>
+        <li>
+            <a routerLink="/health">{{ 'HEALTH' | translate }}</a>
+        </li>
+        <li>
+            <a routerLink="/client">{{ 'CLIENT' | translate }}</a>
+        </li>
+        <li>
+            <a routerLink="/invoice">{{ 'INVOICE' | translate }}</a>
+        </li>
+        <li>
+            <a routerLink="/configuration">{{ 'CONFIGURATION' | translate }}</a>
+        </li>
+        <li>
+            <a routerLink="/cms">{{ 'CONTENT MANAGEMENT' | translate }}</a>
+        </li>
+        <li>
+            <a routerLink="/profile">{{ 'PROFILE' | translate }}</a>
+        </li>
+    </ul>
+</div>
+
+<!--USER MENU-->
+<div class="user-menu" [class.enabled]="isActiveUserMenu">
+    <div class="item">
+        <a routerLink="/profile">{{ 'PROFILE' | translate }} <i class="fa fa-cogs fa-fw" aria-hidden="true"></i></a>
+    </div>
+    <div class="item">
+        <a (click)="logout()">{{ 'LOGOUT' | translate }} <i class="fa fa-sign-out fa-fw" aria-hidden="true"></i></a>
+    </div>
+</div>
+
+<!-- CONTENT CONTAINER -->
+<div class="content-container">
+    <router-outlet></router-outlet>
+</div>
