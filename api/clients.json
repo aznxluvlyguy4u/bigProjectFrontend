@@ -1,0 +1,136 @@
+{
+  "result": [
+    {
+      "client_id": "001",
+      "ubn": "000001",
+      "debtor_number": "111111111",
+      "last_name": "Smit",
+      "place": "Breda",
+      "subscription_date": "2004-03-31T22:00:00.000Z",
+      "animal_health": "YES",
+      "pedigree_list": ["NTS12345", "TSN12345"],
+      "status": "ACTIVE",
+      "unpaid_invoices": 0
+    },
+    {
+      "client_id": "002",
+      "ubn": "000002",
+      "debtor_number": "222222222",
+      "last_name": "Jansen",
+      "place": "Leiden",
+      "subscription_date": "2004-04-01T22:00:00.000Z",
+      "animal_health": "NO",
+      "pedigree_list": ["NTS12345"],
+      "status": "ACTIVE",
+      "unpaid_invoices": 2
+    },
+    {
+      "client_id": "003",
+      "ubn": "000003",
+      "debtor_number": "333333333",
+      "last_name": "Gerritsen",
+      "place": "Amsterdam",
+      "subscription_date": "2004-04-02T22:00:00.000Z",
+      "animal_health": "YES",
+      "pedigree_list": [],
+      "status": "NON-ACTIVE",
+      "unpaid_invoices": 0
+    },
+    {
+      "client_id": "004",
+      "ubn": "000004",
+      "debtor_number": "4444444444",
+      "last_name": "Jackson",
+      "place": "Breda",
+      "subscription_date": "2004-04-03T22:00:00.000Z",
+      "animal_health": "NO",
+      "pedigree_list": ["NTS12345", "TSN12345"," NTS67890"],
+      "status": "ACTIVE",
+      "unpaid_invoices": 0
+    },
+    {
+      "client_id": "005",
+      "ubn": "000005",
+      "debtor_number": "555555555",
+      "last_name": "van Dalen",
+      "place": "Rotterdam",
+      "subscription_date": "2004-04-04T22:00:00.000Z",
+      "animal_health": "YES",
+      "pedigree_list": [],
+      "status": "ACTIVE",
+      "unpaid_invoices": 4
+    },
+    {
+      "client_id": "006",
+      "ubn": "000006",
+      "debtor_number": "666666666",
+      "last_name": "de Jong",
+      "place": "Rosendaal",
+      "subscription_date": "2004-04-05T22:00:00.000Z",
+      "animal_health": "YES",
+      "pedigree_list": [],
+      "status": "NON-ACTIVE",
+      "unpaid_invoices": 1
+    },
+    {
+      "client_id": "007",
+      "ubn": "000007",
+      "debtor_number": "7777777777",
+      "last_name": "Roberts",
+      "place": "Leiden",
+      "subscription_date": "2004-04-04T22:00:00.000Z",
+      "animal_health": "NO",
+      "pedigree_list": ["NTS12345"],
+      "status": "ACTIVE",
+      "unpaid_invoices": 2
+    },
+    {
+      "client_id": "008",
+      "ubn": "000008",
+      "debtor_number": "888888888",
+      "last_name": "Gates",
+      "place": "Amsterdam",
+      "subscription_date": "2004-04-05T22:00:00.000Z",
+      "animal_health": "YES",
+      "pedigree_list": [],
+      "status": "NON-ACTIVE",
+      "unpaid_invoices": 0
+    },
+    {
+      "client_id": "009",
+      "ubn": "000009",
+      "debtor_number": "9999999999",
+      "last_name": "Jobs",
+      "place": "New York",
+      "subscription_date": "2004-04-06T22:00:00.000Z",
+      "animal_health": "NO",
+      "pedigree_list": ["NTS12345", "TSN12345"," NTS67890"],
+      "status": "ACTIVE",
+      "unpaid_invoices": 0
+    },
+    {
+      "client_id": "010",
+      "ubn": "000010",
+      "debtor_number": "10101010101",
+      "last_name": "Musk",
+      "place": "Rotterdam",
+      "subscription_date": "2004-04-07T22:00:00.000Z",
+      "animal_health": "YES",
+      "pedigree_list": [],
+      "status": "ACTIVE",
+      "unpaid_invoices": 4
+    },
+    {
+      "client_id": "011",
+      "ubn": "000011",
+      "debtor_number": "11111000000",
+      "last_name": "Burp",
+      "place": "Rosendaal",
+      "subscription_date": "2004-04-05T22:00:00.000Z",
+      "animal_health": "YES",
+      "pedigree_list": [],
+      "status": "NON-ACTIVE",
+      "unpaid_invoices": 1
+    }
+  ]
+}

@@ -1,8 +1,8 @@
 import {Component} from "@angular/core";
 import {TranslateService} from "ng2-translate/ng2-translate";
 import {ROUTER_DIRECTIVES} from "@angular/router";
-import {SettingsService} from "./global/settings/settings.service";
 import moment from 'moment';
+import {SettingsService} from "./global/services/settings/settings.service";
 
 @Component({
     selector: 'nsfo-admin',

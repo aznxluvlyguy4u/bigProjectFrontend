@@ -25,6 +25,7 @@ import {ConfigDepartComponent} from "./main/config/depart/config.depart";
 import {CMSComponent} from "./main/cms/cms.component";
 import {ProfileComponent} from "./main/profile/profile.component";
 import {LoginComponent} from "./login/login.component";
+import {ClientOverviewComponent} from "./main/client/overview/client.overview";
 
 const routes: RouterConfig = [
     {
@@ -42,7 +43,8 @@ const routes: RouterConfig = [
                 ]},
             {path: 'client', component: ClientComponent,
                 children: [
-                    {path: '', terminal: true, redirectTo: 'edit'},
+                    {path: '', terminal: true, redirectTo: 'overview'},
+                    {path: 'overview', component: ClientOverviewComponent},
                     {path: 'edit', component: ClientEditComponent},
                     {path: 'create', component: ClientCreateComponent},
                     {path: 'details', component: ClientDetailsComponent},

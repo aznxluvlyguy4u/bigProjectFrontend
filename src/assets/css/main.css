@@ -1,6 +1,14 @@
 @import url(https://fonts.googleapis.com/css?family=Lato:300,400,700,900);
+select {
+  padding-top: 0;
+  padding-bottom: 0; }
+
+input:disabled:hover {
+  cursor: default; }
+
 .content-container {
-  padding: 5em 2em 0 2em; }
+  padding: 5em 2em 0 2em;
+  font-family: "Lato", sans-serif; }
 
 nav {
   position: fixed;
@@ -102,3 +110,59 @@ nav {
       margin-left: 0.4em; }
     .user-menu a:hover {
       background-color: #48A770; }
+
+#client .page-header .page-title {
+  display: inline-block;
+  color: rgba(72, 167, 112, 0.5);
+  font-size: 2em;
+  font-weight: 900; }
+
+#client .table-options-container {
+  padding: 1em 0; }
+  #client .table-options-container label {
+    font-weight: 700;
+    font-size: 0.8em; }
+    #client .table-options-container label input {
+      font-weight: 400;
+      font-size: 1em; }
+    #client .table-options-container label select {
+      font-weight: 400;
+      font-size: 1em; }
+    #client .table-options-container label button {
+      font-weight: 400;
+      font-size: 1em; }
+
+#client table {
+  font-size: 0.8em; }
+  #client table .label {
+    padding: 0.6em;
+    font-weight: 900;
+    font-size: 0.95em;
+    border-radius: 5px; }
+    #client table .label i {
+      font-size: 0.95em; }
+  #client table button {
+    margin: 0;
+    padding: 0.6em;
+    font-weight: 700;
+    font-size: 0.95em; }
+  #client table .dropdown-pane {
+    padding: 0.5em;
+    width: 150px; }
+    #client table .dropdown-pane ul {
+      list-style: none;
+      text-align: right;
+      font-size: 0.85em;
+      margin: 0; }
+      #client table .dropdown-pane ul li a {
+        display: block;
+        color: #2c2c2c;
+        width: 100%; }
+        #client table .dropdown-pane ul li a:hover {
+          background-color: #48A770;
+          color: #FFF; }
+        #client table .dropdown-pane ul li a.danger:hover {
+          color: red;
+          font-weight: 700; }
+      #client table .dropdown-pane ul li i {
+        margin-left: 0.5em; }
