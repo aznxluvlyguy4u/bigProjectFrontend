@@ -1,1 +1,10 @@
-{}
+{
+  "DASHBOARD" : "Dashboard",
+  "ANIMAL HEALTH" : "Diergezondheid",
+  "CLIENTS" : "Klanten",
+  "INVOICES" : "Facturen",
+  "CONTENT MANAGEMENT" : "Contentbeheer",
+  "CONFIGURATIONS" : "Instellingen",
+  "PROFILE": "Profiel",
+  "LOGOUT": "Uitloggen"
+}

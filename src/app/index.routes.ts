@@ -30,7 +30,8 @@ const routes: RouterConfig = [
     {
         path: '', component: MainComponent,
         children: [
-            {path: '', terminal: true, component: DashboardComponent},
+            {path: '', terminal: true, redirectTo: 'dashboard'},
+            {path: 'dashboard', terminal: true, component: DashboardComponent},
             {path: 'health', component: HealthComponent,
                 children: [
                     {path: '', terminal: true, redirectTo: 'erroneous-csv'},

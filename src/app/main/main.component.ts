@@ -20,7 +20,10 @@ export class MainComponent {
         this.isActiveUserMenu = !this.isActiveUserMenu;
     }
 
-    private logout() {
-        
+    private closeAllMenus() {
+        this.isActiveSideMenu = false;
+        this.isActiveUserMenu = false;
     }
+
+    private logout() {}
 }

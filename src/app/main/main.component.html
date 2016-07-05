@@ -3,49 +3,66 @@
     <button type="button" (click)="toggleSideMenu()" [class.active]="isActiveSideMenu" class="menu-toggle">
         <i class="fa fa-bars"></i>
     </button>
-    <a routerLink="/main" class="brand-name"> NSFO <span>Online</span></a>
+    <a routerLink="/dashboard" class="brand-name"> NSFO <span>Online</span></a>
     <span class="subtitle">{{'ADMIN' | translate}}</span>
     <div class="empty-block"></div>
     <button type="button" (click)="toggleUserMenu()" [class.active]="isActiveUserMenu" class="profile-toggle">
-        <i class="fa fa-user"><span class="show-for-large"></span></i>
+        <i class="fa fa-user"><span class="show-for-large"> {{'Test User'}} </span></i>
     </button>
 </nav>
 
 <!--SIDE MENU-->
 <div class="side-menu" [class.enabled]="isActiveSideMenu">
-    <ul>
+    <ul (click)="closeAllMenus()">
         <li>
-            <a routerLink="">{{ 'DASHBOARD' | translate }}</a>
+            <a routerLink="/dashboard" routerLinkActive="active">
+                <i class="fa fa-tachometer fa-fw" aria-hidden="true"></i>
+                {{ 'DASHBOARD' | translate }}
+            </a>
         </li>
         <li>
-            <a routerLink="/health">{{ 'HEALTH' | translate }}</a>
+            <a routerLink="/health" routerLinkActive="active">
+                <i class="fa fa-medkit fa-fw" aria-hidden="true"></i>
+                {{ 'ANIMAL HEALTH' | translate }}
+            </a>
         </li>
         <li>
-            <a routerLink="/client">{{ 'CLIENT' | translate }}</a>
+            <a routerLink="/client" routerLinkActive="active">
+                <i class="fa fa-users fa-fw" aria-hidden="true"></i>
+                {{ 'CLIENTS' | translate }}
+            </a>
         </li>
         <li>
-            <a routerLink="/invoice">{{ 'INVOICE' | translate }}</a>
+            <a routerLink="/invoice" routerLinkActive="active">
+                <i class="fa fa-file-text-o fa-fw" aria-hidden="true"></i>
+                {{ 'INVOICES' | translate }}
+            </a>
         </li>
         <li>
-            <a routerLink="/configuration">{{ 'CONFIGURATION' | translate }}</a>
+            <a routerLink="/cms" routerLinkActive="active">
+                <i class="fa fa-list-alt fa-fw" aria-hidden="true"></i>
+                {{ 'CONTENT MANAGEMENT' | translate }}
+            </a>
         </li>
         <li>
-            <a routerLink="/cms">{{ 'CONTENT MANAGEMENT' | translate }}</a>
+            <a routerLink="/configuration" routerLinkActive="active">
+                <i class="fa fa-cogs fa-fw" aria-hidden="true"></i>
+                {{ 'CONFIGURATIONS' | translate }}
+            </a>
         </li>
         <li>
-            <a routerLink="/profile">{{ 'PROFILE' | translate }}</a>
+            <a routerLink="/profile" routerLinkActive="active">
+                <i class="fa fa-user fa-fw" aria-hidden="true"></i>
+                {{ 'PROFILE' | translate }}
+            </a>
         </li>
     </ul>
 </div>
 
 <!--USER MENU-->
 <div class="user-menu" [class.enabled]="isActiveUserMenu">
-    <div class="item">
-        <a routerLink="/profile">{{ 'PROFILE' | translate }} <i class="fa fa-cogs fa-fw" aria-hidden="true"></i></a>
-    </div>
-    <div class="item">
-        <a (click)="logout()">{{ 'LOGOUT' | translate }} <i class="fa fa-sign-out fa-fw" aria-hidden="true"></i></a>
-    </div>
+    <a routerLink="/profile" routerLinkActive="active" (click)="closeAllMenus()">{{ 'PROFILE' | translate }} <i class="fa fa-user fa-fw" aria-hidden="true"></i></a>
+    <a (click)="logout()">{{ 'LOGOUT' | translate }} <i class="fa fa-sign-out fa-fw" aria-hidden="true"></i></a>
 </div>
 
 <!-- CONTENT CONTAINER -->
