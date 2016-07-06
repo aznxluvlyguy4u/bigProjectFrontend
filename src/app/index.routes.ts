@@ -7,8 +7,8 @@ import {HealthAddCSVComponent} from "./main/health/add-csv/health.addCSV";
 import {HealthAuthorizeComponent} from "./main/health/authorize/health.authorize";
 import {HealthLettersComponent} from "./main/health/letters/health.letters";
 import {ClientComponent} from "./main/client/client.component";
-import {ClientEditComponent} from "./main/client/edit/client.edit";
-import {ClientCreateComponent} from "./main/client/create/client.create";
+import {ClientOverviewComponent} from "./main/client/overview/client.overview";
+import {ClientDossierComponent} from "./main/client/dossier/client.create";
 import {ClientDetailsComponent} from "./main/client/details/client.details";
 import {ClientLivestockComponent} from "./main/client/livestock/client.livestock";
 import {InvoiceCreateComponent} from "./main/invoice/create/invoice.create";
@@ -25,7 +25,6 @@ import {ConfigDepartComponent} from "./main/config/depart/config.depart";
 import {CMSComponent} from "./main/cms/cms.component";
 import {ProfileComponent} from "./main/profile/profile.component";
 import {LoginComponent} from "./login/login.component";
-import {ClientOverviewComponent} from "./main/client/overview/client.overview";
 
 const routes: RouterConfig = [
     {
@@ -45,8 +44,8 @@ const routes: RouterConfig = [
                 children: [
                     {path: '', terminal: true, redirectTo: 'overview'},
                     {path: 'overview', component: ClientOverviewComponent},
-                    {path: 'edit', component: ClientEditComponent},
-                    {path: 'create', component: ClientCreateComponent},
+                    {path: 'dossier/:mode', component: ClientDossierComponent},
+                    {path: 'dossier/:mode/:id', component: ClientDossierComponent},
                     {path: 'details', component: ClientDetailsComponent},
                     {path: 'livestock', component: ClientLivestockComponent}
                 ]},

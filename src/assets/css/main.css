@@ -122,6 +122,8 @@ nav {
   #client .table-options-container label {
     font-weight: 700;
     font-size: 0.8em; }
+    #client .table-options-container label.category {
+      font-weight: 900; }
     #client .table-options-container label input {
       font-weight: 400;
       font-size: 1em; }
@@ -131,6 +133,38 @@ nav {
     #client .table-options-container label button {
       font-weight: 400;
       font-size: 1em; }
+
+#client .client-info input, #client .client-info select {
+  font-size: 0.85em; }
+
+#client .client-info label {
+  font-weight: 400;
+  font-size: 0.8em; }
+  #client .client-info label.category {
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 0.4em;
+    margin-top: 0.4em; }
+    #client .client-info label.category textarea {
+      font-size: 1em;
+      font-weight: 400; }
+
+#client .client-info table td a {
+  font-size: 1.5em; }
+  #client .client-info table td a.remove-button {
+    color: #EC5840; }
+    #client .client-info table td a.remove-button:hover {
+      color: #a3422d; }
+
+#client .client-info .file-picker {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em; }
+  #client .client-info .file-picker a {
+    color: #EC5840; }
+    #client .client-info .file-picker a:hover {
+      color: #a3422d; }
+  #client .client-info .file-picker input {
+    margin-bottom: 0; }
 
 #client table {
   font-size: 0.8em; }

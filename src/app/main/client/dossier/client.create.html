@@ -1,0 +1,434 @@
+<div class="page-header">
+    <div class="page-title">{{ pageTitle | translate }}</div>
+</div>
+
+<div class="row table-options-container">
+    <div class="large-2 columns">
+        <button (click)="navigateTo('/client')" class="small primary button expanded">
+            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+            {{ 'CLIENT OVERVIEW' | translate }}
+        </button>
+    </div>
+
+    <div class="large-2 columns">
+        <button *ngIf="pageMode == 'new'" class="small primary button expanded">
+            <i class="fa fa-floppy-o" aria-hidden="true"></i>
+            {{ 'SAVE' | translate }}
+        </button>
+
+        <button *ngIf="pageMode == 'edit'" class="small primary button expanded">
+            <i class="fa fa-floppy-o" aria-hidden="true"></i>
+            {{ 'EDIT' | translate }}
+        </button>
+    </div>
+</div>
+
+<div class="row client-info">
+    <div class="large-6 columns">
+
+        <!-- COMPANY INFO CONTAINER -->
+        <div class="row">
+            <div class="large-12 columns">
+                <label class="category">{{ 'COMPANY INFORMATION' | translate }}</label>
+            </div>
+        </div>
+
+        <!-- COMPANY NAME -->
+        <div class="row">
+            <div class="large-6 columns">
+                <label class="middle">{{ 'COMPANY NAME' | translate }}</label>
+            </div>
+            <div class="large-6 columns">
+                <input type="text">
+            </div>
+        </div>
+
+        <!-- TELEPHONE -->
+        <div class="row">
+            <div class="large-6 columns">
+                <label class="middle"> {{ 'TELEPHONE NUMBER' | translate }} </label>
+            </div>
+            <div class="large-6 columns">
+                <input type="text" maxlength="12">
+            </div>
+        </div>
+
+        <!-- BRS NUMBER -->
+        <div class="row">
+            <div class="large-6 columns">
+                <label class="middle"> {{ 'BRS NUMBER' | translate }} </label>
+            </div>
+            <div class="large-6 columns">
+                <input type="text">
+            </div>
+        </div>
+
+        <!-- BTW NUMBER -->
+        <div class="row">
+            <div class="large-6 columns">
+                <label class="middle"> {{ 'BTW NUMBER' | translate }} </label>
+            </div>
+            <div class="large-6 columns">
+                <input type="text" maxlength="18">
+            </div>
+        </div>
+
+        <!-- KVK NUMBER -->
+        <div class="row">
+            <div class="large-6 columns">
+                <label class="middle"> {{ 'KVK NUMBER' | translate }} </label>
+            </div>
+            <div class="large-6 columns">
+                <input type="text" maxlength="15">
+            </div>
+        </div>
+
+        <!-- ADDRESS CONTAINER -->
+        <div class="row">
+            <div class="large-12 columns">
+                <label class="category"> {{ 'ADDRESS' | translate }} </label>
+            </div>
+        </div>
+
+        <!-- STREET NAME -->
+        <div class="row">
+            <div class="large-6 columns">
+                <label class="middle"> {{ 'STREET NAME' | translate }} </label>
+            </div>
+            <div class="large-6 columns">
+                <input type="text">
+            </div>
+        </div>
+
+        <!-- STREET NUMBER -->
+        <div class="row">
+            <div class="large-6 columns">
+                <label class="middle"> {{ 'STREET NUMBER' | translate }} </label>
+            </div>
+            <div class="large-6 columns">
+                <input type="number">
+            </div>
+        </div>
+
+        <!-- STREET NUMBER SUFFIX -->
+        <div class="row">
+            <div class="large-6 columns">
+                <label class="middle"> {{ 'STREET NUMBER SUFFIX' | translate }} </label>
+            </div>
+            <div class="large-6 columns">
+                <input type="text">
+            </div>
+        </div>
+
+        <!-- POSTAL CODE -->
+        <div class="row">
+            <div class="large-6 columns">
+                <label class="middle"> {{ 'POSTAL CODE' | translate }} </label>
+            </div>
+            <div class="large-6 columns">
+                <input type="text" maxlength="6">
+            </div>
+        </div>
+
+        <!-- PLACE -->
+        <div class="row">
+            <div class="large-6 columns">
+                <label class="middle"> {{ 'PLACE' | translate }} </label>
+            </div>
+            <div class="large-6 columns">
+                <input type="text">
+            </div>
+        </div>
+
+        <!-- STATE -->
+        <div class="row">
+            <div class="large-6 columns">
+                <label class="middle"> {{ 'STATE' | translate }} </label>
+            </div>
+            <div class="large-6 columns">
+                <select>
+                    <option value="">--</option>
+                    <option *ngFor="let state of stateList" value="{{ state.code }}">{{ state.name }}</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- BILLING ADDRESS -->
+        <div class="row">
+            <div class="large-12 columns">
+                <label class="category bottom"> {{ 'BILLING ADDRESS' | translate }} </label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="large-6 columns">
+                <label class="middle"> {{ 'STREET NAME' | translate }} </label>
+            </div>
+            <div class="large-6 columns">
+                <input type="text">
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-6 columns">
+                <label class="middle"> {{ 'STREET NUMBER' | translate }} </label>
+            </div>
+            <div class="large-6 columns">
+                <input type="number">
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-6 columns">
+                <label class="middle"> {{ 'STREET NUMBER SUFFIX' | translate }} </label>
+            </div>
+            <div class="large-6 columns">
+                <input type="text">
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-6 columns">
+                <label class="middle"> {{ 'POSTAL CODE' | translate }} </label>
+            </div>
+            <div class="large-6 columns">
+                <input type="text" maxlength="6">
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-6 columns">
+                <label class="middle"> {{ 'PLACE' | translate }} </label>
+            </div>
+            <div class="large-6 columns">
+                <input type="text">
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-6 columns">
+                <label class="middle"> {{ 'STATE' | translate }} </label>
+            </div>
+            <div class="large-6 columns">
+                <select>
+                    <option value="">--</option>
+                    <option *ngFor="let state of stateList" value="{{ state.code }}">{{ state.name }}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="large-5 columns">
+
+        <!-- UBNS -->
+        <div class="row">
+            <div class="large-12 columns">
+                <label class="category"> {{ 'UBNS' | translate }}
+                    <table>
+                        <thead>
+                            <tr>
+                                <td>{{ 'UBN' | translate }}</td>
+                                <td>{{ 'POSTCODE' | translate }}</td>
+                                <td>{{ 'PLAATS' | translate }}</td>
+                                <td>
+                                    <button type="button" class="tiny primary button pull-right">
+                                        <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
+                                        {{ 'ADD' | translate }}
+                                    </button>
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>123456</td>
+                                <td>1234AB</td>
+                                <td>Den Haag</td>
+                                <td class="text-right">
+                                    <a><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
+                                    <a class="remove-button"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </label>
+            </div>
+        </div>
+
+        <!-- USERS -->
+        <div class="row">
+            <div class="large-12 columns">
+                <label class="category"> {{ 'USERS' | translate }}
+                    <table>
+                        <thead>
+                            <tr>
+                                <td>{{ 'LAST NAME' | translate }}</td>
+                                <td>{{ 'FIRST NAME' | translate }}</td>
+                                <td>{{ 'EMAIL' | translate }}</td>
+                                <td>
+                                    <button type="button" class="tiny primary button pull-right">
+                                        <i class="fa fa-user-plus fa-fw" aria-hidden="true"></i>
+                                        {{ 'ADD' | translate }}
+                                    </button>
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Janssen</td>
+                                <td>Jan</td>
+                                <td>jan.janssen@ziggo.nl</td>
+                                <td class="text-right">
+                                    <a><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
+                                    <a class="remove-button"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </label>
+            </div>
+        </div>
+
+        <!-- NOTES -->
+        <div class="row">
+            <div class="large-12 columns">
+                <label class="category"> {{ 'NOTES' | translate }}
+                    <div class="textarea">
+                        <textarea rows="6"></textarea>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <!-- ANIMAL HEALTH CONTAINER -->
+        <div class="row">
+            <div class="large-12 columns">
+                <label class="category">{{ 'ANIMAL HEALTH' | translate }}</label>
+            </div>
+        </div>
+
+        <!-- ANIMAL HEALTH -->
+        <div class="row">
+            <div class="large-6 columns">
+                <label class="middle"> {{ 'ANIMAL HEALTH' | translate }} </label>
+            </div>
+            <div class="large-6 columns">
+                <select>
+                    <option> -- </option>
+                    <option>{{ 'YES' | translate }}</option>
+                    <option>{{ 'NO' | translate }}</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- ANIMAL HEALTH STATUS -->
+        <div class="row">
+            <div class="large-6 columns">
+                <label class="middle"> {{ 'DISEASE' | translate }} </label>
+            </div>
+            <div class="large-6 columns">
+                <select>
+                    <option> -- </option>
+                    <option>{{ 'SCRAPIE' | translate }}</option>
+                    <option>{{ 'MAEDI VISNA' | translate }}</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- DATE SINCE -->
+        <div class="row">
+            <div class="large-6 columns">
+                <label class="middle"> {{ 'DATE SINCE' | translate }} </label>
+            </div>
+            <div class="large-6 columns">
+                <input type="text">
+            </div>
+        </div>
+
+        <!-- DATE TILL -->
+        <div class="row">
+            <div class="large-6 columns">
+                <label class="middle"> {{ 'DATE TILL' | translate }} </label>
+            </div>
+            <div class="large-6 columns">
+                <input type="text">
+            </div>
+        </div>
+
+        <!-- STATUS -->
+        <div class="row">
+            <div class="large-6 columns">
+                <label class="middle"> {{ 'STATUS' | translate }} </label>
+            </div>
+            <div class="large-6 columns">
+                <select>
+                    <option> -- </option>
+                    <option>{{ 'FREE (1 YEAR)' | translate }}</option>
+                    <option>{{ 'FREE (2 YEAR)' | translate }}</option>
+                    <option>{{ 'UNDER OBSERVATION' | translate }}</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- HEALTH STATEMENT -->
+        <div class="row">
+            <div class="large-6 columns">
+                <label class="middle"> {{ 'HEALTH STATEMENT' | translate }} </label>
+            </div>
+            <div class="large-6 columns file-picker">
+                <div class="row">
+                    <div class="large-2 columns">
+                        <a><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+                    </div>
+                    <div class="large-10 columns end">
+                        <input type="file">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- OWN HEALTH STATEMENT SCRAPIE -->
+        <div class="row">
+            <div class="large-6 columns">
+                <label class="middle"> {{ 'OWN HEALTH STATEMENT SCRAPIE' | translate }} </label>
+            </div>
+            <div class="large-6 columns">
+                <select>
+                    <option> -- </option>
+                    <option>{{ 'YES' | translate }}</option>
+                    <option>{{ 'NO' | translate }}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!--<div class="row">-->
+            <!--<div class="large-3 columns">-->
+                <!--<label class="middle"> {{ 'SALUTATION' | translate }} </label>-->
+            <!--</div>-->
+            <!--<div class="large-9 columns">-->
+                <!--<select>-->
+                    <!--<option>{{ 'SIR' | translate }}</option>-->
+                    <!--<option>{{ 'MISS' | translate }}</option>-->
+                    <!--<option>{{ 'MISSUS' | translate }}</option>-->
+                <!--</select>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+

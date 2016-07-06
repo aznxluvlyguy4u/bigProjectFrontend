@@ -1,5 +1,5 @@
 import {Component} from "@angular/core";
-import {ROUTER_DIRECTIVES} from "@angular/router";
+import {ROUTER_DIRECTIVES, Router} from "@angular/router";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
 import {Client} from "../client.model";
@@ -24,7 +24,7 @@ export class ClientOverviewComponent {
     private filterAmount: number = 10;
     private isLoadedFoundation: boolean;
 
-    constructor(private nsfoService: NSFOService, private settings: SettingsService) {
+    constructor(private nsfoService: NSFOService, private router: Router, private settings: SettingsService) {
         this.getClientList();
     }
 
@@ -40,6 +40,10 @@ export class ClientOverviewComponent {
                     console.log(this.clientList);
                 }
             );
+    }
+    
+    private navigateTo(url: string) {
+        this.router.navigate([url]);
     }
 }
 
