@@ -4,7 +4,7 @@ import {Router, ActivatedRoute} from "@angular/router";
 import {Subscription} from "rxjs/Rx";
 
 @Component({
-    templateUrl: '/app/main/client/dossier/client.create.html',
+    templateUrl: '/app/main/client/dossier/client.dossier.html',
     pipes: [TranslatePipe]
 })
 

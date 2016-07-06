@@ -8,9 +8,8 @@ import {HealthAuthorizeComponent} from "./main/health/authorize/health.authorize
 import {HealthLettersComponent} from "./main/health/letters/health.letters";
 import {ClientComponent} from "./main/client/client.component";
 import {ClientOverviewComponent} from "./main/client/overview/client.overview";
-import {ClientDossierComponent} from "./main/client/dossier/client.create";
+import {ClientDossierComponent} from "./main/client/dossier/client.dossier";
 import {ClientDetailsComponent} from "./main/client/details/client.details";
-import {ClientLivestockComponent} from "./main/client/livestock/client.livestock";
 import {InvoiceCreateComponent} from "./main/invoice/create/invoice.create";
 import {InvoiceDetailsConfigComponent} from "./main/invoice/details-config/invoice.detailsConfig";
 import {InvoiceDetailsComponent} from "./main/invoice/details/invoice.details";
@@ -46,8 +45,7 @@ const routes: RouterConfig = [
                     {path: 'overview', component: ClientOverviewComponent},
                     {path: 'dossier/:mode', component: ClientDossierComponent},
                     {path: 'dossier/:mode/:id', component: ClientDossierComponent},
-                    {path: 'details', component: ClientDetailsComponent},
-                    {path: 'livestock', component: ClientLivestockComponent}
+                    {path: 'details/:id', component: ClientDetailsComponent}
                 ]},
             {path: 'invoice', component: InvoiceComponent,
                 children: [

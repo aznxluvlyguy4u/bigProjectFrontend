@@ -85,7 +85,7 @@
                                     <a>{{ 'LOGIN' | translate }} <i class="fa fa-sign-in fa-fw" aria-hidden="true"></i></a>
                                 </li>
                                 <li>
-                                    <a>{{ 'VIEW' | translate }} <i class="fa fa-info fa-fw" aria-hidden="true"></i></a>
+                                    <a routerLink="/client/details/{{ client.client_id }}">{{ 'VIEW' | translate }} <i class="fa fa-info fa-fw" aria-hidden="true"></i></a>
                                 </li>
                                 <li>
                                     <a routerLink="/client/dossier/edit/{{ client.client_id }}">{{ 'EDIT' | translate }} <i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
