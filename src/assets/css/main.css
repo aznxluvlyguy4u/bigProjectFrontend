@@ -200,3 +200,44 @@ nav {
           font-weight: 700; }
       #client table .dropdown-pane ul li i {
         margin-left: 0.5em; }
+
+#client .client-info-overview {
+  padding: 0.8em;
+  background-color: #F0F0F0;
+  font-size: 0.7em;
+  margin-bottom: 0.5em; }
+  #client .client-info-overview .general {
+    font-size: 1.2em;
+    font-weight: 700; }
+  #client .client-info-overview label {
+    font-size: 1em;
+    font-weight: 700;
+    padding-top: 1em; }
+  #client .client-info-overview table {
+    font-size: 1em; }
+
+#client .table-title label {
+  font-size: 0.8em;
+  font-weight: 700; }
+  #client .table-title label span {
+    font-weight: 400;
+    font-size: 0.9em; }
+
+#client .client-info-table {
+  font-size: 0.7em; }
+  #client .client-info-table a.icon-link i {
+    font-size: 1.5em; }
+
+#client .notes label {
+  font-weight: 700;
+  font-size: 0.8em; }
+
+#client .notes textarea {
+  font-size: 0.9em;
+  font-weight: 400; }
+
+#client .notes-table {
+  font-size: 0.7em; }
+  #client .notes-table .log-info {
+    font-weight: 700;
+    padding-bottom: 0.8em; }
