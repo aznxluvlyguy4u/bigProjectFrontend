@@ -82,7 +82,7 @@
                         <div class="dropdown-pane bottom" id="dropdown-{{client.client_id}}" data-dropdown data-hover="true" data-hover-pane="true">
                             <ul>
                                 <li>
-                                    <a>{{ 'LOGIN' | translate }} <i class="fa fa-sign-in fa-fw" aria-hidden="true"></i></a>
+                                    <a (click)="loginAsGhost(client.client_id)">{{ 'LOGIN' | translate }} <i class="fa fa-sign-in fa-fw" aria-hidden="true"></i></a>
                                 </li>
                                 <li>
                                     <a routerLink="/client/details/{{ client.client_id }}">{{ 'VIEW' | translate }} <i class="fa fa-info fa-fw" aria-hidden="true"></i></a>
@@ -91,7 +91,8 @@
                                     <a routerLink="/client/dossier/edit/{{ client.client_id }}">{{ 'EDIT' | translate }} <i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
                                 </li>
                                 <li>
-                                    <a class="danger">{{ 'DEACTIVATE' | translate }} <i class="fa fa-ban fa-fw" aria-hidden="true"></i></a>
+                                    <a *ngIf="client.status == 'ACTIVE'" class="danger">{{ 'DEACTIVATE' | translate }} <i class="fa fa-ban fa-fw" aria-hidden="true"></i></a>
+                                    <a *ngIf="client.status == 'NON-ACTIVE'">{{ 'ACTIVATE' | translate }} <i class="fa fa-thumbs-o-up fa-fw" aria-hidden="true"></i></a>
                                 </li>
                             </ul>
                         </div>

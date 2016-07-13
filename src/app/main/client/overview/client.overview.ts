@@ -41,7 +41,22 @@ export class ClientOverviewComponent {
                 }
             );
     }
-    
+
+    private loginAsGhost(companyID: number) {
+        let request = {
+            "company_id": companyID
+        };
+        
+        this.nsfoService.doPostRequest('/v1/admins/ghost', request)
+            .subscribe(
+                res => {
+                    let ghostToken = res.result.ghost_token;
+                    let accessToken = localStorage['access_token'];
+                    window.location.href= this.nsfoService.getUserEnvURL() + '/ghostlogin/' + ghostToken + '/' + accessToken;
+                }
+            );
+    };
+
     private navigateTo(url: string) {
         this.router.navigate([url]);
     }
