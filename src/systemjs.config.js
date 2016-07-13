@@ -16,6 +16,7 @@ System.config({
         '@angular/core'                     : {main: 'index.js'},
         '@angular/common'                   : {main: 'index.js'},
         '@angular/compiler'                 : {main: 'index.js'},
+        '@angular/forms'                    : {main: 'index.js'},
         '@angular/http'                     : {main: 'index.js'},
         '@angular/router'                   : {main: 'index.js'},
         '@angular/router-deprecated'        : {main: 'index.js'},

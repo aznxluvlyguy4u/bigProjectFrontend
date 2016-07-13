@@ -5,6 +5,8 @@ import {TranslateService, TranslateLoader, TranslateStaticLoader} from "ng2-tran
 import {Http, HTTP_PROVIDERS} from "@angular/http";
 import {SettingsService} from "./global/services/settings/settings.service";
 import {NSFOService} from "./global/services/nsfo/nsfo.service";
+import {provideForms} from "@angular/forms";
+import {UtilsService} from "./global/services/utils/utils.service";
 
 bootstrap(IndexComponent, [
     APP_ROUTER_PROVIDERS,
@@ -14,7 +16,9 @@ bootstrap(IndexComponent, [
         useFactory: (http: Http) => new TranslateStaticLoader(http, 'assets/i18n', '.json'),
         deps: [Http]
     },
+    provideForms(),
     NSFOService,
     TranslateService,
     SettingsService,
+    UtilsService
 ]);

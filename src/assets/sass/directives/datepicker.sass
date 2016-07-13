@@ -1,0 +1,166 @@
+.ng-datepicker-input
+  position: relative
+  width: 100%
+  cursor: pointer
+  margin-bottom: 0
+
+.ng-datepicker
+  position: absolute
+  z-index: 99
+  width: 175px
+  background: #fff
+  font-size: 0.7rem
+  color: #565a5c
+  display: inline-block
+  border: 1px solid #c4c4c4
+  border-radius: 2px
+  margin: 0
+  padding: 0
+
+  .controls
+    width: 175px
+    display: inline-block
+    padding: 5px 0 0 0
+
+    .left
+      width: 35px
+      display: inline-block
+      float: left
+      margin: 5px 0 0 3px
+      padding-left: 6px
+
+      i
+        font-size: 0.85em
+        cursor: pointer
+
+        &.prev-year-btn
+          margin-right: 10px
+
+        &.prev-month-btn
+          margin-top: 1px
+
+    .right
+      width: 35px
+      display: inline-block
+      float: right
+      margin: 5px 0 0 0
+      padding-right: 10px
+      text-align: right
+
+      i
+        font-size: 0.85em
+        cursor: pointer
+
+        &.next-month-btn
+          margin-top: 0.3em
+          float: left
+
+    .date
+      width: 95px
+      text-align: center
+      font-size: 1em
+      color: #565a5c
+      font-weight: bold
+      float: left
+      padding: 0.5em 0 0 0
+
+  .day-names
+    width: 174.5px
+    font-size: 0.75em
+    border-bottom: 1px solid #c4c4c4
+    display: inline-block
+
+    span
+      width: 24.8px
+      text-align: center
+      color: #82888a
+      float: left
+      display: block
+
+  .calendar
+    width: 175px
+    display: inline-block
+    margin: -5px 0 -5.5px -1px
+    padding: 0
+
+    span
+      .day
+        width: 25px
+        height: 25px
+        border-left: 1px solid #c4c4c4
+        border-bottom: 1px solid #c4c4c4
+        float: left
+        display: block
+        color: #565a5c
+        text-align: center
+        font-weight: bold
+        line-height: 25px
+        margin: 0
+        padding: 0
+        font-size: 0.85em
+        cursor: pointer
+
+        &:hover
+          background: #2193b0
+          color: #fff
+
+        .selected
+          background: #186c81
+          cursor: default
+          pointer-events: none
+          color: #fff
+
+      .disabled
+        border-left: 1px solid transparent
+        cursor: default
+        pointer-events: none
+
+      &:last-child
+        .day
+          width: 26px
+          border-right: 1px solid #c4c4c4
+
+
+    span:nth-child(7n)
+      span
+        .day
+          border-right: none
+
+  .static
+    position: relative
+    width: 100%
+    box-sizing: border-box
+
+    .controls
+      width: 100%
+      text-align: center
+      background-color: #eee
+      padding: 5px 0
+
+      .left
+        i
+          .prev-month-btn
+            margin-top: -6px
+
+      span
+        .date
+          width: auto
+          float: none
+          display: inline-block
+          padding-top: 4px
+
+      .day-names
+        width: 100%
+        background-color: #f9f9f9
+
+        span
+          width: calc(100%/7)
+
+    .calendar
+      width: 100%
+
+      span
+        .day
+          width: calc(100%/7 - 1px)
+          height: 50px
+          line-height: 50px

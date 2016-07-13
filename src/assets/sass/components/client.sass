@@ -1,4 +1,8 @@
 #client
+
+
+  // GLOBALS
+
   .page-header
     .page-title
       display: inline-block
@@ -29,47 +33,90 @@
         font-weight: 400
         font-size: 1em
 
-  .client-info
-    input, select
-      font-size: 0.85em
+
+  //DOSSIER
+
+  .dossier-client-info
+    font-size: 0.7rem
 
     label
-      font-weight: 400
-      font-size: 0.8em
+      font-size: 1em
 
       &.category
-        font-weight: 900
-        text-transform: uppercase
-        margin-bottom: 0.4em
-        margin-top: 0.4em
+        font-size: 1.2em
+        font-weight: 700
+        margin-bottom: 0.5em
+        margin-top: 0.5em
 
-        textarea
-          font-size: 1em
-          font-weight: 400
+    input, select, textarea
+      font-size: 1em
+
+  .dossier-table
+    font-size: 0.7rem
+
+    label
+      font-size: 1em
+
+      &.category
+        font-size: 1.2em
+        font-weight: 700
+        margin-bottom: 0.5em
+        margin-top: 0.5em
 
     table
-      td
+      font-size: 1em
+
+      tbody
+        font-weight: 400
+
+        .boolean
+          font-size: 1.1em
+
+          .fa-check
+            color: $nsfo-green
+
+          .fa-times
+            color: $nsfo-red
+
         a
           font-size: 1.5em
 
           &.remove-button
-            color: #EC5840
+            color: $nsfo-red
 
             &:hover
               color: #a3422d
 
+  .reveal
+    .modal-header
+      background-color: $nsfo-green
+      padding: 0.5em
+      color: #FFF
+      font-size: 1rem
+      font-weight: 400
+
+      button
+        padding-top: 0.2em
+
+    .modal-body
+      padding-top: 1em
+      font-size: 0.7rem
+
+      label
+        font-size: 1em
+
+      input, select
+        font-size: 1em
+
     .file-picker
-      padding-top: 0.5em
-      padding-bottom: 0.5em
+      input[type='file']
+        display: none
 
-      a
-        color: #EC5840
-
-        &:hover
-          color: #a3422d
-
-      input
-        margin-bottom: 0
+    .modal-footer
+      .required-description
+        font-size: 0.6rem
+        margin-top: -1em
+        padding-bottom: 2em
 
   table
     font-size: 0.8em
@@ -111,7 +158,7 @@
               color: #FFF
 
             &.danger:hover
-              color: red
+              color: $nsfo-red
               font-weight: 700
 
           i
@@ -167,3 +214,9 @@
       font-weight: 700
       padding-bottom: 0.8em
 
+  label.error-message
+    font-size: 0.7rem
+    color: $nsfo-red
+    font-weight: 700
+    padding-top: 0.4em
+    margin: 0

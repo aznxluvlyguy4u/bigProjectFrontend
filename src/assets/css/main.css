@@ -3,12 +3,18 @@ select {
   padding-top: 0;
   padding-bottom: 0; }
 
-input:disabled:hover {
+input:disabled:hover,
+select:disabled:hover,
+button:disabled:hover,
+textarea:disabled:hover {
   cursor: default; }
 
 .content-container {
   padding: 5em 2em 0 2em;
   font-family: "Lato", sans-serif; }
+
+.input-error-border {
+  border-color: #EC5840; }
 
 nav {
   position: fixed;
@@ -134,37 +140,68 @@ nav {
       font-weight: 400;
       font-size: 1em; }
 
-#client .client-info input, #client .client-info select {
-  font-size: 0.85em; }
+#client .dossier-client-info {
+  font-size: 0.7rem; }
+  #client .dossier-client-info label {
+    font-size: 1em; }
+    #client .dossier-client-info label.category {
+      font-size: 1.2em;
+      font-weight: 700;
+      margin-bottom: 0.5em;
+      margin-top: 0.5em; }
+  #client .dossier-client-info input, #client .dossier-client-info select, #client .dossier-client-info textarea {
+    font-size: 1em; }
 
-#client .client-info label {
-  font-weight: 400;
-  font-size: 0.8em; }
-  #client .client-info label.category {
-    font-weight: 900;
-    text-transform: uppercase;
-    margin-bottom: 0.4em;
-    margin-top: 0.4em; }
-    #client .client-info label.category textarea {
-      font-size: 1em;
+#client .dossier-table {
+  font-size: 0.7rem; }
+  #client .dossier-table label {
+    font-size: 1em; }
+    #client .dossier-table label.category {
+      font-size: 1.2em;
+      font-weight: 700;
+      margin-bottom: 0.5em;
+      margin-top: 0.5em; }
+  #client .dossier-table table {
+    font-size: 1em; }
+    #client .dossier-table table tbody {
       font-weight: 400; }
+      #client .dossier-table table tbody .boolean {
+        font-size: 1.1em; }
+        #client .dossier-table table tbody .boolean .fa-check {
+          color: #48A770; }
+        #client .dossier-table table tbody .boolean .fa-times {
+          color: #EC5840; }
+      #client .dossier-table table tbody a {
+        font-size: 1.5em; }
+        #client .dossier-table table tbody a.remove-button {
+          color: #EC5840; }
+          #client .dossier-table table tbody a.remove-button:hover {
+            color: #a3422d; }
 
-#client .client-info table td a {
-  font-size: 1.5em; }
-  #client .client-info table td a.remove-button {
-    color: #EC5840; }
-    #client .client-info table td a.remove-button:hover {
-      color: #a3422d; }
+#client .reveal .modal-header {
+  background-color: #48A770;
+  padding: 0.5em;
+  color: #FFF;
+  font-size: 1rem;
+  font-weight: 400; }
+  #client .reveal .modal-header button {
+    padding-top: 0.2em; }
 
-#client .client-info .file-picker {
-  padding-top: 0.5em;
-  padding-bottom: 0.5em; }
-  #client .client-info .file-picker a {
-    color: #EC5840; }
-    #client .client-info .file-picker a:hover {
-      color: #a3422d; }
-  #client .client-info .file-picker input {
-    margin-bottom: 0; }
+#client .reveal .modal-body {
+  padding-top: 1em;
+  font-size: 0.7rem; }
+  #client .reveal .modal-body label {
+    font-size: 1em; }
+  #client .reveal .modal-body input, #client .reveal .modal-body select {
+    font-size: 1em; }
+
+#client .reveal .file-picker input[type='file'] {
+  display: none; }
+
+#client .reveal .modal-footer .required-description {
+  font-size: 0.6rem;
+  margin-top: -1em;
+  padding-bottom: 2em; }
 
 #client table {
   font-size: 0.8em; }
@@ -196,7 +233,7 @@ nav {
           background-color: #48A770;
           color: #FFF; }
         #client table .dropdown-pane ul li a.danger:hover {
-          color: red;
+          color: #EC5840;
           font-weight: 700; }
       #client table .dropdown-pane ul li i {
         margin-left: 0.5em; }
@@ -241,3 +278,142 @@ nav {
   #client .notes-table .log-info {
     font-weight: 700;
     padding-bottom: 0.8em; }
+
+#client label.error-message {
+  font-size: 0.7rem;
+  color: #EC5840;
+  font-weight: 700;
+  padding-top: 0.4em;
+  margin: 0; }
+
+.ng-datepicker-input {
+  position: relative;
+  width: 100%;
+  cursor: pointer;
+  margin-bottom: 0; }
+
+.ng-datepicker {
+  position: absolute;
+  z-index: 99;
+  width: 175px;
+  background: #fff;
+  font-size: 0.7rem;
+  color: #565a5c;
+  display: inline-block;
+  border: 1px solid #c4c4c4;
+  border-radius: 2px;
+  margin: 0;
+  padding: 0; }
+  .ng-datepicker .controls {
+    width: 175px;
+    display: inline-block;
+    padding: 5px 0 0 0; }
+    .ng-datepicker .controls .left {
+      width: 35px;
+      display: inline-block;
+      float: left;
+      margin: 5px 0 0 3px;
+      padding-left: 6px; }
+      .ng-datepicker .controls .left i {
+        font-size: 0.85em;
+        cursor: pointer; }
+        .ng-datepicker .controls .left i.prev-year-btn {
+          margin-right: 10px; }
+        .ng-datepicker .controls .left i.prev-month-btn {
+          margin-top: 1px; }
+    .ng-datepicker .controls .right {
+      width: 35px;
+      display: inline-block;
+      float: right;
+      margin: 5px 0 0 0;
+      padding-right: 10px;
+      text-align: right; }
+      .ng-datepicker .controls .right i {
+        font-size: 0.85em;
+        cursor: pointer; }
+        .ng-datepicker .controls .right i.next-month-btn {
+          margin-top: 0.3em;
+          float: left; }
+    .ng-datepicker .controls .date {
+      width: 95px;
+      text-align: center;
+      font-size: 1em;
+      color: #565a5c;
+      font-weight: bold;
+      float: left;
+      padding: 0.5em 0 0 0; }
+  .ng-datepicker .day-names {
+    width: 174.5px;
+    font-size: 0.75em;
+    border-bottom: 1px solid #c4c4c4;
+    display: inline-block; }
+    .ng-datepicker .day-names span {
+      width: 24.8px;
+      text-align: center;
+      color: #82888a;
+      float: left;
+      display: block; }
+  .ng-datepicker .calendar {
+    width: 175px;
+    display: inline-block;
+    margin: -5px 0 -5.5px -1px;
+    padding: 0; }
+    .ng-datepicker .calendar span .day {
+      width: 25px;
+      height: 25px;
+      border-left: 1px solid #c4c4c4;
+      border-bottom: 1px solid #c4c4c4;
+      float: left;
+      display: block;
+      color: #565a5c;
+      text-align: center;
+      font-weight: bold;
+      line-height: 25px;
+      margin: 0;
+      padding: 0;
+      font-size: 0.85em;
+      cursor: pointer; }
+      .ng-datepicker .calendar span .day:hover {
+        background: #2193b0;
+        color: #fff; }
+      .ng-datepicker .calendar span .day .selected {
+        background: #186c81;
+        cursor: default;
+        pointer-events: none;
+        color: #fff; }
+    .ng-datepicker .calendar span .disabled {
+      border-left: 1px solid transparent;
+      cursor: default;
+      pointer-events: none; }
+    .ng-datepicker .calendar span:last-child .day {
+      width: 26px;
+      border-right: 1px solid #c4c4c4; }
+    .ng-datepicker .calendar span:nth-child(7n) span .day {
+      border-right: none; }
+  .ng-datepicker .static {
+    position: relative;
+    width: 100%;
+    box-sizing: border-box; }
+    .ng-datepicker .static .controls {
+      width: 100%;
+      text-align: center;
+      background-color: #eee;
+      padding: 5px 0; }
+      .ng-datepicker .static .controls .left i .prev-month-btn {
+        margin-top: -6px; }
+      .ng-datepicker .static .controls span .date {
+        width: auto;
+        float: none;
+        display: inline-block;
+        padding-top: 4px; }
+      .ng-datepicker .static .controls .day-names {
+        width: 100%;
+        background-color: #f9f9f9; }
+        .ng-datepicker .static .controls .day-names span {
+          width: calc(100%/7); }
+    .ng-datepicker .static .calendar {
+      width: 100%; }
+      .ng-datepicker .static .calendar span .day {
+        width: calc(100%/7 - 1px);
+        height: 50px;
+        line-height: 50px; }

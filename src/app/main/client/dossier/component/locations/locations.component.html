@@ -1,0 +1,243 @@
+<!--LOCATION TABLE-->
+<div class="large-12 columns">
+    <table>
+        <thead>
+            <tr>
+                <td>{{ 'UBN' | translate }}</td>
+                <td>{{ 'POSTAL CODE' | translate }}</td>
+                <td>{{ 'PLACE' | translate }}</td>
+                <td>{{ 'ANIMAL HEALTH STATUS' | translate }}</td>
+                <td>
+                    <button type="button" (click)="openModal(false)" [disabled]="disabledMode" class="tiny primary button pull-right">
+                        <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
+                        {{ 'ADD' | translate }}
+                    </button>
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngIf="locations.length == 0">
+                <td colspan="5" class="text-center">{{ 'THERE IS NO LOCATION ADDED' | translate }}</td>
+            </tr>
+            <tr *ngFor="let location of locations">
+                <td>{{ location.ubn }}</td>
+                <td>
+                    <span *ngIf="location.address.postal_code">{{ location.address.postal_code }}</span>
+                    <span *ngIf="!location.address.postal_code">--</span>
+                </td>
+                <td>
+                    <span *ngIf="location.address.city">{{ location.address.city }}</span>
+                    <span *ngIf="!location.address.city">--</span>
+                </td>
+                <td>
+                    <span *ngIf="location.health.health_status">{{ location.health.health_status }}</span>
+                    <span *ngIf="!location.health.health_status">--</span>
+                </td>
+                <td class="text-right">
+                    <span *ngIf="!disabledMode">
+                        <a (click)="openModal(true, location)"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
+                        <a (click)="removeLocation(location)" class="remove-button"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<!--ADD LOCATION MODAL-->
+<div class="reveal-overlay" [ngStyle]="{'display': displayModal}">
+    <div class="small reveal" [ngStyle]="{'display': displayModal}">
+        <div class="modal-header">
+            <span *ngIf="!isModalEditMode">{{ 'NEW LOCATION' | translate }}</span>
+            <span *ngIf="isModalEditMode">{{ 'EDIT LOCATION' | translate }}</span>
+            <button type="button" class="pull-right" aria-label="Close modal" (click)="closeModal()">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div [formGroup]="form" class="modal-body">
+            <div class="row">
+                <div class="large-6 columns">
+
+                    <div class="row">
+                        <div class="large-4 columns">
+                            <label class="middle"> {{ 'UBN' | translate }} * </label>
+                        </div>
+                        <div class="large-8 columns">
+                            <input type="text" [(ngModel)]="location.ubn" formControlName="ubn" (keydown)="resetValidation()" maxlength="10">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="large-4 columns">
+                            <label class="middle"> {{ 'STREET NAME' | translate }} </label>
+                        </div>
+                        <div class="large-8 columns">
+                            <input type="text" [(ngModel)]="location.address.street_name" formControlName="address_street_name" maxlength="40">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="large-4 columns">
+                            <label class="middle"> {{ 'STREET NUMBER' | translate }} </label>
+                        </div>
+                        <div class="large-8 columns">
+                            <input type="number" [(ngModel)]="location.address.address_number" formControlName="address_address_number" maxlength="10">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="large-4 columns">
+                            <label> {{ 'STREET NUMBER SUFFIX' | translate }} </label>
+                        </div>
+                        <div class="large-8 columns">
+                            <input type="text" [(ngModel)]="location.address.suffix" formControlName="address_address_suffix" maxlength="10">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="large-4 columns">
+                            <label class="middle"> {{ 'POSTAL CODE' | translate }} </label>
+                        </div>
+                        <div class="large-8 columns">
+                            <input type="text" [(ngModel)]="location.address.postal_code" formControlName="address_address_postal_code" maxlength="6">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="large-4 columns">
+                            <label class="middle"> {{ 'PLACE' | translate }} </label>
+                        </div>
+                        <div class="large-8 columns">
+                            <input type="text" [(ngModel)]="location.address.city" formControlName="address_address_city" maxlength="30">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="large-4 columns">
+                            <label class="middle"> {{ 'STATE' | translate }} </label>
+                        </div>
+                        <div class="large-8 columns">
+                            <select [(ngModel)]="location.address.state" formControlName="address_address_state">
+                                <option value="">--</option>
+                                <option *ngFor="let province of provinces" value="{{ province.code }}">{{ province.name }}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="large-6 columns">
+
+                    <!-- ANIMAL HEALTH -->
+                    <div class="row">
+                        <div class="large-4 columns">
+                            <label class="middle"> {{ 'ANIMAL HEALTH' | translate }} </label>
+                        </div>
+                        <div class="large-8 columns">
+                            <select [(ngModel)]="location.health.animal_health" formControlName="health_animal_health">
+                                <option> -- </option>
+                                <option value="YES">{{ 'YES' | translate }}</option>
+                                <option value="NO">{{ 'NO' | translate }}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- ANIMAL HEALTH STATUS -->
+                    <div class="row">
+                        <div class="large-4 columns">
+                            <label class="middle"> {{ 'DISEASE' | translate }} </label>
+                        </div>
+                        <div class="large-8 columns">
+                            <select [(ngModel)]="location.health.disease" formControlName="health_disease">
+                                <option> -- </option>
+                                <option value="SCRAPIE">{{ 'SCRAPIE' | translate }}</option>
+                                <option value="MAEDI VISNA">{{ 'MAEDI VISNA' | translate }}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- DATE SINCE -->
+                    <div class="row">
+                        <div class="large-4 columns">
+                            <label class="middle"> {{ 'DATE SINCE' | translate }} </label>
+                        </div>
+                        <div class="large-8 columns">
+                            <datepicker [modelFormat]="settings.getViewDateFormat()" [viewFormat]="settings.getViewDateFormat()" [initDate]="location.health.date_since" [formCtrl]="form.controls['health_date_since']"></datepicker>
+                        </div>
+                    </div>
+
+                    <!-- DATE TILL -->
+                    <div class="row">
+                        <div class="large-4 columns">
+                            <label class="middle"> {{ 'DATE TILL' | translate }} </label>
+                        </div>
+                        <div class="large-8 columns">
+                            <datepicker [modelFormat]="settings.getViewDateFormat()" [viewFormat]="settings.getViewDateFormat()" [formCtrl]="form.controls['health_date_till']"></datepicker>
+                        </div>
+                    </div>
+
+                    <!-- STATUS -->
+                    <div class="row">
+                        <div class="large-4 columns">
+                            <label class="middle"> {{ 'STATUS' | translate }} </label>
+                        </div>
+                        <div class="large-8 columns">
+                            <select [(ngModel)]="location.health.health_status" formControlName="health_health_status">
+                                <option value="">--</option>
+                                <option *ngFor="let healthStatus of healthStatusses" value="{{ healthStatus.name }}">{{ healthStatus.name | translate }}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- HEALTH STATEMENT -->
+                    <div class="row">
+                        <div class="large-6 columns">
+                            <label class="middle"> {{ 'HEALTH STATEMENT' | translate }} </label>
+                        </div>
+                        <div *ngIf="!location.health.health_statement?.name" class="large-6 columns file-picker">
+                            <label class="tiny primary button pull-right">
+                                <i class="fa fa-upload" aria-hidden="true"></i>
+                                <input type="file" (change)="selectFile($event)">
+                            </label>
+                        </div>
+                        <div *ngIf="location.health.health_statement?.name" class="large-6 columns">
+                            <button (click)="openFile()" class="small primary button">
+                                <i class="fa fa-file-o fa-fw" aria-hidden="true"></i>
+                            </button>
+                            <button (click)="removeFile()" class="small alert button">
+                                <i class="fa fa-trash-o fa-fw" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- OWN HEALTH STATEMENT SCRAPIE -->
+                    <div class="row">
+                        <div class="large-6 columns">
+                            <label> {{ 'OWN HEALTH STATEMENT SCRAPIE' | translate }} </label>
+                        </div>
+                        <div class="large-6 columns">
+                            <select [(ngModel)]="location.health.own_health_statement" formControlName="health_own_health_statement">
+                                <option value=""> -- </option>
+                                <option value="YES">{{ 'YES' | translate }}</option>
+                                <option value="NO">{{ 'NO' | translate }}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="large-12 columns">
+                    <span class="pull-right required-description"> * {{ 'IS A REQUIRED FIELD' | translate }} </span>
+                </div>
+            </div>
+            <span class="pull-left">
+                <label *ngIf="!hasUniqueUBNs" class="error-message">{{ 'UBN IS NOT UNIQUE' | translate }}</label>
+                <label *ngIf="!isValidForm" class="error-message">{{ 'UBN IS REQUIRED' | translate }}</label>
+            </span>
+            <span class="pull-right">
+                <button *ngIf="!isModalEditMode" (click)="addLocation()" class="tiny primary button">{{ 'ADD' | translate}}</button>
+                <button *ngIf="isModalEditMode" (click)="editLocation()" class="tiny primary button">{{ 'EDIT' | translate}}</button>
+                <button (click)="closeModal()" class="tiny alert button">{{ 'CANCEL' | translate}}</button>
+            </span>
+        </div>
+    </div>
+</div>

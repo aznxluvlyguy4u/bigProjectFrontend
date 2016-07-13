@@ -2,9 +2,16 @@ select
   padding-top: 0
   padding-bottom: 0
 
-input:disabled:hover
+input:disabled:hover,
+select:disabled:hover,
+button:disabled:hover,
+textarea:disabled:hover
   cursor: default
 
 .content-container
   padding: 5em 2em 0 2em
   font-family: $lato
+
+
+.input-error-border
+  border-color: $nsfo-red

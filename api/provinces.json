@@ -1,0 +1,52 @@
+{
+  "result": [
+    {
+      "code": "ZL",
+      "name": "Zeeland"
+    },
+    {
+      "code": "ZH",
+      "name": "Zuid-Holland"
+    },
+    {
+      "code": "UT",
+      "name": "Utrecht"
+    },
+    {
+      "code": "OV",
+      "name": "Overijssel"
+    },
+    {
+      "code": "NH",
+      "name": "Noord-Holland"
+    },
+    {
+      "code": "NB",
+      "name": "Noord-Brabant"
+    },
+    {
+      "code": "LB",
+      "name": "Limburg"
+    },
+    {
+      "code": "GR",
+      "name": "Groningen"
+    },
+    {
+      "code": "GD",
+      "name": "Gelderland"
+    },
+    {
+      "code": "FR",
+      "name": "Friesland"
+    },
+    {
+      "code": "FL",
+      "name": "Flevoland"
+    },
+    {
+      "code": "DR",
+      "name": "Drenthe"
+    }
+  ]
+}

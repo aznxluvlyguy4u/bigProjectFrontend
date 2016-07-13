@@ -1,0 +1,118 @@
+<!--USER TABLE-->
+<div class="large-12 columns">
+    <table class="stack">
+        <thead>
+            <tr>
+                <td>{{ 'LAST NAME' | translate }}</td>
+                <td>{{ 'FIRST NAME' | translate }}</td>
+                <td>{{ 'E-MAIL ADDRESS' | translate }}</td>
+                <td class="text-center">{{ 'PRIMARY CONTACTPERSON' | translate }}</td>
+                <td>
+                    <button (click)="openModal(false)" [disabled]="disabledMode" class="tiny primary button pull-right">
+                        <i class="fa fa-user-plus fa-fw" aria-hidden="true"></i>
+                        {{ 'ADD' | translate }}
+                    </button>
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngIf="users.length == 0">
+                <td colspan="5" class="text-center">{{ 'THERE IS NO USER ADDED' | translate }}</td>
+            </tr>
+            <tr *ngFor="let user of users">
+                <td>
+                    <span *ngIf="user.last_name">{{ user.last_name }}</span>
+                    <span *ngIf="!user.last_name">--</span>
+                </td>
+                <td>
+                    <span *ngIf="user.first_name">{{ user.first_name }}</span>
+                    <span *ngIf="!user.first_name">--</span>
+                </td>
+                <td>{{ user.email_address }}</td>
+                <td class="text-center boolean">
+                    <i *ngIf="user.primary_contactperson" class="fa fa-check" aria-hidden="true"></i>
+                    <i *ngIf="!user.primary_contactperson" class="fa fa-times" aria-hidden="true"></i>
+                </td>
+                <td class="text-right">
+                    <span *ngIf="!disabledMode">
+                        <a (click)="openModal(true, user)"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
+                        <a (click)="removeUser(user)" class="remove-button"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!--ADD USER MODAL-->
+<div class="reveal-overlay" [ngStyle]="{'display': displayModal}">
+    <div class="tiny reveal" [ngStyle]="{'display': displayModal}">
+        <div class="modal-header">
+            <span *ngIf="!isModalEditMode">{{ 'NEW USER' | translate }}</span>
+            <span *ngIf="isModalEditMode">{{ 'EDIT USER' | translate }}</span>
+            <button type="button" class="pull-right" aria-label="Close modal" (click)="closeModal()">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div [formGroup]="form" class="large-12 columns">
+                    <div class="row">
+                        <div class="large-4 columns">
+                            <label class="middle"> {{ 'LAST NAME' | translate }} </label>
+                        </div>
+                        <div class="large-8 columns">
+                            <input type="text" [(ngModel)]="user.last_name" formControlName="last_name" maxlength="50">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="large-4 columns">
+                            <label class="middle"> {{ 'FIRST NAME' | translate }} </label>
+                        </div>
+                        <div class="large-8 columns">
+                            <input type="text" [(ngModel)]="user.first_name" formControlName="first_name" maxlength="50">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="large-4 columns">
+                            <label class="middle"> {{ 'E-MAIL ADDRESS' | translate }} * </label>
+                        </div>
+                        <div class="large-8 columns">
+                            <input type="text" [(ngModel)]="user.email_address" formControlName="email_address" maxlength="50" (keydown)="resetValidation()">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="large-4 columns">
+                            <label> {{ 'PRIMARY CONTACTPERSON' | translate }} </label>
+                        </div>
+                        <div class="large-8 columns">
+                            <select formControlName="primary_contactperson" [disabled]="hasPrimaryContactPerson && !user.primary_contactperson">
+                                <option value="YES">{{ 'YES' | translate }}</option>
+                                <option value="NO" [selected]="hasPrimaryContactPerson">{{ 'NO' | translate }}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="large-12 columns">
+                    <span class="pull-right required-description"> * {{ 'IS A REQUIRED FIELD' | translate }} </span>
+                </div>
+            </div>
+            <span class="pull-left">
+                <label *ngIf="!hasUniqueEmails" class="error-message">{{ 'E-MAIL ADDRESS IS NOT UNIQUE' | translate }}</label>
+                <label *ngIf="!isValidForm" class="error-message">{{ 'E-MAIL ADDRESS IS REQUIRED' | translate }}</label>
+            </span>
+            <span class="pull-right">
+                <button *ngIf="!isModalEditMode" (click)="addUser()" class="tiny primary button">{{ 'ADD' | translate}}</button>
+                <button *ngIf="isModalEditMode" (click)="editUser()" class="tiny primary button">{{ 'EDIT' | translate}}</button>
+                <button (click)="closeModal()" class="tiny alert button">{{ 'CANCEL' | translate}}</button>
+            </span>
+        </div>
+    </div>
+</div>
