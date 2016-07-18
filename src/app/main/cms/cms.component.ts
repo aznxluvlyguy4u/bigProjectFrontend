@@ -1,9 +1,24 @@
 import {Component} from "@angular/core";
-import {ROUTER_DIRECTIVES} from "@angular/router";
+import {TranslatePipe} from "ng2-translate/ng2-translate";
+import {FormBuilder, ControlGroup} from "@angular/common";
+import {REACTIVE_FORM_DIRECTIVES} from "@angular/forms";
 
 @Component({
-    directives: [ROUTER_DIRECTIVES],
-    template: '<h1>CMS</h1><router-outlet></router-outlet>'
+    directives: [REACTIVE_FORM_DIRECTIVES],
+    templateUrl: '/app/main/cms/cms.component.html',
+    pipes: [TranslatePipe]
 })
 
-export class CMSComponent {}
+export class CMSComponent {
+
+    private form: ControlGroup;
+    
+    constructor(private fb: FormBuilder) {
+        this.form = fb.group({
+            dashboard: [''],
+            contact_information: ['']
+        });
+    }
+    
+    private save() {}
+}
