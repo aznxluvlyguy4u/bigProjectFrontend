@@ -24,6 +24,9 @@ import {ConfigDepartComponent} from "./main/config/depart/config.depart";
 import {CMSComponent} from "./main/cms/cms.component";
 import {ProfileComponent} from "./main/profile/profile.component";
 import {LoginComponent} from "./login/login.component";
+import {ConfigMedicationComponent} from "./main/config/medication/config.medication";
+import {ConfigUsersComponent} from "./main/config/users/config.users";
+import {ConfigChoiceFieldsComponent} from "./main/config/choiceFields/config.choiceFields";
 
 const routes: RouterConfig = [
     {
@@ -58,11 +61,9 @@ const routes: RouterConfig = [
                 ]},
             {path: 'configuration', component: ConfigComponent,
                 children: [
-                    {path: '', terminal: true, redirectTo: 'loss'},
-                    {path: 'loss', component: ConfigLossComponent},
-                    {path: 'treatment', component: ConfigTreatmentComponent},
-                    {path: 'contact', component: ConfigContactComponent},
-                    {path: 'depart', component: ConfigDepartComponent}
+                    {path: '', terminal: true, redirectTo: 'users'},
+                    {path: 'users', component: ConfigUsersComponent},
+                    {path: 'choice_fields', component: ConfigChoiceFieldsComponent}
                 ]},
             {path: 'cms', terminal: true, component: CMSComponent},
             {path: 'profile', terminal: true, component: ProfileComponent}

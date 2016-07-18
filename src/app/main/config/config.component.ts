@@ -1,9 +1,19 @@
 import {Component} from "@angular/core";
-import {ROUTER_DIRECTIVES} from "@angular/router";
+import {ROUTER_DIRECTIVES, Router} from "@angular/router";
+import {TranslatePipe} from "ng2-translate/ng2-translate";
 
 @Component({
     directives: [ROUTER_DIRECTIVES],
-    template: '<h1>CONFIG</h1><router-outlet></router-outlet>'
+    templateUrl: '/app/main/config/config.component.html',
+    pipes: [TranslatePipe]
 })
 
-export class ConfigComponent {}
+export class ConfigComponent {
+    private selectedRoute: string = '/configuration/depart';
+
+    constructor(private router: Router) {}
+
+    private navigateTo(url: string) {
+        this.router.navigate([url]);
+    }
+}

@@ -1,0 +1,85 @@
+<div class="large-4 columns">
+    <label class="middle">{{ 'CONTACT FORM OPTIONS' | translate }}</label>
+</div>
+<div class="large-5 columns end">
+    <table>
+        <thead>
+            <tr>
+                <td>{{'CHOICE' | translate}}</td>
+                <td>{{'ORDER' | translate}}</td>
+                <td>
+                    <button type="button" (click)="openModal(false)" class="small primary button pull-right">
+                        <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
+                        {{ 'ADD CHOICE' | translate }}
+                    </button>
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngIf="choices.length == 0">
+                <td colspan="3" class="text-center">{{ 'NO CHOICE HAS BEEN ADDED' | translate }}</td>
+            </tr>
+
+            <tr *ngFor="let choice of choices">
+                <td>
+                    {{ choice.name }}
+                </td>
+                <td>
+                    {{ choice.order }}
+                </td>
+                <td>
+                    <span class="pull-right">
+                        <a (click)="openModal(true, choice)"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
+                        <a (click)="removeChoice(choice)" class="remove-button"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!--ADD REASON MODAL-->
+<div class="reveal-overlay" [ngStyle]="{'display': displayModal}">
+    <div class="tiny reveal" [ngStyle]="{'display': displayModal}">
+        <div class="modal-header">
+            <span *ngIf="!isModalEditMode">{{ 'NEW CHOICE' | translate }}</span>
+            <span *ngIf="isModalEditMode">{{ 'EDIT CHOICE' | translate }}</span>
+            <button type="button" class="pull-right" aria-label="Close modal" (click)="closeModal()">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div [formGroup]="form" class="modal-body">
+            <div class="row">
+                <div class="large-4 columns">
+                    <label class="middle"> {{ 'CHOICE' | translate }} * </label>
+                </div>
+                <div class="large-8 columns">
+                    <input type="text" [(ngModel)]="choice.name" formControlName="choice" maxlength="20">
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-4 columns">
+                    <label class="middle"> {{ 'ORDER' | translate }} * </label>
+                </div>
+                <div class="large-8 columns">
+                    <input type="number" [(ngModel)]="choice.order" formControlName="order" min="0">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="large-12 columns">
+                    <span class="pull-right required-description"> * {{ 'IS A REQUIRED FIELD' | translate }} </span>
+                </div>
+            </div>
+             <span class="pull-left">
+                <label *ngIf="!isValidForm" class="error-message">{{ 'FILL IN ALL THE REQUIRED FIELDS' | translate }}</label>
+            </span>
+            <span class="pull-right">
+                <button *ngIf="!isModalEditMode" (click)="addChoice()" class="tiny primary button">{{ 'ADD' | translate}}</button>
+                <button *ngIf="isModalEditMode" (click)="editChoice()" class="tiny primary button">{{ 'EDIT' | translate}}</button>
+                <button (click)="closeModal()" class="tiny alert button">{{ 'CANCEL' | translate}}</button>
+            </span>
+        </div>
+    </div>
+</div>

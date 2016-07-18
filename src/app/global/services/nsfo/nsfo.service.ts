@@ -72,4 +72,10 @@ export class NSFOService {
         return this.http.get("/api/health_statusses.json")
             .map(res => res.json())
     }
+
+    // TODO REMOVE THIS WHEN API LIVE
+    doGetUsers() {
+        return this.http.get("/api/users.json")
+            .map(res => res.json())
+    }
 }

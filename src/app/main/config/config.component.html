@@ -1,0 +1,43 @@
+<div id="config">
+
+    <!--BREADCRUMBS-->
+    <div class="row">
+        <ul class="breadcrumbs">
+            <li><a routerLink="/dashboard">{{ 'DASHBOARD' | translate }}</a></li>
+            <li>{{ 'CONFIGURATIONS' | translate }}</li>
+        </ul>
+    </div>
+
+    <div class="row">
+        <div class="page-header">
+            <div class="page-title">{{ 'CONFIGURATIONS' | translate }}</div>
+        </div>
+    </div>
+
+    <!--TABS MEDIUM/LARGE SCREENS-->
+    <div class="row hide-for-small-only">
+        <ul class="tabs">
+            <li class="tabs-title">
+                <a routerLink="/configuration/users" routerLinkActive="active">{{ 'USERS' | translate }}</a>
+            </li>
+            <li class="tabs-title">
+                <a routerLink="/configuration/choice_fields" routerLinkActive="active">{{ 'CHOICE FIELDS' | translate }}</a>
+            </li>
+        </ul>
+    </div>
+
+    <!--TABS SMALL SCREENS-->
+    <div class="row show-for-small-only">
+        <label> {{ 'TAB' | translate }}
+            <select [(ngModel)]="selectedRoute" (change)="navigateTo($event.target.value)">
+                <option value="/configuration/users">{{ 'USERS' | translate }}</option>
+                <option value="/configuration/choice_fields">{{ 'CHOICE FIELDS' | translate }}</option>
+            </select>
+        </label>
+    </div>
+
+    <!--PAGE CONTENT-->
+    <div class="row">
+        <router-outlet></router-outlet>
+    </div>
+</div>

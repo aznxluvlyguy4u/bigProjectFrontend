@@ -16,6 +16,16 @@ textarea:disabled:hover {
 .input-error-border {
   border-color: #EC5840; }
 
+.page-header .page-title {
+  display: inline-block;
+  color: rgba(72, 167, 112, 0.5);
+  padding-bottom: 0.8em;
+  font-size: 2em;
+  font-weight: 900; }
+
+.tabs-title a.active {
+  background-color: #E6E6E6; }
+
 nav {
   position: fixed;
   display: flex;
@@ -117,17 +127,11 @@ nav {
     .user-menu a:hover {
       background-color: #48A770; }
 
-#client .page-header .page-title {
-  display: inline-block;
-  color: rgba(72, 167, 112, 0.5);
-  font-size: 2em;
-  font-weight: 900; }
-
 #client .table-options-container {
-  padding: 1em 0; }
+  font-size: 0.7rem; }
   #client .table-options-container label {
     font-weight: 700;
-    font-size: 0.8em; }
+    font-size: 1em; }
     #client .table-options-container label.category {
       font-weight: 900; }
     #client .table-options-container label input {
@@ -139,6 +143,9 @@ nav {
     #client .table-options-container label button {
       font-weight: 400;
       font-size: 1em; }
+
+#client .client-overview tr {
+  font-size: 0.7rem; }
 
 #client .dossier-client-info {
   font-size: 0.7rem; }
@@ -285,6 +292,52 @@ nav {
   font-weight: 700;
   padding-top: 0.4em;
   margin: 0; }
+
+#content-management .form-container label {
+  font-weight: 700;
+  font-size: 0.8em; }
+
+#content-management .form-container textarea {
+  font-weight: 400;
+  font-size: 0.8em; }
+
+#config label {
+  font-size: 0.75rem;
+  font-weight: 700; }
+
+#config table {
+  font-size: 0.7rem; }
+  #config table button {
+    font-size: 1em;
+    margin-bottom: 0; }
+  #config table td a {
+    font-size: 1.25em; }
+    #config table td a.remove-button {
+      color: #EC5840; }
+    #config table td a:hover {
+      color: #a3422d; }
+
+#config .reveal {
+  font-size: 0.7rem; }
+  #config .reveal .modal-header {
+    background-color: #48A770;
+    padding: 0.5em;
+    color: #FFF;
+    font-size: 1.3em; }
+    #config .reveal .modal-header button {
+      padding-top: 0.2em; }
+  #config .reveal .modal-body {
+    padding-top: 1em; }
+    #config .reveal .modal-body label {
+      font-size: 1em; }
+    #config .reveal .modal-body input, #config .reveal .modal-body select {
+      font-size: 1em; }
+  #config .reveal .file-picker input[type='file'] {
+    display: none; }
+  #config .reveal .modal-footer .required-description {
+    font-size: 0.85em;
+    margin-top: -1em;
+    padding-bottom: 2em; }
 
 .ng-datepicker-input {
   position: relative;
