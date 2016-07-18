@@ -9,6 +9,7 @@ import {UsersDisplay} from "./component/users/users.component";
 import {LocationsDisplay} from "./component/locations/locations.component";
 import {UtilsService} from "../../../global/services/utils/utils.service";
 import {REACTIVE_FORM_DIRECTIVES} from "@angular/forms";
+import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
 
 @Component({
     directives: [REACTIVE_FORM_DIRECTIVES, LocationsDisplay, UsersDisplay],
@@ -33,7 +34,13 @@ export class ClientDossierComponent {
     private errorMessage: string;
     private savingInProgress: boolean = false;
 
-    constructor(private router: Router, private activatedRoute: ActivatedRoute, private utils: UtilsService, private fb: FormBuilder) {
+    constructor(
+        private router: Router,
+        private activatedRoute: ActivatedRoute, 
+        private utils: UtilsService, 
+        private fb: FormBuilder,
+        private api: NSFOService
+    ) {
         this.form = fb.group({
             company_name: ['', Validators.required],
             telephone_number: [''],
@@ -65,6 +72,7 @@ export class ClientDossierComponent {
             if(this.pageMode == 'edit') {
                 this.pageTitle = 'EDIT CLIENT';
                 this.clientId = params['id'];
+                this.getClientInfo();
             }
 
             if(this.pageMode == 'new') {
@@ -84,7 +92,16 @@ export class ClientDossierComponent {
                 this.provinces = _.sortBy(res, ['code']);
             });
     }
-
+    
+    private getClientInfo() {
+        this.api.doGetClientInfo()
+            .subscribe(
+                res => {
+                    this.client = res.result;
+                }
+            );
+    };
+    
     private updateLocations(locations: Location[]): void {
         this.client.locations = locations;
     }

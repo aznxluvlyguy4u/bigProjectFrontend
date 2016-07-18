@@ -37,14 +37,13 @@ export class ClientOverviewComponent {
             .subscribe(
                 res => {
                     this.clientList = <Client[]> res.result;
-                    console.log(this.clientList);
                 }
             );
     }
 
-    private loginAsGhost(companyID: number) {
+    private loginAsGhost(clientID: number) {
         let request = {
-            "company_id": companyID
+            "company_id": clientID
         };
         
         this.nsfoService.doPostRequest('/v1/admins/ghost', request)

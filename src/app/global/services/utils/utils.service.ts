@@ -6,10 +6,28 @@ import {ReplaySubject} from "rxjs/Rx";
 export class UtilsService {
     private provinces: ReplaySubject<any> = new ReplaySubject();
     private healthStatusses: ReplaySubject<any> = new ReplaySubject();
+    private userDetails: ReplaySubject<any> = new ReplaySubject();
 
-    constructor(private api: NSFOService){
+    constructor(private api: NSFOService) {
+        this.initUserDetails();
         this.initProvinces();
         this.initHealthStatusses();
+    }
+
+    // USER DETAILS
+    private initUserDetails() {
+        this.api.doGetUserDetails()
+            .subscribe(res => {
+                this.setUserDetails(res.result);
+            })
+    }
+
+    public setUserDetails(userDetails) {
+        this.userDetails.next(userDetails);
+    }
+
+    public getUserDetails() {
+        return this.userDetails.asObservable();
     }
 
     // PROVINCES

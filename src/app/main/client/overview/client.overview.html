@@ -43,16 +43,17 @@
 
 <div class="row">
     <div class="large-12 columns">
-        <table class="stack">
+        <table class="stack client-overview">
             <thead>
                 <tr>
-                    <td>{{ 'UBN' | translate }}</td>
                     <td>{{ 'DEBTORS' | translate }} #</td>
-                    <td>{{ 'LAST NAME' | translate }}</td>
+                    <td>{{ 'COMPANY NAME' | translate }}</td>
                     <td>{{ 'PLACE' | translate }}</td>
+                    <td>{{ 'PRIMARY CONTACTPERSON' | translate }}</td>
+                    <td>{{ 'UBN' | translate }}</td>
+                    <td>{{ 'PEDIGREE' | translate }}</td>
                     <td>{{ 'SUBSCRIPTION DATE' | translate }}</td>
                     <td>{{ 'ANIMAL HEALTH' | translate }}</td>
-                    <td>{{ 'PEDIGREE' | translate }}</td>
                     <td>{{ 'STATUS' | translate }}</td>
                     <td></td>
                     <td></td>
@@ -60,17 +61,23 @@
             </thead>
             <tbody>
                 <tr *ngFor="let client of clientList | clientFilter:[filterSearch, filterInvoices] | paginate: {itemsPerPage: filterAmount, currentPage: page}">
-                    <td>{{ client.ubn }}</td>
                     <td>{{ client.debtor_number }}</td>
-                    <td>{{ client.last_name }}</td>
-                    <td>{{ client.place }}</td>
-                    <td>{{ settings.convertToViewDate(client.subscription_date) }}</td>
-                    <td>{{ client.animal_health | translate }}</td>
+                    <td>{{ client.company_name }}</td>
+                    <td>{{ client.address.city }}</td>
+                    <td>{{ client.primary_contactperson}}</td>
                     <td>
-                        <div *ngFor="let pedigree of client.pedigree_list">
+                        <div *ngFor="let location of client.locations">
+                            {{ location }}<br>
+                        </div>
+                    </td>
+                    <td>
+                        <div *ngFor="let pedigree of client.pedigrees">
                             {{ pedigree }}<br>
                         </div>
                     </td>
+                    <td>{{ settings.convertToViewDate(client.subscription_date) }}</td>
+                    <td>{{ client.animal_health | translate }}</td>
+
                     <td>{{ client.status | translate }}</td>
                     <td>
                         <span *ngIf="client.unpaid_invoices > 0" class="alert label">

@@ -56,6 +56,18 @@ export class NSFOService {
     }
 
     // TODO REMOVE THIS WHEN API LIVE
+    doGetUserDetails() {
+        return this.http.get("/api/user_details.json")
+            .map(res => res.json())
+    }
+
+    // TODO REMOVE THIS WHEN API LIVE
+    doGetClientInfo() {
+        return this.http.get("/api/clients_edit_1.json")
+            .map(res => res.json())
+    }
+
+    // TODO REMOVE THIS WHEN API LIVE
     doGetClients() {
         return this.http.get("/api/clients.json")
             .map(res => res.json())
@@ -76,6 +88,18 @@ export class NSFOService {
     // TODO REMOVE THIS WHEN API LIVE
     doGetUsers() {
         return this.http.get("/api/users.json")
+            .map(res => res.json())
+    }
+
+    // TODO REMOVE THIS WHEN API LIVE
+    doGetClientDetails() {
+        return this.http.get("/api/clients_details_1.json")
+            .map(res => res.json())
+    }
+
+    // TODO REMOVE THIS WHEN API LIVE
+    doGetClientNotes() {
+        return this.http.get("/api/clients_details_1_notes.json")
             .map(res => res.json())
     }
 }

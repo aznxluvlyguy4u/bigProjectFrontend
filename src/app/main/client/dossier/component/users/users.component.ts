@@ -53,7 +53,7 @@ export class UsersDisplay {
         if(editMode) {
             this.user = _.clone(user);
             this.userTemp = _.clone(user);
-
+            
             if(this.user.primary_contactperson) {
                 (<FormControl>this.form.controls['primary_contactperson']).updateValue('YES');
             }

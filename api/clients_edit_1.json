@@ -1,0 +1,65 @@
+{
+  "result": {
+    "client_id": 1,
+    "company_name": "Marta Fokkerij",
+    "telephone_number": "070-12312312",
+    "company_relation_number": "12376123712",
+    "debtor_number": "111111111",
+    "vat_number": "8918217187",
+    "chamber_of_commerce_number": "917238712",
+    "notes": "test note",
+    "address": {
+      "street_name": "Postmanlaan",
+      "address_number": "90",
+      "suffix": "a",
+      "postal_code": "1234AB",
+      "city": "Den Haag",
+      "state": "ZH"
+    },
+    "billing_address": {
+      "street_name": "Postmanlaan",
+      "address_number": "90",
+      "suffix": "a",
+      "postal_code": "1234AB",
+      "city": "Den Haag",
+      "state": "ZH"
+    },
+    "locations": [
+      {
+        "ubn": "0123456",
+        "address": {
+          "street_name": "Postmanlaan",
+          "address_number": "90",
+          "suffix": "a",
+          "postal_code": "1234AB",
+          "city": "Den Haag",
+          "state": "ZH",
+          "country": "NL"
+        },
+        "health": {
+          "animal_health": "YES",
+          "disease": "SCRAPIE",
+          "date_since": "2016-03-15T22:00:00.000Z",
+          "date_till": "2016-03-31T22:00:00.000Z",
+          "health_status": "IN OBSERVATION",
+          "health_statement": "",
+          "own_health_statement": "YES"
+        }
+      }
+    ],
+    "users": [
+      {
+        "last_name": "Brink",
+        "first_name": "Marta",
+        "email_address": "marta.brink@brinkfokkerij.nl",
+        "primary_contactperson": true
+      },
+      {
+        "last_name": "Burp",
+        "first_name": "Joe",
+        "email_address": "joe.burp@brinkfokkerij.nl",
+        "primary_contactperson": false
+      }
+    ]
+  }
+}

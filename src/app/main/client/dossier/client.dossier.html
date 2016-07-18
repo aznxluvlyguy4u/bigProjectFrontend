@@ -257,7 +257,7 @@
             </div>
         </div>
         <div class="row">
-            <locations-display (updated)="updateLocations($event)" [disabledMode]="savingInProgress"></locations-display>
+            <locations-display (updated)="updateLocations($event)" [locations]="client.locations" [disabledMode]="savingInProgress"></locations-display>
         </div>
     </div>
     <div class="large-6 columns">
@@ -269,7 +269,7 @@
             </div>
         </div>
         <div class="row">
-            <users-display (updated)="updateUsers($event)" [disabledMode]="savingInProgress"></users-display>
+            <users-display (updated)="updateUsers($event)" [users]="client.users" [disabledMode]="savingInProgress"></users-display>
         </div>
     </div>
 </div>

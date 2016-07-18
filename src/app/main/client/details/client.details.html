@@ -17,7 +17,7 @@
                 {{ 'LIVESTOCK' | translate }}
             </button>
 
-            <button class="small primary button">
+            <button (click)="loginAsGhost()" class="small primary button">
                 <i class="fa fa-sign-in fa-fw" aria-hidden="true"></i>
                 {{ 'LOGIN' | translate }}
             </button>
@@ -40,23 +40,23 @@
     <div class="large-3 columns">
         <div class="client-info-overview">
             <div class="general">
-                <div>Jan Jansen Fokkerij</div>
-                <div>Derdestraat 12 A</div>
-                <div>1234 AB Uden</div>
+                <div>{{ clientDetails.company_name }}</div>
+                <div>{{ clientDetails.address.street_name + ' ' + clientDetails.address.address_number + ' ' + clientDetails.address.suffix }} </div>
+                <div>{{ clientDetails.address.postal_code + ' ' + clientDetails.address.city }}</div>
             </div>
 
             <label>{{ 'TELEPHONE NUMBER' | translate }}</label>
-            <div class="value">+31-123451234</div>
+            <div class="value">{{ clientDetails.telephone_number }}</div>
 
             <label>{{ 'PRIMARY CONTACT PERSON' | translate }}</label>
-            <div class="value">dhr. Jan Jansen</div>
-            <div class="value">jan.jansen@chello.nl</div>
+            <div class="value">{{ clientDetails.primary_contactperson.prefix | translate }} {{ clientDetails.primary_contactperson.first_name + ' ' + clientDetails.primary_contactperson.last_name }}</div>
+            <div class="value">{{ clientDetails.primary_contactperson.email_address }}</div>
 
             <label>{{ 'STATUS' | translate }}</label>
-            <div class="value">{{ 'ACTIVE' | translate }}</div>
+            <div class="value">{{ clientDetails.status | translate }}</div>
 
             <label>{{ 'SUBSCRIPTION DATE' | translate }}</label>
-            <div class="value"> 01-07-2005</div>
+            <div class="value"> {{ settings.convertToViewDate(clientDetails.subscription_date) }}</div>
         </div>
         <div class="client-info-overview">
             <table>
@@ -70,23 +70,23 @@
                 <tbody>
                 <tr>
                     <td>< 6 {{ 'MONTHS' | translate }}</td>
-                    <td>6</td>
-                    <td>6</td>
+                    <td>{{ clientDetails.livestock.ram.less_6_months }}</td>
+                    <td>{{ clientDetails.livestock.ewe.less_6_months }}</td>
                 </tr>
                 <tr>
                     <td>6 - 12 {{ 'MONTHS' | translate }}</td>
-                    <td>18</td>
-                    <td>18</td>
+                    <td>{{ clientDetails.livestock.ram.between_6_12_months }}</td>
+                    <td>{{ clientDetails.livestock.ewe.between_6_12_months }}</td>
                 </tr>
                 <tr>
                     <td> > 12 {{ 'MONTHS' | translate }}</td>
-                    <td>50</td>
-                    <td>37</td>
+                    <td>{{ clientDetails.livestock.ram.greater_12_months }}</td>
+                    <td>{{ clientDetails.livestock.ewe.greater_12_months }}</td>
                 </tr>
                 <tr>
                     <td>{{ 'TOTAL' | translate }}</td>
-                    <td>74</td>
-                    <td>61</td>
+                    <td>{{ clientDetails.livestock.ram.total }}</td>
+                    <td>{{ clientDetails.livestock.ewe.total }}</td>
                 </tr>
                 </tbody>
             </table>
@@ -94,23 +94,15 @@
         <div class="client-info-overview">
             <table>
                 <thead>
-                <tr>
-                    <td colspan="2">{{ 'BREEDER NUMBERS' | translate }}</td>
-                </tr>
+                    <tr>
+                        <td colspan="2">{{ 'BREEDER NUMBERS' | translate }}</td>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>00756</td>
-                    <td>NTS</td>
-                </tr>
-                <tr>
-                    <td>26045</td>
-                    <td>SBT</td>
-                </tr>
-                <tr>
-                    <td>00EBG</td>
-                    <td>CF</td>
-                </tr>
+                    <tr *ngFor="let number of clientDetails.breeder_numbers">
+                        <td>{{ number.number }}</td>
+                        <td>{{ number.code }}</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -132,28 +124,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td> 0000001 </td>
-                            <td> 01-01-2001 </td>
+                        <tr *ngFor="let invoice of clientDetails.invoices">
+                            <td> {{ invoice.invoice_number }} </td>
+                            <td> {{ settings.convertToViewDate(invoice.invoice_date) }} </td>
                             <td>
-                                <span class="success label">
-                                    {{ 'PAID' | translate }}
+                                <span *ngIf="invoice.status == 'PAID'" class="success label">
+                                    {{ invoice.status | translate }}
+                                </span>
+                                <span *ngIf="invoice.status == 'UNPAID'" class="alert label">
+                                    {{ invoice.status | translate }}
                                 </span>
                             </td>
                             <td>
-                                <a class="icon-link"><i class="fa fa-file-pdf-o fa-fw" aria-hidden="true"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td> 0000001 </td>
-                            <td> 01-01-2001 </td>
-                            <td>
-                                <span class="alert label">
-                                    {{ 'UNPAID' | translate }}
-                                </span>
-                            </td>
-                            <td>
-                                <a class="icon-link"><i class="fa fa-file-pdf-o fa-fw" aria-hidden="true"></i></a>
+                                <a class="icon-link" href="{{ invoice.pdf_url }}" target="_blank"><i class="fa fa-file-pdf-o fa-fw" aria-hidden="true"></i></a>
                             </td>
                         </tr>
                     </tbody>
@@ -179,14 +162,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td> 1111111 </td>
-                            <td> Everts </td>
-                            <td>{{ 'SCRAPIE' | translate }}</td>
-                            <td> 01-04-2005 </td>
-                            <td>{{ 'DIRECTION DATE' | translate }}: 01-04-2005</td>
-                            <td>18 dagen van monstername tot autorisatie</td>
-                            <td>Marjo van Bergen</td>
+                        <tr *ngFor="let health of clientDetails.animal_health">
+                            <td>{{ health.ubn }}</td>
+                            <td>{{ health.name }}</td>
+                            <td>{{ health.inspection | translate }}</td>
+                            <td>{{ settings.convertToViewDate(health.request_date) }}</td>
+                            <td>
+                                <span *ngFor="let direction of health.directions">
+                                    {{ direction.type  | translate }}: <br> {{ settings.convertToViewDate(direction.date)}} <br><br>
+                                </span>
+                            </td>
+                            <td>{{ health.total_lead_time }}</td>
+                            <td>{{ health.authorized_by }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -198,68 +185,24 @@
             <div class="large-12 columns notes">
                 <label>
                     {{ 'NOTES' | translate }}
-                    <textarea rows="7"></textarea>
+                    <textarea [(ngModel)]="clientNote.message" rows="7"></textarea>
                 </label>
-                <button type="button" class="small primary button expanded">{{ 'SAVE' | translate }}</button>
+                <button type="button" (click)="addClientNote()" class="small primary button expanded">{{ 'SAVE' | translate }}</button>
             </div>
         </div>
         <div class="row">
             <div class="large-12 columns">
                 <table class="notes-table">
                     <tbody>
-                        <tr>
+                        <tr *ngFor="let note of clientNotes">
                             <td>
                                 <div class="row log-info">
                                     <div class="large-12 columns">
-                                        <div class="pull-left"> 01-01-2001 16:23 </div>
-                                        <div class="pull-right">{{ 'BY' | translate }} Test User </div>
+                                        <div class="pull-left"> {{ settings.convertToViewDateTime(note.creation_date) }} </div>
+                                        <div class="pull-right">{{ 'BY' | translate }} {{ note.created_by }}</div>
                                     </div>
                                 </div>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam consequat ornare ante non maximus. Suspendisse ac felis non dui commodo sagittis.
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="row log-info">
-                                    <div class="large-12 columns">
-                                        <div class="pull-left"> 01-01-2001 16:23 </div>
-                                        <div class="pull-right">{{ 'BY' | translate }} Test User </div>
-                                    </div>
-                                </div>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam consequat ornare ante non maximus. Suspendisse ac felis non dui commodo sagittis.
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="row log-info">
-                                    <div class="large-12 columns">
-                                        <div class="pull-left"> 01-01-2001 16:23 </div>
-                                        <div class="pull-right">{{ 'BY' | translate }} Test User </div>
-                                    </div>
-                                </div>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam consequat ornare ante non maximus. Suspendisse ac felis non dui commodo sagittis.
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="row log-info">
-                                    <div class="large-12 columns">
-                                        <div class="pull-left"> 01-01-2001 16:23 </div>
-                                        <div class="pull-right">{{ 'BY' | translate }} Test User </div>
-                                    </div>
-                                </div>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam consequat ornare ante non maximus. Suspendisse ac felis non dui commodo sagittis.
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="row log-info">
-                                    <div class="large-12 columns">
-                                        <div class="pull-left"> 01-01-2001 16:23 </div>
-                                        <div class="pull-right">{{ 'BY' | translate }} Test User </div>
-                                    </div>
-                                </div>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam consequat ornare ante non maximus. Suspendisse ac felis non dui commodo sagittis.
+                                {{ note.message }}
                             </td>
                         </tr>
                     </tbody>

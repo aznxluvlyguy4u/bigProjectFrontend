@@ -25,13 +25,14 @@ export class ClientFilterPipe implements PipeTransform {
         if (search_input != null) {
             search_input = args[0].toLocaleUpperCase();
             filtered = filtered.filter(client => (
-                client.ubn +
                 client.debtor_number +
-                client.last_name.toLocaleUpperCase() +
-                client.place.toLocaleUpperCase() +
+                client.company_name.toLocaleUpperCase() +
+                client.address.city.toLocaleUpperCase() +
+                client.primary_contactperson.toLocaleUpperCase() +
+                client.locations +
+                client.pedigrees +
                 client.subscription_date  +
-                client.animal_health.toLocaleUpperCase()  +
-                client.pedigree_list +
+                client.animal_health.toLocaleUpperCase() +
                 client.status.toLocaleUpperCase()
             ).indexOf(search_input) !== -1);
         }
