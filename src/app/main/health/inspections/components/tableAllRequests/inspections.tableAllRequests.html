@@ -1,10 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<table>
+    <thead>
+        <tr>
+            <td> {{ 'UBN' | translate }} </td>
+            <td> {{ 'NAME' | translate }} </td>
+            <td> {{ 'INSPECTION' | translate }} </td>
+            <td> {{ 'REQUEST DATE' | translate }} </td>
+            <td> {{ 'DIRECTION DATE' | translate }} </td>
+            <td> {{ 'NEXT ACTION' | translate }} </td>
+            <td>
+                <button type="button" class="small primary button pull-right">
+                    {{ 'DOWNLOAD ALL FORMS' | translate }}
+                    <span *ngIf="requests.length > 0" class="badge"> {{ requests.length }} </span>
+                </button>
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let request of requests">
+            <td>{{ request.ubn }}</td>
+            <td>{{ request.name }}</td>
+            <td>{{ request.inspection | translate }}</td>
+            <td>
+                <span *ngIf="request.request_date">
+                    {{ settings.convertToViewDate(request.request_date) }}
+                </span>
+                <span *ngIf="!request.request_date">
+                    --
+                </span>
+            </td>
+            <td>
+                <span *ngIf="request.direction_date">
+                    {{ settings.convertToViewDate(request.direction_date) }}
+                </span>
+                <span *ngIf="!request.direction_date">
+                    --
+                </span>
+            </td>
+            <td>{{ request.next_action | translate }}</td>
+            <td>
+                <button type="button" class="small primary button pull-right">
+                    {{ 'DOWNLOAD' | translate }}
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>

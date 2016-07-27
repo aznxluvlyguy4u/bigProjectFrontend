@@ -1,7 +1,13 @@
 import {Component} from "@angular/core";
+import {TranslatePipe} from "ng2-translate/ng2-translate";
+import {CKEditor} from "ng2-ckeditor/CKEditor";
 
 @Component({
-    template: '<h1>HEALTH - LETTERS</h1>'
+    directives: [CKEditor],
+    templateUrl: '/app/main/health/letters/health.letters.html',
+    pipes: [TranslatePipe]
 })
 
-export class HealthLettersComponent {}
+export class HealthLettersComponent {
+    private ckeditorContent: string = "";
+}

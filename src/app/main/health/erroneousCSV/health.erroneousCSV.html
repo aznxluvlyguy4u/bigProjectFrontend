@@ -1,10 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<div class="row">
+    <div class="large-12 columns">
+        <table>
+            <thead>
+                <tr>
+                    <td>{{ 'DATE' | translate }}</td>
+                    <td>{{ 'CSV' | translate }}</td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>01-01-1970</td>
+                    <td>test file</td>
+                    <td>
+                        <button type="button" class="small primary button pull-right">
+                            {{ 'DOWNLOAD' | translate }}
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

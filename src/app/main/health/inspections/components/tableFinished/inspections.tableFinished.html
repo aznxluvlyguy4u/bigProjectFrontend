@@ -1,10 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<table>
+    <thead>
+    <tr>
+        <td> {{ 'UBN' | translate }} </td>
+        <td> {{ 'NAME' | translate }} </td>
+        <td> {{ 'INSPECTION' | translate }} </td>
+        <td> {{ 'DATA' | translate }} </td>
+        <td> {{ 'TOTAL LEAD TIME' | translate }} </td>
+        <td> {{ 'AUTHORIZED BY' | translate }} </td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let request of requests">
+        <td>{{ request.ubn }}</td>
+        <td>{{ request.name }}</td>
+        <td>{{ request.inspection | translate }}</td>
+        <td>
+            <div *ngFor="let date of request.data">
+                {{ date.type }}: {{ settings.convertToViewDate(date.date) }}
+            </div> <br>
+        </td>
+        <td>
+            {{ request.total_lead_time }} {{ 'DAYS FROM SAMPLING TO AUTHORIZATION' | translate }}
+        </td>
+        <td>{{ request.authorized_by }}</td>
+    </tr>
+    </tbody>
+</table>

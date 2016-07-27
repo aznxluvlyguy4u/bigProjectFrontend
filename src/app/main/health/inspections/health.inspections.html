@@ -1,10 +1,53 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<div class="row table-options-container">
+    <div class="large-12 columns hide-for-small-only">
+        <ul class="tabs">
+            <li class="tabs-title">
+                <a (click)="selectTab('ALL REQUESTS')" [class.active]="selectedTab == 'ALL REQUESTS'">
+                    {{ 'ALL REQUESTS' | translate }}
+                    <span *ngIf="getNewRequestAmount() > 0" class="badge">{{ getNewRequestAmount() }}</span>
+                </a>
+            </li>
+            <li class="tabs-title">
+                <a (click)="selectTab('ANNOUNCED INSPECTIONS')" [class.active]="selectedTab == 'ANNOUNCED INSPECTIONS'">
+                    {{ 'ANNOUNCED INSPECTIONS' | translate }}
+                    <span *ngIf="getAnnouncedRequestAmount() > 0" class="badge">{{ getAnnouncedRequestAmount() }}</span>
+                </a>
+            </li>
+            <li class="tabs-title">
+                <a (click)="selectTab('ONGOING INSPECTIONS')" [class.active]="selectedTab == 'ONGOING INSPECTIONS'">
+                    {{ 'ONGOING INSPECTIONS' | translate }}
+                    <span *ngIf="getOngoingRequestAmount() > 0" class="badge">{{ getOngoingRequestAmount() }}</span>
+                </a>
+            </li>
+            <li class="tabs-title">
+                <a (click)="selectTab('TO BE AUTHORIZED INSPECTIONS')" [class.active]="selectedTab == 'TO BE AUTHORIZED INSPECTIONS'">
+                    {{ 'TO BE AUTHORIZED INSPECTIONS' | translate }}
+                    <span *ngIf="getAuthorizationRequestAmount() > 0" class="badge">{{ getAuthorizationRequestAmount() }}</span>
+                </a>
+            </li>
+            <li class="tabs-title">
+                <a (click)="selectTab('FINISHED INSPECTIONS')" [class.active]="selectedTab == 'FINISHED INSPECTIONS'">
+                    {{ 'FINISHED INSPECTIONS' | translate }}
+                    <span *ngIf="getFinishedRequestAmount() > 0" class="badge">{{ getFinishedRequestAmount() }}</span>
+                </a>
+            </li>
+            <li class="tabs-title">
+                <a (click)="selectTab('EXPIRED TERM')" [class.active]="selectedTab == 'EXPIRED TERM'">
+                    {{ 'EXPIRED TERM' | translate }}
+                    <span *ngIf="getExpiredRequestAmount() > 0" class="alert badge">{{ getFinishedRequestAmount() }}</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
 
-</body>
-</html>
+<div class="row">
+    <div class="large-12 columns">
+        <health-table-all *ngIf="selectedTab == 'ALL REQUESTS'" [animalHealthRequests]="animalHealthRequests"></health-table-all>
+        <health-table-announced *ngIf="selectedTab == 'ANNOUNCED INSPECTIONS'" [animalHealthRequests]="animalHealthRequests"></health-table-announced>
+        <health-table-ongoing *ngIf="selectedTab == 'ONGOING INSPECTIONS'" [animalHealthRequests]="animalHealthRequests"></health-table-ongoing>
+        <health-table-authorization *ngIf="selectedTab == 'TO BE AUTHORIZED INSPECTIONS'" [animalHealthRequests]="animalHealthRequests"></health-table-authorization>
+        <health-table-finished *ngIf="selectedTab == 'FINISHED INSPECTIONS'" [animalHealthRequests]="animalHealthRequests"></health-table-finished>
+        <health-table-expired *ngIf="selectedTab == 'EXPIRED TERM'" [animalHealthRequests]="animalHealthRequests"></health-table-expired>
+    </div>
+</div>

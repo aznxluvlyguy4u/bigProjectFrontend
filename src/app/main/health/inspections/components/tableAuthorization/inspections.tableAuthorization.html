@@ -1,10 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<table *ngIf="!showAuthPage">
+    <thead>
+    <tr>
+        <td> {{ 'UBN' | translate }} </td>
+        <td> {{ 'NAME' | translate }} </td>
+        <td> {{ 'INSPECTION' | translate }} </td>
+        <td> {{ 'REQUEST DATE' | translate }} </td>
+        <td> {{ 'SAMPLING DATE' | translate }} </td>
+        <td> {{ 'NEXT ACTION' | translate }} </td>
+        <td> {{ 'ACTION TAKEN BY' | translate }} </td>
+        <td></td>
+    </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let request of requests">
+            <td>{{ request.ubn }}</td>
+            <td>{{ request.name }}</td>
+            <td>{{ request.inspection | translate }}</td>
+            <td>
+                <span *ngIf="request.request_date">
+                    {{ settings.convertToViewDate(request.request_date) }}
+                </span>
+                <span *ngIf="!request.request_date">
+                    --
+                </span>
+            </td>
+            <td>
+                <span *ngIf="request.sampling_date">
+                    {{ settings.convertToViewDate(request.sampling_date) }}
+                </span>
+                <span *ngIf="!request.sampling_date">
+                    --
+                </span>
+            </td>
+            <td>{{ request.next_action | translate }}</td>
+            <td>{{ request.action_taken_by }}</td>
+            <td>
+                <button type="button" (click)="switchToAuthPage(request.request_id)" class="small primary button">
+                    {{ 'AUTHORIZE' | translate }}
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>
 
-</body>
-</html>
+<request-auth *ngIf="showAuthPage" [requestId]="selectedId" (showOverviewPage)="switchToOverviewPage($event)"></request-auth>

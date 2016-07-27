@@ -1,1 +1,229 @@
-<h1> AUTH </h1>
+<div id="auth-page">
+    <button type="button" (click)="goToOverviewPage()" class="small primary button">
+        <i class="fa fa-chevron-left fa-fw" aria-hidden="true"></i> {{ 'BACK TO OVERVIEW' | translate }}
+    </button>
+
+    <div class="callout">
+        <div class="row result-container">
+            <div class="large-2 columns">
+                <span class="header-label">{{ 'DATE RESULT' | translate }}:</span> 01/01/2001
+            </div>
+            <div class="large-2 columns">
+                <span class="header-label">{{ 'RESULT' | translate }}:</span> 01/01/2001
+            </div>
+            <div class="large-2 columns">
+                <span class="header-label">{{ 'ULN' | translate }}:</span> NL12918819812
+            </div>
+            <div class="large-2 columns">
+                <span class="header-label">{{ 'DATE OF BIRTH' | translate }}:</span> 01/01/2001
+            </div>
+            <div class="large-2 columns end">
+                <span class="header-label">{{ 'Sendin_ID' | translate }}:</span> 01/01/2001
+            </div>
+        </div>
+        <div class="row value-container">
+            <div class="large-3 columns">
+                <div class="row">
+                    <div class="small-6 columns">
+                        {{ 'VETERINARY NAME' | translate }}:
+                    </div>
+                    <div class="small-6 columns">
+                        12312312
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="small-6 columns">
+                        {{ 'VETERINARY ADDRESS' | translate}}:
+                    </div>
+                    <div class="small-6 columns">
+                        12312312
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="small-6 columns">
+                        {{ 'VETERINARY POSTCODE' | translate}}:
+                    </div>
+                    <div class="small-6 columns">
+                        12312312
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="small-6 columns">
+                        {{ 'VETERINARY CITY' | translate}}:
+                    </div>
+                    <div class="small-6 columns">
+                        12312312
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="large-6 columns">
+                        {{ 'VETERINARY EMAIL' | translate}}:
+                    </div>
+                    <div class="large-6 columns">
+                        12312312
+                    </div>
+                </div>
+            </div>
+            <div class="large-3 columns">
+                <div class="row">
+                    <div class="small-6 columns">
+                        {{ 'Serl_EAE'}}:
+                    </div>
+                    <div class="small-6 columns">
+                        12312312
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="small-6 columns">
+                        {{ 'CLA_PP'}}:
+                    </div>
+                    <div class="small-6 columns">
+                        12312312
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="small-6 columns">
+                        {{ 'CLA_Result'}}:
+                    </div>
+                    <div class="small-6 columns">
+                        12312312
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="small-6 columns">
+                        {{ 'MV'}}:
+                    </div>
+                    <div class="small-6 columns">
+                        12312312
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="small-6 columns">
+                        {{ 'SGHSAELISA'}}:
+                    </div>
+                    <div class="small-6 columns">
+                        12312312
+                    </div>
+                </div>
+            </div>
+            <div class="large-3 columns">
+                <div class="row">
+                    <div class="small-6 columns">
+                        {{ 'JohnesEIA'}}:
+                    </div>
+                    <div class="small-6 columns">
+                        12312312
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="small-6 columns">
+                        {{ 'JohnesEIA'}}:
+                    </div>
+                    <div class="small-6 columns">
+                        12312312
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="small-6 columns">
+                        {{ 'JohnesP'}}:
+                    </div>
+                    <div class="small-6 columns">
+                        12312312
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="small-6 columns">
+                        {{ 'MVOD_RatoP'}}:
+                    </div>
+                    <div class="small-6 columns">
+                        12312312
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="small-6 columns">
+                        {{ 'MV_CAEPool'}}:
+                    </div>
+                    <div class="small-6 columns">
+                        12312312
+                    </div>
+                </div>
+            </div>
+            <div class="large-3 columns">
+                <div class="row">
+                    <div class="small-6 columns">
+                        {{ 'SGHSASAGID'}}:
+                    </div>
+                    <div class="small-6 columns">
+                        12312312
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="small-6 columns">
+                        {{ 'GENOTYPE' | translate}}:
+                    </div>
+                    <div class="small-6 columns">
+                        12312312
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="small-6 columns">
+                        {{ 'GENOTYPE CLASS' | translate }}:
+                    </div>
+                    <div class="small-6 columns">
+                        12312312
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row auth-container">
+        <div class="large-push-4 large-4 columns">
+            <div class="row">
+                <div class="large-2 columns">
+                    <label> {{ 'NOTES' | translate }} </label>
+                </div>
+                <div class="large-10 columns">
+                    <textarea rows="8"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="large-4 columns">
+            <div class="row">
+                <div class="large-4 columns">
+                    <label class="middle"> {{ 'DATE SINCE' | translate }} </label>
+                </div>
+                <div class="large-8 columns">
+                    <input type="text">
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-4 columns">
+                    <label class="middle"> {{ 'DATE TILL' | translate }} </label>
+                </div>
+                <div class="large-8 columns">
+                    <input type="text">
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-4 columns">
+                    <label class="middle"> {{ 'STATUS' | translate }} </label>
+                </div>
+                <div class="large-8 columns">
+                    <select>
+                        <option> {{ 'FREE (1 YEAR)' | translate }} </option>
+                        <option> {{ 'FREE (2 YEAR)' | translate }} </option>
+                        <option> {{ 'UNDER OBSERVATION' | translate }} </option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-4 columns"> &nbsp; </div>
+                <div class="large-8 columns">
+                    <button type="button" class="small primary button expanded">
+                        {{ 'AUTHORIZE' | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,10 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<div id="add-csv" class="row">
+    <div class="large-4 columns">
+        <div class="row">
+            <div class="large-6 columns">
+                <label class="middle"> {{ 'UBN' | translate }} </label>
+            </div>
+            <div class="large-6 columns">
+                <input type="text">
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-6 columns">
+                <label class="middle"> {{ 'INSPECTION' | translate }} </label>
+            </div>
+            <div *ngIf="!inspectionDocument?.name" class="large-6 columns file-picker">
+                <label class="tiny primary button pull-right">
+                    <i class="fa fa-upload" aria-hidden="true"></i>
+                    <input type="file" (change)="selectFile($event)">
+                </label>
+            </div>
+            <div *ngIf="inspectionDocument?.name" class="large-6 columns">
+                <button (click)="openFile()" class="small primary button">
+                    <i class="fa fa-file-o fa-fw" aria-hidden="true"></i>
+                </button>
+                <button (click)="removeFile()" class="small alert button">
+                    <i class="fa fa-trash-o fa-fw" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-6 columns"> &nbsp; </div>
+            <div class="large-6 columns">
+                <button type="button" *ngIf="!uploadIsSuccessful" class="small primary button pull-right">
+                    {{ 'UPLOAD' | translate }}
+                </button>
+                <button type="button" *ngIf="uploadIsSuccessful" class="small primary button pull-right">
+                    {{ 'AUTHORIZE' | translate }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

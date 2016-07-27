@@ -1,10 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<div id="health">
 
-</body>
-</html>
+    <!--BREADCRUMBS-->
+    <div class="row">
+        <ul class="breadcrumbs">
+            <li><a routerLink="/dashboard">{{ 'DASHBOARD' | translate }}</a></li>
+            <li>{{ 'ANIMAL HEALTH' | translate }}</li>
+        </ul>
+    </div>
+
+    <div class="row">
+        <div class="page-header">
+            <div class="page-title">{{ 'ANIMAL HEALTH' | translate }}</div>
+        </div>
+    </div>
+
+    <!--TABS MEDIUM/LARGE SCREENS-->
+    <div class="row hide-for-small-only">
+        <ul class="tabs">
+            <li class="tabs-title">
+                <a routerLink="/health/inspections" routerLinkActive="active">{{ 'INSPECTIONS' | translate }}</a>
+            </li>
+            <li class="tabs-title">
+                <a routerLink="/health/letters" routerLinkActive="active">{{ 'SUPPORT LETTERS' | translate }}</a>
+            </li>
+            <li class="tabs-title">
+                <a routerLink="/health/upload-csv" routerLinkActive="active">{{ 'UPLOAD CSV' | translate }}</a>
+            </li>
+            <li class="tabs-title">
+                <a routerLink="/health/erroneous-csv" routerLinkActive="active">{{ 'ERRONEOUS CSV' | translate }}</a>
+            </li>
+        </ul>
+    </div>
+
+    <!--TABS SMALL SCREENS-->
+    <div class="row show-for-small-only">
+        <label> {{ 'TAB' | translate }}
+            <select [(ngModel)]="selectedRoute" (change)="navigateTo($event.target.value)">
+                <option value="/health/inspections">{{ 'INSPECTIONS' | translate }}</option>
+                <option value="/health/letters">{{ 'SUPPORT LETTERS' | translate }}</option>
+                <option value="/health/upload-csv">{{ 'UPLOAD CSV' | translate }}</option>
+                <option value="/health/erroneous-csv">{{ 'ERRONEOUS CSV' | translate }}</option>
+            </select>
+        </label>
+    </div>
+
+    <!--PAGE CONTENT-->
+    <div class="row">
+        <router-outlet></router-outlet>
+    </div>
+</div>

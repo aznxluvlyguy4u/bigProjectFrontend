@@ -1,7 +1,21 @@
-import {Component} from "@angular/core";
+import {Component, Input, Output} from "@angular/core";
+import {EventEmitter} from "@angular/platform-browser-dynamic/src/facade/async";
+import {TranslatePipe} from "ng2-translate/ng2-translate";
 
 @Component({
-    templateUrl: '/app/main/health/authorization/health.authorization.html',
+    selector: 'request-auth',
+    templateUrl: '/app/main/health/inspections/components/tableAuthorization/authorization/tableAuthorization.authorization.html',
+    pipes: [TranslatePipe]
 })
 
-export class HealthAuthorizationComponent {}
+export class AuthorizationComponent {
+    
+    @Input() requestId: string;
+    @Output() showOverviewPage: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+    constructor() {}
+
+    private goToOverviewPage() {
+        this.showOverviewPage.emit(false);
+    }
+}
