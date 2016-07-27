@@ -22,7 +22,7 @@ export class ClientFilterPipe implements PipeTransform {
         }
 
         // FILTER: SEARCH
-        if (search_input != null) {
+        if (search_input) {
             search_input = args[0].toLocaleUpperCase();
             filtered = filtered.filter(client => (
                 client.debtor_number +
