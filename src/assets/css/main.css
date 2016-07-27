@@ -339,6 +339,128 @@ nav {
     margin-top: -1em;
     padding-bottom: 2em; }
 
+#profile .form-container {
+  font-size: 0.7rem; }
+  #profile .form-container label {
+    font-size: 1em; }
+  #profile .form-container input {
+    font-size: 1em; }
+
+#health label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding-top: 0.7em; }
+
+#health input, #health select, #health button {
+  font-size: 1em;
+  font-weight: 400; }
+
+#health table {
+  font-size: 0.7rem; }
+  #health table button {
+    margin-bottom: 0; }
+    #health table button .badge {
+      background-color: #FFFFFF;
+      color: #000;
+      padding-bottom: 0.45em; }
+
+#health .file-picker input[type='file'] {
+  display: none; }
+
+#health #auth-page {
+  padding-top: 1em;
+  font-size: 0.7rem; }
+  #health #auth-page .callout {
+    padding-top: 0; }
+    #health #auth-page .callout .result-container {
+      padding: 0.8em 0;
+      background-color: #EEF3F5; }
+      #health #auth-page .callout .result-container span.header-label {
+        display: inline-block;
+        font-weight: 700; }
+    #health #auth-page .callout .value-container {
+      padding-top: 1em; }
+
+#health .auth-container textarea {
+  font-size: 0.7rem;
+  resize: none; }
+
+#health #letter-page {
+  padding-top: 3em;
+  font-size: 0.7rem; }
+  #health #letter-page a.menu-section {
+    color: #000; }
+
+#health #add-csv {
+  padding-top: 3em;
+  font-size: 0.7rem; }
+
+#invoice .table-options-container {
+  font-size: 0.7rem; }
+  #invoice .table-options-container label {
+    font-weight: 700;
+    font-size: 1em; }
+    #invoice .table-options-container label.category {
+      font-weight: 900; }
+    #invoice .table-options-container label input {
+      font-weight: 400;
+      font-size: 1em; }
+    #invoice .table-options-container label select {
+      font-weight: 400;
+      font-size: 1em; }
+    #invoice .table-options-container label button {
+      font-weight: 400;
+      font-size: 1em; }
+
+#invoice .invoice-overview tr {
+  font-size: 0.7rem; }
+  #invoice .invoice-overview tr .label {
+    padding: 0.6em;
+    font-weight: 900;
+    font-size: 0.9em;
+    border-radius: 5px; }
+  #invoice .invoice-overview tr button {
+    font-size: 0.7rem;
+    margin-bottom: 0; }
+
+#invoice #invoice-details button {
+  height: 39px; }
+
+#invoice #invoice-details .client-selection label {
+  font-weight: 700;
+  font-size: 0.7rem; }
+
+#invoice #invoice-details .client-selection input, #invoice #invoice-details .client-selection button {
+  font-weight: 400;
+  font-size: 0.7rem;
+  margin-bottom: 0; }
+
+#invoice #invoice-details .information-overview {
+  padding-top: 1em;
+  padding-bottom: 3em;
+  font-size: 0.7rem; }
+  #invoice #invoice-details .information-overview .section-title {
+    font-weight: 700;
+    font-size: 1.2em; }
+
+#invoice #invoice-details .invoice-rules label {
+  font-weight: 700;
+  font-size: 0.8rem; }
+
+#invoice #invoice-details .invoice-rules select, #invoice #invoice-details .invoice-rules button {
+  font-weight: 400; }
+
+#invoice #invoice-details .invoice-rules select {
+  font-size: 0.7rem; }
+
+#invoice #invoice-details table {
+  font-size: 0.7rem; }
+  #invoice #invoice-details table .remove-button {
+    color: #EC5840; }
+    #invoice #invoice-details table .remove-button:hover {
+      color: #732f20;
+      cursor: pointer; }
+
 .ng-datepicker-input {
   position: relative;
   width: 100%;

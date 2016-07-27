@@ -2,31 +2,23 @@ import {provideRouter, RouterConfig} from "@angular/router";
 import {MainComponent} from "./main/main.component";
 import {DashboardComponent} from "./main/dashboard/dashboard.component";
 import {HealthComponent} from "./main/health/health.component";
-import {HealthErroneousCSVComponent} from "./main/health/erroneous-csv/health.erroneousCSV";
-import {HealthAddCSVComponent} from "./main/health/add-csv/health.addCSV";
-import {HealthAuthorizeComponent} from "./main/health/authorize/health.authorize";
 import {HealthLettersComponent} from "./main/health/letters/health.letters";
 import {ClientComponent} from "./main/client/client.component";
 import {ClientOverviewComponent} from "./main/client/overview/client.overview";
 import {ClientDossierComponent} from "./main/client/dossier/client.dossier";
 import {ClientDetailsComponent} from "./main/client/details/client.details";
-import {InvoiceCreateComponent} from "./main/invoice/create/invoice.create";
-import {InvoiceDetailsConfigComponent} from "./main/invoice/details-config/invoice.detailsConfig";
 import {InvoiceDetailsComponent} from "./main/invoice/details/invoice.details";
-import {InvoiceRulesComponent} from "./main/invoice/rules/invoice.rules";
 import {InvoiceComponent} from "./main/invoice/invoice.component";
-import {InvoiceConfigComponent} from "./main/invoice/config/invoice.config";
 import {ConfigComponent} from "./main/config/config.component";
-import {ConfigLossComponent} from "./main/config/loss/config.loss";
-import {ConfigTreatmentComponent} from "./main/config/treatment/config.treatment";
-import {ConfigContactComponent} from "./main/config/contact/config.contact";
-import {ConfigDepartComponent} from "./main/config/depart/config.depart";
 import {CMSComponent} from "./main/cms/cms.component";
 import {ProfileComponent} from "./main/profile/profile.component";
 import {LoginComponent} from "./login/login.component";
-import {ConfigMedicationComponent} from "./main/config/medication/config.medication";
 import {ConfigUsersComponent} from "./main/config/users/config.users";
 import {ConfigChoiceFieldsComponent} from "./main/config/choiceFields/config.choiceFields";
+import {HealthInspectionsComponent} from "./main/health/inspections/health.inspections";
+import {HealthErroneousCSVComponent} from "./main/health/erroneousCSV/health.erroneousCSV";
+import {HealthUploadCSVComponent} from "./main/health/uploadCSV/health.uploadCSV";
+import {InvoiceOverviewComponent} from "./main/invoice/overview/invoice.overview";
 
 const routes: RouterConfig = [
     {
@@ -36,10 +28,10 @@ const routes: RouterConfig = [
             {path: 'dashboard', terminal: true, component: DashboardComponent},
             {path: 'health', component: HealthComponent,
                 children: [
-                    {path: '', terminal: true, redirectTo: 'erroneous-csv'},
+                    {path: '', terminal: true, redirectTo: 'inspections'},
+                    {path: 'inspections', component: HealthInspectionsComponent},
                     {path: 'erroneous-csv', component: HealthErroneousCSVComponent},
-                    {path: 'add-csv', component: HealthAddCSVComponent},
-                    {path: 'authorize', component: HealthAuthorizeComponent},
+                    {path: 'upload-csv', component: HealthUploadCSVComponent},
                     {path: 'letters', component: HealthLettersComponent}
                 ]},
             {path: 'client', component: ClientComponent,
@@ -52,12 +44,10 @@ const routes: RouterConfig = [
                 ]},
             {path: 'invoice', component: InvoiceComponent,
                 children: [
-                    {path: '', terminal: true, redirectTo: 'configuration'},
-                    {path: 'configuration', component: InvoiceConfigComponent},
-                    {path: 'create', component: InvoiceCreateComponent},
-                    {path: 'details', component: InvoiceDetailsComponent},
-                    {path: 'rules', component: InvoiceRulesComponent},
-                    {path: 'details-configuration', component: InvoiceDetailsConfigComponent}
+                    {path: '', terminal: true, redirectTo: 'overview'},
+                    {path: 'overview', component: InvoiceOverviewComponent},
+                    {path: 'details/:mode', component: InvoiceDetailsComponent},
+                    {path: 'details/:mode/:id', component: InvoiceDetailsComponent},
                 ]},
             {path: 'configuration', component: ConfigComponent,
                 children: [
