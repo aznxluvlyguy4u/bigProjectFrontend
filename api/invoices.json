@@ -1,0 +1,59 @@
+{
+  "result": [
+    {
+      "invoice_id": 1,
+      "invoice_number": "0000001",
+      "debtor_number": "0000001",
+      "ubn": "0000001",
+      "name": "Marta Brink",
+      "subscription_date": "2005-03-31T22:00:00.000Z",
+      "invoice_date": "2016-03-31T22:00:00.000Z",
+      "status": "UNPAID",
+      "reminders": 1
+    },
+    {
+      "invoice_id": 2,
+      "invoice_number": "0000002",
+      "debtor_number": "0000002",
+      "ubn": "0000002",
+      "name": "Jan Klaassen",
+      "subscription_date": "2005-03-31T22:00:00.000Z",
+      "invoice_date": "",
+      "status": "",
+      "reminders": 0
+    },
+    {
+      "invoice_id": 3,
+      "invoice_number": "0000003",
+      "debtor_number": "0000003",
+      "ubn": "0000003",
+      "name": "50 Cent",
+      "subscription_date": "2005-03-31T22:00:00.000Z",
+      "invoice_date": "2016-03-31T22:00:00.000Z",
+      "status": "PAID",
+      "reminders": 0
+    },
+    {
+      "invoice_id": 4,
+      "invoice_number": "0000004",
+      "debtor_number": "0000004",
+      "ubn": "0000004",
+      "name": "Joe Budden",
+      "subscription_date": "2005-03-31T22:00:00.000Z",
+      "invoice_date": "",
+      "status": "",
+      "reminders": 0
+    },
+    {
+      "invoice_id": 5,
+      "invoice_number": "0000005",
+      "debtor_number": "0000005",
+      "ubn": "0000005",
+      "name": "Sean Carter",
+      "subscription_date": "2005-03-31T22:00:00.000Z",
+      "invoice_date": "2016-03-31T22:00:00.000Z",
+      "status": "PAID",
+      "reminders": 0
+    }
+  ]
+}

@@ -1,10 +1,208 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<div id="invoice-details">
+    <div class="page-header">
+        <div class="page-title">{{ pageTitle | translate }}</div>
+    </div>
 
-</body>
-</html>
+    <div class="row client-selection">
+        <div class="large-2 columns">
+            <label>
+                {{ 'UBN' | translate }}
+                <input type="text">
+            </label>
+        </div>
+        <div class="large-2 columns">
+            <label>
+                {{ 'LAST NAME' | translate }}
+                <input type="text">
+            </label>
+        </div>
+        <div class="large-2 columns end">
+            <label>
+                &nbsp;
+                <button class="small primary button expanded">
+                    {{ 'SELECT' | translate }}
+                </button>
+            </label>
+        </div>
+    </div>
+<hr>
+    <div class="row information-overview">
+        <div class="large-3 columns">
+            <div class="row">
+                <div class="large-12 columns section-title">
+                    {{ 'CLIENT INFORMATION' | translate }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-6 columns">
+                    {{ 'UBN' | translate }}
+                </div>
+                <div class="large-6 columns">
+                    123123112
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-6 columns">
+                    {{ 'INVOICE NUMBER' | translate }}
+                </div>
+                <div class="large-6 columns">
+                    123123112
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-6 columns">
+                    {{ 'NAME' | translate }}
+                </div>
+                <div class="large-6 columns">
+                    Jansen
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-6 columns">
+                    {{ 'VAT NUMBER' | translate }}
+                </div>
+                <div class="large-6 columns">
+                    12391723981
+                </div>
+            </div>
+        </div>
+        <div class="large-3 columns end">
+            <div class="row">
+                <div class="large-12 columns section-title">
+                    {{ 'YOUR INFORMATION' | translate }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-6 columns">
+                    {{ 'NAME' | translate }}
+                </div>
+                <div class="large-6 columns">
+                    Burp
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-6 columns">
+                    {{ 'IBAN' | translate }}
+                </div>
+                <div class="large-6 columns">
+                    NLING123123112
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-6 columns">
+                    {{ 'VAT NUMBER' | translate }}
+                </div>
+                <div class="large-6 columns">
+                    12391723981
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row invoice-rules">
+        <div class="large-6 columns">
+            <label>
+                {{ 'INVOICE RULE' | translate }}
+                <select [(ngModel)]="selectedInvoiceId">
+                    <option value="">--</option>
+                    <option *ngFor="let rule of invoiceRulesOptions" value="{{ rule.rule_id }}">{{ rule.description }}</option>
+                </select>
+            </label>
+        </div>
+        <div class="large-2 columns end">
+            <label>
+                &nbsp;
+                <button [disabled]="!selectedInvoiceId" (click)="addInvoiceRule()" class="small primary button expanded">
+                    <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
+                    {{ 'ADD' | translate }}
+                </button>
+            </label>
+        </div>
+    </div>
+
+    <div class="row invoice-table">
+        <div class="large-12 columns">
+            <table>
+                <thead>
+                    <tr>
+                        <td width="1"></td>
+                        <td>
+                            {{ 'DESCRIPTION' | translate }}
+                        </td>
+                        <td class="text-right">
+                            {{ 'VAT RATE' | translate }}
+                        </td>
+                        <td class="text-right">
+                            {{ 'PRICE' | translate }}
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let rule of invoice.rules">
+                        <td width="1">
+                            <i class="fa fa-times fa-fw remove-button" (click)="removeInvoiceRule(rule)" aria-hidden="true"></i>
+                        </td>
+                        <td>
+                            {{rule.description}}
+                        </td>
+                        <td class="text-right">
+                            {{rule.vat_rate}}%
+                        </td>
+                        <td class="text-right">
+                            {{rule.price_excl_vat.toFixed(2)}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="large-push-8 large-4 columns">
+            <table>
+                <tbody>
+                    <tr>
+                        <td> {{ 'TOTAL EXCL VAT' | translate }}</td>
+                        <td>
+                            <span class="pull-right">
+                                000,00
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td> {{ 'VAT ON' | translate }}</td>
+                        <td>
+                            <span class="pull-right">
+                                000,00
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td> {{ 'TOTAL INCL VAT' | translate }}</td>
+                        <td>
+                            <span class="pull-right">
+                                000,00
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="large-12 columns">
+            <span class="pull-right">
+                <button type="button" class="small primary button">
+                    {{ 'SEND INVOICE' | translate }}
+                </button>
+                <button type="button" class="small primary button">
+                    {{ 'SAVE' | translate }}
+                </button>
+                <button type="button" class="small alert button">
+                    {{ 'CANCEL' | translate }}
+                </button>
+            </span>
+        </div>
+    </div>
+</div>

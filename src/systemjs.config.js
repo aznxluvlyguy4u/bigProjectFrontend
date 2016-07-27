@@ -8,7 +8,8 @@ System.config({
         'moment'        : 'node_modules/moment/min',
         'ng2-translate' : 'node_modules/ng2-translate',
         'ng2-pagination': 'node_modules/ng2-pagination',
-        'lodash'        : 'node_modules/lodash'
+        'lodash'        : 'node_modules/lodash',
+        'ng2-ckeditor'  : 'node_modules/ng2-ckeditor/lib'
     },
     packages: {
         'app'                               : {main: 'index.js'},
@@ -28,6 +29,7 @@ System.config({
         'moment'                            : {main: 'moment-with-locales.min.js'},
         'ng2-translate'                     : {defaultExtension: 'js'},
         'ng2-pagination'                    : {defaultExtension: 'js'},
+        'ng2-ckeditor'                      : {main: 'CKEditor.js'},
         'lodash'                            : {main: 'lodash.min.js'}
     }
 });

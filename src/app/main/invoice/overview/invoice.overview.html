@@ -1,10 +1,89 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<div class="page-header">
+    <div class="page-title">{{ 'INVOICE OVERVIEW' | translate }}</div>
+</div>
 
-</body>
-</html>
+<div class="row table-options-container">
+    <div class="large-2 columns">
+        <label>
+            {{ 'INVOICES' | translate }}
+            <select [(ngModel)]="filterInvoices">
+                <option value="ALL">{{ 'ALL' | translate }}</option>
+                <option value="UNPAID INVOICES">{{ 'UNPAID INVOICES' | translate }}</option>
+            </select>
+        </label>
+    </div>
+    <div class="large-2 columns">
+        <label>
+            &nbsp;
+            <button (click)="navigateTo('/invoice/details/new')" class="medium primary button expanded">
+                <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
+                {{ 'NEW INVOICE' | translate }}
+            </button>
+        </label>
+    </div>
+</div>
+
+<div class="row">
+    <div class="large-12 columns">
+        <table class="stack invoice-overview">
+            <thead>
+                <tr>
+                    <td>{{ 'INVOICE NUMBER' | translate }}</td>
+                    <td>{{ 'DEBTOR NUMBER' | translate }}</td>
+                    <td>{{ 'UBN' | translate }}</td>
+                    <td>{{ 'NAME' | translate }}</td>
+                    <td>{{ 'SUBSCRIPTION DATE' | translate }}</td>
+                    <td>{{ 'INVOICE DATE' | translate }}</td>
+                    <td>{{ 'STATUS' | translate }}</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let invoice of invoices">
+                    <td>{{ invoice.invoice_number }}</td>
+                    <td>{{ invoice.debtor_number }}</td>
+                    <td>{{ invoice.ubn }}</td>
+                    <td>{{ invoice.name }}</td>
+                    <td>
+                        <span *ngIf="invoice.subscription_date">
+                            {{ settings.convertToViewDate(invoice.subscription_date) }}
+                        </span>
+                        <span *ngIf="!invoice.subscription_date">
+                            --
+                        </span>
+                    </td>
+                    <td>
+                        <span *ngIf="invoice.invoice_date">
+                            {{ settings.convertToViewDate(invoice.invoice_date) }}
+                        </span>
+                        <span *ngIf="!invoice.invoice_date" class="warning label">
+                            {{ 'NOT SEND' | translate }}
+                        </span>
+                    </td>
+                    <td>
+                        <span *ngIf="invoice.status == 'UNPAID'" class="alert label">
+                            {{ 'UNPAID' | translate }} ({{ calculateDays(invoice.invoice_date)}} {{ 'DAYS' | translate }})
+                        </span>
+                        <span *ngIf="invoice.status == 'PAID'" class="success label">
+                            {{ 'PAID' | translate }}
+                        </span>
+                    </td>
+                    <td>
+                        <span *ngIf="invoice.reminders > 0" class="alert label">
+                            {{ invoice.reminders }} {{ 'REMINDER(S)' | translate }}
+                        </span>
+                    </td>
+                    <td>
+                        <button type="button" *ngIf="!invoice.invoice_date" class="tiny primary button">
+                            {{ 'EDIT' | translate }}
+                        </button>
+                        <button type="button" class="small primary button pull-right">
+                            {{ 'VIEW' | translate }}
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

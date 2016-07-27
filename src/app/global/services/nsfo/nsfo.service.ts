@@ -102,4 +102,22 @@ export class NSFOService {
         return this.http.get("/api/clients_details_1_notes.json")
             .map(res => res.json())
     }
+
+    // TODO REMOVE THIS WHEN API LIVE
+    doGetAnimalHealth() {
+        return this.http.get("/api/animal_health.json")
+            .map(res => res.json())
+    }
+
+    // TODO REMOVE THIS WHEN API LIVE
+    doGetInvoices() {
+        return this.http.get("/api/invoices.json")
+            .map(res => res.json())
+    }
+
+    // TODO REMOVE THIS WHEN API LIVE
+    doGetInvoiceRules() {
+        return this.http.get("/api/invoices_rules.json")
+            .map(res => res.json())
+    }
 }

@@ -1,0 +1,67 @@
+{
+  "result": [
+    {
+      "ubn": "1234567",
+      "company": {
+        "name": "Franken Fokkerij B.V",
+        "address": "Dropstraat",
+        "street_number": "11",
+        "postal_code": "1234AB"
+      },
+      "inspection_results": [
+        {
+          "result_date": "2016-03-01T22:00:00.000Z",
+          "uln_country_code": "NL",
+          "uln_number": "1000061999959",
+          "date_of_birth": "2004-11-09T22:00:00.000Z",
+          "result": "ARR/ARR",
+          "notes": "",
+          "sendin_id": "APG150505",
+          "vet_name": "",
+          "vet_address": "",
+          "vet_zipcode": "",
+          "vet_city": "",
+          "vet_email": "",
+          "serl_eae": "",
+          "cla_pp": "",
+          "cla_result": "",
+          "mv": "",
+          "sghsaelisa": "",
+          "johnes_eia": "",
+          "johnes_p": "",
+          "mvod_rato_p": "",
+          "mv_cae_pool": "",
+          "sghsasagid": "",
+          "genotype": "ARR/ARR",
+          "genotype_class": "G1"
+        },
+        {
+          "result_date": "2016-03-04T22:00:00.000Z",
+          "uln_country_code": "NL",
+          "uln_number": "1000061888888",
+          "date_of_birth": "2005-08-03T22:00:00.000Z",
+          "result": "ARR/ARR",
+          "notes": "",
+          "sendin_id": "APG150512",
+          "vet_name": "",
+          "vet_address": "",
+          "vet_zipcode": "",
+          "vet_city": "",
+          "vet_email": "",
+          "serl_eae": "",
+          "cla_pp": "",
+          "cla_result": "",
+          "mv": "",
+          "sghsaelisa": "",
+          "johnes_eia": "",
+          "johnes_p": "",
+          "mvod_rato_p": "",
+          "mv_cae_pool": "",
+          "sghsasagid": "",
+          "genotype": "ARR/ARR",
+          "genotype_class": "G1"
+        }
+      ]
+    }
+  ]
+}
