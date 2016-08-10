@@ -26,6 +26,39 @@ textarea:disabled:hover {
 .tabs-title a.active {
   background-color: #E6E6E6; }
 
+.spinner {
+  margin: 1rem auto 0;
+  width: 70px;
+  text-align: center; }
+  .spinner > div {
+    width: 12px;
+    height: 12px;
+    background-color: #EC5840;
+    border-radius: 100%;
+    display: inline-block;
+    -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+    animation: sk-bouncedelay 1.4s infinite ease-in-out both; }
+  .spinner .bounce1 {
+    -webkit-animation-delay: -0.32s;
+    animation-delay: -0.32s; }
+  .spinner .bounce2 {
+    -webkit-animation-delay: -0.16s;
+    animation-delay: -0.16s; }
+
+@keyframes sk-bouncedelay {
+  0%, 80%, 100% {
+    -webkit-transform: scale(0); }
+  40% {
+    -webkit-transform: scale(1); } }
+
+@keyframes sk-bouncedelay {
+  0%, 80%, 100% {
+    -webkit-transform: scale(0);
+    transform: scale(0); }
+  40% {
+    -webkit-transform: scale(1);
+    transform: scale(1); } }
+
 nav {
   position: fixed;
   display: flex;
@@ -292,6 +325,9 @@ nav {
   font-weight: 700;
   padding-top: 0.4em;
   margin: 0; }
+
+#client .ghost-login-modal table td {
+  font-size: 0.7rem; }
 
 #content-management .form-container label {
   font-weight: 700;

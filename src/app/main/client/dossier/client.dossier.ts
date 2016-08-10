@@ -10,15 +10,16 @@ import {LocationsDisplay} from "./component/locations/locations.component";
 import {UtilsService} from "../../../global/services/utils/utils.service";
 import {REACTIVE_FORM_DIRECTIVES} from "@angular/forms";
 import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
+import {Datepicker} from "../../../global/components/datepicker/datepicker.component";
+import {SettingsService} from "../../../global/services/settings/settings.service";
 
 @Component({
-    directives: [REACTIVE_FORM_DIRECTIVES, LocationsDisplay, UsersDisplay],
+    directives: [REACTIVE_FORM_DIRECTIVES, LocationsDisplay, UsersDisplay, Datepicker],
     templateUrl: '/app/main/client/dossier/client.dossier.html',
     pipes: [TranslatePipe]
 })
 
 export class ClientDossierComponent {
-    private modal_display = 'none';
     private provinces = [];
     private provinces$: Subscription;
     private pageTitle: string;
@@ -38,8 +39,9 @@ export class ClientDossierComponent {
         private router: Router,
         private activatedRoute: ActivatedRoute, 
         private utils: UtilsService, 
+        private settings: SettingsService, 
         private fb: FormBuilder,
-        private api: NSFOService
+        private nsfo: NSFOService
     ) {
         this.form = fb.group({
             company_name: ['', Validators.required],
@@ -48,19 +50,20 @@ export class ClientDossierComponent {
             debtor_number: [''],
             vat_number: [''],
             chamber_of_commerce_number: [''],
-            address_street_name: [''],
-            address_address_number: [''],
+            address_street_name: ['', Validators.required],
+            address_address_number: ['', Validators.required],
             address_suffix: [''],
-            address_postal_code: [''],
-            address_city: [''],
-            address_state: [''],
-            billing_address_street_name: [''],
-            billing_address_address_number: [''],
+            address_postal_code: ['', Validators.required],
+            address_city: ['', Validators.required],
+            address_state: ['', Validators.required],
+            billing_address_street_name: ['', Validators.required],
+            billing_address_address_number: ['', Validators.required],
             billing_address_suffix: [''],
-            billing_address_postal_code: [''],
-            billing_address_city: [''],
-            billing_address_state: [''],
-            notes: ['']
+            billing_address_postal_code: ['', Validators.required],
+            billing_address_city: ['', Validators.required],
+            billing_address_state: ['', Validators.required],
+            animal_health_subscription: ['NO'],
+            subscription_date: [''],
         });
     }
 
@@ -94,20 +97,39 @@ export class ClientDossierComponent {
     }
     
     private getClientInfo() {
-        this.api.doGetClientInfo()
+        this.nsfo.doGetRequest(this.nsfo.URI_CLIENT + '/' + this.clientId)
             .subscribe(
                 res => {
+                    console.log(res);
                     this.client = res.result;
+                    this.client.deleted_users = [];
+                    this.client.deleted_locations = [];
+
+                    for(let user of this.client.users) {
+                        user.primary_contactperson = false;
+                    }
+
+                    let user = this.client.owner;
+                    user.primary_contactperson = true;
+                    this.client.users.push(user);
                 }
-            );
+            )
     };
     
     private updateLocations(locations: Location[]): void {
         this.client.locations = locations;
     }
 
+    private updateDeletedLocations(location: Location): void {
+        this.client.deleted_locations.push(location);
+    }
+
     private updateUsers(users: User[]): void {
         this.client.users = users;
+    }
+
+    private updateDeletedUsers(user: User): void {
+        this.client.deleted_users.push(user);
     }
 
     private saveClient(): void {
@@ -129,11 +151,30 @@ export class ClientDossierComponent {
         if (this.isValidForm) {
             if (this.form.valid) {
                 this.savingInProgress = true;
-                
-                // TODO CONNECT TO API
-                console.log(this.client);
-                this.navigateTo('/client');
-                
+
+                let newClient = _.cloneDeep(this.client);
+
+                if(this.form.controls['animal_health_subscription'].value == 'YES') {
+                    newClient.animal_health_subscription = true;
+                    newClient.subscription_date = '';
+                } else {
+                    newClient.animal_health_subscription = false;
+                }
+
+                let owner = _.find(newClient.users, ['primary_contactperson', true]);
+                _.remove(newClient.users, owner);
+
+                newClient.owner = owner;
+                newClient.deleted_locations = [];
+                newClient.deleted_users = [];
+
+                this.nsfo.doPostRequest(this.nsfo.URI_CLIENT, newClient)
+                    .subscribe(
+                        res => {
+                            this.savingInProgress = false;
+                            this.navigateTo('/client');
+                        }
+                    );
             } else {
                 this.isValidForm = false;
                 this.errorMessage = 'FILL IN ALL THE REQUIRED FIELDS';
@@ -143,7 +184,56 @@ export class ClientDossierComponent {
     }
     
     private editClient(): void {
-        
+        this.isValidForm = true;
+        this.errorMessage = '';
+
+        let owner = _.find(this.client.users, ['primary_contactperson', true]);
+        console.log(owner);
+        if (!owner) {
+            this.isValidForm = false;
+            this.errorMessage = 'A PRIMARY CONTACTPERSON IS REQUIRED';
+            this.openModal();
+        }
+
+        if (this.client.locations.length == 0) {
+            this.isValidForm = false;
+            this.errorMessage = 'AT LEAST ONE LOCATION IS REQUIRED';
+            this.openModal();
+        }
+
+        if (this.isValidForm) {
+            if (this.form.valid) {
+                this.savingInProgress = true;
+
+                let newClient = _.cloneDeep(this.client);
+
+                if(this.form.controls['animal_health_subscription'].value == 'YES') {
+                    newClient.animal_health_subscription = true;
+                    newClient.subscription_date = '';
+                } else {
+                    newClient.animal_health_subscription = false;
+                }
+
+                let owner = _.find(newClient.users, ['primary_contactperson', true]);
+                _.remove(newClient.users, owner);
+
+                newClient.owner = owner;
+
+                console.log(newClient);
+                this.nsfo.doPutRequest(this.nsfo.URI_CLIENT, newClient)
+                    .subscribe(
+                        res => {
+                            this.savingInProgress = false;
+                            // this.navigateTo('/client');
+                        }
+                    );
+
+            } else {
+                this.isValidForm = false;
+                this.errorMessage = 'FILL IN ALL THE REQUIRED FIELDS';
+                this.openModal();
+            }
+        }
     }
 
     private openModal() {
@@ -153,7 +243,7 @@ export class ClientDossierComponent {
     private closeModal() {
         this.modalDisplay = 'none';
     }
-
+    
     private navigateTo(url: string) {
         this.router.navigate([url]);
     }

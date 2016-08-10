@@ -10,6 +10,10 @@
       "animal_health": "YES",
       "status": "ACTIVE",
       "notes": "",
+      "owner": {
+        "last_name": "Brink",
+        "first_name": "Marta"
+      },
       "address": {
         "street_name": "Postmanlaan",
         "address_number": "90",
@@ -47,6 +51,10 @@
       "animal_health": "YES",
       "status": "ACTIVE",
       "notes": "",
+      "owner": {
+        "last_name": "Jobs",
+        "first_name": "Steve"
+      },
       "address": {
         "street_name": "Burplaan",
         "address_number": "90",

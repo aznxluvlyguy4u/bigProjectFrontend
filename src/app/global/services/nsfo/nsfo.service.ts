@@ -4,8 +4,22 @@ import {Http, Headers} from "@angular/http";
 @Injectable()
 export class NSFOService {
     // private API_SERVER_URL: string = 'http://nsfo-api.jongensvantechniek.nl/api';
-    private API_SERVER_URL: string = 'http://ebe6a43d.ngrok.io/api';
-    private USER_ENV_URL: string = 'http://localhost:3002';
+    private API_SERVER_URL: string = 'http://localhost:8000/api';
+    private USER_ENV_URL: string = 'http://localhost:8080';
+
+    public URI_GHOST_LOGIN: string = '/v1/admins/ghost';
+    public URI_ADMIN: string = '/v1/admins';
+    public URI_ADMIN_DEACTIVATE: string = '/v1/admins-deactivate';
+    public URI_ADMIN_ACCESS_LEVEL: string = '/v1/admins-access-levels';
+
+    public URI_CLIENT_OVERVIEW: string = '/v1/companies';
+    public URI_CLIENT: string = '/v1/company';
+    public URI_CLIENT_DETAILS: string = '/v1/company/details';
+    public URI_CLIENT_NOTES: string = '/v1/company/notes';
+    public URI_CLIENT_INACTIVE: string = '/v1/company/inactive';
+
+    public URI_HEALTH_COMPANY: string = '/v1/health/company';
+    public URI_HEALTH_UBN: string = '/v1/health/ubn';
 
     private content_type: string = "Content-Type";
     private authorization: string = "Authorization";

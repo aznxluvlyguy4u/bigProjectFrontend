@@ -1,5 +1,5 @@
 export class Client {
-    public client_id: number;
+    public company_id: number;
     public debtor_number: string;
     public company_name: string;
     public telephone_number: string;
@@ -7,22 +7,28 @@ export class Client {
     public vat_number: string;
     public chamber_of_commerce_number: string;
     public subscription_date: string;
-    public unpaid_invoices: number;
-    public notes: string;
+    public animal_health_subscription: string | boolean;
+    public status: boolean;
+    public owner: User = new User();
+    public unpaid_invoices: Invoice[] = [];
+    public notes: ClientNote[] = [];
     public address: Address = new Address();
     public billing_address: Address = new Address();
     public locations: Location[] = [];
+    public deleted_locations: Location[] = [];
     public users: User[] = [];
+    public deleted_users: User[] = [];
     public pedigrees: Pedigree[] = [];
 }
 
 export class Location {
+    public location_id: string;
     public ubn: string;
     public address: Address = new Address();
-    public health: Health = new Health()
 }
 
 export class User {
+    public person_id: number;
     public prefix: string;
     public last_name: string;
     public first_name: string;
@@ -40,25 +46,15 @@ class Address {
     public country: string;
 }
 
-class Health {
-    public animal_health: string | boolean;
-    public disease: string;
-    public date_since: string;
-    public date_till: string;
-    public health_status: string;
-    public health_statement: File;
-    public own_health_statement: string | boolean;
-}
-
 class Pedigree {
     public number: string;
 }
 
 export class ClientDetails {
-    public client_id: number;
+    public company_id: number;
     public company_name: string;
     public telephone_number: string;
-    public primary_contactperson: User = new User();
+    public owner: User = new User();
     public status: string;
     public subscription_date: string;
     public livestock: LivestockStats = new LivestockStats();
@@ -66,6 +62,14 @@ export class ClientDetails {
     public breeder_numbers: BreederNumber[] = [];
     public invoices: Invoice[] = [];
     public animal_health: AnimalHealth[] = [];
+    public users: User[] = [];
+    public health_statusses: LocationHealthStatus[] = [];
+}
+
+export class LocationHealthStatus {
+    public ubn: string;
+    public maedi_visna_status: string;
+    public scrapie_status: string;
 }
 
 class BreederNumber {
@@ -109,6 +113,22 @@ class AnimalStats {
 
 export class ClientNote {
     public creation_date: string;
-    public created_by: string;
+    public creator: User = new User();
     public message: string;
 }
+
+export const MAEDI_VISNA_STATUS_OPTIONS = [
+    "FREE",
+    "FREE_1_YEAR",
+    "FREE_2_YEAR",
+    "UNDER_OBSERVATION",
+    "UNDER_INVESTIGATION",
+    "STATUS_KNOWN_BY_AHD"
+];
+
+export const SCRAPIE_STATUS_OPTIONS = [
+    "FREE",
+    "RESISTANT",
+    "UNDER_OBSERVATION",
+    "UNDER_INVESTIGATION"
+];

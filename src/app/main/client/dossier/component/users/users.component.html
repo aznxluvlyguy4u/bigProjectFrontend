@@ -36,7 +36,7 @@
                 <td class="text-right">
                     <span *ngIf="!disabledMode">
                         <a (click)="openModal(true, user)"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
-                        <a (click)="removeUser(user)" class="remove-button"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+                        <a (click)="removeUser(user);sendDeletedUser(user)" class="remove-button"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
                     </span>
                 </td>
             </tr>
@@ -59,7 +59,7 @@
                 <div [formGroup]="form" class="large-12 columns">
                     <div class="row">
                         <div class="large-4 columns">
-                            <label class="middle"> {{ 'LAST NAME' | translate }} </label>
+                            <label class="middle"> {{ 'LAST NAME' | translate }} * </label>
                         </div>
                         <div class="large-8 columns">
                             <input type="text" [(ngModel)]="user.last_name" formControlName="last_name" maxlength="50">
@@ -68,7 +68,7 @@
 
                     <div class="row">
                         <div class="large-4 columns">
-                            <label class="middle"> {{ 'FIRST NAME' | translate }} </label>
+                            <label class="middle"> {{ 'FIRST NAME' | translate }} * </label>
                         </div>
                         <div class="large-8 columns">
                             <input type="text" [(ngModel)]="user.first_name" formControlName="first_name" maxlength="50">
@@ -86,7 +86,7 @@
 
                     <div class="row">
                         <div class="large-4 columns">
-                            <label> {{ 'PRIMARY CONTACTPERSON' | translate }} </label>
+                            <label class="middle"> {{ 'PRIMARY CONTACTPERSON' | translate }} </label>
                         </div>
                         <div class="large-8 columns">
                             <select formControlName="primary_contactperson" [disabled]="hasPrimaryContactPerson && !user.primary_contactperson">
@@ -106,7 +106,7 @@
             </div>
             <span class="pull-left">
                 <label *ngIf="!hasUniqueEmails" class="error-message">{{ 'E-MAIL ADDRESS IS NOT UNIQUE' | translate }}</label>
-                <label *ngIf="!isValidForm" class="error-message">{{ 'E-MAIL ADDRESS IS REQUIRED' | translate }}</label>
+                <label *ngIf="!isValidForm" class="error-message">{{ 'FILL IN ALL THE REQUIRED FIELDS' | translate }}</label>
             </span>
             <span class="pull-right">
                 <button *ngIf="!isModalEditMode" (click)="addUser()" class="tiny primary button">{{ 'ADD' | translate}}</button>

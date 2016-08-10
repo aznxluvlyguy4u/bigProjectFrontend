@@ -12,12 +12,7 @@
 
     <div class="large-6 columns">
         <span class="pull-right">
-            <button class="small primary button">
-                <i class="fa fa-list-alt" aria-hidden="true"></i>
-                {{ 'LIVESTOCK' | translate }}
-            </button>
-
-            <button (click)="loginAsGhost()" class="small primary button">
+            <button (click)="openUserModal()" class="small primary button">
                 <i class="fa fa-sign-in fa-fw" aria-hidden="true"></i>
                 {{ 'LOGIN' | translate }}
             </button>
@@ -27,9 +22,14 @@
                 {{ 'EDIT' | translate }}
             </button>
 
-            <button class="small alert button">
+            <button *ngIf="clientDetails.status" (click)="setCompanyActive(false)" class="small alert button">
                 <i class="fa fa-ban fa-fw" aria-hidden="true"></i>
                 {{ 'DEACTIVATE' | translate }}
+            </button>
+
+            <button *ngIf="!clientDetails.status" (click)="setCompanyActive(true)" class="small alert button">
+                <i class="fa fa-thumbs-o-up fa-fw" aria-hidden="true"></i>
+                {{ 'ACTIVATE' | translate }}
             </button>
         </span>
     </div>
@@ -49,14 +49,28 @@
             <div class="value">{{ clientDetails.telephone_number }}</div>
 
             <label>{{ 'PRIMARY CONTACT PERSON' | translate }}</label>
-            <div class="value">{{ clientDetails.primary_contactperson.prefix | translate }} {{ clientDetails.primary_contactperson.first_name + ' ' + clientDetails.primary_contactperson.last_name }}</div>
-            <div class="value">{{ clientDetails.primary_contactperson.email_address }}</div>
+            <div class="value">{{ clientDetails.owner.prefix | translate }} {{ clientDetails.owner.first_name + ' ' + clientDetails.owner.last_name }}</div>
+            <div class="value">{{ clientDetails.owner.email_address }}</div>
 
             <label>{{ 'STATUS' | translate }}</label>
-            <div class="value">{{ clientDetails.status | translate }}</div>
+            <div class="value">
+                <span *ngIf="clientDetails.status">
+                    {{ 'ACTIVE' | translate }}
+                </span>
+                  <span *ngIf="!clientDetails.status">
+                    {{ 'NON-ACTIVE' | translate }}
+                </span>
+            </div>
 
             <label>{{ 'SUBSCRIPTION DATE' | translate }}</label>
-            <div class="value"> {{ settings.convertToViewDate(clientDetails.subscription_date) }}</div>
+            <div class="value">
+                <span *ngIf="clientDetails.subscription_date">
+                    {{ settings.convertToViewDate(clientDetails.subscription_date) }}
+                </span>
+                <span *ngIf="!clientDetails.subscription_date">
+                    --
+                </span>
+            </div>
         </div>
         <div class="client-info-overview">
             <table>
@@ -91,7 +105,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="client-info-overview">
+        <div *ngIf="clientDetails.breeder_numbers.length > 0" class="client-info-overview">
             <table>
                 <thead>
                     <tr>
@@ -111,6 +125,89 @@
         <div class="row">
             <div class="large-12 columns">
                 <div class="table-title">
+                    <label> {{ 'ANIMAL HEALTH' | translate }}  <span> ({{ 'STATUS PER LOCATION' | translate }}) </span></label>
+                </div>
+
+                <table class="client-info-table">
+                    <thead>
+                        <tr>
+                            <td>{{ 'UBN' | translate }}</td>
+                            <td>{{ 'MAEDI VISNA' | translate }}</td>
+                            <td>{{ 'SCRAPIE' | translate }}</td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngIf="healthStatusses.length == 0">
+                            <td colspan="4" class="text-center">{{ 'THERE ARE NO LOCATIONS' | translate }}</td>
+                        </tr>
+                        <tr *ngFor="let healthStatus of healthStatusses">
+                            <td>
+                                <span *ngIf="!healthStatus.ubn">--</span>
+                                <span *ngIf="healthStatus.ubn">{{ healthStatus.ubn }}</span>
+                            </td>
+                            <td>
+                                <span *ngIf="!healthStatus.maedi_visna_status">--</span>
+                                <span *ngIf="healthStatus.maedi_visna_status">{{ healthStatus.maedi_visna_status | translate }}</span>
+                            </td>
+                            <td>
+                                <span *ngIf="!healthStatus.scrapie_status">--</span>
+                                <span *ngIf="healthStatus.scrapie_status">{{ healthStatus.scrapie_status | translate }}</span>
+                            </td>
+                            <td>
+                                <span class="pull-right">
+                                    <button type="button" (click)="openLocationHealthModal(healthStatus)" class="small primary button">
+                                        {{ 'EDIT' | translate }}
+                                    </button>
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-12 columns">
+                <div class="table-title">
+                    <label> {{ 'ANIMAL HEALTH' | translate }} <span> ({{ 'FINISHED INSPECTIONS' | translate }}) </span></label>
+                </div>
+
+                <table class="client-info-table">
+                    <thead>
+                    <tr>
+                        <td>{{ 'UBN' | translate }}</td>
+                        <td>{{ 'NAME' | translate }}</td>
+                        <td>{{ 'INSPECTION' | translate }}</td>
+                        <td>{{ 'REQUEST DATE' | translate }}</td>
+                        <td>{{ 'DIRECTION DATE' | translate }}</td>
+                        <td>{{ 'TOTAL LEAD TIME' | translate }}</td>
+                        <td>{{ 'AUTHORIZED BY' | translate }}</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngIf="clientDetails.invoices.length == 0">
+                        <td colspan="7" class="text-center">{{ 'THERE ARE NO FINISHED INSPECTIONS' | translate }}</td>
+                    </tr>
+                    <tr *ngFor="let health of clientDetails.animal_health">
+                        <td>{{ health.ubn }}</td>
+                        <td>{{ health.name }}</td>
+                        <td>{{ health.inspection | translate }}</td>
+                        <td>{{ settings.convertToViewDate(health.request_date) }}</td>
+                        <td>
+                                <span *ngFor="let direction of health.directions">
+                                    {{ direction.type  | translate }}: <br> {{ settings.convertToViewDate(direction.date)}} <br><br>
+                                </span>
+                        </td>
+                        <td>{{ health.total_lead_time }}</td>
+                        <td>{{ health.authorized_by }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-12 columns">
+                <div class="table-title">
                     <label> {{ 'INVOICES' | translate }} </label>
                 </div>
 
@@ -124,6 +221,9 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <tr *ngIf="clientDetails.invoices.length == 0">
+                            <td colspan="4" class="text-center">{{ 'THERE ARE NO INVOICES' | translate }}</td>
+                        </tr>
                         <tr *ngFor="let invoice of clientDetails.invoices">
                             <td> {{ invoice.invoice_number }} </td>
                             <td> {{ settings.convertToViewDate(invoice.invoice_date) }} </td>
@@ -143,42 +243,6 @@
                 </table>
             </div>
         </div>
-        <div class="row">
-            <div class="large-12 columns">
-                <div class="table-title">
-                    <label> {{ 'ANIMAL HEALTH' | translate }} <span> ({{ 'FINISHED INSPECTIONS' | translate }}) </span></label>
-                </div>
-
-                <table class="client-info-table">
-                    <thead>
-                        <tr>
-                            <td>{{ 'UBN' | translate }}</td>
-                            <td>{{ 'NAME' | translate }}</td>
-                            <td>{{ 'INSPECTION' | translate }}</td>
-                            <td>{{ 'REQUEST DATE' | translate }}</td>
-                            <td>{{ 'DIRECTION DATE' | translate }}</td>
-                            <td>{{ 'TOTAL LEAD TIME' | translate }}</td>
-                            <td>{{ 'AUTHORIZED BY' | translate }}</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let health of clientDetails.animal_health">
-                            <td>{{ health.ubn }}</td>
-                            <td>{{ health.name }}</td>
-                            <td>{{ health.inspection | translate }}</td>
-                            <td>{{ settings.convertToViewDate(health.request_date) }}</td>
-                            <td>
-                                <span *ngFor="let direction of health.directions">
-                                    {{ direction.type  | translate }}: <br> {{ settings.convertToViewDate(direction.date)}} <br><br>
-                                </span>
-                            </td>
-                            <td>{{ health.total_lead_time }}</td>
-                            <td>{{ health.authorized_by }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
     </div>
     <div class="large-3 columns">
         <div class="row">
@@ -187,7 +251,14 @@
                     {{ 'NOTES' | translate }}
                     <textarea [(ngModel)]="clientNote.message" rows="7"></textarea>
                 </label>
-                <button type="button" (click)="addClientNote()" class="small primary button expanded">{{ 'SAVE' | translate }}</button>
+                <button type="button" (click)="addClientNote()" [disabled]="isSavingNote" class="small primary button expanded">
+                     <span *ngIf="!isSavingNote">
+                        {{ 'SAVE' | translate }}
+                    </span>
+                    <span *ngIf="isSavingNote">
+                        <i class="fa fa-gear fa-spin fa-fw"></i>
+                    </span>
+                </button>
             </div>
         </div>
         <div class="row">
@@ -199,7 +270,7 @@
                                 <div class="row log-info">
                                     <div class="large-12 columns">
                                         <div class="pull-left"> {{ settings.convertToViewDateTime(note.creation_date) }} </div>
-                                        <div class="pull-right">{{ 'BY' | translate }} {{ note.created_by }}</div>
+                                        <div class="pull-right">{{ 'BY' | translate }} {{ note.creator.first_name + ' ' + note.creator.last_name }} </div>
                                     </div>
                                 </div>
                                 {{ note.message }}
@@ -208,6 +279,119 @@
                     </tbody>
                 </table>
             </div>
+        </div>
+    </div>
+</div>
+
+<!--USER MODAL-->
+<div class="reveal-overlay ghost-login-modal" [ngStyle]="{'display': userModalDisplay}">
+    <div class="tiny reveal" [ngStyle]="{'display': userModalDisplay}">
+        <div class="modal-header">
+            {{ 'LOGIN AS' | translate }}
+            <button type="button" class="pull-right" aria-label="Close modal" (click)="closeUserModal()">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <table>
+                <thead>
+                <tr>
+                    <td>{{ 'USER' | translate }}</td>
+                    <td>{{ 'E-MAIL ADDRESS' | translate }}</td>
+                    <td></td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{{ clientDetails.owner.first_name + ' ' + clientDetails.owner.last_name }}</td>
+                    <td>{{ clientDetails.owner.email_address }}</td>
+                    <td>
+                        <span class="pull-right">
+                            <button type="button" (click)="loginAsGhost(clientDetails.owner.person_id)" class="small primary button">
+                                <i class="fa fa-sign-in fa-fw" aria-hidden="true"></i>
+                                {{ 'LOGIN' |  translate}}
+                            </button>
+                        </span>
+                    </td>
+                </tr>
+                <tr *ngFor="let user of clientDetails.users">
+                    <td>
+                        {{ user.first_name + ' ' + user.last_name }}
+                    </td>
+                    <td>
+                        {{ user.email_address }}
+                    </td>
+                    <td>
+                        <span class="pull-right">
+                            <button type="button" (click)="loginAsGhost(user.person_id)" class="small primary button">
+                                <i class="fa fa-sign-in fa-fw" aria-hidden="true"></i>
+                                {{ 'LOGIN' |  translate}}
+                            </button>
+                        </span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <button class="tiny primary button pull-right" (click)="closeUserModal()">{{ 'CLOSE' | translate}}</button>
+        </div>
+    </div>
+</div>
+
+<!--HEALTH STATUS MODAL-->
+<div class="reveal-overlay ghost-login-modal" [ngStyle]="{'display': locationHealthModalDisplay}">
+    <div class="tiny reveal" [ngStyle]="{'display': locationHealthModalDisplay}">
+        <div class="modal-header">
+            {{ 'UBN' | translate }}: {{ selectedLocation.ubn }}
+            <button type="button" class="pull-right" aria-label="Close modal" (click)="closeLocationHealthModal()">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="large-12 columns">
+                    <div class="row">
+                        <div class="large-4 columns">
+                            <label class="middle"> {{ 'MAEDI VISNA' | translate }} </label>
+                        </div>
+                        <div class="large-8 columns">
+                            <select [(ngModel)]="selectedLocation.maedi_visna_status">
+                                <option value=""> -- </option>
+                                <option *ngFor="let healthStatus of maediVisnaStatusOptions" value="{{ healthStatus}}">
+                                    {{ healthStatus| translate }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="large-4 columns">
+                            <label class="middle"> {{ 'SCRAPIE' | translate }} </label>
+                        </div>
+                        <div class="large-8 columns">
+                            <select [(ngModel)]="selectedLocation.scrapie_status">
+                                <option value=""> -- </option>
+                                <option *ngFor="let healthStatus of scrapieStatusOptions" value="{{ healthStatus }}">
+                                    {{ healthStatus | translate }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <span class="pull-right">
+                <button class="tiny primary button" [disabled]="isChangingLocationHealth" (click)="setLocationHealthStatus()">
+                    <span *ngIf="!isChangingLocationHealth" (click)="setLocationHealthStatus()">
+                        {{ 'EDIT' | translate}}
+                    </span>
+                     <span *ngIf="isChangingLocationHealth">
+                         <i class="fa fa-gear fa-spin fa-fw"></i>
+                    </span>
+                </button>
+                <button class="tiny primary button" [disabled]="isChangingLocationHealth" (click)="closeLocationHealthModal()">{{ 'CANCEL' | translate}}</button>
+            </span>
         </div>
     </div>
 </div>

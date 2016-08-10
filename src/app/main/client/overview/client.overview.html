@@ -60,46 +60,91 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let client of clientList | clientFilter:[filterSearch, filterInvoices] | paginate: {itemsPerPage: filterAmount, currentPage: page}">
-                    <td>{{ client.debtor_number }}</td>
-                    <td>{{ client.company_name }}</td>
-                    <td>{{ client.address.city }}</td>
-                    <td>{{ client.primary_contactperson}}</td>
+                <tr *ngIf="!isLoaded">
+                    <td colspan="10">
+                        <div class="spinner">
+                            <div class="bounce1"></div>
+                            <div class="bounce2"></div>
+                            <div class="bounce3"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngFor="let client of clientList | clientFilter:[filterSearch, filterInvoices] | paginate: {itemsPerPage: filterAmount, currentPage: page}; let i = index">
                     <td>
-                        <div *ngFor="let location of client.locations">
-                            {{ location }}<br>
+                        <span *ngIf="client.debtor_number">{{ client.debtor_number }}</span>
+                        <span *ngIf="!client.debtor_number">--</span>
+                    </td>
+                    <td>
+                        <span *ngIf="client.company_name">{{ client.company_name }}</span>
+                        <span *ngIf="!client.company_name">--</span>
+                    </td>
+                    <td>
+                        <span *ngIf="client.address.city">{{ client.address.city }}</span>
+                        <span *ngIf="!client.address.city">--</span>
+                    </td>
+                    <td>{{ client.owner.first_name }} {{ client.owner.last_name }}</td>
+                    <td>
+                        <span *ngIf="client.locations.length == 0">--</span>
+                        <div *ngIf="client.locations.length > 0" *ngFor="let location of client.locations" >
+                            {{ location }}
+                            <span *ngIf="client.locations.length > 1">
+                                <br>
+                            </span>
                         </div>
                     </td>
                     <td>
-                        <div *ngFor="let pedigree of client.pedigrees">
-                            {{ pedigree }}<br>
+                        <span *ngIf="client.pedigrees.length == 0">--</span>
+                        <div *ngIf="client.pedigrees.length > 0" *ngFor="let pedigree of client.pedigrees" >
+                            {{ pedigree }}
+                            <span *ngIf="client.pedigrees.length > 1">
+                                <br>
+                            </span>
                         </div>
                     </td>
-                    <td>{{ settings.convertToViewDate(client.subscription_date) }}</td>
-                    <td>{{ client.animal_health | translate }}</td>
-
-                    <td>{{ client.status | translate }}</td>
                     <td>
-                        <span *ngIf="client.unpaid_invoices > 0" class="alert label">
-                            {{ client.unpaid_invoices }} <i class="fa fa-file-text-o fa-fw" aria-hidden="true"></i>
+                        <span *ngIf="client.subscription_date">{{ settings.convertToViewDate(client.subscription_date) }}</span>
+                        <span *ngIf="!client.subscription_date">--</span>
+                    </td>
+                    <td>
+                        <span *ngIf="client.animal_health">{{ 'YES' | translate }}</span>
+                        <span *ngIf="!client.animal_health">{{ 'NO' | translate }}</span>
+                    </td>
+                    <td>
+                        <span *ngIf="client.status">{{ 'ACTIVE' | translate }}</span>
+                        <span *ngIf="!client.status">{{ 'NON-ACTIVE' | translate }}</span>
+                    </td>
+                    <td>
+                        <span *ngIf="client.unpaid_invoices.length > 0" class="alert label">
+                            {{ client.unpaid_invoices.length }} <i class="fa fa-file-text-o fa-fw" aria-hidden="true"></i>
                         </span>
                     </td>
                     <td>
-                        <button type="button" class="tiny dropdown button float-right" [attr.data-toggle]="'dropdown-' + client.client_id">{{ 'OPTIONS' | translate }}</button>
-                        <div class="dropdown-pane bottom" id="dropdown-{{client.client_id}}" data-dropdown data-hover="true" data-hover-pane="true">
+                        <button type="button" [disabled]="isSending" class="tiny dropdown button float-right" [attr.data-toggle]="'dropdown-' + client.company_id">
+                            <span *ngIf="!isSending">
+                                {{ 'OPTIONS' | translate }}
+                            </span>
+                            <span *ngIf="isSending">
+                                <i class="fa fa-gear fa-spin fa-fw"></i>
+                            </span>
+                        </button>
+                        <div class="dropdown-pane bottom" id="dropdown-{{ client.company_id }}" data-dropdown data-hover="true" data-hover-pane="true">
                             <ul>
                                 <li>
-                                    <a (click)="loginAsGhost(client.client_id)">{{ 'LOGIN' | translate }} <i class="fa fa-sign-in fa-fw" aria-hidden="true"></i></a>
+                                    <a *ngIf="client.status" (click)="openUserModal(client)">{{ 'LOGIN' | translate }} <i class="fa fa-sign-in fa-fw" aria-hidden="true"></i></a>
                                 </li>
                                 <li>
-                                    <a routerLink="/client/details/{{ client.client_id }}">{{ 'VIEW' | translate }} <i class="fa fa-info fa-fw" aria-hidden="true"></i></a>
+                                    <a routerLink="/client/details/{{ client.company_id }}">{{ 'VIEW' | translate }} <i class="fa fa-info fa-fw" aria-hidden="true"></i></a>
                                 </li>
                                 <li>
-                                    <a routerLink="/client/dossier/edit/{{ client.client_id }}">{{ 'EDIT' | translate }} <i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
+                                    <a routerLink="/client/dossier/edit/{{ client.company_id }}">{{ 'EDIT' | translate }} <i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
                                 </li>
                                 <li>
-                                    <a *ngIf="client.status == 'ACTIVE'" class="danger">{{ 'DEACTIVATE' | translate }} <i class="fa fa-ban fa-fw" aria-hidden="true"></i></a>
-                                    <a *ngIf="client.status == 'NON-ACTIVE'">{{ 'ACTIVATE' | translate }} <i class="fa fa-thumbs-o-up fa-fw" aria-hidden="true"></i></a>
+                                    <a *ngIf="client.status" (click)="setCompanyActive(client, false)" class="danger">
+                                        {{ 'DEACTIVATE' | translate }} <i class="fa fa-ban fa-fw" aria-hidden="true"></i>
+                                    </a>
+                                    <a *ngIf="!client.status" (click)="setCompanyActive(client, true)">
+                                        {{ 'ACTIVATE' | translate }} <i class="fa fa-thumbs-o-up fa-fw" aria-hidden="true"></i>
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -109,5 +154,61 @@
         </table>
 
         <pagination (pageChange)="page = $event"></pagination>
+    </div>
+</div>
+
+<!--USER MODAL-->
+<div class="reveal-overlay ghost-login-modal" [ngStyle]="{'display': userModalDisplay}">
+    <div class="tiny reveal" [ngStyle]="{'display': userModalDisplay}">
+        <div class="modal-header">
+            {{ 'LOGIN AS' | translate }}
+            <button type="button" class="pull-right" aria-label="Close modal" (click)="closeUserModal()">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <table>
+                <thead>
+                <tr>
+                    <td>{{ 'USER' | translate }}</td>
+                    <td>{{ 'E-MAIL ADDRESS' | translate }}</td>
+                    <td></td>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ selectedClient.owner.first_name + ' ' + selectedClient.owner.last_name }}</td>
+                        <td>{{ selectedClient.owner.email_address }}</td>
+                        <td>
+                            <span class="pull-right">
+                                <button type="button" (click)="loginAsGhost(selectedClient.owner.person_id)" class="small primary button">
+                                    <i class="fa fa-sign-in fa-fw" aria-hidden="true"></i>
+                                    {{ 'LOGIN' |  translate}}
+                                </button>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr *ngFor="let user of selectedClient.users">
+                        <td>
+                            {{ user.first_name + ' ' + user.last_name }}
+                        </td>
+                        <td>
+                            {{ user.email_address }}
+                        </td>
+                        <td>
+                            <span class="pull-right">
+                                <button type="button" (click)="loginAsGhost(user.person_id)" class="small primary button">
+                                    <i class="fa fa-sign-in fa-fw" aria-hidden="true"></i>
+                                    {{ 'LOGIN' |  translate}}
+                                </button>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <button class="tiny primary button pull-right" (click)="closeUserModal()">{{ 'CLOSE' | translate}}</button>
+        </div>
     </div>
 </div>

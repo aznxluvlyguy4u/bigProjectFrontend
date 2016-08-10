@@ -25,14 +25,15 @@ export class UsersDisplay {
 
     @Input() users: User[] = [];
     @Input() disabledMode: boolean = false;
-    @Output() updated: EventEmitter<User[]> = new EventEmitter<User[]>();
+    @Output() getUsers: EventEmitter<User[]> = new EventEmitter<User[]>();
+    @Output() getDeletedUsers: EventEmitter<User> = new EventEmitter<User>();
 
     constructor(private fb: FormBuilder) {
         this.form = fb.group({
-            first_name: [],
-            last_name: [],
+            first_name: ['', Validators.required],
+            last_name: ['', Validators.required],
             email_address: ['', Validators.required],
-            primary_contactperson: ['YES']
+            primary_contactperson: ['']
         });
     }
 
@@ -53,7 +54,7 @@ export class UsersDisplay {
         if(editMode) {
             this.user = _.clone(user);
             this.userTemp = _.clone(user);
-            
+
             if(this.user.primary_contactperson) {
                 (<FormControl>this.form.controls['primary_contactperson']).updateValue('YES');
             }
@@ -90,7 +91,7 @@ export class UsersDisplay {
                 }
 
                 this.users.push(this.user);
-                this.updated.emit(this.users);
+                this.getUsers.emit(this.users);
                 this.closeModal();
             } else {
                 this.hasUniqueEmails = false;
@@ -102,7 +103,11 @@ export class UsersDisplay {
     
     private removeUser(user: User): void {
         _.remove(this.users, user);
-        this.updated.emit(this.users);
+        this.getUsers.emit(this.users);
+    }
+
+    private sendDeletedUser(user: User) {
+        this.getDeletedUsers.emit(user);
     }
 
     private editUser(): void {
@@ -124,7 +129,7 @@ export class UsersDisplay {
 
                 this.removeUser(this.userTemp);
                 this.users.push(this.user);
-                this.updated.emit(this.users);
+                this.getUsers.emit(this.users);
                 this.closeModal();
             } else {
                 this.hasUniqueEmails = false;

@@ -4,7 +4,6 @@ import {REACTIVE_FORM_DIRECTIVES, FormGroup, FormBuilder, FormControl} from "@an
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {Location} from "../../../client.model";
 import {UtilsService} from "../../../../../global/services/utils/utils.service";
-import {Datepicker} from "../../../../../global/components/datepicker/datepicker.component";
 import {SettingsService} from "../../../../../global/services/settings/settings.service";
 import {Validators} from "@angular/common";
 import {Subscription} from "rxjs/Rx";
@@ -12,7 +11,7 @@ import {EventEmitter} from "@angular/platform-browser-dynamic/src/facade/async";
 
 @Component({
     selector: 'locations-display',
-    directives: [REACTIVE_FORM_DIRECTIVES, Datepicker],
+    directives: [REACTIVE_FORM_DIRECTIVES],
     templateUrl: '/app/main/client/dossier/component/locations/locations.component.html',
     pipes: [TranslatePipe]
 })
@@ -20,8 +19,6 @@ import {EventEmitter} from "@angular/platform-browser-dynamic/src/facade/async";
 export class LocationsDisplay {
     private provinces = [];
     private provinces$: Subscription;
-    private healthStatusses = [];
-    private healthStatusses$: Subscription;
     private displayModal: string = 'none';
     private isModalEditMode: boolean = false;
     private hasUniqueUBNs: boolean = true;
@@ -32,30 +29,23 @@ export class LocationsDisplay {
 
     @Input() locations: Location[] = [];
     @Input() disabledMode: boolean = false;
-    @Output() updated: EventEmitter<Location[]> = new EventEmitter<Location[]>();
+    @Output() getLocations: EventEmitter<Location[]> = new EventEmitter<Location[]>();
+    @Output() getDeletedLocations: EventEmitter<Location> = new EventEmitter<Location>();
 
     constructor(private fb: FormBuilder, private utils: UtilsService, public settings: SettingsService) {
         this.form = fb.group({
             ubn: ['', Validators.required],
-            address_street_name: [],
-            address_address_number: [],
-            address_address_suffix: [],
-            address_address_postal_code: [],
-            address_address_city: [],
-            address_address_state: [],
-            health_animal_health: [],
-            health_disease: [],
-            health_date_since: [],
-            health_date_till: [],
-            health_health_status: [],
-            health_health_statement: [],
-            health_own_health_statement: []
+            address_street_name: ['', Validators.required],
+            address_address_number: ['', Validators.required],
+            address_address_suffix: [''],
+            address_address_postal_code: ['', Validators.required],
+            address_address_city: ['', Validators.required],
+            address_address_state: ['', Validators.required]
         });
     }
 
     ngOnInit() {
         this.initProvinces();
-        this.initHealthStatusses();
     }
 
     ngOnDestroy() {
@@ -68,46 +58,14 @@ export class LocationsDisplay {
                 this.provinces = _.sortBy(res, ['code']);
             });
     }
-
-    private initHealthStatusses(): void {
-        this.healthStatusses$ = this.utils.getHealthStatusses()
-            .subscribe(res => {
-                this.healthStatusses = res;
-            });
-    }
-
+    
     private openModal(editMode: boolean, location: Location): void {
         this.isModalEditMode = editMode;
         this.displayModal = 'block';
 
-        if(!editMode) {
-            (<FormControl>this.form.controls['health_date_since']).updateValue('');
-            (<FormControl>this.form.controls['health_date_till']).updateValue('');
-        }
-
         if(editMode) {
             this.location = _.cloneDeep(location);
             this.locationTemp = _.cloneDeep(location);
-
-            if(this.location.health.animal_health) {
-                (<FormControl>this.form.controls['health_animal_health']).updateValue('YES');
-                this.location.health.animal_health = 'YES';
-            }
-
-            if(!this.location.health.animal_health) {
-                (<FormControl>this.form.controls['health_animal_health']).updateValue('NO');
-                this.location.health.animal_health = 'NO';
-            }
-
-            if(this.location.health.own_health_statement) {
-                (<FormControl>this.form.controls['health_own_health_statement']).updateValue('YES');
-                this.location.health.own_health_statement = 'YES';
-            }
-
-            if(!this.location.health.own_health_statement) {
-                (<FormControl>this.form.controls['health_own_health_statement']).updateValue('NO');
-                this.location.health.own_health_statement = 'NO';
-            }
         }
     }
 
@@ -115,20 +73,6 @@ export class LocationsDisplay {
         this.displayModal = 'none';
         this.location = new Location();
         this.resetValidation();
-    }
-
-
-    private selectFile(event): void {
-        this.location.health.health_statement = event.target.files[0];
-    }
-
-    private openFile(): void {
-        let url = URL.createObjectURL(this.location.health.health_statement);
-        window.open(url);
-    }
-
-    private removeFile(): void {
-        this.location.health.health_statement = null;
     }
     
     private addLocation(): void {
@@ -138,24 +82,8 @@ export class LocationsDisplay {
             let isUniqueUBN = this.checkForUniqueUBN(this.location);
 
             if(isUniqueUBN) {
-                if(this.form.controls['health_animal_health'].value == 'YES') {
-                    this.location.health.animal_health = true;
-                }
-
-                if(this.form.controls['health_animal_health'].value == 'NO') {
-                    this.location.health.animal_health= false;
-                }
-
-                if(this.form.controls['health_own_health_statement'].value == 'YES') {
-                    this.location.health.own_health_statement = true;
-                }
-
-                if(this.form.controls['health_own_health_statement'].value == 'NO') {
-                    this.location.health.own_health_statement= false;
-                }
-
                 this.locations.push(this.location);
-                this.updated.emit(this.locations);
+                this.getLocations.emit(this.locations);
                 this.closeModal();
             } else {
                 this.hasUniqueUBNs = false;
@@ -167,33 +95,21 @@ export class LocationsDisplay {
 
     private removeLocation(location: Location): void {
         _.remove(this.locations, location);
-        this.updated.emit(this.locations);
+        this.getLocations.emit(this.locations);
     }
 
+    private sendDeletedLocation(location: Location) {
+        this.getDeletedLocations.emit(location);
+    }
+    
     private editLocation(): void {
         if(this.form.valid && this.isValidForm) {
             let isUniqueUBN = this.checkForUniqueUBN(this.location);
 
             if(isUniqueUBN) {
-                if(this.form.controls['health_animal_health'].value == 'YES') {
-                    this.location.health.animal_health = true;
-                }
-
-                if(this.form.controls['health_animal_health'].value == 'NO') {
-                    this.location.health.animal_health= false;
-                }
-
-                if(this.form.controls['health_own_health_statement'].value == 'YES') {
-                    this.location.health.own_health_statement = true;
-                }
-
-                if(this.form.controls['health_own_health_statement'].value == 'NO') {
-                    this.location.health.own_health_statement= false;
-                }
-                
                 this.removeLocation(this.locationTemp);
                 this.locations.push(this.location);
-                this.updated.emit(this.locations);
+                this.getLocations.emit(this.locations);
                 this.closeModal();
             } else {
                 this.hasUniqueUBNs = false;
