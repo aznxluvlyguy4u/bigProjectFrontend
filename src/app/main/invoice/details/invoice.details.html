@@ -152,6 +152,11 @@
                             {{rule.price_excl_vat.toFixed(2)}}
                         </td>
                     </tr>
+                    <tr>
+                        <td *ngIf="invoice.rules.length == 0" colspan="4" class="text-center">
+                            {{ 'ADD A INVOICE RULE' | translate }}
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -165,15 +170,17 @@
                         <td> {{ 'TOTAL EXCL VAT' | translate }}</td>
                         <td>
                             <span class="pull-right">
-                                000,00
+                                {{ totalExclVAT.toFixed(2) }}
                             </span>
                         </td>
                     </tr>
-                    <tr>
-                        <td> {{ 'VAT ON' | translate }}</td>
+                    <tr *ngFor="let vat of vatCalculations">
+                        <td>
+                            {{ vat.category }}% {{ 'VAT ON' | translate }} {{ vat.amount.toFixed(2) }}
+                        </td>
                         <td>
                             <span class="pull-right">
-                                000,00
+                                {{ vat.total.toFixed(2) }}
                             </span>
                         </td>
                     </tr>
@@ -181,7 +188,7 @@
                         <td> {{ 'TOTAL INCL VAT' | translate }}</td>
                         <td>
                             <span class="pull-right">
-                                000,00
+                                {{ totalInclVAT.toFixed(2) }}
                             </span>
                         </td>
                     </tr>
