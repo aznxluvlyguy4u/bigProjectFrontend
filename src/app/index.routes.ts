@@ -19,10 +19,11 @@ import {HealthInspectionsComponent} from "./main/health/inspections/health.inspe
 import {HealthErroneousCSVComponent} from "./main/health/erroneousCSV/health.erroneousCSV";
 import {HealthUploadCSVComponent} from "./main/health/uploadCSV/health.uploadCSV";
 import {InvoiceOverviewComponent} from "./main/invoice/overview/invoice.overview";
+import {AuthenticatedGuard} from "./global/guards/authenticated.guard";
 
 const routes: RouterConfig = [
     {
-        path: '', component: MainComponent,
+        path: '', component: MainComponent, canActivate: [AuthenticatedGuard],
         children: [
             {path: '', terminal: true, redirectTo: 'dashboard'},
             {path: 'dashboard', terminal: true, component: DashboardComponent},

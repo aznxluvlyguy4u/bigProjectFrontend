@@ -2,7 +2,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import {Component} from "@angular/core";
 import {Subscription} from "rxjs/Rx";
-import {Router, ActivatedRoute} from "@angular/router";
+import {Routxer, ActivatedRoute} from "@angular/router";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
 import {

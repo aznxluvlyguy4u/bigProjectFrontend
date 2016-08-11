@@ -3,10 +3,13 @@ import {Http, Headers} from "@angular/http";
 
 @Injectable()
 export class NSFOService {
-    // private API_SERVER_URL: string = 'http://nsfo-api.jongensvantechniek.nl/api';
-    private API_SERVER_URL: string = 'http://localhost:8000/api';
-    private USER_ENV_URL: string = 'http://localhost:8080';
+    private API_SERVER_URL: string = 'http://nsfo-dev-api.jongensvantechniek.nl/api';
+    // private API_SERVER_URL: string = 'http://localhost:8000/api';
+    private USER_ENV_URL: string = 'http://nsfo-dev.jongensvantechniek.nl';
 
+    public URI_RESET_PASSWORD = '/v1/admins/auth/password-reset';
+    public URI_VALIDATE_TOKEN = '/v1/auth/validate-token';
+    
     public URI_GHOST_LOGIN: string = '/v1/admins/ghost';
     public URI_ADMIN: string = '/v1/admins';
     public URI_ADMIN_DEACTIVATE: string = '/v1/admins-deactivate';
@@ -23,7 +26,7 @@ export class NSFOService {
 
     private content_type: string = "Content-Type";
     private authorization: string = "Authorization";
-    private access_token: string = "AccessToken";
+    public access_token: string = "AccessToken";
     
     private ACCESS_TOKEN_NAMESPACE: string = 'access_token';
     
@@ -34,7 +37,7 @@ export class NSFOService {
         headers.append(this.content_type, "application/json");
         headers.append(this.authorization, 'Basic ' + btoa(username + ':' + password));
 
-        return this.http.get(this.API_SERVER_URL + '/v1/auth/authorize', {headers: headers})
+        return this.http.get(this.API_SERVER_URL + '/v1/admins/auth/authorize', {headers: headers})
             .map(res => res.json());
     }
 

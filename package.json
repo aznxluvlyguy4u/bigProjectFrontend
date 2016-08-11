@@ -11,7 +11,7 @@
     "start-sans-compiler": "concurrently \"npm run lite\" \"npm run watch-css\"",
     "postinstall": "npm run typings",
     "build": "npm run clean && tsc",
-    "build:prod": "npm run build && browserify -s main build/main.js > build/bundle.js && npm run minify",
+    "publish:staging": "gulp build && gulp zip:staging && gulp publish:staging",
     "minify": "uglifyjs build/bundle.js --screw-ie8 --compress --mangle --output build/bundle.min.js"
   },
   "license": "ISC",
@@ -47,7 +47,22 @@
     "nodemon": "^1.9.1",
     "typescript": "^1.9.0-dev.20160625-1.0",
     "typings": "^1.0.4",
-    "uglifyjs": "^2.4.10",
-    "browserify": "^13.0.1"
+    "uglify-js": "^2.6.2",
+    "bowcat": "^1.0.0",
+    "del": "^2.2.0",
+    "gulp": "^3.9.1",
+    "gulp-artifactory-upload": "^1.2.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-env": "^0.4.0",
+    "gulp-npm-files": "^0.1.3",
+    "gulp-replace": "^0.5.4",
+    "gulp-sass": "^2.3.1",
+    "gulp-sequence": "^0.4.5",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-tslint": "^5.0.0",
+    "gulp-typescript": "^2.13.4",
+    "gulp-uglify": "^1.5.3",
+    "gulp-zip": "^3.2.0",
+    "run-sequence": "^1.2.1"
   }
 }

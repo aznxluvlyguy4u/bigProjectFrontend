@@ -7,6 +7,7 @@ import {SettingsService} from "./global/services/settings/settings.service";
 import {NSFOService} from "./global/services/nsfo/nsfo.service";
 import {provideForms} from "@angular/forms";
 import {UtilsService} from "./global/services/utils/utils.service";
+import {AuthenticatedGuard} from "./global/guards/authenticated.guard";
 
 bootstrap(IndexComponent, [
     APP_ROUTER_PROVIDERS,
@@ -17,6 +18,7 @@ bootstrap(IndexComponent, [
         deps: [Http]
     },
     provideForms(),
+    AuthenticatedGuard,
     NSFOService,
     TranslateService,
     SettingsService,

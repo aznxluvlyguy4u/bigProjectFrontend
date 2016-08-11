@@ -36,12 +36,12 @@ export class ConfigUsersComponent {
     }
     
     private getUsers(): void {
-        this.nsfo.doGetUsers()
+        this.nsfo.doGetRequest(this.nsfo.URI_ADMIN)
             .subscribe(
                 res => {
-                    this.users = <User[]> res.result;
+                    this.users= <User[]> res.result;
                 }
-            )
+            );
     }
 
     private addUser(): void {
@@ -51,8 +51,13 @@ export class ConfigUsersComponent {
             let isUniqueEmail = this.checkForUniqueEmail(this.user);
 
             if(isUniqueEmail) {
-                this.users.push(this.user);
-                this.closeModal();
+                this.nsfo.doPostRequest(this.nsfo.URI_ADMIN, this.user)
+                    .subscribe(
+                        res => {
+                            this.users.push(this.user);
+                            this.closeModal();
+                        }
+                    );
             } else {
                 this.hasUniqueEmails = false;
             }

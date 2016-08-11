@@ -203,5 +203,14 @@
   "UNDER_OBSERVATION": "In observatie",
   "UNDER_INVESTIGATION": "In onderzoek",
   "STATUS_KNOWN_BY_AHD": "Status bij GD bekend",
-  "STATUS PER LOCATION": "Status per locatie"
+  "STATUS PER LOCATION": "Status per locatie",
+  "FORGOT PASSWORD?": "Wachtwoord vergeten?",
+  "AND/OR": "en/of",
+  "ARE INCORRECT.": "zijn incorrect.",
+  "NOT A MEMBER YET?": "Nog geen lid?",
+  "CLICK HERE": "Klik hier",
+  "RESET": "Reset",
+  "BACK TO THE LOGIN PAGE": "Terug naar login pagina",
+  "ENTER YOUR EMAIL ADDRESS TO RESET YOUR PASSWORD.": "Vul uw e-mail adres in om uw wachtwoord te resetten.",
+  "AN EMAIL WITH INSTRUCTIONS HAS BEEN SENT": "Er is een e-mail verstuurd met verdere instructies. U ontvangt binnen enkele minuten een e-mail met uw nieuwe wachtwoord."
 }
