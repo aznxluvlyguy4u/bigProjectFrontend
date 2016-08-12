@@ -97,7 +97,7 @@ export class ClientDossierComponent {
     }
     
     private getClientInfo() {
-        this.nsfo.doGetRequest(this.nsfo.URI_CLIENT + '/' + this.clientId)
+        this.nsfo.doGetRequest(this.nsfo.URI_CLIENTS + '/' + this.clientId)
             .subscribe(
                 res => {
                     console.log(res);
@@ -168,7 +168,7 @@ export class ClientDossierComponent {
                 newClient.deleted_locations = [];
                 newClient.deleted_users = [];
 
-                this.nsfo.doPostRequest(this.nsfo.URI_CLIENT, newClient)
+                this.nsfo.doPostRequest(this.nsfo.URI_CLIENTS, newClient)
                     .subscribe(
                         res => {
                             this.savingInProgress = false;
@@ -188,7 +188,6 @@ export class ClientDossierComponent {
         this.errorMessage = '';
 
         let owner = _.find(this.client.users, ['primary_contactperson', true]);
-        console.log(owner);
         if (!owner) {
             this.isValidForm = false;
             this.errorMessage = 'A PRIMARY CONTACTPERSON IS REQUIRED';
@@ -219,12 +218,11 @@ export class ClientDossierComponent {
 
                 newClient.owner = owner;
 
-                console.log(newClient);
-                this.nsfo.doPutRequest(this.nsfo.URI_CLIENT, newClient)
+                this.nsfo.doPutRequest(this.nsfo.URI_CLIENTS + '/' + newClient.person_id, newClient)
                     .subscribe(
                         res => {
                             this.savingInProgress = false;
-                            // this.navigateTo('/client');
+                            this.navigateTo('/client');
                         }
                     );
 

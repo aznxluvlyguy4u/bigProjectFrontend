@@ -37,7 +37,7 @@ export class ClientOverviewComponent {
     }
 
     private getClientList() {
-        this.nsfo.doGetRequest(this.nsfo.URI_CLIENT_OVERVIEW)
+        this.nsfo.doGetRequest(this.nsfo.URI_CLIENTS)
             .subscribe(
                 res => {
                     this.clientList = <Client[]> res.result;
@@ -67,7 +67,7 @@ export class ClientOverviewComponent {
             "is_active": is_active
         };
 
-        this.nsfo.doPutRequest(this.nsfo.URI_CLIENT_INACTIVE + '/' + client.company_id, request)
+        this.nsfo.doPutRequest(this.nsfo.URI_CLIENTS + '/' + client.company_id + '/status', request)
             .subscribe(res => {
                 client.status = is_active;
                 this.isSending = false;

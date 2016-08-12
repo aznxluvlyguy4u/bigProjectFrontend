@@ -56,7 +56,7 @@ export class ClientDetailsComponent {
     }
 
     private getClientDetails(): void {
-        this.nsfo.doGetRequest(this.nsfo.URI_CLIENT_DETAILS + '/' + this.clientId)
+        this.nsfo.doGetRequest(this.nsfo.URI_CLIENT_DETAILS + '/' + this.clientId + '/details')
             .subscribe(res => {
                 console.log(res);
                 this.clientDetails = <ClientDetails> res.result;
@@ -64,7 +64,7 @@ export class ClientDetailsComponent {
     }
 
     private getClientNotes(): void {
-        this.nsfo.doGetRequest(this.nsfo.URI_CLIENT_NOTES + '/' + this.clientId)
+        this.nsfo.doGetRequest(this.nsfo.URI_CLIENT_NOTES + '/' + this.clientId + '/notes')
             .subscribe(res => {
                 console.log(res);
                 this.clientNotes = <ClientNote[]> res.result;
@@ -86,7 +86,7 @@ export class ClientDetailsComponent {
             "note": this.clientNote.message
         };
 
-        this.nsfo.doPostRequest(this.nsfo.URI_CLIENT_NOTES + '/' + this.clientId, request)
+        this.nsfo.doPostRequest(this.nsfo.URI_CLIENTS + '/' + this.clientId + '/notes', request)
             .subscribe(res => {
                 let note: ClientNote = res.result;
                 this.clientNote.creator.first_name = note.creator.first_name;
@@ -120,7 +120,7 @@ export class ClientDetailsComponent {
             "is_active": is_active
         };
 
-        this.nsfo.doPutRequest(this.nsfo.URI_CLIENT_INACTIVE + '/' + this.clientDetails.company_id, request)
+        this.nsfo.doPutRequest(this.nsfo.URI_CLIENTS + '/' + this.clientDetails.company_id + '/status', request)
             .subscribe(res => {
                 this.clientDetails.status = is_active;
                 this.isSending = false;
