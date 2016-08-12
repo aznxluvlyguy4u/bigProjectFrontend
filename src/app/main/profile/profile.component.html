@@ -23,7 +23,7 @@
                     <label class="middle">{{ 'FIRST NAME' | translate }} * </label>
                 </div>
                 <div class="large-6 columns">
-                    <input type="text" formControlName="first_name">
+                    <input type="text" [(ngModel)]="profile.first_name" formControlName="first_name">
                 </div>
             </div>
 
@@ -32,7 +32,7 @@
                     <label class="middle">{{ 'LAST NAME' | translate }} * </label>
                 </div>
                 <div class="large-6 columns">
-                    <input type="text" formControlName="last_name">
+                    <input type="text" [(ngModel)]="profile.last_name" formControlName="last_name">
                 </div>
             </div>
 
@@ -41,7 +41,7 @@
                     <label class="middle">{{ 'E-MAIL ADDRESS' | translate }} * </label>
                 </div>
                 <div class="large-6 columns">
-                    <input type="text" formControlName="email_address">
+                    <input type="text" [(ngModel)]="profile.email_address" formControlName="email_address">
                 </div>
             </div>
 
@@ -50,7 +50,7 @@
                     <label class="middle">{{ 'CHANGE PASSWORD' | translate }}</label>
                 </div>
                 <div class="large-6 columns">
-                    <input type="password" formControlName="password">
+                    <input type="password" [(ngModel)]="profile.new_password" formControlName="password">
                 </div>
             </div>
 
@@ -67,12 +67,28 @@
                     &nbsp;
                 </div>
                 <div class="large-6 columns">
-                    <button type="button" (click)="saveProfile()" class="small primary button expanded"> {{ 'SAVE' | translate }}</button>
+                    <button type="button" [disabled]="isSaving" (click)="saveProfile()" class="small primary button expanded">
+                        <span *ngIf="isSaving">
+                            <i class="fa fa-gear fa-spin fa-fw"></i>
+                        </span>
+                        <span *ngIf="!isSaving">
+                            {{ 'SAVE' | translate }}
+                        </span>
+                    </button>
                 </div>
             </div>
             <div class="row">
                 <div class="large-12 columns">
                     <span class="pull-right required-description"> * {{ 'IS A REQUIRED FIELD' | translate }} </span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-12 columns">
+                    <div *ngIf="!form.valid">
+                        <div *ngIf="(form.controls.password.hasError('required') || form.controls.repeat_password.hasError('required')) && !isValidForm" class="input-error-msg">{{ 'FILL IN ALL FIELDS' | translate }}</div>
+                        <div *ngIf="form.hasError('invalidPassword') && !isValidForm" class="input-error-msg">{{ 'THE REPEATED PASSWORD DOES NOT MATCH' | translate }}</div>
+                        <div *ngIf="form.controls.password.hasError('minlength') && !isValidForm" class="input-error-msg">{{ 'THE PASSWORD NEEDS TO BE LONGER THAN 6 CHARACTERS' | translate }}</div>
+                    </div>
                 </div>
             </div>
         </div>

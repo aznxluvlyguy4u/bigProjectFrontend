@@ -212,5 +212,9 @@
   "RESET": "Reset",
   "BACK TO THE LOGIN PAGE": "Terug naar login pagina",
   "ENTER YOUR EMAIL ADDRESS TO RESET YOUR PASSWORD.": "Vul uw e-mail adres in om uw wachtwoord te resetten.",
-  "AN EMAIL WITH INSTRUCTIONS HAS BEEN SENT": "Er is een e-mail verstuurd met verdere instructies. U ontvangt binnen enkele minuten een e-mail met uw nieuwe wachtwoord."
+  "AN EMAIL WITH INSTRUCTIONS HAS BEEN SENT": "Er is een e-mail verstuurd met verdere instructies. U ontvangt binnen enkele minuten een e-mail met uw nieuwe wachtwoord.",
+  "THE REPEATED PASSWORD DOES NOT MATCH": "Het herhaalde wachtwoord komt niet overeen.",
+  "USERNAME AND PASSWORD ARE REQUIRED": "Gebruikersnaam en Wachtwoord zijn verplicht.",
+  "THE PASSWORD NEEDS TO BE LONGER THAN 6 CHARACTERS": "Wachtwoord moet langer zijn dan 5 karakters.",
+  "SOMETHING WENT WRONG. TRY ANOTHER TIME.": "Iets ging verkeerd. Probeer het op een later tijdstip."
 }
