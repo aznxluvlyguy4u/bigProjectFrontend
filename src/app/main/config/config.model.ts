@@ -4,10 +4,10 @@ export class Choice {
     public order: string;
 }
 
-export class User {
-    public user_id: number;
+export class Admin {
+    public person_id: number;
     public email_address: string;
     public first_name: string;
     public last_name: string;
-    public user_type: string;
+    public access_level: string;
 }

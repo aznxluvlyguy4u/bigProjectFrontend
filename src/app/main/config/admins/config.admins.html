@@ -1,36 +1,38 @@
-<div class="row">
-    <div class="large-12 columns">
-        <table class="stacked">
-            <thead>
-                <tr>
-                    <td>{{ 'E-MAIL ADDRESS' | translate}}</td>
-                    <td>{{ 'FIRST NAME' | translate}}</td>
-                    <td>{{ 'LAST NAME' | translate}}</td>
-                    <td>{{ 'ACCESS LEVEL' | translate}}</td>
-                    <td>
-                        <button type="button" (click)="openModal(false)" class="small primary button pull-right">
-                            <i class="fa fa-user-plus fa-fw" aria-hidden="true"></i>
-                            {{ 'ADD USER' | translate }}
-                        </button>
-                    </td>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let user of users">
-                    <td>{{ user.email_address }}</td>
-                    <td>{{ user.first_name }}</td>
-                    <td>{{ user.last_name }}</td>
-                    <td>{{ user.access_level | translate }}</td>
-                    <td>
-                        <span class="pull-right">
-                            <a (click)="openModal(true, user)"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
-                            <a (click)="resendPassword(user)"><i class="fa fa-envelope-o fa-fw" aria-hidden="true"></i></a>
-                            <a (click)="removeUser(user)" class="remove-button"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
-                        </span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+<div id="admins">
+    <div class="row">
+        <div class="large-12 columns">
+            <table class="stacked">
+                <thead>
+                    <tr>
+                        <td>{{ 'E-MAIL ADDRESS' | translate}}</td>
+                        <td>{{ 'FIRST NAME' | translate}}</td>
+                        <td>{{ 'LAST NAME' | translate}}</td>
+                        <td>{{ 'ACCESS LEVEL' | translate}}</td>
+                        <td>
+                            <button type="button" (click)="openModal(false)" class="small primary button pull-right">
+                                <i class="fa fa-user-plus fa-fw" aria-hidden="true"></i>
+                                {{ 'ADD ADMIN' | translate }}
+                            </button>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let admin of admins">
+                        <td>{{ admin.email_address }}</td>
+                        <td>{{ admin.first_name }}</td>
+                        <td>{{ admin.last_name }}</td>
+                        <td>{{ admin.access_level | translate }}</td>
+                        <td>
+                            <span class="pull-right overview-controls">
+                                <a (click)="resendPassword(admin)"><i class="fa fa-envelope-o fa-fw" aria-hidden="true"></i></a>
+                                <a (click)="openModal(true, admin)"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
+                                <a (click)="openRemoveModal(admin)" class="remove-button"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
@@ -38,8 +40,8 @@
 <div class="reveal-overlay" [ngStyle]="{'display': displayModal}">
     <div class="tiny reveal" [ngStyle]="{'display': displayModal}">
         <div class="modal-header">
-            <span *ngIf="!isModalEditMode">{{ 'NEW USER' | translate }}</span>
-            <span *ngIf="isModalEditMode">{{ 'EDIT USER' | translate }}</span>
+            <span *ngIf="!isModalEditMode">{{ 'NEW ADMIN' | translate }}</span>
+            <span *ngIf="isModalEditMode">{{ 'EDIT ADMIN' | translate }}</span>
             <button type="button" class="pull-right" aria-label="Close modal" (click)="closeModal()">
                 <i class="fa fa-times" aria-hidden="true"></i>
             </button>
@@ -50,7 +52,7 @@
                     <label class="middle"> {{ 'E-MAIL ADDRESS' | translate }} * </label>
                 </div>
                 <div class="large-8 columns">
-                    <input type="text" [(ngModel)]="user.email_address" formControlName="email_address" maxlength="50" (keydown)="resetValidation()">
+                    <input type="text" [(ngModel)]="admin.email_address" formControlName="email_address" maxlength="50" (keydown)="resetValidation()">
                 </div>
             </div>
             <div class="row">
@@ -58,7 +60,7 @@
                     <label class="middle"> {{ 'FIRST NAME' | translate }} * </label>
                 </div>
                 <div class="large-8 columns">
-                    <input type="text" [(ngModel)]="user.first_name" formControlName="first_name" maxlength="50" (keydown)="resetValidation()">
+                    <input type="text" [(ngModel)]="admin.first_name" formControlName="first_name" maxlength="50" (keydown)="resetValidation()">
                 </div>
             </div>
             <div class="row">
@@ -66,7 +68,7 @@
                     <label class="middle"> {{ 'LAST NAME' | translate }} * </label>
                 </div>
                 <div class="large-8 columns">
-                    <input type="text" [(ngModel)]="user.last_name" formControlName="last_name" maxlength="50" (keydown)="resetValidation()">
+                    <input type="text" [(ngModel)]="admin.last_name" formControlName="last_name" maxlength="50" (keydown)="resetValidation()">
                 </div>
             </div>
             <div class="row">
@@ -74,10 +76,10 @@
                     <label class="middle"> {{ 'ACCESS LEVEL' | translate }} * </label>
                 </div>
                 <div class="large-8 columns">
-                    <select [(ngModel)]="user.access_level" formControlName="type" (change)="resetValidation()">
+                    <select [(ngModel)]="admin.access_level" formControlName="type" (change)="resetValidation()">
                         <option value="">--</option>
                         <option value="ADMIN">{{ 'ADMIN' | translate}}</option>
-                        <option value="SUPER_ADMIN">{{ 'SUPER ADMIN' | translate}}</option>
+                        <option value="SUPER_ADMIN">{{ 'SUPER_ADMIN' | translate}}</option>
                     </select>
                 </div>
             </div>
@@ -89,13 +91,57 @@
                 </div>
             </div>
             <span class="pull-left">
-                <label *ngIf="!hasUniqueEmails" class="error-message">{{ 'E-MAIL ADDRESS IS NOT UNIQUE' | translate }}</label>
-                <label *ngIf="!isValidForm" class="error-message">{{ 'FILL IN ALL THE REQUIRED FIELDS' | translate }}</label>
+                <label *ngIf="!hasUniqueEmails" class="input-error-msg">{{ 'E-MAIL ADDRESS IS NOT UNIQUE' | translate }}</label>
+                <label *ngIf="!isValidForm" class="input-error-msg">{{ 'FILL IN ALL THE REQUIRED FIELDS' | translate }}</label>
+                <label *ngIf="errorMessage" class="input-error-msg">{{ errorMessage | translate }}</label>
             </span>
             <span class="pull-right">
-                <button *ngIf="!isModalEditMode" (click)="addUser()" class="tiny primary button">{{ 'ADD' | translate}}</button>
-                <button *ngIf="isModalEditMode" (click)="editUser()" class="tiny primary button">{{ 'EDIT' | translate}}</button>
-                <button (click)="closeModal()" class="tiny alert button">{{ 'CANCEL' | translate}}</button>
+                <button *ngIf="!isModalEditMode" [disabled]="isSaving" (click)="addAdmin()" class="tiny primary button">
+                    <span *ngIf="!isSaving">
+                        {{ 'ADD' | translate}}
+                    </span>
+                    <span *ngIf="isSaving">
+                        <i class="fa fa-gear fa-spin fa-fw"></i>
+                    </span>
+                </button>
+                <button *ngIf="isModalEditMode" [disabled]="isSaving" (click)="editAdmin()" class="tiny primary button">
+                    <span *ngIf="!isSaving">
+                        {{ 'EDIT' | translate}}
+                    </span>
+                    <span *ngIf="isSaving">
+                        <i class="fa fa-gear fa-spin fa-fw"></i>
+                    </span>
+                </button>
+                <button (click)="closeModal()" [disabled]="isSaving" class="tiny alert button">{{ 'CANCEL' | translate}}</button>
+            </span>
+        </div>
+    </div>
+</div>
+
+<!--REMOVE MODAL-->
+<div class="reveal-overlay" [ngStyle]="{'display': displayRemoveModal}">
+    <div class="tiny reveal" [ngStyle]="{'display': displayRemoveModal}">
+        <div class="modal-header">
+            {{ 'REMOVE ADMIN' | translate }}
+            <button type="button" (click)="closeRemoveModal()" class="pull-right" aria-label="Close modal">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="modal-body"> {{ 'ARE YOU SURE YOU WANT TO REMOVE THIS ADMIN' | translate }} </div>
+        <div class="modal-footer">
+            <span class="pull-left">
+                <label *ngIf="errorMessage" class="input-error-msg">{{ errorMessage | translate }}</label>
+            </span>
+            <span class="pull-right">
+            <button class="tiny alert button" [disabled]="isSaving" (click)="removeAdmin()">
+                <span *ngIf="!isSaving">
+                    {{ 'REMOVE' | translate}}
+                </span>
+                <span *ngIf="isSaving">
+                    <i class="fa fa-gear fa-spin fa-fw"></i>
+                </span>
+            </button>
+            <button class="tiny primary button" [disabled]="isSaving" (click)="closeRemoveModal()">{{ 'CANCEL' | translate}}</button>
             </span>
         </div>
     </div>

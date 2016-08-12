@@ -462,6 +462,14 @@ nav {
     margin-top: -1em;
     padding-bottom: 2em; }
 
+#config #admins .overview-controls a {
+  margin-left: 0.4em;
+  font-size: 0.95rem; }
+
+#config #admins .overview-controls .fa-pencil-square-o {
+  margin-top: 0.5em;
+  margin-left: 0.4em; }
+
 #profile .form-container {
   font-size: 0.7rem; }
   #profile .form-container label {

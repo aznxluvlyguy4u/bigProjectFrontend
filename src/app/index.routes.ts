@@ -13,13 +13,13 @@ import {ConfigComponent} from "./main/config/config.component";
 import {CMSComponent} from "./main/cms/cms.component";
 import {ProfileComponent} from "./main/profile/profile.component";
 import {LoginComponent} from "./login/login.component";
-import {ConfigUsersComponent} from "./main/config/users/config.users";
 import {ConfigChoiceFieldsComponent} from "./main/config/choiceFields/config.choiceFields";
 import {HealthInspectionsComponent} from "./main/health/inspections/health.inspections";
 import {HealthErroneousCSVComponent} from "./main/health/erroneousCSV/health.erroneousCSV";
 import {HealthUploadCSVComponent} from "./main/health/uploadCSV/health.uploadCSV";
 import {InvoiceOverviewComponent} from "./main/invoice/overview/invoice.overview";
 import {AuthenticatedGuard} from "./global/guards/authenticated.guard";
+import {ConfigAdminsComponent} from "./main/config/admins/config.admins";
 
 const routes: RouterConfig = [
     {
@@ -52,8 +52,8 @@ const routes: RouterConfig = [
                 ]},
             {path: 'configuration', component: ConfigComponent,
                 children: [
-                    {path: '', terminal: true, redirectTo: 'users'},
-                    {path: 'users', component: ConfigUsersComponent},
+                    {path: '', terminal: true, redirectTo: 'admins'},
+                    {path: 'admins', component: ConfigAdminsComponent},
                     {path: 'choice_fields', component: ConfigChoiceFieldsComponent}
                 ]},
             {path: 'cms', terminal: true, component: CMSComponent},
