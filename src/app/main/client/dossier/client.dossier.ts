@@ -218,10 +218,9 @@ export class ClientDossierComponent {
 
                 newClient.owner = owner;
 
-                this.nsfo.doPutRequest(this.nsfo.URI_CLIENTS + '/' + newClient.person_id, newClient)
+                this.nsfo.doPutRequest(this.nsfo.URI_CLIENTS + '/' + this.client.company_id, newClient)
                     .subscribe(
                         res => {
-                            this.savingInProgress = false;
                             this.navigateTo('/client');
                         }
                     );

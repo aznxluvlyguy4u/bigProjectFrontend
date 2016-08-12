@@ -6,7 +6,7 @@
                     <td>{{ 'E-MAIL ADDRESS' | translate}}</td>
                     <td>{{ 'FIRST NAME' | translate}}</td>
                     <td>{{ 'LAST NAME' | translate}}</td>
-                    <td>{{ 'USER TYPE' | translate}}</td>
+                    <td>{{ 'ACCESS LEVEL' | translate}}</td>
                     <td>
                         <button type="button" (click)="openModal(false)" class="small primary button pull-right">
                             <i class="fa fa-user-plus fa-fw" aria-hidden="true"></i>
@@ -20,7 +20,7 @@
                     <td>{{ user.email_address }}</td>
                     <td>{{ user.first_name }}</td>
                     <td>{{ user.last_name }}</td>
-                    <td>{{ user.type | translate }}</td>
+                    <td>{{ user.access_level | translate }}</td>
                     <td>
                         <span class="pull-right">
                             <a (click)="openModal(true, user)"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
@@ -71,13 +71,13 @@
             </div>
             <div class="row">
                 <div class="large-4 columns">
-                    <label class="middle"> {{ 'USER TYPE' | translate }} * </label>
+                    <label class="middle"> {{ 'ACCESS LEVEL' | translate }} * </label>
                 </div>
                 <div class="large-8 columns">
-                    <select [(ngModel)]="user.type" formControlName="type" (change)="resetValidation()">
+                    <select [(ngModel)]="user.access_level" formControlName="type" (change)="resetValidation()">
                         <option value="">--</option>
-                        <option value="USER">{{ 'USER' | translate}}</option>
                         <option value="ADMIN">{{ 'ADMIN' | translate}}</option>
+                        <option value="SUPER_ADMIN">{{ 'SUPER ADMIN' | translate}}</option>
                     </select>
                 </div>
             </div>

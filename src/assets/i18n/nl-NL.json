@@ -216,5 +216,14 @@
   "THE REPEATED PASSWORD DOES NOT MATCH": "Het herhaalde wachtwoord komt niet overeen.",
   "USERNAME AND PASSWORD ARE REQUIRED": "Gebruikersnaam en Wachtwoord zijn verplicht.",
   "THE PASSWORD NEEDS TO BE LONGER THAN 6 CHARACTERS": "Wachtwoord moet langer zijn dan 5 karakters.",
-  "SOMETHING WENT WRONG. TRY ANOTHER TIME.": "Iets ging verkeerd. Probeer het op een later tijdstip."
+  "SOMETHING WENT WRONG. TRY ANOTHER TIME.": "Iets ging verkeerd. Probeer het op een later tijdstip.",
+  "ACCESS LEVEL": "Rechten",
+  "SUPER_ADMIN": "Superbeheerder",
+  "ADD ADMIN": "Beheerder toevoegen",
+  "NEW ADMIN": "Nieuw beheerder",
+  "EDIT ADMIN": "Wijzig beheerder",
+  "ADMINS": "Beheerders",
+  "ARE YOU SURE YOU WANT TO REMOVE THIS ADMIN": "Weet u zeker dat u deze beheerder wilt verwijderen?",
+  "REMOVE": "Verwijderen",
+  "REMOVE ADMIN": "Verwijder Beheerder"
 }

@@ -2,7 +2,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import {Component} from "@angular/core";
 import {Subscription} from "rxjs/Rx";
-import {Routxer, ActivatedRoute} from "@angular/router";
+import {Routxer, ActivatedRoute, Router} from "@angular/router";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
 import {
@@ -56,7 +56,7 @@ export class ClientDetailsComponent {
     }
 
     private getClientDetails(): void {
-        this.nsfo.doGetRequest(this.nsfo.URI_CLIENT_DETAILS + '/' + this.clientId + '/details')
+        this.nsfo.doGetRequest(this.nsfo.URI_CLIENTS + '/' + this.clientDetails.company_id + '/details')
             .subscribe(res => {
                 console.log(res);
                 this.clientDetails = <ClientDetails> res.result;
@@ -64,7 +64,7 @@ export class ClientDetailsComponent {
     }
 
     private getClientNotes(): void {
-        this.nsfo.doGetRequest(this.nsfo.URI_CLIENT_NOTES + '/' + this.clientId + '/notes')
+        this.nsfo.doGetRequest(this.nsfo.URI_CLIENTS + '/' + this.clientDetails.company_id + '/notes')
             .subscribe(res => {
                 console.log(res);
                 this.clientNotes = <ClientNote[]> res.result;
@@ -73,7 +73,7 @@ export class ClientDetailsComponent {
     }
 
     private getHealthStatusses(): void {
-        this.nsfo.doGetRequest(this.nsfo.URI_HEALTH_COMPANY + '/' + this.clientId)
+        this.nsfo.doGetRequest(this.nsfo.URI_HEALTH_COMPANY + '/' + this.clientDetails.company_id)
             .subscribe(res => {
                 console.log(res);
                 this.healthStatusses = <LocationHealthStatus[]> res.result;
@@ -86,7 +86,7 @@ export class ClientDetailsComponent {
             "note": this.clientNote.message
         };
 
-        this.nsfo.doPostRequest(this.nsfo.URI_CLIENTS + '/' + this.clientId + '/notes', request)
+        this.nsfo.doPostRequest(this.nsfo.URI_CLIENTS + '/' + this.clientDetails.company_id + '/notes', request)
             .subscribe(res => {
                 let note: ClientNote = res.result;
                 this.clientNote.creator.first_name = note.creator.first_name;
