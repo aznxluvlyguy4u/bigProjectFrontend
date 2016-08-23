@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ = require("lodash");
 import {Component} from "@angular/core";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {Admin} from "../config.model";
@@ -82,12 +82,9 @@ export class ConfigAdminsComponent {
 
     private removeAdmin(): void {
         this.isSaving = true;
+
         _.remove(this.admins, this.selectedAdmin);
-        let request = {
-            "admins": [this.selectedAdmin]
-        };
-        
-        this.nsfo.doPutRequest(this.nsfo.URI_ADMIN + '-deactivate', request)
+        this.nsfo.doPutRequest(this.nsfo.URI_ADMIN + '-deactivate', this.selectedAdmin)
             .subscribe(
                 res => {
                     this.isSaving = false;
@@ -106,11 +103,7 @@ export class ConfigAdminsComponent {
             let isUniqueEmail = this.checkForUniqueEmail(this.admin);
 
             if(isUniqueEmail) {
-                let request = {
-                    "admins": [this.admin]
-                };
-
-                this.nsfo.doPutRequest(this.nsfo.URI_ADMIN, request)
+                this.nsfo.doPutRequest(this.nsfo.URI_ADMIN, this.admin)
                     .subscribe(
                         res => {
                             _.remove(this.admins, this.adminTemp);
