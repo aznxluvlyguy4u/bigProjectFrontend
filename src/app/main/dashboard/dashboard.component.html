@@ -1,0 +1,87 @@
+<div id="dashboard">
+
+    <!--BREADCRUMBS-->
+    <div class="row">
+        <div class="large-12 columns">
+            <ul class="breadcrumbs">
+                <li class="disabled">{{ 'NSFO ONLINE' | translate }}</li>
+                <li>{{ 'DASHBOARD' | translate }}</li>
+            </ul>
+        </div>
+    </div>
+
+    <!--CARDS-->
+    <div class="row">
+
+        <!--CLIENT CARD-->
+        <div class="large-4 columns">
+            <div class="card callout">
+                <div class="card-header">{{ 'CLIENT MANAGEMENT' | translate }}</div>
+                <div class="card-body">
+                    <div class="value">
+                        <span> {{ dashboard.clients}} </span>
+                    </div>
+                    <label>{{ 'REGISTERED CLIENTS' | translate }}</label>
+                </div>
+                <div class="card-footer text-center">
+                    <button (click)="navigateTo('/client/overview')" class="tiny button">{{ 'VIEW CLIENTS' | translate }}</button>
+                    <button (click)="navigateTo('/client/dossier/new')" class="tiny button">{{ 'ADD NEW CLIENT' | translate }}</button>
+                </div>
+            </div>
+        </div>
+
+        <!--INVOICES CARD-->
+        <div class="large-4 columns">
+            <div class="card callout">
+                <div class="card-header">{{ 'INVOICE MANAGEMENT' | translate }}</div>
+                <div class="card-body">
+                    <div class="value">
+                        <span> {{ dashboard.invoices}} </span>
+                    </div>
+                    <label>{{ 'UNPAID INVOICES' | translate }}</label>
+                </div>
+                <div class="card-footer text-center">
+                    <button (click)="navigateTo('/invoice/overview')" class="tiny button">{{ 'VIEW INVOICES' | translate }}</button>
+                </div>
+            </div>
+        </div>
+
+        <!--ANIMAL HEALTH CARD-->
+        <div class="large-4 columns">
+            <div class="card callout">
+                <div class="card-header">{{ 'ANIMAL HEALTH' | translate }}</div>
+                <div class="card-body">
+                    <div class="value">
+                        <span> {{ dashboard.requested_inspections}} </span>
+                    </div>
+                    <label>{{ 'INSPECTION REQUESTS' | translate }}</label>
+                </div>
+                <div class="card-footer text-center">
+                    <button (click)="navigateTo('/health/inspections')" class="tiny button">{{ 'VIEW INSPECTIONS' | translate }}</button>
+                </div>
+            </div>
+        </div>
+
+        <!--REPORTS-->
+        <div class="large-4 columns">
+            <div class="card callout">
+                <div class="card-header">{{ 'REPORTS' | translate }}</div>
+                <div class="card-body"></div>
+                <div class="card-footer text-center">
+                    <button (click)="navigateTo('/report')" class="tiny button">{{ 'VIEW REPORTS' | translate }}</button>
+                </div>
+            </div>
+        </div>
+
+        <!--CONFIGURATION CARD-->
+        <div class="large-4 columns end">
+            <div class="card callout">
+                <div class="card-header">{{ 'CONFIGURATIONS' | translate }}</div>
+                <div class="card-body"></div>
+                <div class="card-footer text-center">
+                    <button (click)="navigateTo('/configuration/admins')" class="tiny button">{{ 'EDIT CONFIGURATIONS' | translate }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
