@@ -7,7 +7,7 @@ import {ChoiceFieldsContactComponent} from "./components/contact/choiceFields.co
 
 @Component({
     directives: [ChoiceFieldsDepartComponent, ChoiceFieldsLossComponent, ChoiceFieldsTreatmentComponent, ChoiceFieldsContactComponent],
-    templateUrl: '/app/main/config/choiceFields/config.choiceFields.html',
+    template: require('./config.choiceFields.html'),
     pipes: [TranslatePipe]
 })
 

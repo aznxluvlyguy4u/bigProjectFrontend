@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ = require("lodash");
 import {Component} from "@angular/core";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {Choice} from "../../../config.model";
@@ -9,7 +9,7 @@ import {NSFOService} from "../../../../../global/services/nsfo/nsfo.service";
 @Component({
     selector: 'choicefields-loss',
     directives: [REACTIVE_FORM_DIRECTIVES],
-    templateUrl: '/app/main/config/choiceFields/components/loss/choiceFields.loss.html',
+    template: require('./choiceFields.loss.html'),
     pipes: [TranslatePipe]
 })
 
