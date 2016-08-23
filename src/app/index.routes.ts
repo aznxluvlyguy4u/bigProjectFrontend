@@ -10,7 +10,7 @@ import {ClientDetailsComponent} from "./main/client/details/client.details";
 import {InvoiceDetailsComponent} from "./main/invoice/details/invoice.details";
 import {InvoiceComponent} from "./main/invoice/invoice.component";
 import {ConfigComponent} from "./main/config/config.component";
-import {CMSComponent} from "./main/cms/cms.component";
+import {ConfigCMSComponent} from "./main/config/cms/cms.component";
 import {ProfileComponent} from "./main/profile/profile.component";
 import {LoginComponent} from "./login/login.component";
 import {ConfigChoiceFieldsComponent} from "./main/config/choiceFields/config.choiceFields";
@@ -20,6 +20,7 @@ import {HealthUploadCSVComponent} from "./main/health/uploadCSV/health.uploadCSV
 import {InvoiceOverviewComponent} from "./main/invoice/overview/invoice.overview";
 import {AuthenticatedGuard} from "./global/guards/authenticated.guard";
 import {ConfigAdminsComponent} from "./main/config/admins/config.admins";
+import {ReportComponent} from "./main/report/report.component";
 
 const routes: RouterConfig = [
     {
@@ -54,9 +55,10 @@ const routes: RouterConfig = [
                 children: [
                     {path: '', terminal: true, redirectTo: 'admins'},
                     {path: 'admins', component: ConfigAdminsComponent},
+                    {path: 'cms', component: ConfigCMSComponent},
                     {path: 'choice_fields', component: ConfigChoiceFieldsComponent}
                 ]},
-            {path: 'cms', terminal: true, component: CMSComponent},
+            {path: 'report', terminal: true, component: ReportComponent},
             {path: 'profile', terminal: true, component: ProfileComponent}
         ]
     },
