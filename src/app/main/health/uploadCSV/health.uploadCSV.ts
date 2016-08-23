@@ -2,7 +2,7 @@ import {Component} from "@angular/core";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 
 @Component({
-    templateUrl: '/app/main/health/uploadCSV/health.uploadCSV.html',
+    template: require('./health.uploadCSV.html'),
     pipes: [TranslatePipe]
 })
 
