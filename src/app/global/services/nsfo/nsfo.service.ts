@@ -5,8 +5,6 @@ import {Http, Headers} from "@angular/http";
 export class NSFOService {
     private API_SERVER_URL: string = 'http://nsfo-dev-api.jongensvantechniek.nl/api';
     private USER_ENV_URL: string = 'http://nsfo-dev.jongensvantechniek.nl';
-    // private API_SERVER_URL: string = 'http://localhost:8000/api';
-    // private USER_ENV_URL: string = 'http://localhost:3000/';
 
     public URI_RESET_PASSWORD = '/v1/admins/auth/password-reset';
     public URI_VALIDATE_TOKEN = '/v1/auth/validate-token';
@@ -16,6 +14,10 @@ export class NSFOService {
     public URI_ADMIN_DEACTIVATE: string = '/v1/admins-deactivate';
     public URI_ADMIN_ACCESS_LEVEL: string = '/v1/admins-access-levels';
     public URI_ADMIN_PROFILE: string = '/v1/profiles-admin';
+
+    public URI_CMS: string = '/v1/cms';
+    public URI_DASHBOARD: string = '/v1/admin/dashboard';
+    public URI_MENUBAR: string = '/v1/components/admin-menu-bar';
 
     public URI_CLIENTS: string = '/v1/companies';
 
