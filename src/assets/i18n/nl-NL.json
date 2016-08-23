@@ -225,5 +225,18 @@
   "ADMINS": "Beheerders",
   "ARE YOU SURE YOU WANT TO REMOVE THIS ADMIN": "Weet u zeker dat u deze beheerder wilt verwijderen?",
   "REMOVE": "Verwijderen",
-  "REMOVE ADMIN": "Verwijder Beheerder"
+  "REMOVE ADMIN": "Verwijder Beheerder",
+  "DASHBOARD AND CONTACT INFORMATION ARE SAVED": "Dashboard en contact informatie zijn opgeslagen.",
+  "SOMETHING WENT WRONG! TRY AGAIN AT LATER TIME!":"Iets ging verkeerd! Probeer het weer op een later tijdstip.",
+  "CLIENT MANAGEMENT": "Klantenbeheer",
+  "INVOICE MANAGEMENT": "Factuurbeheer",
+  "REPORTS": "Rapportage",
+  "REGISTERED CLIENTS": "Geregistreerde klanten",
+  "VIEW CLIENTS": "Klanten bekijken",
+  "ADD NEW CLIENT": "Klant toevoegen",
+  "VIEW INVOICES": "Facturen bekijken",
+  "INSPECTION REQUESTS": "Onderzoek aanvragen",
+  "VIEW INSPECTIONS": "Onderzoeken bekijken",
+  "VIEW REPORTS": "Rapporten bekijken",
+  "EDIT CONFIGURATIONS": "Wijzig instellingen"
 }
