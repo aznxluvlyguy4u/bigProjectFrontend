@@ -5,7 +5,7 @@ import {SettingsService} from "../../../../../global/services/settings/settings.
 
 @Component({
     selector: 'health-table-ongoing',
-    templateUrl: '/app/main/health/inspections/components/tableOngoing/inspections.tableOngoing.html',
+    template: require('./inspections.tableOngoing.html'),
     pipes: [TranslatePipe]
 })
 

@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ = require("lodash");
 import {Component, Input} from "@angular/core";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {AnimalHealthRequest} from "../../../health.model";
@@ -6,7 +6,7 @@ import {SettingsService} from "../../../../../global/services/settings/settings.
 
 @Component({
     selector: 'health-table-all',
-    templateUrl: '/app/main/health/inspections/components/tableAllRequests/inspections.tableAllRequests.html',
+    template: require('./inspections.tableAllRequests.html'),
     pipes: [TranslatePipe]
 })
 

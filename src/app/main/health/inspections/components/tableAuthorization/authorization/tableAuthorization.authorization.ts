@@ -4,7 +4,7 @@ import {TranslatePipe} from "ng2-translate/ng2-translate";
 
 @Component({
     selector: 'request-auth',
-    templateUrl: '/app/main/health/inspections/components/tableAuthorization/authorization/tableAuthorization.authorization.html',
+    template: require('./tableAuthorization.authorization.html'),
     pipes: [TranslatePipe]
 })
 

@@ -5,7 +5,7 @@ import {AnimalHealthRequest} from "../../../health.model";
 
 @Component({
     selector: 'health-table-expired',
-    templateUrl: '/app/main/health/inspections/components/tableExpired/inspections.tableExpired.html',
+    template: require('./inspections.tableExpired.html'),
     pipes: [TranslatePipe]
 })
 

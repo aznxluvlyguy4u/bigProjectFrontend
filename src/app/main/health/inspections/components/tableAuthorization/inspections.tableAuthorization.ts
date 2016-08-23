@@ -8,7 +8,7 @@ import {AuthorizationComponent} from "./authorization/tableAuthorization.authori
 @Component({
     selector: 'health-table-authorization',
     directives: [AuthorizationComponent],
-    templateUrl: '/app/main/health/inspections/components/tableAuthorization/inspections.tableAuthorization.html',
+    template: require('./inspections.tableAuthorization.html'),
     pipes: [TranslatePipe]
 })
 

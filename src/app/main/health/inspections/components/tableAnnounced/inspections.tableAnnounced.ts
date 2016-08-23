@@ -5,7 +5,7 @@ import {SettingsService} from "../../../../../global/services/settings/settings.
 
 @Component({
     selector: 'health-table-announced',
-    templateUrl: '/app/main/health/inspections/components/tableAnnounced/inspections.tableAnnounced.html',
+    template: require('./inspections.tableAnnounced.html'),
     pipes: [TranslatePipe]
 })
 

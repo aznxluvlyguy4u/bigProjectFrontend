@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ = require("lodash");
 import {Component} from "@angular/core";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {HealthTableAll} from "./components/tableAllRequests/inspections.tableAllRequests";
@@ -19,7 +19,7 @@ import {AnimalHealthRequest} from "../health.model";
         HealthTableExpired,
         HealthTableFinished
     ],
-    templateUrl: '/app/main/health/inspections/health.inspections.html',
+    template: require('./health.inspections.html'),
     pipes: [TranslatePipe]
 })
 

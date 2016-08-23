@@ -5,7 +5,7 @@ import {AnimalHealthRequest} from "../../../health.model";
 
 @Component({
     selector: 'health-table-finished',
-    templateUrl: '/app/main/health/inspections/components/tableFinished/inspections.tableFinished.html',
+    template: require('./inspections.tableFinished.html'),
     pipes: [TranslatePipe]
 })
 
