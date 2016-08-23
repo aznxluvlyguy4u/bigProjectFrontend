@@ -9,6 +9,8 @@ import {provideForms} from "@angular/forms";
 import {UtilsService} from "./global/services/utils/utils.service";
 import {AuthenticatedGuard} from "./global/guards/authenticated.guard";
 
+require('font-awesome-loader');
+
 bootstrap(IndexComponent, [
     APP_ROUTER_PROVIDERS,
     HTTP_PROVIDERS,
