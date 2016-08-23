@@ -1,0 +1,37 @@
+<div id="content-management">
+    <div class="row">
+        <div class="large-3 columns">
+            <label class="middle"> {{ 'DASHBOARD' | translate }} </label>
+        </div>
+        <div class="large-6 columns end">
+            <textarea id="dashboardtext" maxlength="10"></textarea>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="large-3 columns">
+            <label class="middle"> {{ 'CONTACT INFORMATION' | translate }} </label>
+        </div>
+        <div class="large-6 columns end">
+            <textarea id="contacttext"></textarea>
+        </div>
+    </div>
+    <div class="row">
+        <div class="large-3 columns">&nbsp;</div>
+        <div class="large-6 columns end">
+            <span class="pull-left">
+                <label *ngIf="isSaved" class="success-message middle">{{ 'DASHBOARD AND CONTACT INFORMATION ARE SAVED' | translate }}</label>
+                <label *ngIf="hasFailed" class="error-message middle">{{ 'SOMETHING WENT WRONG! TRY AGAIN AT LATER TIME!' | translate }}</label>
+            </span>
+            <button type="button" [disabled]="savingInProgress" (click)="save()" class="small primary button pull-right">
+                <span *ngIf="!savingInProgress">
+                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                    {{ 'SAVE' | translate }}
+                </span>
+                <span *ngIf="savingInProgress">
+                    <i class="fa fa-gear fa-spin fa-fw"></i>
+                </span>
+            </button>
+        </div>
+    </div>
+</div>
