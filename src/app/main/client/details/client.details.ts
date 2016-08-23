@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ = require("lodash");
 import moment from 'moment';
 import {Component} from "@angular/core";
 import {Subscription} from "rxjs/Rx";
@@ -13,7 +13,7 @@ import {SettingsService} from "../../../global/services/settings/settings.servic
 import {UtilsService} from "../../../global/services/utils/utils.service";
 
 @Component({
-    templateUrl: '/app/main/client/details/client.details.html',
+    template: require('./client.details.html'),
     pipes: [TranslatePipe]
 })
 

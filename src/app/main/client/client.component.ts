@@ -4,7 +4,7 @@ import {TranslatePipe} from "ng2-translate/ng2-translate";
 
 @Component({
     directives: [ROUTER_DIRECTIVES],
-    templateUrl: '/app/main/client/client.component.html',
+    template: require('./client.component.html'),
     pipes: [TranslatePipe]
 })
 

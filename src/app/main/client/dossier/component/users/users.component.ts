@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ = require("lodash");
 import {Component, Input, Output} from "@angular/core";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {User} from "../../../client.model";
@@ -9,7 +9,7 @@ import {EventEmitter} from "@angular/platform-browser-dynamic/src/facade/async";
 @Component({
     selector: 'users-display',
     directives: [REACTIVE_FORM_DIRECTIVES],
-    templateUrl: '/app/main/client/dossier/component/users/users.component.html',
+    template: require('./users.component.html'),
     pipes: [TranslatePipe]
 })
 

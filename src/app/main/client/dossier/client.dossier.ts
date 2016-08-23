@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ = require("lodash");
 import {Component} from "@angular/core";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {Router, ActivatedRoute} from "@angular/router";
@@ -15,7 +15,7 @@ import {SettingsService} from "../../../global/services/settings/settings.servic
 
 @Component({
     directives: [REACTIVE_FORM_DIRECTIVES, LocationsDisplay, UsersDisplay, Datepicker],
-    templateUrl: '/app/main/client/dossier/client.dossier.html',
+    template: require('./client.dossier.html'),
     pipes: [TranslatePipe]
 })
 

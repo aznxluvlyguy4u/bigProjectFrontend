@@ -13,7 +13,7 @@ declare var $;
 @Component({
     providers: [PaginationService],
     directives: [ROUTER_DIRECTIVES, PaginationComponent],
-    templateUrl: '/app/main/client/overview/client.overview.html',
+    template: require('./client.overview.html'),
     pipes: [TranslatePipe, ClientFilterPipe, PaginatePipe]
 })
 
