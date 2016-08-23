@@ -7,7 +7,7 @@
     <span class="subtitle">{{'ADMIN'}}</span>
     <div class="empty-block"></div>
     <button type="button" (click)="toggleUserMenu()" [class.active]="isActiveUserMenu" class="profile-toggle">
-        <i class="fa fa-user"><span class="show-for-large"> {{'Test User'}} </span></i>
+        <i class="fa fa-user"><span class="show-for-large"> {{ admin.first_name }} {{ admin.last_name }} </span></i>
     </button>
 </nav>
 
@@ -36,12 +36,6 @@
             <a routerLink="/invoice" routerLinkActive="active">
                 <i class="fa fa-file-text-o fa-fw" aria-hidden="true"></i>
                 {{ 'INVOICES' | translate }}
-            </a>
-        </li>
-        <li>
-            <a routerLink="/cms" routerLinkActive="active">
-                <i class="fa fa-list-alt fa-fw" aria-hidden="true"></i>
-                {{ 'CONTENT MANAGEMENT' | translate }}
             </a>
         </li>
         <li>
