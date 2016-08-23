@@ -11,7 +11,7 @@ import {Router} from "@angular/router";
 @Component({
     providers: [PaginationService],
     directives: [PaginationComponent],
-    templateUrl: '/app/main/invoice/overview/invoice.overview.html',
+    template: require('./invoice.overview.html'),
     pipes: [TranslatePipe, PaginatePipe]
 })
 

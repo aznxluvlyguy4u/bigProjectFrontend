@@ -7,7 +7,7 @@ import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
 import {InvoiceRule, Invoice} from "../invoice.model";
 
 @Component({
-    templateUrl: '/app/main/invoice/details/invoice.details.html',
+    template: require('./invoice.details.html'),
     pipes: [TranslatePipe]
 })
 
