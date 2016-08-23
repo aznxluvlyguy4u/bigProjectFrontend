@@ -6,33 +6,33 @@ import {ReplaySubject} from "rxjs/Rx";
 export class UtilsService {
     private provinces: ReplaySubject<any> = new ReplaySubject();
     private healthStatusses: ReplaySubject<any> = new ReplaySubject();
-    private userDetails: ReplaySubject<any> = new ReplaySubject();
+    private adminDetails: ReplaySubject<any> = new ReplaySubject();
 
-    constructor(private api: NSFOService) {
-        this.initUserDetails();
+    constructor(private nsfo: NSFOService) {
+        this.initAdminDetails();
         this.initProvinces();
         this.initHealthStatusses();
     }
 
     // USER DETAILS
-    private initUserDetails() {
-        this.api.doGetUserDetails()
+    public initAdminDetails() {
+        this.nsfo.doGetRequest(this.nsfo.URI_MENUBAR)
             .subscribe(res => {
-                this.setUserDetails(res.result);
+                this.setAdminDetails(res.result);
             })
     }
 
-    public setUserDetails(userDetails) {
-        this.userDetails.next(userDetails);
+    public setAdminDetails(userDetails) {
+        this.adminDetails.next(userDetails);
     }
 
-    public getUserDetails() {
-        return this.userDetails.asObservable();
+    public getAdminDetails() {
+        return this.adminDetails.asObservable();
     }
 
     // PROVINCES
     private initProvinces() {
-        this.api.doGetProvinces()
+        this.nsfo.doGetProvinces()
             .subscribe(res => {
                 this.setProvinces(res.result);
             })
@@ -48,7 +48,7 @@ export class UtilsService {
 
     // HEALTH STATUSSES
     private initHealthStatusses() {
-        this.api.doGetHealthStatusses()
+        this.nsfo.doGetHealthStatusses()
             .subscribe(res => {
                 this.setHealthStatusses(res.result);
             })
