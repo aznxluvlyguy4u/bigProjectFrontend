@@ -5,10 +5,11 @@ import {NSFOService} from "../../global/services/nsfo/nsfo.service";
 import {AdminProfile} from "./profile.model";
 import {PasswordValidator} from "./validator/profile.validator";
 import {Router} from "@angular/router";
+import {UtilsService} from "../../global/services/utils/utils.service";
 
 @Component({
     directives: [REACTIVE_FORM_DIRECTIVES],
-    templateUrl: '/app/main/profile/profile.component.html',
+    template: require('./profile.component.html'),
     pipes: [TranslatePipe]
 })
 
@@ -18,7 +19,7 @@ export class ProfileComponent {
     private isValidForm: boolean = true;
     private isSaving: boolean = false;
 
-    constructor(private fb: FormBuilder, private nsfo: NSFOService, private router: Router) {
+    constructor(private fb: FormBuilder, private nsfo: NSFOService, private router: Router, private utils: UtilsService) {
         this.form = fb.group({
             first_name: ['', Validators.required],
             last_name: ['', Validators.required],
@@ -56,6 +57,7 @@ export class ProfileComponent {
             this.nsfo.doPutRequest(this.nsfo.URI_ADMIN_PROFILE, request)
                 .subscribe(
                     res => {
+                        this.utils.initAdminDetails();
                         this.isSaving = false;
                         this.router.navigate(['/dashboard']);
                     },
