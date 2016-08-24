@@ -23,9 +23,9 @@
             <li class="tabs-title">
                 <a routerLink="/configuration/cms" routerLinkActive="active">{{ 'CONTENT MANAGEMENT' | translate }}</a>
             </li>
-            <li class="tabs-title">
-                <a routerLink="/configuration/choice_fields" routerLinkActive="active">{{ 'CHOICE FIELDS' | translate }}</a>
-            </li>
+            <!--<li class="tabs-title">-->
+                <!--<a routerLink="/configuration/choice_fields" routerLinkActive="active">{{ 'CHOICE FIELDS' | translate }}</a>-->
+            <!--</li>-->
         </ul>
     </div>
 
@@ -35,7 +35,7 @@
             <select [(ngModel)]="selectedRoute" (change)="navigateTo($event.target.value)">
                 <option value="/configuration/users">{{ 'USERS' | translate }}</option>
                 <option value="/configuration/cms">{{ 'CONTENT MANAGEMENT' | translate }}</option>
-                <option value="/configuration/choice_fields">{{ 'CHOICE FIELDS' | translate }}</option>
+                <!--<option value="/configuration/choice_fields">{{ 'CHOICE FIELDS' | translate }}</option>-->
             </select>
         </label>
     </div>
