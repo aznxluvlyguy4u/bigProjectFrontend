@@ -102,6 +102,7 @@ class Direction {
 class LivestockStats {
     public ram: AnimalStats = new AnimalStats();
     public ewe: AnimalStats = new AnimalStats();
+    public neuter: AnimalStats = new AnimalStats();
 }
 
 class AnimalStats {

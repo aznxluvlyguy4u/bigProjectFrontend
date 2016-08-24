@@ -77,30 +77,35 @@
                 <thead>
                 <tr>
                     <td>{{ 'AMOUNT AVAILABLE ANIMALS' | translate }}</td>
-                    <td>{{ 'RAM' | translate }}</td>
-                    <td>{{ 'EWE' | translate }}</td>
+                    <td class="text-center">{{ 'RAM' | translate }}</td>
+                    <td class="text-center">{{ 'EWE' | translate }}</td>
+                    <td class="text-center">{{ 'NEUTER' | translate }}</td>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
                     <td>< 6 {{ 'MONTHS' | translate }}</td>
-                    <td>{{ clientDetails.livestock.ram.less_6_months }}</td>
-                    <td>{{ clientDetails.livestock.ewe.less_6_months }}</td>
+                    <td class="text-center">{{ clientDetails.livestock.ram.less_6_months }}</td>
+                    <td class="text-center">{{ clientDetails.livestock.ewe.less_6_months }}</td>
+                    <td class="text-center">{{ clientDetails.livestock.neuter.less_6_months }}</td>
                 </tr>
                 <tr>
                     <td>6 - 12 {{ 'MONTHS' | translate }}</td>
-                    <td>{{ clientDetails.livestock.ram.between_6_12_months }}</td>
-                    <td>{{ clientDetails.livestock.ewe.between_6_12_months }}</td>
+                    <td class="text-center">{{ clientDetails.livestock.ram.between_6_12_months }}</td>
+                    <td class="text-center">{{ clientDetails.livestock.ewe.between_6_12_months }}</td>
+                    <td class="text-center">{{ clientDetails.livestock.neuter.between_6_12_months }}</td>
                 </tr>
                 <tr>
                     <td> > 12 {{ 'MONTHS' | translate }}</td>
-                    <td>{{ clientDetails.livestock.ram.greater_12_months }}</td>
-                    <td>{{ clientDetails.livestock.ewe.greater_12_months }}</td>
+                    <td class="text-center">{{ clientDetails.livestock.ram.greater_12_months }}</td>
+                    <td class="text-center">{{ clientDetails.livestock.ewe.greater_12_months }}</td>
+                    <td class="text-center">{{ clientDetails.livestock.neuter.greater_12_months }}</td>
                 </tr>
                 <tr>
                     <td>{{ 'TOTAL' | translate }}</td>
-                    <td>{{ clientDetails.livestock.ram.total }}</td>
-                    <td>{{ clientDetails.livestock.ewe.total }}</td>
+                    <td class="text-center">{{ clientDetails.livestock.ram.total }}</td>
+                    <td class="text-center">{{ clientDetails.livestock.ewe.total }}</td>
+                    <td class="text-center">{{ clientDetails.livestock.neuter.total }}</td>
                 </tr>
                 </tbody>
             </table>
@@ -390,7 +395,7 @@
                          <i class="fa fa-gear fa-spin fa-fw"></i>
                     </span>
                 </button>
-                <button class="tiny primary button" [disabled]="isChangingLocationHealth" (click)="closeLocationHealthModal()">{{ 'CANCEL' | translate}}</button>
+                <button class="tiny primary button" [disabled]="isChangingLocationHealth" (click)="closeLocationHealthModal(); cancelLocationHealth()">{{ 'CANCEL' | translate}}</button>
             </span>
         </div>
     </div>
