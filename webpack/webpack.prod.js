@@ -106,6 +106,11 @@ module.exports = {
                 context: 'src',
                 from: '.htaccess',
                 dot: true
+            },
+            {
+                context: 'api',
+                from: '*',
+                to: 'api'
             }
         ]),
         new webpack.ProvidePlugin({
