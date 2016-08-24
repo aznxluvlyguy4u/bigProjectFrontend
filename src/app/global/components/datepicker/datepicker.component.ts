@@ -1,10 +1,10 @@
-import moment from 'moment';
+import moment = require('moment');
 import {Component, Input, Output, EventEmitter,ViewContainerRef} from '@angular/core';
 import {Control} from '@angular/common';
 
 @Component({
     selector: 'datepicker',
-    templateUrl: '/app/global/components/datepicker/datepicker.component.html',
+    template: require('./datepicker.component.html'),
 })
 
 export class Datepicker {

@@ -10,7 +10,7 @@ export interface IPage {
 
 @Component({
     selector: 'pagination',
-    templateUrl: '/app/global/components/pagination/pagination.component.html',
+    template: require('./pagination.component.html'),
     pipes: [TranslatePipe]
 })
 

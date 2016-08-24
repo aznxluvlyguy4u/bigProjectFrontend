@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment = require('moment');
 import {Injectable} from "@angular/core";
 
 @Injectable()
