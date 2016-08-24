@@ -8,7 +8,7 @@ import {FormGroup, FormBuilder, REACTIVE_FORM_DIRECTIVES} from "@angular/forms";
 
 @Component({
     directives: [REACTIVE_FORM_DIRECTIVES],
-    templateUrl: '/app/main/config/admins/config.admins.html',
+    template: require('./config.admins.html'),
     pipes: [TranslatePipe]
 })
 
@@ -131,6 +131,7 @@ export class ConfigAdminsComponent {
     private openModal(editMode: boolean, admin: Admin): void {
         this.isModalEditMode = editMode;
         this.displayModal = 'block';
+        this.isValidForm = true;
 
         if(editMode) {
             this.admin = _.cloneDeep(admin);
