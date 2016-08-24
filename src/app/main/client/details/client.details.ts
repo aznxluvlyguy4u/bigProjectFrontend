@@ -1,8 +1,8 @@
 import _ = require("lodash");
-import moment from 'moment';
+import moment = require("moment");
 import {Component} from "@angular/core";
 import {Subscription} from "rxjs/Rx";
-import {Routxer, ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
 import {
@@ -56,26 +56,23 @@ export class ClientDetailsComponent {
     }
 
     private getClientDetails(): void {
-        this.nsfo.doGetRequest(this.nsfo.URI_CLIENTS + '/' + this.clientDetails.company_id + '/details')
+        this.nsfo.doGetRequest(this.nsfo.URI_CLIENTS + '/' + this.clientId + '/details')
             .subscribe(res => {
-                console.log(res);
                 this.clientDetails = <ClientDetails> res.result;
             });
     }
 
     private getClientNotes(): void {
-        this.nsfo.doGetRequest(this.nsfo.URI_CLIENTS + '/' + this.clientDetails.company_id + '/notes')
+        this.nsfo.doGetRequest(this.nsfo.URI_CLIENTS + '/' + this.clientId  + '/notes')
             .subscribe(res => {
-                console.log(res);
                 this.clientNotes = <ClientNote[]> res.result;
                 this.clientNotes = _.orderBy(this.clientNotes, ['creation_date'], ['desc']);
             });
     }
 
     private getHealthStatusses(): void {
-        this.nsfo.doGetRequest(this.nsfo.URI_HEALTH_COMPANY + '/' + this.clientDetails.company_id)
+        this.nsfo.doGetRequest(this.nsfo.URI_HEALTH_COMPANY + '/' + this.clientId)
             .subscribe(res => {
-                console.log(res);
                 this.healthStatusses = <LocationHealthStatus[]> res.result;
             });
     }
@@ -86,7 +83,7 @@ export class ClientDetailsComponent {
             "note": this.clientNote.message
         };
 
-        this.nsfo.doPostRequest(this.nsfo.URI_CLIENTS + '/' + this.clientDetails.company_id + '/notes', request)
+        this.nsfo.doPostRequest(this.nsfo.URI_CLIENTS + '/' + this.clientId + '/notes', request)
             .subscribe(res => {
                 let note: ClientNote = res.result;
                 this.clientNote.creator.first_name = note.creator.first_name;
@@ -158,13 +155,16 @@ export class ClientDetailsComponent {
 
     private openLocationHealthModal(location: LocationHealthStatus) {
         this.selectedLocation = location;
-        this.tempSelectedLocation = location;
+        this.tempSelectedLocation = _.clone(location);
         this.locationHealthModalDisplay = 'block';
     }
 
     private closeLocationHealthModal() {
-        this.selectedLocation = this.tempSelectedLocation;
         this.locationHealthModalDisplay = 'none';
+    }
+
+    private cancelLocationHealth() {
+        this.selectedLocation = _.clone(this.tempSelectedLocation);
     }
 }
 
