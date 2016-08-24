@@ -238,5 +238,9 @@
   "INSPECTION REQUESTS": "Onderzoek aanvragen",
   "VIEW INSPECTIONS": "Onderzoeken bekijken",
   "VIEW REPORTS": "Rapporten bekijken",
-  "EDIT CONFIGURATIONS": "Wijzig instellingen"
+  "EDIT CONFIGURATIONS": "Wijzig instellingen",
+  "A PRIMARY CONTACTPERSON IS REQUIRED": "Een primaire contactpersoon is verplicht.",
+  "THERE ARE CHANGED FIELDS AND NOT SAVED. ARE YOU SURE YOU WANT TO LEAVE THIS PAGE": "Er zijn velden gewijzigd en nog niet opgeslagen. Weet u zeker dat u deze pagina wilt verlaten?",
+  "CHANGED FIELDS": "Gewijzigde velden",
+  "NEUTER": "Onbekend"
 }
