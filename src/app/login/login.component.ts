@@ -6,7 +6,7 @@ import {NSFOService} from "../global/services/nsfo/nsfo.service";
 
 @Component({
     directives: [REACTIVE_FORM_DIRECTIVES],
-    templateUrl: '/app/login/login.component.html',
+    template: require('./login.component.html'),
     pipes: [TranslatePipe]
 })
 
