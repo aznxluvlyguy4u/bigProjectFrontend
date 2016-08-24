@@ -9,9 +9,7 @@ export class ClientFilterPipe implements PipeTransform {
     transform(list: any, args: string[]): any {
         let search_input: string = args[0];
         let invoices_option: string = args[1];
-
-        console.log(args);
-
+        
         let filtered = list;
 
         // FILTER: INVOICES
