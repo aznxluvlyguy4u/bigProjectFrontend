@@ -53,5 +53,8 @@ export class MainComponent {
         this.isActiveUserMenu = false;
     }
 
-    private logout() {}
+    private logout() {
+        localStorage.removeItem('access_token');
+        this.router.navigate(['/login']);
+    }
 }
