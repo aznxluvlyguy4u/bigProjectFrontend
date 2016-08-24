@@ -6,8 +6,8 @@
     "postinstall": "typings install",
     "start": "webpack-dev-server --port 8081 --config webpack/webpack.dev.js",
     "build": "webpack --config webpack/webpack.prod.js",
-    "deploy:staging": "npm run build && gulp zip:staging && gulp publish:staging",
-    "deploy:prod": "npm run build && gulp zip:prod && gulp publish:prod"
+    "publish:staging": "npm run build && gulp zip:staging && gulp publish:staging",
+    "publish:prod": "npm run build && gulp zip:prod && gulp publish:prod"
   },
   "license": "ISC",
   "dependencies": {
@@ -29,7 +29,7 @@
     "moment": "^2.12.0",
     "ng2-ckeditor": "^1.0.6",
     "ng2-pagination": "^0.3.2",
-    "ng2-translate": "^2.2.0",
+    "ng2-translate": "2.2.0",
     "reflect-metadata": "^0.1.8",
     "rxjs": "5.0.0-beta.6",
     "systemjs": "0.19.27",
