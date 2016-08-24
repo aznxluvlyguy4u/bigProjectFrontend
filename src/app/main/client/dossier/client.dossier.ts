@@ -28,12 +28,15 @@ export class ClientDossierComponent {
     private dataSub: Subscription;
 
     private client: Client = new Client();
+    private clientTemp: Client;
 
     private form: ControlGroup;
     private isValidForm: boolean = true;
     private modalDisplay: string = 'none';
     private errorMessage: string;
     private savingInProgress: boolean = false;
+
+    private changeModalDisplay: string = 'none';
 
     constructor(
         private router: Router,
@@ -80,6 +83,7 @@ export class ClientDossierComponent {
 
             if(this.pageMode == 'new') {
                 this.pageTitle = 'NEW CLIENT';
+                this.clientTemp = _.cloneDeep(this.client);
             }
         });
     }
@@ -100,7 +104,6 @@ export class ClientDossierComponent {
         this.nsfo.doGetRequest(this.nsfo.URI_CLIENTS + '/' + this.clientId)
             .subscribe(
                 res => {
-                    console.log(res);
                     this.client = res.result;
                     this.client.deleted_users = [];
                     this.client.deleted_locations = [];
@@ -112,6 +115,8 @@ export class ClientDossierComponent {
                     let user = this.client.owner;
                     user.primary_contactperson = true;
                     this.client.users.push(user);
+
+                    this.clientTemp = _.cloneDeep(this.client);
                 }
             )
     };
@@ -231,6 +236,31 @@ export class ClientDossierComponent {
                 this.openModal();
             }
         }
+    }
+
+    private navigateToClientOverview(){
+        if(this.checkForChanges()){
+            this.navigateTo('/client');
+        } else {
+            this.openChangeModal();
+        }
+    }
+
+    private checkForChanges() {
+        console.log(JSON.stringify(this.client));
+        console.log(JSON.stringify(this.clientTemp));
+        if(_.isEqual(this.client, this.clientTemp)) {
+            return true
+        }
+        return false
+    }
+
+    private openChangeModal() {
+        this.changeModalDisplay = 'block';
+    }
+
+    private closeChangeModal() {
+        this.changeModalDisplay = 'none';
     }
 
     private openModal() {
