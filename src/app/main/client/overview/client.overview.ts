@@ -47,18 +47,7 @@ export class ClientOverviewComponent {
     }
 
     private loginAsGhost(personID: string) {
-        let request = {
-            "person_id": personID
-        };
-        
-        this.nsfo.doPostRequest(this.nsfo.URI_GHOST_LOGIN, request)
-            .subscribe(
-                res => {
-                    let ghostToken = res.result.ghost_token;
-                    let accessToken = localStorage['access_token'];
-                    window.location.href= this.nsfo.getUserEnvURL() + '/ghostlogin/' + ghostToken + '/' + accessToken;
-                }
-            );
+        window.open(window.location.origin + '/ghostlogin/' + personID);
     };
 
     private setCompanyActive(client: Client, is_active: boolean) {
