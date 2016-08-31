@@ -242,5 +242,7 @@
   "A PRIMARY CONTACTPERSON IS REQUIRED": "Een primaire contactpersoon is verplicht.",
   "THERE ARE CHANGED FIELDS AND NOT SAVED. ARE YOU SURE YOU WANT TO LEAVE THIS PAGE": "Er zijn velden gewijzigd en nog niet opgeslagen. Weet u zeker dat u deze pagina wilt verlaten?",
   "CHANGED FIELDS": "Gewijzigde velden",
-  "NEUTER": "Onbekend"
+  "NEUTER": "Onbekend",
+  "THIS EMAIL IS ALREADY REGISTERED FOR ANOTHER USER. EMAIL HAS TO BE UNIQUE.": "Het e-mail adres ({{value}}) is al geregistreerd bij een ander gebruiker. Het e-mail adres moet uniek zijn.",
+  "THIS UBN IS ALREADY REGISTERED IN ANOTHER COMPANY. UBN HAS TO BE UNIQUE.": "Het UBN ({{value}}) is al geregistreerd bij een ander bedrijf. Het UBN moet uniek zijn."
 }
