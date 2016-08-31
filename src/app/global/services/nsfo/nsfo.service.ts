@@ -6,8 +6,12 @@ export class NSFOService {
     private API_SERVER_URL: string = 'http://nsfo-dev-api.jongensvantechniek.nl/api';
     private USER_ENV_URL: string = 'http://nsfo-dev.jongensvantechniek.nl';
 
+    // private API_SERVER_URL: string = 'http://localhost:8000/api';
+    // private USER_ENV_URL: string = 'http://localhost:8080';
+
     public URI_RESET_PASSWORD = '/v1/admins/auth/password-reset';
     public URI_VALIDATE_TOKEN = '/v1/auth/validate-token';
+    public URI_PROVINCES = '/v1/countries/nl/provinces';
     
     public URI_GHOST_LOGIN: string = '/v1/admins/ghost';
     public URI_ADMIN: string = '/v1/admins';

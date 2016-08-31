@@ -32,7 +32,7 @@ export class UtilsService {
 
     // PROVINCES
     private initProvinces() {
-        this.nsfo.doGetProvinces()
+        this.nsfo.doGetRequest(this.nsfo.URI_PROVINCES)
             .subscribe(res => {
                 this.setProvinces(res.result);
             })
