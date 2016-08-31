@@ -6,13 +6,13 @@
     <div class="large-2 columns">
         <label>
             {{ 'SEARCH' | translate }}
-            <input type="text" [(ngModel)]="filterSearch" placeholder="{{ 'SEARCH' | translate }}" maxlength="50">
+            <input type="text" [(ngModel)]="filterSearch" (keydown)="page = 1" placeholder="{{ 'SEARCH' | translate }}" maxlength="50">
         </label>
     </div>
     <div class="large-2 columns">
         <label>
             {{ 'INVOICES' | translate }}
-            <select [(ngModel)]="filterInvoices">
+            <select [(ngModel)]="filterInvoices" (change)="page = 1">
                 <option value="ALL">{{ 'ALL' | translate }}</option>
                 <option value="UNPAID INVOICES">{{ 'UNPAID INVOICES' | translate }}</option>
             </select>
@@ -21,7 +21,7 @@
     <div class="large-2 columns">
         <label>
             {{ 'DISPLAY AMOUNT' | translate }}
-            <select [(ngModel)]="filterAmount">
+            <select [(ngModel)]="filterAmount" (change)="page = 1">
                 <option value="10">10</option>
                 <option value="25">25</option>
                 <option value="50">50</option>
@@ -101,7 +101,7 @@
                         </div>
                     </td>
                     <td>
-                        <span *ngIf="client.subscription_date">{{ settings.convertToViewDate(client.subscription_date) }}</span>
+                        <span *ngIf="client.subscription_date">{{ settings.convertToViewDate(client.subscription_date.date) }}</span>
                         <span *ngIf="!client.subscription_date">--</span>
                     </td>
                     <td>
