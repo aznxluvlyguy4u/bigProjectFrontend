@@ -21,6 +21,7 @@ import {InvoiceOverviewComponent} from "./main/invoice/overview/invoice.overview
 import {AuthenticatedGuard} from "./global/guards/authenticated.guard";
 import {ConfigAdminsComponent} from "./main/config/admins/config.admins";
 import {ReportComponent} from "./main/report/report.component";
+import {GhostLoginComponent} from "./ghostlogin/ghostlogin.component";
 
 const routes: RouterConfig = [
     {
@@ -62,6 +63,7 @@ const routes: RouterConfig = [
             {path: 'profile', terminal: true, component: ProfileComponent}
         ]
     },
+    {path: 'ghostlogin/:person', component: GhostLoginComponent, canActivate: [AuthenticatedGuard]},
     {path: 'login', component: LoginComponent}
 ];
 
