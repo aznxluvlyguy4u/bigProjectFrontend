@@ -5,6 +5,8 @@ import {Admin} from "../config.model";
 import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
 import {Validators} from "@angular/common";
 import {FormGroup, FormBuilder, REACTIVE_FORM_DIRECTIVES} from "@angular/forms";
+import {UtilsService} from "../../../global/services/utils/utils.service";
+import {Observable} from "rxjs/Rx";
 
 @Component({
     directives: [REACTIVE_FORM_DIRECTIVES],
@@ -17,6 +19,8 @@ export class ConfigAdminsComponent {
     private admin: Admin = new Admin();
     private adminTemp: Admin;
     private selectedAdmin: Admin;
+    private superAdminDetails: [] = [];
+    private superAdminDetails$: Observable;
     private isModalEditMode: boolean = false;
     private isValidForm: boolean = true;
     private isSaving: boolean = false;
@@ -27,9 +31,10 @@ export class ConfigAdminsComponent {
 
     private form: FormGroup;
 
-    constructor(private nsfo: NSFOService, private fb: FormBuilder) {
+    constructor(private nsfo: NSFOService, private fb: FormBuilder, private utils: UtilsService) {
+        this.getAdminDetails();
         this.getAdmins();
-
+        
         this.form = fb.group({
             first_name: ['', Validators.required],
             last_name: ['', Validators.required],
@@ -39,6 +44,13 @@ export class ConfigAdminsComponent {
         });
     }
     
+    private getAdminDetails(): void {
+        this.superAdminDetails$ = this.utils.getAdminDetails()
+            .subscribe(res => {
+                this.superAdminDetails['email'] = res.email_address;
+            });
+    }
+
     private getAdmins(): void {
         this.nsfo.doGetRequest(this.nsfo.URI_ADMIN)
             .subscribe(

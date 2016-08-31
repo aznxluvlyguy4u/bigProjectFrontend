@@ -23,7 +23,7 @@
                         <td>{{ admin.last_name }}</td>
                         <td>{{ admin.access_level | translate }}</td>
                         <td>
-                            <span class="pull-right overview-controls">
+                            <span *ngIf="admin.email_address != superAdminDetails?.email" class="pull-right overview-controls">
                                 <a (click)="openModal(true, admin)"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
                                 <a (click)="openRemoveModal(admin)" class="remove-button"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
                             </span>
