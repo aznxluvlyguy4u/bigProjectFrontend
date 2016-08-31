@@ -24,7 +24,11 @@ export class MainComponent {
     }
 
     private validateToken() {
-        this.nsfo.doGetRequest(this.nsfo.URI_VALIDATE_TOKEN)
+        let request = {
+            "env": "ADMIN"
+        };
+
+        this.nsfo.doPostRequest(this.nsfo.URI_VALIDATE_TOKEN, request)
             .subscribe(
                 res => {},
                 err => {this.router.navigate(['/login'])}
