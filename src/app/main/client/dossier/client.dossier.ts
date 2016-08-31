@@ -33,6 +33,7 @@ export class ClientDossierComponent {
     private form: ControlGroup;
     private isValidForm: boolean = true;
     private modalDisplay: string = 'none';
+    private errorData: string;
     private errorMessage: string;
     private savingInProgress: boolean = false;
 
@@ -108,6 +109,13 @@ export class ClientDossierComponent {
                     this.client.deleted_users = [];
                     this.client.deleted_locations = [];
 
+                    if(this.client.animal_health_subscription) {
+                        this.form.controls['animal_health_subscription'].updateValue('YES');
+                        this.client.subscription_date = this.settings.convertToViewDate(this.client.subscription_date);
+                    } else {
+                        this.form.controls['animal_health_subscription'].updateValue('NO');
+                    }
+
                     for(let user of this.client.users) {
                         user.primary_contactperson = false;
                     }
@@ -161,9 +169,10 @@ export class ClientDossierComponent {
 
                 if(this.form.controls['animal_health_subscription'].value == 'YES') {
                     newClient.animal_health_subscription = true;
-                    newClient.subscription_date = '';
+                    newClient.subscription_date = this.form.controls['subscription_date'].value;
                 } else {
                     newClient.animal_health_subscription = false;
+                    newClient.subscription_date = '';
                 }
 
                 let owner = _.find(newClient.users, ['primary_contactperson', true]);
@@ -178,6 +187,13 @@ export class ClientDossierComponent {
                         res => {
                             this.savingInProgress = false;
                             this.navigateTo('/client');
+                        },
+                        err => {
+                            let error = err.json();
+                            this.errorData = error.data;
+                            this.errorMessage = error.message;
+                            this.openModal();
+                            this.savingInProgress = false;
                         }
                     );
             } else {
@@ -213,9 +229,10 @@ export class ClientDossierComponent {
 
                 if(this.form.controls['animal_health_subscription'].value == 'YES') {
                     newClient.animal_health_subscription = true;
-                    newClient.subscription_date = '';
+                    newClient.subscription_date = this.form.controls['subscription_date'].value;
                 } else {
                     newClient.animal_health_subscription = false;
+                    newClient.subscription_date = '';
                 }
 
                 let owner = _.find(newClient.users, ['primary_contactperson', true]);
@@ -227,6 +244,13 @@ export class ClientDossierComponent {
                     .subscribe(
                         res => {
                             this.navigateTo('/client');
+                        },
+                        err => {
+                            let error = err.json();
+                            this.errorData = error.data;
+                            this.errorMessage = error.message;
+                            this.openModal();
+                            this.savingInProgress = false;
                         }
                     );
 
@@ -247,8 +271,6 @@ export class ClientDossierComponent {
     }
 
     private checkForChanges() {
-        console.log(JSON.stringify(this.client));
-        console.log(JSON.stringify(this.clientTemp));
         if(_.isEqual(this.client, this.clientTemp)) {
             return true
         }

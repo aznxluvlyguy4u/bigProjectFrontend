@@ -22,8 +22,13 @@
         </button>
 
         <button *ngIf="pageMode == 'edit'" (click)="editClient()" [disabled]="savingInProgress" class="small primary button expanded">
-            <i class="fa fa-floppy-o" aria-hidden="true"></i>
-            {{ 'EDIT' | translate }}
+            <span *ngIf="!savingInProgress">
+                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                {{ 'EDIT' | translate }}
+            </span>
+            <span *ngIf="savingInProgress">
+                <i class="fa fa-gear fa-spin fa-fw"></i>
+            </span>
         </button>
     </div>
 </div>
@@ -257,7 +262,7 @@
             </div>
             <div class="large-6 columns">
                 <span>
-                    <datepicker [formCtrl]="form.controls['subscription_date']" [viewFormat]="settings.getViewDateFormat()" [modelFormat]="settings.getModelDateTimeFormat()"></datepicker>
+                    <datepicker [formCtrl]="form.controls['subscription_date']" [initDate]="client.subscription_date" [viewFormat]="settings.getViewDateFormat()" [modelFormat]="settings.getModelDateTimeFormat()" [editMode]="!savingInProgress"></datepicker>
                 </span>
             </div>
         </div>
@@ -301,7 +306,7 @@
             </button>
         </div>
         <div class="modal-body">
-            {{ errorMessage | translate }}
+            {{ errorMessage | translate:{value: errorData} }}
         </div>
         <div class="modal-footer">
             <button class="tiny primary button pull-right" (click)="closeModal()">{{ 'OK' | translate}}</button>
