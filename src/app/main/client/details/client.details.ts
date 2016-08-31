@@ -78,37 +78,28 @@ export class ClientDetailsComponent {
     }
     
     private addClientNote(): void {
-        this.isSavingNote = true;
-        let request = {
-            "note": this.clientNote.message
-        };
+        if(this.clientNote.message) {
+            this.isSavingNote = true;
+            let request = {
+                "note": this.clientNote.message
+            };
 
-        this.nsfo.doPostRequest(this.nsfo.URI_CLIENTS + '/' + this.clientId + '/notes', request)
-            .subscribe(res => {
-                let note: ClientNote = res.result;
-                this.clientNote.creator.first_name = note.creator.first_name;
-                this.clientNote.creator.last_name = note.creator.last_name;
-                this.clientNote.creation_date = moment().format();
-                this.clientNotes.push(this.clientNote);
-                this.clientNotes = _.orderBy(this.clientNotes, ['creation_date'], ['desc']);
-                this.clientNote = new ClientNote();
-                this.isSavingNote = false;
-            });
+            this.nsfo.doPostRequest(this.nsfo.URI_CLIENTS + '/' + this.clientId + '/notes', request)
+                .subscribe(res => {
+                    let note: ClientNote = res.result;
+                    this.clientNote.creator.first_name = note.creator.first_name;
+                    this.clientNote.creator.last_name = note.creator.last_name;
+                    this.clientNote.creation_date = moment().format();
+                    this.clientNotes.push(this.clientNote);
+                    this.clientNotes = _.orderBy(this.clientNotes, ['creation_date'], ['desc']);
+                    this.clientNote = new ClientNote();
+                    this.isSavingNote = false;
+                });
+        }
     }
 
     private loginAsGhost(personID: string) {
-        let request = {
-            "person_id": personID
-        };
-
-        this.nsfo.doPostRequest(this.nsfo.URI_GHOST_LOGIN, request)
-            .subscribe(
-                res => {
-                    let ghostToken = res.result.ghost_token;
-                    let accessToken = localStorage['access_token'];
-                    window.location.href= this.nsfo.getUserEnvURL() + '/ghostlogin/' + ghostToken + '/' + accessToken;
-                }
-            );
+        window.open(window.location.origin + '/ghostlogin/' + personID);
     };
 
     private setCompanyActive(is_active: boolean) {
