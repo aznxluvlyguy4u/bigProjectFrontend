@@ -24,7 +24,7 @@
         <button *ngIf="pageMode == 'edit'" (click)="editClient()" [disabled]="savingInProgress" class="small primary button expanded">
             <span *ngIf="!savingInProgress">
                 <i class="fa fa-floppy-o" aria-hidden="true"></i>
-                {{ 'EDIT' | translate }}
+                {{ 'SAVE' | translate }}
             </span>
             <span *ngIf="savingInProgress">
                 <i class="fa fa-gear fa-spin fa-fw"></i>
