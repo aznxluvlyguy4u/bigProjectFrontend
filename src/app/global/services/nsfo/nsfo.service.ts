@@ -3,8 +3,8 @@ import {Http, Headers} from "@angular/http";
 
 @Injectable()
 export class NSFOService {
-    private API_SERVER_URL: string = 'http://nsfo-dev-api.jongensvantechniek.nl/api';
-    private USER_ENV_URL: string = 'http://nsfo-dev.jongensvantechniek.nl';
+    private API_SERVER_URL: string = 'https://nsfo-api.jongensvantechniek.nl/api';
+    private USER_ENV_URL: string = 'http://online.nsfo.nl';
 
     // private API_SERVER_URL: string = 'http://localhost:8000/api';
     // private USER_ENV_URL: string = 'http://localhost:8080';
