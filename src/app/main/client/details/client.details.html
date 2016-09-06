@@ -12,7 +12,7 @@
 
     <div class="large-6 columns">
         <span class="pull-right">
-            <button (click)="openUserModal()" class="small primary button">
+            <button *ngIf="clientDetails.status && healthStatusses.length > 0" (click)="openUserModal()" class="small primary button">
                 <i class="fa fa-sign-in fa-fw" aria-hidden="true"></i>
                 {{ 'LOGIN' | translate }}
             </button>

@@ -129,7 +129,7 @@
                         <div class="dropdown-pane bottom" id="dropdown-{{ client.company_id }}" data-dropdown data-hover="true" data-hover-pane="true">
                             <ul>
                                 <li>
-                                    <a *ngIf="client.status" (click)="openUserModal(client)">{{ 'LOGIN' | translate }} <i class="fa fa-sign-in fa-fw" aria-hidden="true"></i></a>
+                                    <a *ngIf="client.status && client.locations.length > 0" (click)="openUserModal(client)">{{ 'LOGIN' | translate }} <i class="fa fa-sign-in fa-fw" aria-hidden="true"></i></a>
                                 </li>
                                 <li>
                                     <a routerLink="/client/details/{{ client.company_id }}">{{ 'VIEW' | translate }} <i class="fa fa-info fa-fw" aria-hidden="true"></i></a>
