@@ -154,13 +154,7 @@ export class ClientDossierComponent {
             this.errorMessage = 'AT LEAST ONE USER IS REQUIRED';
             this.openModal();
         }
-
-        if (this.client.locations.length == 0) {
-            this.isValidForm = false;
-            this.errorMessage = 'AT LEAST ONE LOCATION IS REQUIRED';
-            this.openModal();
-        }
-
+        
         if (this.isValidForm) {
             if (this.form.valid) {
                 this.savingInProgress = true;
@@ -214,13 +208,7 @@ export class ClientDossierComponent {
             this.errorMessage = 'A PRIMARY CONTACTPERSON IS REQUIRED';
             this.openModal();
         }
-
-        if (this.client.locations.length == 0) {
-            this.isValidForm = false;
-            this.errorMessage = 'AT LEAST ONE LOCATION IS REQUIRED';
-            this.openModal();
-        }
-
+        
         if (this.isValidForm) {
             if (this.form.valid) {
                 this.savingInProgress = true;
