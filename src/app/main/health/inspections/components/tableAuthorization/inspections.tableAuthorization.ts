@@ -4,6 +4,7 @@ import {SettingsService} from "../../../../../global/services/settings/settings.
 import {AnimalHealthRequest} from "../../../health.model";
 import {Router} from "@angular/router";
 import {AuthorizationComponent} from "./authorization/tableAuthorization.authorization";
+import {NSFOService} from "../../../../../global/services/nsfo/nsfo.service";
 
 @Component({
     selector: 'health-table-authorization',
@@ -14,18 +15,20 @@ import {AuthorizationComponent} from "./authorization/tableAuthorization.authori
 
 export class HealthTableAuthorization {
     private requests: AnimalHealthRequest[] = [];
+    private results = [];
     private showAuthPage = false;
-    private selectedId = -1;
+    private selectedRequest: AnimalHealthRequest = new AnimalHealthRequest();
 
     @Input() animalHealthRequests: AnimalHealthRequest[];
 
-    constructor(private settings: SettingsService, private router: Router) {}
+    constructor(private settings: SettingsService, private router: Router, private nsfo: NSFOService) {}
     
     ngOnChanges() {
         this.getRequests();
     }
 
     private getRequests(): void {
+        this.requests = [];
         for (let request of this.animalHealthRequests) {
             if(request.status == 'AUTHORIZATION') {
                 this.requests.push(request);
@@ -33,12 +36,24 @@ export class HealthTableAuthorization {
         }
     }
 
-    private switchToAuthPage(request_id: number): void {
-        this.selectedId = request_id;
+    private getResults(inspectionId) {
+        this.nsfo.doGetRequest(this.nsfo.URI_HEALTH_INSPECTIONS + '/' + inspectionId + '/results')
+            .subscribe(
+                res => {
+                    this.results = res.result;
+                }
+            )
+    }
+
+    private switchToAuthPage(request): void {
+        this.getResults(request.inspection_id);
+        this.selectedRequest = request;
         this.showAuthPage = true;
     }
 
     private switchToOverviewPage(switchPage): void {
         this.showAuthPage = switchPage;
+        this.selectedRequest = new AnimalHealthRequest();
+        this.results = [];
     }
 }

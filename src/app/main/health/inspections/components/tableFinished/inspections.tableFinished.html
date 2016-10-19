@@ -4,25 +4,24 @@
         <td> {{ 'UBN' | translate }} </td>
         <td> {{ 'NAME' | translate }} </td>
         <td> {{ 'INSPECTION' | translate }} </td>
-        <td> {{ 'DATA' | translate }} </td>
         <td> {{ 'TOTAL LEAD TIME' | translate }} </td>
-        <td> {{ 'AUTHORIZED BY' | translate }} </td>
+        <td> {{ 'DATA' | translate }} </td>
     </tr>
     </thead>
     <tbody>
     <tr *ngFor="let request of requests">
-        <td>{{ request.ubn }}</td>
-        <td>{{ request.name }}</td>
-        <td>{{ request.inspection | translate }}</td>
+        <td> {{ request.ubn }} </td>
+        <td> {{ request.last_name }} </td>
+        <td> {{ request.inspection | translate }} </td>
         <td>
-            <div *ngFor="let date of request.data">
-                {{ date.type }}: {{ settings.convertToViewDate(date.date) }}
-            </div> <br>
+            <span *ngIf="request.total_lead_time == 0 || request.total_lead_time > 1"> {{ request.total_lead_time }} {{ 'DAYS FROM SAMPLING TO AUTHORIZATION' | translate }} </span>
+            <span *ngIf="request.total_lead_time == 1"> {{ request.total_lead_time }} {{ 'DAY FROM SAMPLING TO AUTHORIZATION' | translate }} </span>
         </td>
         <td>
-            {{ request.total_lead_time }} {{ 'DAYS FROM SAMPLING TO AUTHORIZATION' | translate }}
+            <span *ngFor="let direction of request.directions">
+                {{ 'LABEL_INSPECTION_' + direction.direction_type | translate}}: {{ direction.first_name + " " + direction.last_name }} ({{ settings.convertToViewDateTime(direction.direction_date) }}) <br>
+            </span>
         </td>
-        <td>{{ request.authorized_by }}</td>
     </tr>
     </tbody>
 </table>

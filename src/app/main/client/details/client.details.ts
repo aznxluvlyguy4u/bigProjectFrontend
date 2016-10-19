@@ -11,8 +11,12 @@ import {
 } from "../client.model";
 import {SettingsService} from "../../../global/services/settings/settings.service";
 import {UtilsService} from "../../../global/services/utils/utils.service";
+import {Datepicker} from "../../../global/components/datepicker/datepicker.component";
+import {REACTIVE_FORM_DIRECTIVES} from "@angular/forms";
+import {ControlGroup, FormBuilder} from "@angular/common";
 
 @Component({
+    directives: [REACTIVE_FORM_DIRECTIVES, Datepicker],
     template: require('./client.details.html'),
     pipes: [TranslatePipe]
 })
@@ -33,14 +37,22 @@ export class ClientDetailsComponent {
     private tempSelectedLocation: LocationHealthStatus = new LocationHealthStatus();
     private maediVisnaStatusOptions: string[] = MAEDI_VISNA_STATUS_OPTIONS;
     private scrapieStatusOptions: string[] = SCRAPIE_STATUS_OPTIONS;
+    private form: ControlGroup;
     
     constructor(
         private router: Router,
         private nsfo: NSFOService,
         private activatedRoute: ActivatedRoute,
         private settings: SettingsService,
-        private utils: UtilsService
-    ) {}
+        private utils: UtilsService,
+        private fb: FormBuilder
+    ) {
+        this.form = fb.group({
+            "scrapie_check_date" : [''],
+            "maedi_visna_check_date" : [''],
+            "reason_of_change": ['']
+        });
+    }
 
     ngOnInit() {
         this.dataSub = this.activatedRoute.params.subscribe(params => {
@@ -74,6 +86,13 @@ export class ClientDetailsComponent {
         this.nsfo.doGetRequest(this.nsfo.URI_HEALTH_COMPANY + '/' + this.clientId)
             .subscribe(res => {
                 this.healthStatusses = <LocationHealthStatus[]> res.result;
+                for(let healthStatus of this.healthStatusses) {
+                    healthStatus.scrapie_check_date = this.settings.convertToViewDate(healthStatus.scrapie_check_date);
+                    healthStatus.maedi_visna_check_date = this.settings.convertToViewDate(healthStatus.maedi_visna_check_date);
+
+                    this.form.controls['scrapie_check_date'].updateValue(healthStatus.scrapie_check_date);
+                    this.form.controls['maedi_visna_check_date'].updateValue(healthStatus.maedi_visna_check_date);
+                }
             });
     }
     
@@ -120,7 +139,10 @@ export class ClientDetailsComponent {
 
         let request = {
             "maedi_visna_status": this.selectedLocation.maedi_visna_status,
+            "maedi_visna_check_date": this.form.controls['maedi_visna_check_date'].value,
             "scrapie_status": this.selectedLocation.scrapie_status,
+            "scrapie_check_date": this.form.controls['scrapie_check_date'].value,
+            "reason_of_change": this.form.controls['reason_of_change'].value
         };
 
         this.nsfo.doPutRequest(this.nsfo.URI_HEALTH_UBN + '/' + this.selectedLocation.ubn, request)

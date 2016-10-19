@@ -21,13 +21,7 @@
                 <a routerLink="/health/inspections" routerLinkActive="active">{{ 'INSPECTIONS' | translate }}</a>
             </li>
             <li class="tabs-title">
-                <a routerLink="/health/letters" routerLinkActive="active">{{ 'SUPPORT LETTERS' | translate }}</a>
-            </li>
-            <li class="tabs-title">
-                <a routerLink="/health/upload-csv" routerLinkActive="active">{{ 'UPLOAD CSV' | translate }}</a>
-            </li>
-            <li class="tabs-title">
-                <a routerLink="/health/erroneous-csv" routerLinkActive="active">{{ 'ERRONEOUS CSV' | translate }}</a>
+                <a routerLink="/health/failed_imports" routerLinkActive="active">{{ 'FAILED IMPORTS' | translate }}</a>
             </li>
         </ul>
     </div>
@@ -37,9 +31,7 @@
         <label> {{ 'TAB' | translate }}
             <select [(ngModel)]="selectedRoute" (change)="navigateTo($event.target.value)">
                 <option value="/health/inspections">{{ 'INSPECTIONS' | translate }}</option>
-                <option value="/health/letters">{{ 'SUPPORT LETTERS' | translate }}</option>
-                <option value="/health/upload-csv">{{ 'UPLOAD CSV' | translate }}</option>
-                <option value="/health/erroneous-csv">{{ 'ERRONEOUS CSV' | translate }}</option>
+                <option value="/health/failed_imports-csv">{{ 'FAILED IMPORTS' | translate }}</option>
             </select>
         </label>
     </div>

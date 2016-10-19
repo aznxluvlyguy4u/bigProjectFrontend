@@ -69,7 +69,10 @@ export class ClientDetails {
 export class LocationHealthStatus {
     public ubn: string;
     public maedi_visna_status: string;
+    public maedi_visna_check_date: string;
     public scrapie_status: string;
+    public scrapie_check_date: string;
+    public reason_of_change: string;
 }
 
 class BreederNumber {

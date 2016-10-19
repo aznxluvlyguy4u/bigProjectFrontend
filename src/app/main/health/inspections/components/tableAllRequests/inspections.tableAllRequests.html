@@ -5,12 +5,11 @@
             <td> {{ 'NAME' | translate }} </td>
             <td> {{ 'INSPECTION' | translate }} </td>
             <td> {{ 'REQUEST DATE' | translate }} </td>
-            <td> {{ 'DIRECTION DATE' | translate }} </td>
             <td> {{ 'NEXT ACTION' | translate }} </td>
             <td>
-                <button type="button" class="small primary button pull-right">
-                    {{ 'DOWNLOAD ALL FORMS' | translate }}
+                <button type="button" *ngIf="requests.length > 0" (click)="getAllDocuments()" class="tiny primary button pull-right">
                     <span *ngIf="requests.length > 0" class="badge"> {{ requests.length }} </span>
+                    {{ 'DOWNLOAD' | translate }}
                 </button>
             </td>
         </tr>
@@ -18,7 +17,7 @@
     <tbody>
         <tr *ngFor="let request of requests">
             <td>{{ request.ubn }}</td>
-            <td>{{ request.name }}</td>
+            <td>{{ request.last_name }}</td>
             <td>{{ request.inspection | translate }}</td>
             <td>
                 <span *ngIf="request.request_date">
@@ -28,19 +27,16 @@
                     --
                 </span>
             </td>
-            <td>
-                <span *ngIf="request.direction_date">
-                    {{ settings.convertToViewDate(request.direction_date) }}
-                </span>
-                <span *ngIf="!request.direction_date">
-                    --
-                </span>
-            </td>
             <td>{{ request.next_action | translate }}</td>
             <td>
-                <button type="button" class="small primary button pull-right">
-                    {{ 'DOWNLOAD' | translate }}
-                </button>
+                <span class="pull-right">
+                    <button type="button" (click)="getDocument(request)" class="small primary button">
+                        {{ 'DOWNLOAD' | translate }}
+                    </button>
+                    <button type="button" (click)="changeStatus(request, $event)" class="small primary button">
+                        {{ 'ANNOUNCE' | translate }}
+                    </button>
+                </span>
             </td>
         </tr>
     </tbody>

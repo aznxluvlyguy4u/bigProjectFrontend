@@ -11,3 +11,11 @@ export class Admin {
     public last_name: string;
     public access_level: string;
 }
+
+export class HealthLetter {
+    public log_date: string;
+    public html: string;
+    public revision_number: string;
+    public last_name: string;
+    public first_name: string;
+}

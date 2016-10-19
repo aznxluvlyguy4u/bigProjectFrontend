@@ -42,7 +42,6 @@ export class ConfigCMSComponent {
                 if(res.result) {
                     CKEDITOR.instances.dashboardtext.setData(res.result.dashboard);
                     CKEDITOR.instances.contacttext.setData(res.result.contact_info);
-                    console.log();
 
                     $('iframe')
                         .contents()

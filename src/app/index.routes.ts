@@ -2,7 +2,6 @@ import {provideRouter, RouterConfig} from "@angular/router";
 import {MainComponent} from "./main/main.component";
 import {DashboardComponent} from "./main/dashboard/dashboard.component";
 import {HealthComponent} from "./main/health/health.component";
-import {HealthLettersComponent} from "./main/health/letters/health.letters";
 import {ClientComponent} from "./main/client/client.component";
 import {ClientOverviewComponent} from "./main/client/overview/client.overview";
 import {ClientDossierComponent} from "./main/client/dossier/client.dossier";
@@ -15,13 +14,16 @@ import {ProfileComponent} from "./main/profile/profile.component";
 import {LoginComponent} from "./login/login.component";
 import {ConfigChoiceFieldsComponent} from "./main/config/choiceFields/config.choiceFields";
 import {HealthInspectionsComponent} from "./main/health/inspections/health.inspections";
-import {HealthErroneousCSVComponent} from "./main/health/erroneousCSV/health.erroneousCSV";
-import {HealthUploadCSVComponent} from "./main/health/uploadCSV/health.uploadCSV";
+import {HealthFailedImportsComponent} from "./main/health/failedImports/health.failedImports";
 import {InvoiceOverviewComponent} from "./main/invoice/overview/invoice.overview";
 import {AuthenticatedGuard} from "./global/guards/authenticated.guard";
 import {ConfigAdminsComponent} from "./main/config/admins/config.admins";
 import {ReportComponent} from "./main/report/report.component";
 import {GhostLoginComponent} from "./ghostlogin/ghostlogin.component";
+import {HealthLettersComponent} from "./main/config/healthLetters/healthLetters.component";
+import {ScrapieAnnouncementComponent} from "./main/config/healthLetters/scrapie/announcement/scrapie.announcement";
+import {ScrapieSupportComponent} from "./main/config/healthLetters/scrapie/support/scrapie.support";
+import {LoadingComponent} from "./loading/loading.component";
 
 const routes: RouterConfig = [
     {
@@ -33,9 +35,7 @@ const routes: RouterConfig = [
                 children: [
                     {path: '', terminal: true, redirectTo: 'inspections'},
                     {path: 'inspections', component: HealthInspectionsComponent},
-                    {path: 'erroneous-csv', component: HealthErroneousCSVComponent},
-                    {path: 'upload-csv', component: HealthUploadCSVComponent},
-                    {path: 'letters', component: HealthLettersComponent}
+                    {path: 'failed_imports', component: HealthFailedImportsComponent},
                 ]},
             {path: 'client', component: ClientComponent,
                 children: [
@@ -57,6 +57,12 @@ const routes: RouterConfig = [
                     {path: '', terminal: true, redirectTo: 'admins'},
                     {path: 'admins', component: ConfigAdminsComponent},
                     {path: 'cms', component: ConfigCMSComponent},
+                    {path: 'health_letters', component: HealthLettersComponent,
+                        children: [
+                            {path: '', terminal: true, redirectTo: 'scrapie_announcement'},
+                            {path: 'scrapie_announcement', component: ScrapieAnnouncementComponent},
+                            {path: 'scrapie_supporting', component: ScrapieSupportComponent},
+                        ]},
                     {path: 'choice_fields', component: ConfigChoiceFieldsComponent}
                 ]},
             {path: 'report', terminal: true, component: ReportComponent},
@@ -64,7 +70,8 @@ const routes: RouterConfig = [
         ]
     },
     {path: 'ghostlogin/:person', component: GhostLoginComponent, canActivate: [AuthenticatedGuard]},
-    {path: 'login', component: LoginComponent}
+    {path: 'login', component: LoginComponent},
+    {path: 'loading', terminal: true, component: LoadingComponent}
 ];
 
 export const APP_ROUTER_PROVIDERS = [

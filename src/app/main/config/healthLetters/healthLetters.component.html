@@ -1,0 +1,14 @@
+<div id="health-letters">
+    <div class="row">
+        <div class="large-2 columns">
+            <ul class="menu vertical">
+                <li class="menu-title">{{ 'SCRAPIE' | translate }}</li>
+                <li><a routerLink="/configuration/health_letters/scrapie_announcement" routerLinkActive="active">{{ 'ANNOUNCEMENT LETTER' | translate }}</a></li>
+                <li><a routerLink="/configuration/health_letters/scrapie_supporting" routerLinkActive="active">{{ 'SUPPORTING LETTER' | translate }}</a></li>
+            </ul>
+        </div>
+        <div class="large-10 columns">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>
