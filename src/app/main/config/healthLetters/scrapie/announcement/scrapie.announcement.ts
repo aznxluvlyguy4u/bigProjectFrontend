@@ -19,6 +19,7 @@ export class ScrapieAnnouncementComponent {
     private illness: string = 'scrapie';
     private letter_type: string = 'announcement';
     private letter: HealthLetter = new HealthLetter();
+    private isLoaded: boolean = false;
     
     private editorConfig = {
         language: 'nl',
@@ -37,7 +38,7 @@ export class ScrapieAnnouncementComponent {
     }
 
     ngAfterViewInit() {
-        CKEDITOR.replace('texteditor', this.editorConfig);
+
     }
 
     private getHTMLData(): void {
@@ -46,15 +47,24 @@ export class ScrapieAnnouncementComponent {
             .subscribe(
                 res => {
                     this.letter = res.result;
-                    CKEDITOR.instances.texteditor.setData(res.result.html);
+                    if (!this.isLoaded) {
+                        CKEDITOR.replace('scrapie_announcement_editor', this.editorConfig);
+                        CKEDITOR.instances.scrapie_announcement_editor.on('instanceReady', this.loadCSS);
+                        this.isLoaded = true;
+                    }
+                    CKEDITOR.instances.scrapie_announcement_editor.setData(res.result.html);
+                    this.loadCSS();
 
-                    $('iframe')
-                        .contents()
-                        .find("head")
-                        .append($("<style type='text/css'>  p{line-height: 1.5 !important; margin: 0; padding: 0;}  </style>"));
                     this.isSaving = false;
                 }
             )
+    }
+
+    private loadCSS() {
+        $('iframe')
+            .contents()
+            .find("head")
+            .append($("<style type='text/css'>  p{line-height: 1.5 !important; margin: 0; padding: 0;}  </style>"));
     }
 
     private save(): void {
@@ -62,7 +72,7 @@ export class ScrapieAnnouncementComponent {
         let request = {
             "illness": this.illness,
             "letter_type": this.letter_type,
-            "html": CKEDITOR.instances.texteditor.getData()
+            "html": CKEDITOR.instances.scrapie_announcement_editor.getData()
         };
 
         this.nsfo.doPostRequest(this.nsfo.URI_HEALTH_LOCATION_LETTERS, request)

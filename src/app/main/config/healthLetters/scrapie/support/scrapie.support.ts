@@ -17,6 +17,7 @@ export class ScrapieSupportComponent {
     private illness: string = 'scrapie';
     private letter_type: string = 'support';
     private letter: HealthLetter = new HealthLetter();
+    private isLoaded: boolean = false;
 
     private editorConfig = {
         language: 'nl',
@@ -34,25 +35,30 @@ export class ScrapieSupportComponent {
         this.getHTMLData();
     }
 
-    ngAfterViewInit() {
-        CKEDITOR.replace('texteditor', this.editorConfig);
-    }
-
     private getHTMLData(): void {
         this.isSaving = true;
         this.nsfo.doGetRequest(this.nsfo.URI_HEALTH_LOCATION_LETTERS + '/' + this.illness + '/'+ this.letter_type)
             .subscribe(
                 res => {
                     this.letter = res.result;
-                    CKEDITOR.instances.texteditor.setData(res.result.html);
+                    if (!this.isLoaded) {
+                        CKEDITOR.replace('scrapie_support_editor', this.editorConfig);
+                        CKEDITOR.instances.scrapie_support_editor.on('instanceReady', this.loadCSS);
+                        this.isLoaded = true;
+                    }
+                    CKEDITOR.instances.scrapie_support_editor.setData(res.result.html);
+                    this.loadCSS();
 
-                    $('iframe')
-                        .contents()
-                        .find("head")
-                        .append($("<style type='text/css'>  p{line-height: 1.5 !important; margin: 0; padding: 0;}  </style>"));
                     this.isSaving = false;
                 }
             )
+    }
+
+    private loadCSS() {
+        $('iframe')
+            .contents()
+            .find("head")
+            .append($("<style type='text/css'>  p{line-height: 1.5 !important; margin: 0; padding: 0;}  </style>"));
     }
 
     private save(): void {
@@ -60,7 +66,7 @@ export class ScrapieSupportComponent {
         let request = {
             "illness": this.illness,
             "letter_type": this.letter_type,
-            "html": CKEDITOR.instances.texteditor.getData()
+            "html": CKEDITOR.instances.scrapie_support_editor.getData()
         };
 
         this.nsfo.doPostRequest(this.nsfo.URI_HEALTH_LOCATION_LETTERS, request)
