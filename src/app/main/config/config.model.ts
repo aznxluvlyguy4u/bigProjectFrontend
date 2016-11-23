@@ -19,3 +19,12 @@ export class HealthLetter {
     public last_name: string;
     public first_name: string;
 }
+
+export class InvoiceRule {
+    public id: number;
+    public description: string;
+    public vat_percentage_rate: number;
+    public price_excl_vat: number;
+    public sort_order: number;
+    public category: string;
+}

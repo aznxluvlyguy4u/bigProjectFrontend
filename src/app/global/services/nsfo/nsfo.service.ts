@@ -34,6 +34,8 @@ export class NSFOService {
     public URI_HEALTH_INSPECTIONS: string = '/v1/health_inspections';
     
     public URI_HEALTH_LOCATION_LETTERS: string = '/v1/health_location_letters';
+    
+    public URI_SETTINGS: string = '/v1/settings';
 
     private content_type: string = "Content-Type";
     private authorization: string = "Authorization";
@@ -76,6 +78,15 @@ export class NSFOService {
         headers.append(this.access_token, localStorage[this.ACCESS_TOKEN_NAMESPACE]);
 
         return this.http.put(this.API_SERVER_URL + uri, JSON.stringify(data), {headers: headers})
+            .map(res => res.json());
+    }
+
+    public doDeleteRequest(uri:string, data) {
+        let headers = new Headers();
+        headers.append(this.content_type, "application/json");
+        headers.append(this.access_token, localStorage[this.ACCESS_TOKEN_NAMESPACE]);
+
+        return this.http.delete(this.API_SERVER_URL + uri, {headers: headers})
             .map(res => res.json());
     }
 

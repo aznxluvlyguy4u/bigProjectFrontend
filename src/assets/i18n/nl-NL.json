@@ -267,5 +267,18 @@
   "DATE": "Datum",
   "FILENAME": "Bestandsnaam",
   "FTP SERVER": "FTP Server",
-  "THERE ARE NO FAILED IMPORTS": "Er zijn geen gefaalde importen."
+  "THERE ARE NO FAILED IMPORTS": "Er zijn geen gefaalde importen.",
+  "INVOICING": "Facturatie",
+  "PAYMENT DEADLINE": "Betaaltermijn",
+  "INVOICES RULES": "Rekenregels",
+  "NSFO INVOICES DETAILS": "NSFO factuur details",
+  "INVOICES VARIABLES": "Factuur variabelen",
+  "INSPECTION ANIMAL HEALTH": "Onderzoeken diergezondheid",
+  "PRICE (EXCL. VAT)": "Prijs (excl. BTW)",
+  "VAT PERCENTAGE RATE": "BTW-tarief",
+  "ADD INVOICE RULE": "Rekenregel toevoegen",
+  "NO RULES HAVE BEEN ADDED": "Er zijn geen rekenregels toevoegen.",
+  "NEW INVOICE RULE": "Nieuwe rekenregel",
+  "EDIT INVOICE RULE": "Wijzig rekenregel"
+
 }

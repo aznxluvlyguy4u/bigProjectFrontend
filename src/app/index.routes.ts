@@ -24,6 +24,9 @@ import {HealthLettersComponent} from "./main/config/healthLetters/healthLetters.
 import {ScrapieAnnouncementComponent} from "./main/config/healthLetters/scrapie/announcement/scrapie.announcement";
 import {ScrapieSupportComponent} from "./main/config/healthLetters/scrapie/support/scrapie.support";
 import {LoadingComponent} from "./loading/loading.component";
+import {ConfigInvoicesComponent} from "./main/config/invoices/invoices.component";
+import {InvoicesRulesComponent} from "./main/config/invoices/rules/invoicesRules.invoices";
+import {InvoicesNSFODetailsComponent} from "./main/config/invoices/details/details.invoices";
 
 const routes: RouterConfig = [
     {
@@ -57,6 +60,12 @@ const routes: RouterConfig = [
                     {path: '', terminal: true, redirectTo: 'admins'},
                     {path: 'admins', component: ConfigAdminsComponent},
                     {path: 'cms', component: ConfigCMSComponent},
+                    {path: 'invoices', component: ConfigInvoicesComponent,
+                        children: [
+                            {path: '', terminal: true, redirectTo: 'invoices_rules'},
+                            {path: 'invoices_rules', component: InvoicesRulesComponent},
+                            {path: 'invoices_details', component: InvoicesNSFODetailsComponent},      
+                        ]},
                     {path: 'health_letters', component: HealthLettersComponent,
                         children: [
                             {path: '', terminal: true, redirectTo: 'scrapie_announcement'},
