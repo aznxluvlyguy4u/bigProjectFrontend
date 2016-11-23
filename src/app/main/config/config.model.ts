@@ -11,3 +11,20 @@ export class Admin {
     public last_name: string;
     public access_level: string;
 }
+
+export class HealthLetter {
+    public log_date: string;
+    public html: string;
+    public revision_number: string;
+    public last_name: string;
+    public first_name: string;
+}
+
+export class InvoiceRule {
+    public id: number;
+    public description: string;
+    public vat_percentage_rate: number;
+    public price_excl_vat: number;
+    public sort_order: number;
+    public category: string;
+}

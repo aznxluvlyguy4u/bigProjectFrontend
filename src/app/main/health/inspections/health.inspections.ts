@@ -5,7 +5,7 @@ import {HealthTableAll} from "./components/tableAllRequests/inspections.tableAll
 import {HealthTableOngoing} from "./components/tableOngoing/inspections.tableOngoing";
 import {HealthTableAuthorization} from "./components/tableAuthorization/inspections.tableAuthorization";
 import {HealthTableExpired} from "./components/tableExpired/inspections.tableExpired";
-import {HealthTableFinished} from "./components/tableFinished/inspecitons.tableFinished";
+import {HealthTableFinished} from "./components/tableFinished/inspections.tableFinished";
 import {HealthTableAnnounced} from "./components/tableAnnounced/inspections.tableAnnounced";
 import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
 import {AnimalHealthRequest} from "../health.model";
@@ -36,7 +36,7 @@ export class HealthInspectionsComponent {
     }
     
     private getAnimalHealthRequests(): void {
-        this.nsfo.doGetAnimalHealth()
+        this.nsfo.doGetRequest(this.nsfo.URI_HEALTH_INSPECTIONS)
             .subscribe(
                 res => {
                     this.animalHealthRequests = res.result;

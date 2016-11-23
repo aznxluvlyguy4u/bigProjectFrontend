@@ -1,229 +1,91 @@
 <div id="auth-page">
-    <button type="button" (click)="goToOverviewPage()" class="small primary button">
-        <i class="fa fa-chevron-left fa-fw" aria-hidden="true"></i> {{ 'BACK TO OVERVIEW' | translate }}
-    </button>
-
-    <div class="callout">
-        <div class="row result-container">
-            <div class="large-2 columns">
-                <span class="header-label">{{ 'DATE RESULT' | translate }}:</span> 01/01/2001
-            </div>
-            <div class="large-2 columns">
-                <span class="header-label">{{ 'RESULT' | translate }}:</span> 01/01/2001
-            </div>
-            <div class="large-2 columns">
-                <span class="header-label">{{ 'ULN' | translate }}:</span> NL12918819812
-            </div>
-            <div class="large-2 columns">
-                <span class="header-label">{{ 'DATE OF BIRTH' | translate }}:</span> 01/01/2001
-            </div>
-            <div class="large-2 columns end">
-                <span class="header-label">{{ 'Sendin_ID' | translate }}:</span> 01/01/2001
-            </div>
-        </div>
-        <div class="row value-container">
-            <div class="large-3 columns">
-                <div class="row">
-                    <div class="small-6 columns">
-                        {{ 'VETERINARY NAME' | translate }}:
-                    </div>
-                    <div class="small-6 columns">
-                        12312312
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="small-6 columns">
-                        {{ 'VETERINARY ADDRESS' | translate}}:
-                    </div>
-                    <div class="small-6 columns">
-                        12312312
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="small-6 columns">
-                        {{ 'VETERINARY POSTCODE' | translate}}:
-                    </div>
-                    <div class="small-6 columns">
-                        12312312
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="small-6 columns">
-                        {{ 'VETERINARY CITY' | translate}}:
-                    </div>
-                    <div class="small-6 columns">
-                        12312312
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="large-6 columns">
-                        {{ 'VETERINARY EMAIL' | translate}}:
-                    </div>
-                    <div class="large-6 columns">
-                        12312312
-                    </div>
-                </div>
-            </div>
-            <div class="large-3 columns">
-                <div class="row">
-                    <div class="small-6 columns">
-                        {{ 'Serl_EAE'}}:
-                    </div>
-                    <div class="small-6 columns">
-                        12312312
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="small-6 columns">
-                        {{ 'CLA_PP'}}:
-                    </div>
-                    <div class="small-6 columns">
-                        12312312
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="small-6 columns">
-                        {{ 'CLA_Result'}}:
-                    </div>
-                    <div class="small-6 columns">
-                        12312312
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="small-6 columns">
-                        {{ 'MV'}}:
-                    </div>
-                    <div class="small-6 columns">
-                        12312312
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="small-6 columns">
-                        {{ 'SGHSAELISA'}}:
-                    </div>
-                    <div class="small-6 columns">
-                        12312312
-                    </div>
-                </div>
-            </div>
-            <div class="large-3 columns">
-                <div class="row">
-                    <div class="small-6 columns">
-                        {{ 'JohnesEIA'}}:
-                    </div>
-                    <div class="small-6 columns">
-                        12312312
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="small-6 columns">
-                        {{ 'JohnesEIA'}}:
-                    </div>
-                    <div class="small-6 columns">
-                        12312312
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="small-6 columns">
-                        {{ 'JohnesP'}}:
-                    </div>
-                    <div class="small-6 columns">
-                        12312312
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="small-6 columns">
-                        {{ 'MVOD_RatoP'}}:
-                    </div>
-                    <div class="small-6 columns">
-                        12312312
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="small-6 columns">
-                        {{ 'MV_CAEPool'}}:
-                    </div>
-                    <div class="small-6 columns">
-                        12312312
-                    </div>
-                </div>
-            </div>
-            <div class="large-3 columns">
-                <div class="row">
-                    <div class="small-6 columns">
-                        {{ 'SGHSASAGID'}}:
-                    </div>
-                    <div class="small-6 columns">
-                        12312312
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="small-6 columns">
-                        {{ 'GENOTYPE' | translate}}:
-                    </div>
-                    <div class="small-6 columns">
-                        12312312
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="small-6 columns">
-                        {{ 'GENOTYPE CLASS' | translate }}:
-                    </div>
-                    <div class="small-6 columns">
-                        12312312
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row auth-container">
-        <div class="large-push-4 large-4 columns">
-            <div class="row">
+    <span *ngIf="results.length > 0">
+        <button type="button" (click)="goToOverviewPage()" class="small primary button">
+            <i class="fa fa-chevron-left fa-fw" aria-hidden="true"></i> {{ 'BACK TO OVERVIEW' | translate }}
+        </button>
+        <span class="label-ubn pull-right">
+           {{ 'UBN' | translate }}: {{ request.ubn }}
+        </span>
+        <div *ngFor="let result of results" class="callout">
+            <div class="row result-container">
                 <div class="large-2 columns">
-                    <label> {{ 'NOTES' | translate }} </label>
+                    <span class="header-label">{{ 'ULN' | translate }}:</span> {{ result.uln_country_code + result.uln_number }}
                 </div>
-                <div class="large-10 columns">
-                    <textarea rows="8"></textarea>
+                <div class="large-2 columns">
+                    <span class="header-label">{{ 'DATE OF BIRTH' | translate }}:</span> {{ settings.convertToViewDate(result.date_of_birth) }}
+                </div>
+                <div class="large-4 columns">
+                    <span class="header-label">{{ 'MGX SAMPLE ID' | translate }}:</span> {{ result.mgx_sample_id }}
+                </div>
+                <div class="large-2 columns">
+                    <span class="header-label">{{ 'RESULT DATE' | translate }}:</span> {{ settings.convertToViewDate(result.result_date) }}
+                </div>
+                <div class="large-2 columns end">
+                    <span class="header-label">{{ 'RECEPTION DATE' | translate }}:</span> {{ settings.convertToViewDate(result.reception_date) }}
+                </div>
+            </div>
+            <div class="row value-container">
+                <div class="large-2 columns">
+                    {{ 'GENOTYPE' | translate }}: {{ result.genotype }}
+                </div>
+                <div class="large-2 columns">
+                    {{ 'GENOTYPE CLASS' | translate }}: {{ result.genotype_class }}
+                </div>
+                <div class="large-3 columns end">
+                    {{ 'GENOTYPE WITH CONDON 141' | translate }}: {{ result.genotype_with_condon }}
                 </div>
             </div>
         </div>
-        <div class="large-4 columns">
-            <div class="row">
-                <div class="large-4 columns">
-                    <label class="middle"> {{ 'DATE SINCE' | translate }} </label>
+        <div [formGroup]="form" class="row auth-container">
+            <div class="large-push-8 large-4 columns">
+                <div class="row">
+                    <div class="large-4 columns">
+                        <label class="middle"> {{ 'STATUS' | translate }} </label>
+                    </div>
+                    <div class="large-8 columns">
+                        <select formControlName="health_status">
+                            <option value="FREE"> {{ 'FREE' | translate }} </option>
+                            <option *ngIf="request.inspection == 'SCRAPIE'" value="RESISTANT"> {{ 'RESISTANT' | translate }} </option>
+                            <option *ngIf="request.inspection == 'MAEDI VISNA'" value="FREE (1 YEAR)"> {{ 'FREE (1 YEAR)' | translate }} </option>
+                            <option *ngIf="request.inspection == 'MAEDI VISNA'" value="FREE (2 YEAR)"> {{ 'FREE (2 YEAR)' | translate }} </option>
+                            <option *ngIf="request.inspection == 'MAEDI VISNA'" value="STATUS KNOWN BY AHD"> {{ 'STATUS KNOWN BY AHD' | translate }} </option>
+                            <option value="UNDER OBSERVATION"> {{ 'UNDER OBSERVATION' | translate }} </option>
+                            <option value="UNDER INVESTIGATION"> {{ 'UNDER INVESTIGATION' | translate }} </option>
+                        </select>
+                    </div>
                 </div>
-                <div class="large-8 columns">
-                    <input type="text">
+                <div *ngIf="request.inspection == 'SCRAPIE'" class="row">
+                    <div class="large-4 columns">
+                        <label class="middle"> {{ 'DATE SINCE' | translate }} </label>
+                    </div>
+                    <div class="large-8 columns">
+                        <datepicker [formCtrl]="form.controls['date_since']" [viewFormat]="settings.getViewDateFormat()" [modelFormat]="settings.getModelDateTimeFormat()"></datepicker>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="large-4 columns">
-                    <label class="middle"> {{ 'DATE TILL' | translate }} </label>
+                <div *ngIf="request.inspection == 'MAEDI VISNA'" class="row">
+                    <div class="large-4 columns">
+                        <label class="middle"> {{ 'DATE TILL' | translate }} </label>
+                    </div>
+                    <div class="large-8 columns">
+                        <datepicker [formCtrl]="form.controls['date_till']" [viewFormat]="settings.getViewDateFormat()" [modelFormat]="settings.getModelDateTimeFormat()"></datepicker>
+                    </div>
                 </div>
-                <div class="large-8 columns">
-                    <input type="text">
-                </div>
-            </div>
-            <div class="row">
-                <div class="large-4 columns">
-                    <label class="middle"> {{ 'STATUS' | translate }} </label>
-                </div>
-                <div class="large-8 columns">
-                    <select>
-                        <option> {{ 'FREE (1 YEAR)' | translate }} </option>
-                        <option> {{ 'FREE (2 YEAR)' | translate }} </option>
-                        <option> {{ 'UNDER OBSERVATION' | translate }} </option>
-                    </select>
-                </div>
-            </div>
-            <div class="row">
-                <div class="large-4 columns"> &nbsp; </div>
-                <div class="large-8 columns">
-                    <button type="button" class="small primary button expanded">
-                        {{ 'AUTHORIZE' | translate }}
-                    </button>
+
+                <div class="row">
+                    <div class="large-4 columns"> &nbsp; </div>
+                    <div class="large-8 columns">
+                        <button type="button" (click)="changeStatus()" [disabled]="savingInProgress" class="small primary button expanded">
+                            <span *ngIf="!savingInProgress">
+                                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                {{ 'AUTHORIZE' | translate }}
+                            </span>
+                            <span *ngIf="savingInProgress">
+                                <i class="fa fa-gear fa-spin fa-fw"></i>
+                            </span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </span>
 </div>

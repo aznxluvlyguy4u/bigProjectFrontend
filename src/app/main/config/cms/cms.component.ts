@@ -15,6 +15,7 @@ export class ConfigCMSComponent {
     private isSaved: boolean = false;
     private hasFailed: boolean = false;
     private savingInProgress: boolean = false;
+    private isLoaded: boolean = false;
 
     private editorConfig = {
         language: 'nl',
@@ -32,24 +33,30 @@ export class ConfigCMSComponent {
     }
 
     ngAfterViewInit() {
-        CKEDITOR.replace('dashboardtext', this.editorConfig);
-        CKEDITOR.replace('contacttext', this.editorConfig);
+
     }
 
     private getCMSData() {
         this.nsfo.doGetRequest(this.nsfo.URI_CMS)
             .subscribe(res => {
-                if(res.result) {
-                    CKEDITOR.instances.dashboardtext.setData(res.result.dashboard);
-                    CKEDITOR.instances.contacttext.setData(res.result.contact_info);
-                    console.log();
-
-                    $('iframe')
-                        .contents()
-                        .find("head")
-                        .append($("<style type='text/css'>  p{line-height: 1.5 !important; margin: 0; padding: 0;}  </style>"));
+                if (!this.isLoaded) {
+                    CKEDITOR.replace('dashboardtext', this.editorConfig);
+                    CKEDITOR.instances.dashboardtext.on('instanceReady', this.loadCSS);
+                    CKEDITOR.replace('contacttext', this.editorConfig);
+                    CKEDITOR.instances.contacttext.on('instanceReady', this.loadCSS);
+                    this.isLoaded = true;
                 }
+                CKEDITOR.instances.dashboardtext.setData(res.result.dashboard);
+                CKEDITOR.instances.contacttext.setData(res.result.contact_info);
+                this.loadCSS();
             });
+    }
+
+    private loadCSS() {
+        $('iframe')
+            .contents()
+            .find("head")
+            .append($("<style type='text/css'>  p{line-height: 1.5 !important; margin: 0; padding: 0;}  </style>"));
     }
 
     private save() {

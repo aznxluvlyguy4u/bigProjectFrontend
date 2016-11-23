@@ -2,6 +2,7 @@ import {Component, Input} from "@angular/core";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {AnimalHealthRequest} from "../../../health.model";
 import {SettingsService} from "../../../../../global/services/settings/settings.service";
+import {NSFOService} from "../../../../../global/services/nsfo/nsfo.service";
 
 @Component({
     selector: 'health-table-ongoing',
@@ -14,17 +15,44 @@ export class HealthTableOngoing {
 
     @Input() animalHealthRequests: AnimalHealthRequest[];
 
-    constructor(private settings: SettingsService) {}
+    constructor(private settings: SettingsService, private nsfo: NSFOService) {}
 
     ngOnChanges() {
         this.getRequests();
     }
 
     private getRequests(): void {
+        this.requests = [];
         for (let request of this.animalHealthRequests) {
             if(request.status == 'ONGOING') {
                 this.requests.push(request);
             }
         }
+    }
+
+    private changeStatus(request: AnimalHealthRequest, event: Event): void {
+        let button = event.target;
+        button.disabled = true;
+        button.innerHTML = '<i class="fa fa-gear fa-spin fa-fw"></i>';
+
+        this.nsfo.doPutRequest(this.nsfo.URI_HEALTH_INSPECTIONS, request)
+            .subscribe(
+                res => {
+                    let result = res.result;
+                    request.status = result.status;
+                    request.next_action = result.next_action;
+                    request.action_taken_by = {
+                        "first_name": result.action_taken_by.first_name,
+                        "last_name": result.action_taken_by.last_name
+                    };
+
+                    this.ngOnChanges();
+                },
+                err => {
+                    button.disabled = false;
+                    this.translate.get('START INSPECTION')
+                        .subscribe(val => button.innerHTML = val);
+                }
+            )
     }
 }

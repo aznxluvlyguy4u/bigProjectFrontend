@@ -1,0 +1,41 @@
+<div class="row">
+    <div class="large-12 columns sub-page-header">
+        <span class="sub-page-title">
+            {{ 'SUPPORTING LETTER' | translate }}
+        </span>
+
+        <span class="pull-right">
+            <span class="editor">
+                {{ 'LAST CHANGE BY' | translate }}
+                <span *ngIf="letter.last_name"> {{ letter.first_name + ' ' + letter.last_name }} </span>
+                <span *ngIf="!letter.last_name"> -- </span>
+                {{ 'ON' | translate }}
+                <span *ngIf="letter.log_date"> {{ settings.convertToViewDateTime(letter.log_date) }} </span>
+                <span *ngIf="!letter.log_date"> -- </span>
+            </span>
+            {{ 'REVISION' | translate }}: {{ letter.revision_number }}
+        </span>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="large-12 columns">
+        <textarea id="scrapie_support_editor" maxlength="10"></textarea>
+    </div>
+</div>
+
+<div class="row">
+    <div class="large-12 columns">
+        <br>
+        <button type="button" (click)="save()" [disabled]="isSaving" class="small primary button pull-right ">
+            <span *ngIf="!isSaving">
+                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                {{ 'SAVE' | translate }}
+            </span>
+            <span *ngIf="isSaving">
+                <i class="fa fa-gear fa-spin fa-fw"></i>
+            </span>
+        </button>
+    </div>
+</div>

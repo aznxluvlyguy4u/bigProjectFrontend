@@ -5,15 +5,14 @@
         <td> {{ 'NAME' | translate }} </td>
         <td> {{ 'INSPECTION' | translate }} </td>
         <td> {{ 'REQUEST DATE' | translate }} </td>
-        <td> {{ 'DIRECTION DATE' | translate }} </td>
         <td> {{ 'NEXT ACTION' | translate }} </td>
-        <td> {{ 'ACTION TAKEN BY' | translate }} </td>
+        <td> {{ 'LAST ACTION TAKEN BY' | translate }} </td>
     </tr>
     </thead>
     <tbody>
     <tr *ngFor="let request of requests">
         <td>{{ request.ubn }}</td>
-        <td>{{ request.name }}</td>
+        <td>{{ request.last_name }}</td>
         <td>{{ request.inspection | translate }}</td>
         <td>
             <span *ngIf="request.request_date">
@@ -23,16 +22,8 @@
                 --
             </span>
         </td>
-        <td>
-            <span *ngIf="request.direction_date">
-                {{ settings.convertToViewDate(request.direction_date) }}
-            </span>
-            <span *ngIf="!request.direction_date">
-                --
-            </span>
-        </td>
         <td>{{ request.next_action | translate }}</td>
-        <td>{{ request.action_taken_by }}</td>
+        <td>{{ request.action_taken_by.first_name + " " + request.action_taken_by.last_name }} ({{ settings.convertToViewDateTime(request.direction_date) }})</td>
     </tr>
     </tbody>
 </table>

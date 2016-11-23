@@ -1,7 +1,8 @@
 export class AnimalHealthRequest {
     public request_id: string;
     public ubn: string;
-    public name: string;
+    public last_name: string;
+    public first_name: string;
     public inspection: string;
     public request_date: string;
     public direction_date: string;
@@ -12,6 +13,7 @@ export class AnimalHealthRequest {
     public total_lead_time: string;
     public authorized_by: string;
     public status: string;
+    public inspection_id: string;
 }
 
 class Direction {
