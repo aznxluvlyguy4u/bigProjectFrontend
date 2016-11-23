@@ -10,31 +10,37 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngIf="failedCSVs.length == 0">
+                <tr *ngIf="isLoading">
+                    <td colspan="10">
+                        <div class="spinner">
+                            <div class="bounce1"></div>
+                            <div class="bounce2"></div>
+                            <div class="bounce3"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf="failedImports.length == 0 && !isLoading">
                     <td colspan="4" class="text-center">{{ 'THERE ARE NO FAILED IMPORTS' | translate }}</td>
                 </tr>
-                <tr *ngFor="let csv of failedCSVs">
-                    <td>{{ settings.convertToViewDateTime(csv.log_date) }}</td>
-                    <td>{{ csv.filename }}</td>
-                    <td>{{ csv.servername }}</td>
+                <tr *ngFor="let import of failedImports">
+                    <td>{{ settings.convertToViewDateTime(import.log_date) }}</td>
+                    <td>{{ import.filename }}</td>
+                    <td>{{ import.servername }}</td>
                     <td>
-                        <button type="button" (click)="downloadCSV(csv.url)" class="small primary button pull-right">
+                        <button type="button" (click)="downloadFailedImport(import.url)" class="small primary button pull-right">
                             {{ 'DOWNLOAD' | translate }}
                         </button>
-                        <div *ngIf="!inspectionDocument?.name" class="large-6 columns file-picker">
-                            <label class="tiny primary button pull-right">
-                                <i class="fa fa-upload" aria-hidden="true"></i>
-                                <input type="file" (change)="uploadCSV($event)">
+                        <div class="large-6 columns file-picker">
+                            <label class="tiny primary button pull-right" [ngClass]="{'disabled': isUploading}">
+                                <span *ngIf="!isUploading">
+                                    <i class="fa fa-upload" aria-hidden="true"></i>
+                                    <input type="file" (change)="addImportFile($event)">
+                                </span>
+                                <span *ngIf="isUploading">
+                                    <i class="fa fa-cog fa-spin fa-fw"></i>
+                                </span>
                             </label>
                         </div>
-                        <!--<div *ngIf="inspectionDocument?.name" class="large-6 columns">-->
-                            <!--<button (click)="openFile()" class="small primary button">-->
-                                <!--<i class="fa fa-file-o fa-fw" aria-hidden="true"></i>-->
-                            <!--</button>-->
-                            <!--<button (click)="removeFile()" class="small alert button">-->
-                                <!--<i class="fa fa-trash-o fa-fw" aria-hidden="true"></i>-->
-                            <!--</button>-->
-                        <!--</div>-->
                     </td>
                 </tr>
             </tbody>

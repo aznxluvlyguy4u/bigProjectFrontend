@@ -35,7 +35,7 @@ export class HealthTableAnnounced {
         let request = [
             {
                 "ubn": item.ubn,
-                "illness": item.inspection,
+                "illness": item.inspection.replace(/\s/g, ''),
                 "letter_type": 'support',
             }
         ];

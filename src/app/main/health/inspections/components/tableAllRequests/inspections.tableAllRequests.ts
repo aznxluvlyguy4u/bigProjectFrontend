@@ -36,7 +36,7 @@ export class HealthTableAll {
         let win = window.open('/loading', '_blank');
         let request = [{
                 "ubn": item.ubn,
-                "illness": item.inspection,
+                "illness": item.inspection.replace(/\s/g, ''),
                 "letter_type": 'announcement',
             }];
 
@@ -54,7 +54,7 @@ export class HealthTableAll {
         for (let animalHealthRequest of this.requests) {
             let request = {
                 "ubn": animalHealthRequest.ubn,
-                "illness": animalHealthRequest.inspection,
+                "illness": animalHealthRequest.inspection.replace(/\s/g, ''),
                 "letter_type": 'announcement',
             };
             requests.push(request);

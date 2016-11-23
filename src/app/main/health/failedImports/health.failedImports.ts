@@ -9,16 +9,65 @@ import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
 })
 
 export class HealthFailedImportsComponent {
-    private failedCSVs = [];
+    private inspectionDocument: File;
+    private failedImports = [];
+    private isLoading = false;
+    private isUploading = false;
+    private selectedUBN = '';
     
-    constructor(private settings: SettingsService, private nsfo: NSFOService) {}
+    constructor(private settings: SettingsService, private nsfo: NSFOService) {
+        this.getFailedImports();
+    }
 
-    private downloadCSV(url: string): void {
+    private getFailedImports(): void {
+        this.isLoading = true;
+        this.nsfo.doGetRequest(this.nsfo.URI_HEALTH_INSPECTIONS + '/failed-results')
+            .subscribe(
+                res => {
+                    this.failedImports = res.result;
+                    this.isLoading = false;
+                },
+                err => {
+                    this.isLoading = false;
+                }
+            )
+    }
+
+    private downloadFailedImport(url: string): void {
         window.open(url);
     }
 
-    private uploadCSV(event: Event): void {
-        // When Success
-        // Remove from array
+    private addImportFile(event: Event): void {
+        let self = this;
+        this.isUploading = true;
+        this.inspectionDocument = event.target.files[0];
+        let reader = new FileReader();
+
+        reader.onload = function() {
+            let encodedString = reader.result.split(',')[1];
+
+            let request = {
+                "filename": self.inspectionDocument.name,
+                "type": self.inspectionDocument.type,
+                "extension": self.getFileExtension(self.inspectionDocument.name),
+                "content": encodedString,
+            };
+
+            self.nsfo.doPutRequest(self.nsfo.URI_HEALTH_INSPECTIONS + '/failed-results', request)
+                .subscribe(
+                    res => {
+                        self.isUploading = false;
+                    },
+                    err => {
+                        self.isUploading = false;
+                    }
+                );
+        };
+        reader.readAsDataURL(this.inspectionDocument);
+    }
+    
+    private getFileExtension(filename: string): string {
+        let  ext = /^.+\.([^.]+)$/.exec(filename);
+        return ext == null ? "" : ext[1];
     }
 }
