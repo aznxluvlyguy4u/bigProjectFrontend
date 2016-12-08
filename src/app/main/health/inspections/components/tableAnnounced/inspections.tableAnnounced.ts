@@ -35,7 +35,7 @@ export class HealthTableAnnounced {
         let request = [
             {
                 "ubn": item.ubn,
-                "illness": item.inspection,
+                "illness": item.inspection.replace(/\s/g, ''),
                 "letter_type": 'support',
             }
         ];
@@ -52,6 +52,7 @@ export class HealthTableAnnounced {
         let win = window.open('/loading', '_blank');
         let request = {
             "ubn": item.ubn,
+            "inspection_id": item.inspection_id
         };
 
         this.nsfo.doPostRequest(this.nsfo.URI_HEALTH_INSPECTIONS + '/' + 'barcodes', request)

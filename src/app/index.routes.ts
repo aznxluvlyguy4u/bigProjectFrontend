@@ -27,6 +27,8 @@ import {LoadingComponent} from "./loading/loading.component";
 import {ConfigInvoicesComponent} from "./main/config/invoices/invoices.component";
 import {InvoicesRulesComponent} from "./main/config/invoices/rules/invoicesRules.invoices";
 import {InvoicesNSFODetailsComponent} from "./main/config/invoices/details/details.invoices";
+import {MaediVisnaAnnouncementComponent} from "./main/config/healthLetters/maediVisna/announcement/maediVisna.announcement";
+import {MaediVisnaSupportComponent} from "./main/config/healthLetters/maediVisna/support/maediVisna.support";
 
 const routes: RouterConfig = [
     {
@@ -71,6 +73,8 @@ const routes: RouterConfig = [
                             {path: '', terminal: true, redirectTo: 'scrapie_announcement'},
                             {path: 'scrapie_announcement', component: ScrapieAnnouncementComponent},
                             {path: 'scrapie_supporting', component: ScrapieSupportComponent},
+                            {path: 'maedi_visna_announcement', component: MaediVisnaAnnouncementComponent},
+                            {path: 'maedi_visna_supporting', component: MaediVisnaSupportComponent},
                         ]},
                     {path: 'choice_fields', component: ConfigChoiceFieldsComponent}
                 ]},
