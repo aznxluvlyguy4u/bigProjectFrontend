@@ -25,7 +25,7 @@
                 <tr *ngFor="let import of failedImports">
                     <td>{{ settings.convertToViewDateTime(import.log_date) }}</td>
                     <td>{{ import.filename }}</td>
-                    <td>{{ import.servername }}</td>
+                    <td>{{ import.server_name }}</td>
                     <td>
                         <button type="button" (click)="downloadFailedImport(import.url)" class="small primary button pull-right">
                             {{ 'DOWNLOAD' | translate }}
@@ -34,7 +34,7 @@
                             <label class="tiny primary button pull-right" [ngClass]="{'disabled': isUploading}">
                                 <span *ngIf="!isUploading">
                                     <i class="fa fa-upload" aria-hidden="true"></i>
-                                    <input type="file" (change)="addImportFile($event)">
+                                    <input type="file" (change)="addImportFile($event, import)">
                                 </span>
                                 <span *ngIf="isUploading">
                                     <i class="fa fa-cog fa-spin fa-fw"></i>

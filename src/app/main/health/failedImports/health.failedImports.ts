@@ -37,7 +37,7 @@ export class HealthFailedImportsComponent {
         window.open(url);
     }
 
-    private addImportFile(event: Event): void {
+    private addImportFile(event: Event, failedImport): void {
         let self = this;
         this.isUploading = true;
         this.inspectionDocument = event.target.files[0];
@@ -51,11 +51,15 @@ export class HealthFailedImportsComponent {
                 "type": self.inspectionDocument.type,
                 "extension": self.getFileExtension(self.inspectionDocument.name),
                 "content": encodedString,
+                "failed_import_id": failedImport.failed_import_id,
+                "illness": failedImport.illness
             };
 
             self.nsfo.doPutRequest(self.nsfo.URI_HEALTH_INSPECTIONS + '/failed-results', request)
                 .subscribe(
                     res => {
+                        let index = this.failedImports.indexOf(failedImport);
+                        this.failedImports.splice(index, 1);
                         self.isUploading = false;
                     },
                     err => {
