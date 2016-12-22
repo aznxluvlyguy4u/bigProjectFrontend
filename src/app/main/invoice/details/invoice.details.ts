@@ -1,4 +1,4 @@
-import _ from "lodash";
+var _ = require('lodash');
 import {Component} from "@angular/core";
 import {Subscription} from "rxjs/Rx";
 import {Router, ActivatedRoute} from "@angular/router";
@@ -45,7 +45,7 @@ export class InvoiceDetailsComponent {
     }
 
     private getInvoiceRulesOptions(): void {
-        this.nsfo.doGetInvoiceRules()
+        this.nsfo.doGetRequest(this.nsfo.URI_SETTINGS + '/invoice-rules')
             .subscribe(
                 res => {
                     this.invoiceRulesOptions = <InvoiceRule[]> res.result;
@@ -54,9 +54,19 @@ export class InvoiceDetailsComponent {
     }
     
     private addInvoiceRule(): void {
-        let invoiceRule = _.find(this.invoiceRulesOptions, {'rule_id': this.selectedInvoiceId});
-        this.invoice.rules.push(invoiceRule);
-        this.doVATCalculations();
+        if (this.selectedInvoiceId) {
+            console.log(this.selectedInvoiceId);
+
+            let invoiceRule = _.find(this.invoiceRulesOptions, function(o) {
+                return o.id == this.selectedInvoiceId
+            });
+
+            console.log(invoiceRule);
+
+            this.invoice.rules.push(invoiceRule);
+            console.log(this.invoice.rules);
+            this.doVATCalculations();
+        }
     }
 
     private removeInvoiceRule(invoiceRule: InvoiceRule): void {
@@ -71,29 +81,29 @@ export class InvoiceDetailsComponent {
         this.totalInclVAT = 0;
 
         let calculations = [];
-        let categories = _.uniqBy(this.invoice.rules, 'vat_rate');
+        let categories = _.uniqBy(this.invoice.rules, 'vat_percentage_rate');
         for(let category of categories) {
-            let filteredArray = _.filter(this.invoice.rules, {'vat_rate': category.vat_rate});
+            let filteredArray = _.filter(this.invoice.rules, {'vat_percentage_rate': category.vat_percentage_rate});
             calculations.push(filteredArray);
         }
 
         for(let group of calculations) {
 
             let totalAmount = 0;
-            let vat_rate = 0;
+            let vat_percentage_rate = 0;
 
             for(let single of group) {
                 this.totalExclVAT += single.price_excl_vat;
                 totalAmount += single.price_excl_vat;
-                vat_rate = single.vat_rate;
+                vat_percentage_rate = single.vat_percentage_rate;
             }
 
             let calculation = {
-                category: vat_rate,
+                category: vat_percentage_rate,
                 amount: totalAmount,
-                total: (totalAmount/100) * vat_rate
+                total: (totalAmount/100) * vat_percentage_rate
             };
-            this.totalInclVAT += (totalAmount/100) * vat_rate
+            this.totalInclVAT += (totalAmount/100) * vat_percentage_rate;
             this.vatCalculations.push(calculation);
 
 
