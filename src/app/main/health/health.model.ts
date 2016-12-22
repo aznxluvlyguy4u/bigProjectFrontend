@@ -1,3 +1,4 @@
+import {User} from "../client/client.model";
 export class AnimalHealthRequest {
     public request_id: string;
     public ubn: string;
@@ -7,7 +8,7 @@ export class AnimalHealthRequest {
     public request_date: string;
     public direction_date: string;
     public next_action: string;
-    public action_taken_by: string;
+    public action_taken_by: User;
     public sampling_date: string;
     public data: Direction[] = [];
     public total_lead_time: string;

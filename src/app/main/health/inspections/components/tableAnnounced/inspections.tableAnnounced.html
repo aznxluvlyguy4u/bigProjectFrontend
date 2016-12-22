@@ -27,10 +27,7 @@
             <td>{{ request.action_taken_by.first_name + " " + request.action_taken_by.last_name }} ({{ settings.convertToViewDateTime(request.direction_date) }})</td>
             <td>
                 <span class="pull-right">
-                    <button type="button" (click)="getDocument(request); getBarCodeDocument(request)" class="small primary button">
-                        {{ 'DOWNLOAD' | translate }}
-                    </button>
-                    <button type="button" (click)="changeStatus(request, $event)" class="small primary button">
+                    <button type="button" (click)="getDocument(request); getBarCodeDocument(request); changeStatus(request, $event)" class="small primary button">
                         {{ 'START INSPECTION' | translate }}
                     </button>
                 </span>
