@@ -30,21 +30,27 @@ export class HealthTableOngoing {
         }
     }
 
-    private changeStatus(request: AnimalHealthRequest, event: Event): void {
+    private changeStatus(request: AnimalHealthRequest, event: Event, isToCancel: boolean = false): void {
         let button = event.target;
         button.disabled = true;
         button.innerHTML = '<i class="fa fa-gear fa-spin fa-fw"></i>';
 
+        request.is_canceled = isToCancel;
         this.nsfo.doPutRequest(this.nsfo.URI_HEALTH_INSPECTIONS, request)
             .subscribe(
                 res => {
                     let result = res.result;
-                    request.status = result.status;
-                    request.next_action = result.next_action;
-                    request.action_taken_by = {
-                        "first_name": result.action_taken_by.first_name,
-                        "last_name": result.action_taken_by.last_name
-                    };
+
+                    if(isToCancel) {
+                        request.status= 'NEW'
+                    } else {
+                        request.status = result.status;
+                        request.next_action = result.next_action;
+                        request.action_taken_by = {
+                            "first_name": result.action_taken_by.first_name,
+                            "last_name": result.action_taken_by.last_name
+                        };
+                    }
 
                     this.ngOnChanges();
                 },

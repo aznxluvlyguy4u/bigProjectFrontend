@@ -30,6 +30,9 @@
                     <button type="button" (click)="getDocument(request); getBarCodeDocument(request); changeStatus(request, $event)" class="small primary button">
                         {{ 'START INSPECTION' | translate }}
                     </button>
+                    <button type="button" (click)="changeStatus(request, $event, true)" class="small alert button">
+                        {{ 'CANCEL INSPECTION' | translate }}
+                    </button>
                 </span>
             </td>
         </tr>
