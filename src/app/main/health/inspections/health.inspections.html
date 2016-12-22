@@ -3,13 +3,13 @@
         <ul class="tabs">
             <li class="tabs-title">
                 <a (click)="selectTab('ALL REQUESTS')" [class.active]="selectedTab == 'ALL REQUESTS'">
-                    {{ 'ALL REQUESTS' | translate }}
+                    {{ 'TO ANNOUNCE' | translate }}
                     <span *ngIf="getNewRequestAmount() > 0" class="badge">{{ getNewRequestAmount() }}</span>
                 </a>
             </li>
             <li class="tabs-title">
                 <a (click)="selectTab('ANNOUNCED INSPECTIONS')" [class.active]="selectedTab == 'ANNOUNCED INSPECTIONS'">
-                    {{ 'ANNOUNCED INSPECTIONS' | translate }}
+                    {{ 'BARCODE + FORM' | translate }}
                     <span *ngIf="getAnnouncedRequestAmount() > 0" class="badge">{{ getAnnouncedRequestAmount() }}</span>
                 </a>
             </li>
