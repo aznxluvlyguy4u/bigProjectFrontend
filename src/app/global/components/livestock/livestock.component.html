@@ -1,0 +1,124 @@
+<div class="livestock-container">
+
+    <div class="filters small-12 large-2 columns">
+        <div class="large-11">
+
+            <!--SEARCH INPUT FIELD-->
+            <label class="search-input">
+                {{ 'SEARCH' | translate }}
+                <input type="text" #searchField (keyup)="0" placeholder="{{ 'SEARCH' | translate }}">
+            </label>
+
+            <!--FILTERS-->
+            <div class="accordion-container">
+
+                <!--FILTER BIRTH OF DATE-->
+                <label>{{ 'DATE OF BIRTH' | translate }}
+                    <input type="text" #startDateField (keyup)="0" placeholder="{{ settings.getViewDateFormat() }}">
+                </label>
+                <label> {{'TILL' | translate }}
+                    <input type="text" #endDateField (keyup)="0" placeholder="{{ settings.getViewDateFormat() }}">
+                </label>
+
+                <!--FILTER GENDER-->
+                <label>{{ 'GENDER' | translate }}
+                    <select #filters_gender (change)="0">
+                        <option value="ALL" selected>{{ 'ALL' | translate }}</option>
+                        <option value="MALE">{{ 'MALE' | translate }}</option>
+                        <option value="FEMALE">{{ 'FEMALE' | translate }}</option>
+                        <option value="NEUTER">{{ 'NEUTER' | translate }}</option>
+                    </select>
+                </label>
+
+                <!--FILTER SCRAPIE GENOTYPE-->
+                <label>{{ 'SCRAPIE GENOTYPE' | translate }}
+                    <select #filters_genotype (change)="0">
+                        <option value="ALL" selected>{{ 'ALL' | translate }}</option>
+                        <option *ngFor="let genotype of scrapieGenotypes" value="{{genotype}}">{{ genotype | translate }}</option>
+                    </select>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!--OVERVIEW-->
+    <div class="large-10 expanded no-side-padding columns">
+        <table class="stack">
+            <thead>
+            <tr>
+                <th>
+                    <input type="checkbox" (click)="selectAllAnimals($event)">
+                </th>
+                <th class="padding-column">
+                    {{ 'ULN' | translate }}
+                    <span (click)="setOrderULN()">
+                        <i *ngIf="isASCColumnULNOrder" class="fa fa-arrow-down" aria-hidden="true"></i>
+                        <i *ngIf="!isASCColumnULNOrder" class="fa fa-arrow-up" aria-hidden="true"></i>
+                    </span>
+                </th>
+                <th class="padding-column">
+                    <select [(ngModel)]="selectionColumnOne">
+                        <option value="GENDER"> {{ 'GENDER' | translate }}</option>
+                        <option value="DATE OF BIRTH"> {{ 'DATE OF BIRTH' | translate }}</option>
+                        <option value="PEDIGREE NUMBER"> {{ 'PEDIGREE NUMBER' | translate }}</option>
+                        <option value="COLLAR NUMBER"> {{ 'COLLAR NUMBER' | translate }}</option>
+                        <option value="INFLOW DATE"> {{ 'INFLOW DATE' | translate }}</option>
+                        <option value="WORK NUMBER"> {{ 'WORK NUMBER' | translate }}</option>
+                        <option value="SCRAPIE GENOTYPE"> {{ 'SCRAPIE GENOTYPE' | translate }}</option>
+                    </select>
+                    <span (click)="setOrderColumnOne()">
+                        <i *ngIf="isASCColumnOneOrder" class="fa fa-arrow-down" aria-hidden="true"></i>
+                        <i *ngIf="!isASCColumnOneOrder" class="fa fa-arrow-up" aria-hidden="true"></i>
+                    </span>
+                </th>
+                <th class="padding-column">
+                    <select [(ngModel)]="selectionColumnTwo">
+                        <option value="GENDER"> {{ 'GENDER' | translate }}</option>
+                        <option value="DATE OF BIRTH"> {{ 'DATE OF BIRTH' | translate }}</option>
+                        <option value="PEDIGREE NUMBER"> {{ 'PEDIGREE NUMBER' | translate }}</option>
+                        <option value="COLLAR NUMBER"> {{ 'COLLAR NUMBER' | translate }}</option>
+                        <option value="INFLOW DATE"> {{ 'INFLOW DATE' | translate }}</option>
+                        <option value="SCRAPIE GENOTYPE"> {{ 'SCRAPIE GENOTYPE' | translate }}</option>
+                    </select>
+                    <span (click)="setOrderColumnTwo()">
+                        <i *ngIf="isASCColumnTwoOrder" class="fa fa-arrow-down" aria-hidden="true"></i>
+                        <i *ngIf="!isASCColumnTwoOrder" class="fa fa-arrow-up" aria-hidden="true"></i>
+                    </span>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="hide-for-large">
+                <td>
+                    <input type="checkbox" (click)="selectAllAnimals($event)">
+                    <label class="show-for-small-only">{{ 'SELECT ALL' | translate }}</label>
+                </td>
+            </tr>
+            <tr *ngFor="let animal of animals | livestockFilter:[searchField.value, startDateField.value, endDateField.value, filters_gender.value, filters_genotype.value] | paginate: {itemsPerPage: itemsPerPage, currentPage: page}">
+                <td>
+                    <input type="checkbox" [checked]="animal.selected" (click)="selectAnimal($event, animal)">
+                    <label class="show-for-small-only">{{ 'SELECT' | translate }}</label>
+                </td>
+                <td class="padding-column">
+                    <label class="show-for-small-only">{{ 'ULN' | translate }}</label>
+                    {{ animal.uln_country_code + animal.uln_number }}
+                </td>
+                <td class="padding-column">
+                    <label class="show-for-small-only">{{ selectionColumnOne | translate }}</label>
+                    <span *ngIf="getSelectionValue(selectionColumnOne, animal)">
+                        {{ getSelectionValue(selectionColumnOne, animal) | translate }}
+                    </span>
+                    <span *ngIf="!(getSelectionValue(selectionColumnOne, animal))">
+                        --
+                    </span>
+                </td>
+                <td class="padding-column">
+                    <label class="show-for-small-only">{{ selectionColumnTwo | translate }}</label>
+                    {{ getSelectionValue(selectionColumnTwo, animal) | translate }}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <pagination (pageChange)="page = $event"></pagination>
+</div>

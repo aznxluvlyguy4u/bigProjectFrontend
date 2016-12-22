@@ -7,7 +7,13 @@
             <td> {{ 'REQUEST DATE' | translate }} </td>
             <td> {{ 'NEXT ACTION' | translate }} </td>
             <td> {{ 'LAST ACTION TAKEN BY' | translate }} </td>
-            <td></td>
+            <td>
+                <span class="pull-right">
+                    <button type="button" (click)="openModal()" class="small primary button">
+                        {{ 'NEW INSPECTION' | translate }}
+                    </button>
+                </span>
+            </td>
         </tr>
     </thead>
     <tbody>
@@ -38,3 +44,88 @@
         </tr>
     </tbody>
 </table>
+
+<div id="inspection-creation-modal" class="reveal-overlay" [ngStyle]="{'display': showModal}">
+    <div class="large reveal" [ngStyle]="{'display': showModal}">
+        <div class="modal-header">
+            {{ 'NEW INSPECTION' | translate }}
+            <button type="button" class="pull-right" aria-label="Close modal" (click)="closeModal()">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="large-4 large-centered columns">
+                    <div class="row">
+                        <div class="large-3 columns">
+                            <label class="middle"> {{ 'UBN' | translate }} </label>
+                        </div>
+                        <div class="large-5 columns">
+                            <input [(ngModel)]="inspection.ubn" type="text" maxlength="10">
+                        </div>
+                        <div class="large-4 columns">
+                            <button (click)="getLocationDetails()" [disabled]="isRequestingLocationHealth" class="tiny primary button expanded">
+                                <span *ngIf="!isRequestingLocationHealth">
+                                    {{ 'SELECT' | translate }}
+                                </span>
+                                <span *ngIf="isRequestingLocationHealth">
+                                    <i class="fa fa-gear fa-spin fa-fw"></i>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                    <div *ngIf="selectedLocation" class="row">
+                        <div class="large-3 columns">
+                            <label class="middle"> {{ 'ILLNESS' | translate }} </label>
+                        </div>
+                        <div class="large-9 columns">
+                            <select #illnessSelection (change)="checkLocationHealthStatus(illnessSelection.value)">
+                                <option value="" disabled selected> -- </option>
+                                <option value="SCRAPIE">{{ 'SCRAPIE' | translate }}</option>
+                                <option value="MAEDI VISNA">{{ 'MAEDI VISNA' | translate }}</option>
+                                <option value="CAE">{{ 'CAE' | translate }}</option>
+                                <option value="CL">{{ 'CL' | translate }}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div *ngIf="isUnhealthyLocation" class="row">
+                        <div class="large-3 columns">
+                            <label class="middle"> {{ 'STATUS' | translate }} </label>
+                        </div>
+                        <div class="large-9 columns">
+                            <select #statusSelection (change)="inspection.certification_status = statusSelection.value">
+                                <option value="" disabled selected> -- </option>
+                                <option value="CERTIFICATION">{{ 'CERTIFICATION' | translate }}</option>
+                                <option value="WITHOUT CERTIFICATION">{{ 'WITHOUT CERTIFICATION' | translate }}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div *ngIf="inspection.certification_status == 'CERTIFICATION'" class="row">
+                        <div class="large-3 columns">
+                            <label class="middle"> {{ 'ROADMAP' | translate }} </label>
+                        </div>
+                        <div class="large-9 columns">
+                            <select #roadmapSelection (change)="inspection.roadmap = statusSelection.value">
+                                <option value="ONE INSPECTION">{{ 'ONE INSPECTION' | translate }}</option>
+                                <option value="TWO INSPECTION">{{ 'TWO INSPECTION' | translate }}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="large-12 columns">
+                    <div *ngIf="inspection.inspection" class="row">
+                        <div class="large-12 columns">
+                            <livestock-overview [animals]="animals" [itemsPerPage]="10" (selected)="getSelectedAnimals($event)"></livestock-overview>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <span class="pull-right">
+                <button [disabled]="selectedAnimals.length == 0" class="tiny primary button">{{ 'SAVE' | translate}}</button>
+                <button (click)="closeModal()" class="tiny alert button">{{ 'CANCEL' | translate}}</button>
+            </span>
+        </div>
+    </div>
+</div>

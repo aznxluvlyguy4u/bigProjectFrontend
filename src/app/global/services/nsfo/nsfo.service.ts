@@ -30,10 +30,10 @@ export class NSFOService {
 
     public URI_HEALTH_COMPANY: string = '/v1/health/company';
     public URI_HEALTH_UBN: string = '/v1/health/ubn';
-
     public URI_HEALTH_INSPECTIONS: string = '/v1/health_inspections';
-    
     public URI_HEALTH_LOCATION_LETTERS: string = '/v1/health_location_letters';
+    
+    public URI_LIVESTOCK: string = '/v1/animals-livestock';
     
     public URI_SETTINGS: string = '/v1/settings';
 

@@ -13,6 +13,8 @@ export class AnimalHealthRequest {
     public data: Direction[] = [];
     public total_lead_time: string;
     public authorized_by: string;
+    public certification_status: string;
+    public roadmap: string;
     public status: string;
     public is_canceled: boolean;
     public inspection_id: string;
