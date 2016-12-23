@@ -3,8 +3,9 @@ const zip = require('gulp-zip');
 const env = require('gulp-env');
 const s3 = require('gulp-s3-upload')(awsConfig);
 
+
 /**
- * Change Gulp ENV Options
+ * Load environment variables from JSON File.
  */
 
 env({

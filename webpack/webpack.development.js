@@ -1,12 +1,26 @@
 'use strict';
 
+const env = require('gulp-env');
 const HtmlWebpack = require('html-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack');
 const ChunkWebpack = webpack.optimize.CommonsChunkPlugin;
 
-const rootDir = path.resolve(__dirname, '..');
 
+/**
+ * Load environment variables from JSON File.
+ */
+
+env({
+    file: 'env.json'
+});
+
+
+/**
+ * Initialize webpack DEVELOPMENT config.
+ */
+
+const rootDir = path.resolve(__dirname, '..');
 module.exports = {
     debug: true,
     devServer: {
@@ -68,6 +82,10 @@ module.exports = {
             '$':          'jquery',
             'jQuery':     'jquery',
             '_':          'lodash'
+        }),
+        new webpack.DefinePlugin({
+            NSFO_API_SERVER_URL: JSON.stringify(process.env.NSFO_API_SERVER_URL_STAGING),
+            NSFO_USER_ENV_URL: JSON.stringify(process.env.NSFO_USER_ENV_URL_STAGING),
         })
     ],
     resolve: {
