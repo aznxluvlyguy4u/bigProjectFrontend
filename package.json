@@ -6,7 +6,7 @@
     "postinstall": "typings install",
     "start": "webpack-dev-server --port 8081 --config webpack/webpack.dev.js",
     "build": "webpack --config webpack/webpack.prod.js",
-    "publish:staging": "npm run build && gulp zip:staging",
+    "publish:staging": "npm run build && gulp zip:staging && gulp publish:staging",
     "publish:prod": "npm run build && gulp zip:prod && gulp publish:prod"
   },
   "license": "ISC",
