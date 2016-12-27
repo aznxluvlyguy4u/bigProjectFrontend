@@ -1,3 +1,4 @@
+import _ = require("lodash");
 import {Component, Input} from "@angular/core";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {AnimalHealthRequest} from "../../../health.model";
@@ -26,6 +27,7 @@ export class HealthTableOngoing {
         for (let request of this.animalHealthRequests) {
             if(request.status == 'ONGOING') {
                 this.requests.push(request);
+                this.requests = _.orderBy(this.requests, ['request_date'], ['desc'])
             }
         }
     }
