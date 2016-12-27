@@ -7,7 +7,6 @@ import {NSFOService} from "../../../../../global/services/nsfo/nsfo.service";
 import {LocationHealthStatus} from "../../../../client/client.model";
 import {LivestockComponent} from "../../../../../global/components/livestock/livestock.component";
 import {Animal} from "../../../../../global/components/livestock/livestock.model";
-import {FormBuilder, FormGroup} from "@angular/forms";
 
 @Component({
     selector: 'health-table-announced',
