@@ -5,13 +5,11 @@ import {ReplaySubject} from "rxjs/Rx";
 @Injectable()
 export class UtilsService {
     private provinces: ReplaySubject<any> = new ReplaySubject();
-    private healthStatusses: ReplaySubject<any> = new ReplaySubject();
     private adminDetails: ReplaySubject<any> = new ReplaySubject();
 
     constructor(private nsfo: NSFOService) {
         this.initAdminDetails();
         this.initProvinces();
-        this.initHealthStatusses();
     }
 
     // USER DETAILS
@@ -44,21 +42,5 @@ export class UtilsService {
 
     public getProvinces() {
         return this.provinces.asObservable();
-    }
-
-    // HEALTH STATUSSES
-    private initHealthStatusses() {
-        this.nsfo.doGetHealthStatusses()
-            .subscribe(res => {
-                this.setHealthStatusses(res.result);
-            })
-    }
-
-    public setHealthStatusses(provinces) {
-        this.healthStatusses.next(provinces);
-    }
-
-    public getHealthStatusses() {
-        return this.healthStatusses.asObservable();
     }
 }
