@@ -7,6 +7,7 @@ import {NSFOService} from "../../../../../global/services/nsfo/nsfo.service";
 import {LocationHealthStatus} from "../../../../client/client.model";
 import {LivestockComponent} from "../../../../../global/components/livestock/livestock.component";
 import {Animal} from "../../../../../global/components/livestock/livestock.model";
+import {FormBuilder, FormGroup} from "@angular/forms";
 
 @Component({
     selector: 'health-table-announced',
@@ -20,6 +21,7 @@ export class HealthTableAnnounced {
     private showModal: string = 'none';
     private isUnhealthyLocation: boolean = false;
     private isRequestingLocationHealth: boolean = false;
+    private isRequesting: boolean = false;
     private selectedLocation: LocationHealthStatus;
     private inspection: AnimalHealthRequest = new AnimalHealthRequest();
     private selectedAnimals: Animal[] = [];
@@ -96,7 +98,7 @@ export class HealthTableAnnounced {
                             "last_name": result.action_taken_by.last_name
                         };
                     }
-                   
+
                     this.ngOnChanges();
                 },
                 err => {
@@ -107,12 +109,45 @@ export class HealthTableAnnounced {
             )
     }
 
+    private createInspection(): void {
+        this.isRequesting = true;
+        this.inspection.animals = this.selectedAnimals;
+
+        this.nsfo.doPostRequest(this.nsfo.URI_HEALTH_INSPECTIONS, this.inspection)
+            .subscribe(
+                res => {
+                    console.log(res);
+                    let result = res.result;
+                    let inspection = _.cloneDeep(this.inspection);
+                    inspection.inspection_id = result.inspection_id;
+                    inspection.inspection = result.inspection;
+                    inspection.request_date = result.request_date;
+                    inspection.status = result.status;
+                    inspection.next_action = result.next_action;
+                    inspection.first_name = result.first_name;
+                    inspection.last_name = result.last_name;
+                    inspection.action_taken_by = {
+                        "first_name": result.action_taken_by.first_name,
+                        "last_name": result.action_taken_by.last_name
+                    };
+
+                    this.animalHealthRequests.push(inspection);
+
+                    this.ngOnChanges();
+                    this.closeModal();
+                },
+                () => {
+                    this.isRequesting = false;
+                }
+            )
+    }
+
     private getLocationDetails() {
         this.isRequestingLocationHealth = true;
         this.nsfo.doGetRequest(this.nsfo.URI_HEALTH_UBN + '/' + this.inspection.ubn)
             .subscribe(
                 res => {
-                    this.selectedLocation = res;
+                    this.selectedLocation = res.result;
                     this.getLivestock(this.inspection.ubn);
                     this.isRequestingLocationHealth = false;
                 },
@@ -152,24 +187,40 @@ export class HealthTableAnnounced {
         this.inspection.inspection = illness;
 
         if (illness == 'SCRAPIE') {
-            this.isUnhealthyLocation = this.selectedLocation.scrapie_status != 'FREE_1_YEAR' &&
-                this.selectedLocation.scrapie_status != 'FREE_2_YEAR';
+            this.isUnhealthyLocation = !(this.selectedLocation.scrapie_status == 'FREE' ||
+                this.selectedLocation.scrapie_status == 'RESISTANT');
         }
 
         if (illness == 'MAEDI VISNA') {
-            this.isUnhealthyLocation = this.selectedLocation.maedi_visna_status != 'FREE_1_YEAR' &&
-                this.selectedLocation.maedi_visna_status != 'FREE_2_YEAR';
+            this.isUnhealthyLocation = !(this.selectedLocation.maedi_visna_status == 'FREE_1_YEAR' ||
+                this.selectedLocation.maedi_visna_status == 'FREE_2_YEAR');
         }
 
         if (illness == 'CAE') {
-            this.isUnhealthyLocation = this.selectedLocation.cae_status != 'FREE_1_YEAR' &&
-                this.selectedLocation.cae_status != 'FREE_2_YEAR';
+            this.isUnhealthyLocation = !(this.selectedLocation.cae_status != 'FREE_1_YEAR' &&
+                this.selectedLocation.cae_status != 'FREE_2_YEAR');
         }
 
         if (illness == 'CL') {
-            this.isUnhealthyLocation = this.selectedLocation.cl_status != 'FREE_1_YEAR' &&
-                this.selectedLocation.cl_status != 'FREE_2_YEAR';
+            this.isUnhealthyLocation = !(this.selectedLocation.cl_status != 'FREE_1_YEAR' &&
+                this.selectedLocation.cl_status != 'FREE_2_YEAR');
         }
+    }
+
+    private selectInspectionStatus (value: string) {
+        this.inspection.certification_status = value;
+
+        if (value == 'CERTIFICATION') {
+            this.inspection.roadmap = 'ONE INSPECTION';
+        }
+
+        if (value == 'WITHOUT CERTIFICATION') {
+            this.inspection.roadmap = '';
+        }
+    }
+
+    private selectRoadmap (value: string) {
+        this.inspection.roadmap = value;
     }
 
     private getSelectedAnimals(event: any) {
@@ -182,5 +233,8 @@ export class HealthTableAnnounced {
 
     private closeModal() {
         this.showModal = 'none';
+        this.inspection = new AnimalHealthRequest();
+        this.selectedLocation = null;
+        this.isUnhealthyLocation = false;
     }
 }

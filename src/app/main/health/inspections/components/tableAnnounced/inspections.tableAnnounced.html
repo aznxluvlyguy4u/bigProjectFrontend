@@ -93,7 +93,7 @@
                             <label class="middle"> {{ 'STATUS' | translate }} </label>
                         </div>
                         <div class="large-9 columns">
-                            <select #statusSelection (change)="inspection.certification_status = statusSelection.value">
+                            <select #statusSelection (change)="selectInspectionStatus(statusSelection.value)">
                                 <option value="" disabled selected> -- </option>
                                 <option value="CERTIFICATION">{{ 'CERTIFICATION' | translate }}</option>
                                 <option value="WITHOUT CERTIFICATION">{{ 'WITHOUT CERTIFICATION' | translate }}</option>
@@ -105,8 +105,8 @@
                             <label class="middle"> {{ 'ROADMAP' | translate }} </label>
                         </div>
                         <div class="large-9 columns">
-                            <select #roadmapSelection (change)="inspection.roadmap = statusSelection.value">
-                                <option value="ONE INSPECTION">{{ 'ONE INSPECTION' | translate }}</option>
+                            <select #roadmapSelection (change)="selectRoadmap(roadmapSelection.value)">
+                                <option value="ONE INSPECTION" selected>{{ 'ONE INSPECTION' | translate }}</option>
                                 <option value="TWO INSPECTION">{{ 'TWO INSPECTION' | translate }}</option>
                             </select>
                         </div>
@@ -123,7 +123,14 @@
         </div>
         <div class="modal-footer">
             <span class="pull-right">
-                <button [disabled]="selectedAnimals.length == 0" class="tiny primary button">{{ 'SAVE' | translate}}</button>
+                <button (click)="createInspection()" [disabled]="selectedAnimals.length == 0 || (isUnhealthyLocation && inspection.certification_status == '') || isRequesting" class="tiny primary button">
+                    <span *ngIf="!isRequesting">
+                        {{ 'SAVE' | translate }}
+                    </span>
+                    <span *ngIf="isRequesting">
+                        <i class="fa fa-gear fa-spin fa-fw"></i>
+                    </span>
+                </button>
                 <button (click)="closeModal()" class="tiny alert button">{{ 'CANCEL' | translate}}</button>
             </span>
         </div>

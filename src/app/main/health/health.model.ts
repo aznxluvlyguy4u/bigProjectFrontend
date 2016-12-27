@@ -1,4 +1,6 @@
 import {User} from "../client/client.model";
+import {Animal} from "../../global/components/livestock/livestock.model";
+
 export class AnimalHealthRequest {
     public request_id: string;
     public ubn: string;
@@ -18,6 +20,7 @@ export class AnimalHealthRequest {
     public status: string;
     public is_canceled: boolean;
     public inspection_id: string;
+    public animals: Animal[] = []
 }
 
 class Direction {
