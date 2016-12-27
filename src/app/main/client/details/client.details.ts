@@ -147,8 +147,11 @@ export class ClientDetailsComponent {
 
         this.nsfo.doPutRequest(this.nsfo.URI_HEALTH_UBN + '/' + this.selectedLocation.ubn, request)
             .subscribe(
-                () => {
+                res => {
                     this.closeLocationHealthModal();
+                    this.isChangingLocationHealth = false;
+                },
+                err => {
                     this.isChangingLocationHealth = false;
                 }
             );
