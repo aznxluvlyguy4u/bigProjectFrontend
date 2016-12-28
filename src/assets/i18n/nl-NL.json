@@ -300,5 +300,8 @@
   "WORK NUMBER": "Werknummer",
   "INFLOW DATE": "Instroomdatum",
   "MALE": "Mannelijk",
-  "FEMALE": "Vrouwelijk"
+  "FEMALE": "Vrouwelijk",
+  "REQUIRED RESULTS COUNT": "Aantal resultaten vereist",
+  "RECEIVED RESULTS COUNT": "Aantal resultaten ontvangen",
+  "CURRENT STATUS": "Huidige status"
 }

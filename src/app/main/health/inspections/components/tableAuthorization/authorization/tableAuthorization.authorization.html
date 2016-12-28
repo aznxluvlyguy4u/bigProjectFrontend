@@ -1,10 +1,19 @@
 <div id="auth-page">
-    <span *ngIf="results.length > 0">
+    <span *ngIf="!isLoading && results.length > 0">
         <button type="button" (click)="goToOverviewPage()" class="small primary button">
             <i class="fa fa-chevron-left fa-fw" aria-hidden="true"></i> {{ 'BACK TO OVERVIEW' | translate }}
         </button>
+        <span class="label-count">
+            {{ 'CURRENT STATUS' | translate }}: {{ currentHealthStatus | translate }}
+        </span>
+        <span *ngIf="currentHealthStatus == 'FREE (1 YEAR)' || currentHealthStatus == 'FREE (2 YEAR)'" class="label-count">
+            {{ 'REQUIRED RESULTS COUNT' | translate }}: {{ requiredCount }}
+        </span>
+        <span *ngIf="currentHealthStatus == 'FREE (1 YEAR)' || currentHealthStatus == 'FREE (2 YEAR)'" class="label-count">
+            {{ 'RECEIVED RESULTS COUNT' | translate }}: {{ results.length }}
+        </span>
         <span class="label-ubn pull-right">
-           {{ 'UBN' | translate }}: {{ request.ubn }}
+            {{ 'UBN' | translate }}: {{ request.ubn }}
         </span>
         <div *ngFor="let result of results" class="callout">
             <div class="row result-container">
@@ -57,12 +66,15 @@
                         <label class="middle"> {{ 'STATUS' | translate }} </label>
                     </div>
                     <div class="large-8 columns">
-                        <select formControlName="health_status">
+                        <select *ngIf="request.inspection == 'SCRAPIE'" [(ngModel)]="suggestedHealthStatus" [disabled]="foundHealthStatusSuggestion" formControlName="health_status">
                             <option value="FREE"> {{ 'FREE' | translate }} </option>
-                            <option *ngIf="request.inspection == 'SCRAPIE'" value="RESISTANT"> {{ 'RESISTANT' | translate }} </option>
-                            <option *ngIf="request.inspection == 'MAEDI VISNA'" value="FREE (1 YEAR)"> {{ 'FREE (1 YEAR)' | translate }} </option>
-                            <option *ngIf="request.inspection == 'MAEDI VISNA'" value="FREE (2 YEAR)"> {{ 'FREE (2 YEAR)' | translate }} </option>
-                            <option *ngIf="request.inspection == 'MAEDI VISNA'" value="STATUS KNOWN BY AHD"> {{ 'STATUS KNOWN BY AHD' | translate }} </option>
+                            <option value="RESISTANT"> {{ 'RESISTANT' | translate }} </option>
+                            <option value="UNDER OBSERVATION"> {{ 'UNDER OBSERVATION' | translate }} </option>
+                            <option value="UNDER INVESTIGATION"> {{ 'UNDER INVESTIGATION' | translate }} </option>
+                        </select>
+                        <select *ngIf="request.inspection != 'SCRAPIE'" [(ngModel)]="suggestedHealthStatus" [disabled]="foundHealthStatusSuggestion" formControlName="health_status">
+                            <option value="FREE (1 YEAR)"> {{ 'FREE (1 YEAR)' | translate }} </option>
+                            <option value="FREE (2 YEAR)"> {{ 'FREE (2 YEAR)' | translate }} </option>
                             <option value="UNDER OBSERVATION"> {{ 'UNDER OBSERVATION' | translate }} </option>
                             <option value="UNDER INVESTIGATION"> {{ 'UNDER INVESTIGATION' | translate }} </option>
                         </select>
@@ -98,6 +110,17 @@
                             </span>
                         </button>
                     </div>
+                </div>
+            </div>
+        </div>
+    </span>
+    <span *ngIf="isLoading">
+        <div class="callout">
+            <div class="row value-container text-center">
+                <div class="spinner">
+                    <div class="bounce1"></div>
+                    <div class="bounce2"></div>
+                    <div class="bounce3"></div>
                 </div>
             </div>
         </div>

@@ -18,6 +18,7 @@ export class AnimalHealthRequest {
     public certification_status: string;
     public roadmap: string;
     public status: string;
+    public order_number: string;
     public is_canceled: boolean;
     public inspection_id: string;
     public animals: Animal[] = []
