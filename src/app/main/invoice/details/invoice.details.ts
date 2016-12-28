@@ -55,16 +55,11 @@ export class InvoiceDetailsComponent {
     
     private addInvoiceRule(): void {
         if (this.selectedInvoiceId) {
-            console.log(this.selectedInvoiceId);
-
             let invoiceRule = _.find(this.invoiceRulesOptions, function(o) {
                 return o.id == this.selectedInvoiceId
             });
 
-            console.log(invoiceRule);
-
             this.invoice.rules.push(invoiceRule);
-            console.log(this.invoice.rules);
             this.doVATCalculations();
         }
     }
@@ -110,6 +105,5 @@ export class InvoiceDetailsComponent {
         }
 
         this.totalInclVAT += this.totalExclVAT;
-        console.log(this.vatCalculations);
     }
 }
