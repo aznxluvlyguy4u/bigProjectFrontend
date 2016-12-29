@@ -4,10 +4,11 @@
   "scripts": {
     "typings": "typings",
     "postinstall": "typings install",
-    "start": "webpack-dev-server --port 8081 --config webpack/webpack.dev.js",
-    "build": "webpack --config webpack/webpack.prod.js",
-    "publish:staging": "npm run build && gulp zip:staging && gulp publish:staging",
-    "publish:prod": "npm run build && gulp zip:prod && gulp publish:prod"
+    "start": "webpack-dev-server --port 8081 --config webpack/webpack.local.js",
+    "build:staging": "webpack --config webpack/webpack.development.js",
+    "build:prod": "webpack --config webpack/webpack.production.js",
+    "publish:staging": "npm run build:staging && gulp zip:staging && gulp publish:staging",
+    "publish:prod": "npm run build:prod && gulp zip:prod && gulp publish:prod"
   },
   "license": "ISC",
   "dependencies": {

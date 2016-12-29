@@ -30,10 +30,7 @@
             <td>{{ request.next_action | translate }}</td>
             <td>
                 <span class="pull-right">
-                    <button type="button" (click)="getDocument(request)" class="small primary button">
-                        {{ 'DOWNLOAD' | translate }}
-                    </button>
-                    <button type="button" (click)="changeStatus(request, $event)" class="small primary button">
+                    <button type="button" (click)="changeStatus(request, $event); getDocument(request)" class="small primary button">
                         {{ 'ANNOUNCE' | translate }}
                     </button>
                 </span>

@@ -105,7 +105,7 @@
                 {{ 'INVOICE RULE' | translate }}
                 <select [(ngModel)]="selectedInvoiceId">
                     <option value="">--</option>
-                    <option *ngFor="let rule of invoiceRulesOptions" value="{{ rule.rule_id }}">{{ rule.description }}</option>
+                    <option *ngFor="let rule of invoiceRulesOptions" value="{{ rule.id }}">{{ rule.description }}</option>
                 </select>
             </label>
         </div>
@@ -146,7 +146,7 @@
                             {{rule.description}}
                         </td>
                         <td class="text-right">
-                            {{rule.vat_rate}}%
+                            {{rule.vat_percentage_rate}}%
                         </td>
                         <td class="text-right">
                             {{rule.price_excl_vat.toFixed(2)}}

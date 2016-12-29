@@ -23,12 +23,13 @@ export class InvoiceOverviewComponent {
     }
 
     private getInvoicesList() {
-        this.nsfo.doGetInvoices()
-            .subscribe(
-                res => {
-                    this.invoices = <Invoice[]> res.result;
-                }
-            );
+        // TODO ADD API ENDPOINT TO GET ALL INVOICES
+        // this.nsfo.doGetRequest()
+        //     .subscribe(
+        //         res => {
+        //             this.invoices = <Invoice[]> res.result;
+        //         }
+        //     );
     }
 
     private calculateDays(date: string) {

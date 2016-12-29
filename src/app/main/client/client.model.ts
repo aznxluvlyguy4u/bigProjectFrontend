@@ -72,6 +72,10 @@ export class LocationHealthStatus {
     public maedi_visna_check_date: string;
     public scrapie_status: string;
     public scrapie_check_date: string;
+    public cae_status: string;
+    public cae_check_date: string;
+    public cl_status: string;
+    public cl_check_date: string;
     public reason_of_change: string;
 }
 

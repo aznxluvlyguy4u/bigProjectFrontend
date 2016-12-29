@@ -12,8 +12,9 @@ export class Invoice {
 }
 
 export class InvoiceRule {
-    public rule_id: string;
+    public id: string;
     public description: string;
     public price_excl_vat: number;
-    public vat_rate: number;
+    public vat_percentage_rate: number;
+    public category: string;
 }

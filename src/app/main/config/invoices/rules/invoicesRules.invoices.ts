@@ -108,12 +108,12 @@ export class InvoicesRulesComponent {
                     res => {
                         switch (this.selectedRule.category) {
                             case InvoiceCategory.General:
-                                this.removeGeneralInvoiceRule(this.selectedRuleTemp);
+                                this.removeInvoiceRule(this.selectedRuleTemp);
                                 this.generalRules.push(this.selectedRule);
                                 break;
 
                             case InvoiceCategory.AnimalHealth:
-                                this.removeAnimalHealthRule(this.selectedRuleTemp);
+                                this.removeInvoiceRule(this.selectedRuleTemp);
                                 this.animalHealthRules.push(this.selectedRule);
                                 break;
                         }

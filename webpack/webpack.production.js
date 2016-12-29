@@ -8,8 +8,21 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ChunkWebpack = webpack.optimize.CommonsChunkPlugin;
 const UglifyWebpack = webpack.optimize.UglifyJsPlugin;
 
-const rootDir = path.resolve(__dirname, '..');
 
+/**
+ * Load environment variables from JSON File.
+ */
+
+env({
+    file: 'env.json'
+});
+
+
+/**
+ * Initialize webpack PRODUCTION config.
+ */
+
+const rootDir = path.resolve(__dirname, '..');
 module.exports = {
     debug: false,
     devtool: 'source-map',
@@ -122,6 +135,10 @@ module.exports = {
             root: rootDir,
             verbose: true,
             dry: false
+        }),
+        new webpack.DefinePlugin({
+            NSFO_API_SERVER_URL: JSON.stringify(process.env.NSFO_API_SERVER_URL_PRODUCTION),
+            NSFO_USER_ENV_URL: JSON.stringify(process.env.NSFO_USER_ENV_URL_PRODUCTION)
         })
     ],
     resolve: {

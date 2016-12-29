@@ -3,14 +3,8 @@ import {Http, Headers} from "@angular/http";
 
 @Injectable()
 export class NSFOService {
-    // private API_SERVER_URL: string = 'https://nsfo-api.jongensvantechniek.nl/api';
-    // private USER_ENV_URL: string = 'http://online.nsfo.nl';
-
-    // private API_SERVER_URL: string = 'http://nsfo-dev-api.jongensvantechniek.nl/api';
-    // private USER_ENV_URL: string = 'http://nsfo-dev.jongensvantechniek.nl';
-
-    private API_SERVER_URL: string = 'http://localhost:8000/api';
-    private USER_ENV_URL: string = 'http://localhost:8080';
+    private API_SERVER_URL: string = NSFO_API_SERVER_URL;
+    private USER_ENV_URL: string = NSFO_USER_ENV_URL;
 
     public URI_RESET_PASSWORD = '/v1/admins/auth/password-reset';
     public URI_VALIDATE_TOKEN = '/v1/auth/validate-token';
@@ -30,10 +24,10 @@ export class NSFOService {
 
     public URI_HEALTH_COMPANY: string = '/v1/health/company';
     public URI_HEALTH_UBN: string = '/v1/health/ubn';
-
     public URI_HEALTH_INSPECTIONS: string = '/v1/health_inspections';
-    
     public URI_HEALTH_LOCATION_LETTERS: string = '/v1/health_location_letters';
+    
+    public URI_LIVESTOCK: string = '/v1/animals-livestock';
     
     public URI_SETTINGS: string = '/v1/settings';
 
@@ -92,71 +86,5 @@ export class NSFOService {
 
     public getUserEnvURL(): string {
         return this.USER_ENV_URL;
-    }
-
-    // TODO REMOVE THIS WHEN API LIVE
-    doGetUserDetails() {
-        return this.http.get("/api/user_details.json")
-            .map(res => res.json())
-    }
-
-    // TODO REMOVE THIS WHEN API LIVE
-    doGetClientInfo() {
-        return this.http.get("/api/clients_edit_1.json")
-            .map(res => res.json())
-    }
-
-    // TODO REMOVE THIS WHEN API LIVE
-    doGetClients() {
-        return this.http.get("/api/clients.json")
-            .map(res => res.json())
-    }
-
-    // TODO REMOVE THIS WHEN API LIVE
-    doGetProvinces() {
-        return this.http.get("/api/provinces.json")
-            .map(res => res.json())
-    }
-
-    // TODO REMOVE THIS WHEN API LIVE
-    doGetHealthStatusses() {
-        return this.http.get("/api/health_statusses.json")
-            .map(res => res.json())
-    }
-
-    // TODO REMOVE THIS WHEN API LIVE
-    doGetUsers() {
-        return this.http.get("/api/users.json")
-            .map(res => res.json())
-    }
-
-    // TODO REMOVE THIS WHEN API LIVE
-    doGetClientDetails() {
-        return this.http.get("/api/clients_details_1.json")
-            .map(res => res.json())
-    }
-
-    // TODO REMOVE THIS WHEN API LIVE
-    doGetClientNotes() {
-        return this.http.get("/api/clients_details_1_notes.json")
-            .map(res => res.json())
-    }
-
-    // TODO REMOVE THIS WHEN API LIVE
-    doGetAnimalHealth() {
-        return this.http.get("/api/animal_health.json")
-            .map(res => res.json())
-    }
-
-    // TODO REMOVE THIS WHEN API LIVE
-    doGetInvoices() {
-        return this.http.get("/api/invoices.json")
-            .map(res => res.json())
-    }
-
-    // TODO REMOVE THIS WHEN API LIVE
-    doGetInvoiceRules() {
-        return this.http.get("/api/invoices_rules.json")
-            .map(res => res.json())
     }
 }
