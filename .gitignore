@@ -69,10 +69,13 @@ $RECYCLE.BIN/
 *.msm
 *.msp
 
+npm-debug.log
 
 ### Jetbrains ###
 .idea/*
 
+### Visual Studio COde
+.vscode/*
 
 /typings/
 
@@ -81,3 +84,4 @@ $RECYCLE.BIN/
 /src/app/**/*.js.map
 /dist/
 /env.json
+
