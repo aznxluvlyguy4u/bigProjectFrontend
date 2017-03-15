@@ -115,7 +115,6 @@ export class HealthTableAnnounced {
         this.nsfo.doPostRequest(this.nsfo.URI_HEALTH_INSPECTIONS, this.inspection)
             .subscribe(
                 res => {
-                    console.log(res);
                     let result = res.result;
                     let inspection = _.cloneDeep(this.inspection);
                     inspection.inspection_id = result.inspection_id;
