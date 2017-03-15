@@ -1,0 +1,7 @@
+<span style="color:#1550f2; border-bottom:1px dotted #1550f2;" (click)="enableEditMode()" *ngIf="!editMode">
+    {{editableValue}}
+</span>
+<span *ngIf="editMode">
+    <input [(ngModel)]="editableValue" style="position:relative; z-index:1000;" type="text">
+</span>
+<div *ngIf="editMode" (click)="disableEditMode()" style="z-index:999; position:absolute; top:0; left:0; width:100%; height:100%"></div>
