@@ -66,6 +66,15 @@ export class NSFOService {
             .map(res => res.json());
     }
 
+    public doGetMockRequest(uri:string) {
+        let headers = new Headers();
+        headers.append(this.content_type, "application/json");
+        headers.append(this.access_token, localStorage[this.ACCESS_TOKEN_NAMESPACE]);
+
+        return this.http.get(uri, {headers: headers})
+            .map(res => res.json());
+    }
+
     public doPutRequest(uri:string, data) {
         let headers = new Headers();
         headers.append(this.content_type, "application/json");
