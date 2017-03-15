@@ -9,9 +9,11 @@ import {ControlGroup, FormBuilder} from "@angular/common";
 import {AnimalHealthRequest} from "../../../../health.model";
 import {NSFOService} from "../../../../../../global/services/nsfo/nsfo.service";
 
+import { EditableComponent } from '../../../../../../global/components/editable/editable.component';
+
 @Component({
     selector: 'request-auth',
-    directives: [REACTIVE_FORM_DIRECTIVES, Datepicker],
+    directives: [REACTIVE_FORM_DIRECTIVES, Datepicker, EditableComponent],
     template: require('./tableAuthorization.authorization.html'),
     pipes: [TranslatePipe]
 })
@@ -24,6 +26,7 @@ export class AuthorizationComponent {
     private currentHealthStatus: string;
     private requiredCount: number;
     private suggestedHealthStatus: string;
+    private counterValue = 0;
 
     @Input() results = [];
     @Input() request: AnimalHealthRequest = new AnimalHealthRequest();
@@ -39,7 +42,8 @@ export class AuthorizationComponent {
 
     ngOnChanges() {
         if(this.results) {
-            this.getRequiredResultCount();
+            // this.getRequiredResultCount();
+            this.getCurrentHealthStatus();
         }
     }
 
@@ -77,27 +81,27 @@ export class AuthorizationComponent {
     }
 
     private getRequiredResultCount(): void {
-        this.nsfo.doGetRequest(this.nsfo.URI_HEALTH_INSPECTIONS + '/' + this.request.ubn + '/required-results-amount')
-            .subscribe(
-                res => {
-                    let count = res.result;
-                    let illness = this.request.inspection;
+        // this.nsfo.doGetRequest(this.nsfo.URI_HEALTH_INSPECTIONS + '/' + this.request.ubn + '/required-results-amount')
+        //     .subscribe(
+        //         res => {
+        //             let count = res.result;
+        //             let illness = this.request.inspection;
 
-                    if (illness == 'MAEDI VISNA') {
-                        this.requiredCount = count['maedi_visna_required_amount'];
-                    }
+        //             if (illness == 'MAEDI VISNA') {
+        //                 this.requiredCount = count['maedi_visna_required_amount'];
+        //             }
 
-                    if (illness == 'CAE') {
-                        this.requiredCount = count['cae_required_amount'];
-                    }
+        //             if (illness == 'CAE') {
+        //                 this.requiredCount = count['cae_required_amount'];
+        //             }
 
-                    if (illness == 'CL') {
-                        this.requiredCount = count['cl_required_amount'];
-                    }
+        //             if (illness == 'CL') {
+        //                 this.requiredCount = count['cl_required_amount'];
+        //             }
 
-                    this.getCurrentHealthStatus();
-                }
-            )
+        //             this.getCurrentHealthStatus();
+        //         }
+        //     )
     }
 
     private suggestMaediVisnaHealthStatus(): string {
@@ -165,6 +169,7 @@ export class AuthorizationComponent {
         this.nsfo.doPutRequest(this.nsfo.URI_HEALTH_INSPECTIONS, request)
             .subscribe(
                 res => {
+                    console.log(res);
                     let result = res.result;
                     this.request.status = result.status;
                     this.request.next_action = result.next_action;
@@ -174,7 +179,7 @@ export class AuthorizationComponent {
                     };
 
                     this.savingInProgress = false;
-                    this.showOverviewPage = true;
+                    this.showOverviewPage.emit(true);
                 },
                 err => {
                     this.savingInProgress = false;

@@ -37,21 +37,16 @@ export class HealthTableAuthorization {
     }
     
     // this.nsfo.doGetRequest(this.nsfo.URI_HEALTH_INSPECTIONS + '/' + inspectionId + '/results')
-
     private getResults(inspectionId) {
-        console.log('get results');
         this.nsfo.doGetMockRequest('http://localhost:8081/api/results.json')
             .subscribe(
                 res => {
-                    console.log(res);
                     this.results = res.result;
                 }
             )
     }
 
     private switchToAuthPage(request): void {
-        console.log(request);
-        console.log('AUTHORIZE');
         this.getResults(request.inspection_id);
         this.selectedRequest = request;
         this.showAuthPage = true;

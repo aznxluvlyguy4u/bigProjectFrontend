@@ -15,6 +15,7 @@
         <span class="label-ubn pull-right">
             {{ 'UBN' | translate }}: {{ request.ubn }}
         </span>
+        {{ results | json }}
         <div *ngFor="let result of results" class="callout">
             <div class="row result-container">
                 <div class="large-2 columns">
@@ -34,14 +35,16 @@
                 </div>
             </div>
             <div *ngIf="result.inspection_subject == 'SCRAPIE'" class="row value-container">
-                <div class="large-2 columns">
-                    {{ 'GENOTYPE' | translate }}: {{ result.genotype }}
+                <div class="large-2 columns">                     
+                    {{ 'GENOTYPE' | translate }}: <editable-component [(editableValue)]="result.genotype"></editable-component>
+                    <!--{{ result.genotype }}-->
                 </div>
                 <div class="large-2 columns">
-                    {{ 'GENOTYPE CLASS' | translate }}: {{ result.genotype_class }}
+                    {{ 'GENOTYPE CLASS' | translate }}: <editable-component [(editableValue)]="result.genotype_class"></editable-component>
+                    <!--{{ result.genotype_class }}-->
                 </div>
                 <div class="large-3 columns end">
-                    {{ 'GENOTYPE WITH CONDON 141' | translate }}: {{ result.genotype_with_condon }}
+                    {{ 'GENOTYPE WITH CONDON 141' | translate }}: <editable-component [(editableValue)]="result.genotype_with_condon"></editable-component>
                 </div>
             </div>
             <div *ngIf="result.inspection_subject == 'MAEDI VISNA'" class="row value-container">
