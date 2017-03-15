@@ -1,0 +1,51 @@
+
+{
+    "result": [{
+        "sub_ref":"test",
+        "inspection_subject":"SCRAPIE",
+        "genotype_with_condon":"Hallo 1",
+        "mvnp":"jow",
+        "mv_caepool":"nogiets",
+        "vet_name":"vette naam",
+        "result_date":"2017-03-12T10:39:35Z",
+        "reception_date":"2017-03-12T10:39:35Z",
+        "date_of_birth":"echt",
+        "mgx_sample_id":"jammer"
+    },
+    {
+        "sub_ref":"test",
+        "inspection_subject":"SCRAPIE",
+        "genotype_with_condon":"Hallo 2",
+        "mvnp":"jow",
+        "mv_caepool":"nogiets",
+        "vet_name":"vette naam",
+        "result_date":"2017-03-12T10:39:35Z",
+        "reception_date":"2017-03-12T10:39:35Z",
+        "date_of_birth":"echt",
+        "mgx_sample_id":"jammer"
+    },
+    {
+        "sub_ref":"test",
+        "inspection_subject":"SCRAPIE",
+        "genotype_with_condon":"Hallo 3",
+        "mvnp":"jow",
+        "mv_caepool":"nogiets",
+        "vet_name":"vette naam",
+        "result_date":"2017-03-12T10:39:35Z",
+        "reception_date":"2017-03-12T10:39:35Z",
+        "date_of_birth":"echt",
+        "mgx_sample_id":"jammer"
+    },
+    {
+        "sub_ref":"test",
+        "inspection_subject":"SCRAPIE",
+        "genotype_with_condon":"Hallo 4",
+        "mvnp":"jow",
+        "mv_caepool":"nogiets",
+        "vet_name":"vette naam",
+        "result_date":"2017-03-12T10:39:35Z",
+        "reception_date":"2017-03-12T10:39:35Z",
+        "date_of_birth":"echt",
+        "mgx_sample_id":"jammer"
+    }]
+}
