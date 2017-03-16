@@ -303,5 +303,15 @@
   "FEMALE": "Vrouwelijk",
   "REQUIRED RESULTS COUNT": "Aantal resultaten vereist",
   "RECEIVED RESULTS COUNT": "Aantal resultaten ontvangen",
-  "CURRENT STATUS": "Huidige status"
+  "CURRENT STATUS": "Huidige status",
+  "VET NAME": "Arts",
+  "MV_CAEID": "mv/caeid",
+  "MV_CAE POOL": "mv/cae/pool",
+  "MV_CAE IRA": "mv/cae/ira",
+  "MVNP": "mvnp",
+  "SUB REF": "sub ref",
+  "POSITIVE":"positief",
+  "NEGATIVE":"negatief",
+  "NOT AVAILABLE":"Niet beschikbaar",
+  "MGX SAMPLE ID": "Mgx sample id"
 }

@@ -1,8 +1,16 @@
 <div id="auth-page">
-    <span *ngIf="!isLoading && results.length > 0">
+    <pre>{{ labResult | json }}</pre>
+    <span *ngIf="!isLoading && labResult.lab_results.length > 0">
         <button type="button" (click)="goToOverviewPage()" class="small primary button">
             <i class="fa fa-chevron-left fa-fw" aria-hidden="true"></i> {{ 'BACK TO OVERVIEW' | translate }}
         </button>
+
+
+        <button type="button" (click)="saveLabResult()" class="small primary button">
+            <i class="fa fa-chevron-left fa-fw" aria-hidden="true"></i> {{ 'SAVE LAB RESULT' | translate }}
+        </button>
+
+
         <span class="label-count">
             {{ 'CURRENT STATUS' | translate }}: {{ currentHealthStatus | translate }}
         </span>
@@ -10,55 +18,79 @@
             {{ 'REQUIRED RESULTS COUNT' | translate }}: {{ requiredCount }}
         </span>
         <span *ngIf="currentHealthStatus == 'FREE (1 YEAR)' || currentHealthStatus == 'FREE (2 YEAR)'" class="label-count">
-            {{ 'RECEIVED RESULTS COUNT' | translate }}: {{ results.length }}
+            {{ 'RECEIVED RESULTS COUNT' | translate }}: {{ labResult.lab_results.length }}
         </span>
         <span class="label-ubn pull-right">
             {{ 'UBN' | translate }}: {{ request.ubn }}
         </span>
-        {{ results | json }}
-        <div *ngFor="let result of results" class="callout">
+       
+        <strong>Revisie:</strong> {{ labResult.revision }}
+        <div *ngFor="let lab_result_item of labResult.lab_results" class="callout">
             <div class="row result-container">
                 <div class="large-2 columns">
-                    <span class="header-label">{{ 'ULN' | translate }}:</span> {{ result.uln_country_code + result.uln_number }}
+                    <span class="header-label">{{ 'ULN' | translate }}:</span> {{ lab_result_item.animal.uln_country_code + lab_result_item.animal.uln_number }}
                 </div>
                 <div class="large-2 columns">
-                    <span class="header-label">{{ 'DATE OF BIRTH' | translate }}:</span> {{ settings.convertToViewDate(result.date_of_birth) }}
+                    <span class="header-label">{{ 'DATE OF BIRTH' | translate }}:</span> {{ settings.convertToViewDate(lab_result_item.animal.date_of_birth) }}
                 </div>
-                <div *ngIf="result.inspection_subject == 'SCRAPIE'" class="large-4 columns">
-                    <span class="header-label">{{ 'MGX SAMPLE ID' | translate }}:</span> {{ result.mgx_sample_id }}
+
+                <!-- SCRAPIE -->
+                <div *ngIf="labResult.illness == 'SCRAPIE'" class="large-4 columns">
+                    <span class="header-label">{{ 'MGX SAMPLE ID' | translate }}:</span> 
+                    <editable-component [(editableValue)]="lab_result_item.mgx_sample_id"></editable-component>
+                    <!--{{ lab_result_item.mgx_sample_id }}-->
                 </div>
                 <div class="large-2 columns">
-                    <span class="header-label">{{ 'RESULT DATE' | translate }}:</span> {{ settings.convertToViewDate(result.result_date) }}
+                    <span class="header-label">{{ 'RESULT DATE' | translate }}:</span> 
+                    {{ settings.convertToViewDate(lab_result_item.result_date) }}
                 </div>
                 <div class="large-2 columns end">
-                    <span class="header-label">{{ 'RECEPTION DATE' | translate }}:</span> {{ settings.convertToViewDate(result.reception_date) }}
+                    <span class="header-label">{{ 'RECEPTION DATE' | translate }}:</span> 
+                    {{ settings.convertToViewDate(lab_result_item.reception_date) }}
                 </div>
             </div>
-            <div *ngIf="result.inspection_subject == 'SCRAPIE'" class="row value-container">
-                <div class="large-2 columns">                     
-                    {{ 'GENOTYPE' | translate }}: <editable-component [(editableValue)]="result.genotype"></editable-component>
-                    <!--{{ result.genotype }}-->
+
+            <!-- ONLY FOR SCRAPIE -->
+            <div *ngIf="labResult.illness == 'SCRAPIE'" class="row value-container">
+                <div class="large-2 columns">                    
+                    <strong>{{ 'GENOTYPE' | translate }}:</strong> 
+                    <editable-component [(editableValue)]="lab_result_item.genotype"></editable-component>
                 </div>
                 <div class="large-2 columns">
-                    {{ 'GENOTYPE CLASS' | translate }}: <editable-component [(editableValue)]="result.genotype_class"></editable-component>
-                    <!--{{ result.genotype_class }}-->
+                    <strong>{{ 'GENOTYPE CLASS' | translate }}:</strong> 
+                    <editable-component [(editableValue)]="lab_result_item.genotype_class"></editable-component>
                 </div>
                 <div class="large-3 columns end">
-                    {{ 'GENOTYPE WITH CONDON 141' | translate }}: <editable-component [(editableValue)]="result.genotype_with_condon"></editable-component>
+                    <strong>{{ 'GENOTYPE WITH CONDON 141' | translate }}: </strong>
+                    <editable-component [(editableValue)]="lab_result_item.genotype_with_codon_141"></editable-component>
                 </div>
             </div>
-            <div *ngIf="result.inspection_subject == 'MAEDI VISNA'" class="row value-container">
+
+            <!-- MAEDI VISNA (Zwoeger ziekte) -->
+            <div *ngIf="labResult.illness == 'MAEDI VISNA'" class="row value-container">
                 <div class="large-2 columns">
-                    {{ 'SUB REF' | translate }}: {{ result.sub_ref }}
+                    <strong>{{ 'SUB REF' | translate }}:</strong> 
+                    <editable-component [(editableValue)]="lab_result_item.sub_ref"></editable-component>
                 </div>
                 <div class="large-2 columns">
-                    {{ 'MVNP' | translate }}: {{ result.mvnp }}
+                    <strong>{{ 'MVNP' | translate }}:</strong>
+                    <editable-component [(editableValue)]="lab_result_item.mvnp"></editable-component>
                 </div>
                 <div class="large-2 columns">
-                    {{ 'MV_CAE POOL' | translate }}: {{ result.mv_caepool }}
+                    <strong>{{ 'MV_CAE POOL' | translate }}:</strong> 
+                    {{ lab_result_item.mv_cae_pool | translate }}
                 </div>
-                <div class="large-3 columns end">
-                    {{ 'VET NAME' | translate }}: {{ result.vet_name }}
+                <div class="large-2 columns">
+                    <strong>{{ 'MV_CAE IRA' | translate }}:</strong> 
+                    {{ lab_result_item.mv_cae_ira | translate }}
+                </div>
+                <div class="large-2 columns">
+                    <strong>{{ 'MV_CAEID' | translate }}: </strong> 
+                    {{ lab_result_item.mv_caegid | translate }}
+                </div>
+                <div class="large-2 columns end">
+                    <strong>{{ 'VET NAME' | translate }}: </strong>
+                    <editable-component [(editableValue)]="lab_result_item.veterinarian.name"></editable-component>
                 </div>
             </div>
         </div>

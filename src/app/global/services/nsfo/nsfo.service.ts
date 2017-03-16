@@ -27,9 +27,9 @@ export class NSFOService {
     public URI_HEALTH_INSPECTIONS: string = '/v1/health_inspections';
     public URI_HEALTH_LOCATION_LETTERS: string = '/v1/health_location_letters';
     
-    public URI_LIVESTOCK: string = '/v1/animals-livestock';
-    
+    public URI_LIVESTOCK: string = '/v1/animals-livestock';  
     public URI_SETTINGS: string = '/v1/settings';
+    public URI_LAB_RESULTS: string = '/v1/lab-results';
 
     private content_type: string = "Content-Type";
     private authorization: string = "Authorization";
@@ -63,6 +63,17 @@ export class NSFOService {
         headers.append(this.access_token, localStorage[this.ACCESS_TOKEN_NAMESPACE]);
 
         return this.http.get(this.API_SERVER_URL + uri, {headers: headers})
+            .map(res => res.json());
+    }
+
+    public doGetLabResultsRequest(inspectionId:string, ubn:string) {
+        let headers = new Headers();
+        headers.append(this.content_type, "application/json");
+        headers.append(this.access_token, localStorage[this.ACCESS_TOKEN_NAMESPACE]);
+        headers.append('inspectionId', inspectionId);
+        headers.append('ubn', ubn);
+
+        return this.http.get(this.API_SERVER_URL + this.URI_LAB_RESULTS, {headers: headers})
             .map(res => res.json());
     }
 

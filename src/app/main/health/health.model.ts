@@ -24,7 +24,57 @@ export class AnimalHealthRequest {
     public animals: Animal[] = []
 }
 
-class Direction {
+export class Address {
+    streetname_number:string;
+    postal_code:string;
+    city:string;
+}
+
+export class Owner {
+    name:string;
+    address:Address;
+}
+export class Veterinarian {
+    name:string;
+    address:Address;
+    email_address:string;
+}
+
+export class Direction {
     public type: string;
     public date: string;
+}
+
+export class LabResult {
+    public illness:string;
+    public ubn:string;
+    public owner:Owner;
+    public vetrenarian:Veterinarian;
+    public lab_results:Array<LabResultItem>;
+    public revision:number;
+    public inspectionId:string;
+}
+
+export class LabResultItem {
+    public animal:Animal;
+}
+
+export class LabResultScrapie extends LabResultItem{
+    sample_number:string;
+    mgx_sample_id:string;
+    genotype:string;
+    genotype_with_codon_141:string;
+    genotype_class:string;
+    reception_date:string;
+    result_date:string;
+}
+
+export class LabResultMaediVisna extends LabResultItem{
+    sub_ref:string;
+    ci_name:string;
+    date_sampled:string;
+    mvnp:number;
+    mv_cae_pool:string;
+    mv_cae_ira:string;
+    mv_caegid:string;
 }

@@ -1,7 +1,7 @@
 import {Component, Input} from "@angular/core";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {SettingsService} from "../../../../../global/services/settings/settings.service";
-import {AnimalHealthRequest} from "../../../health.model";
+import {AnimalHealthRequest, LabResultScrapie, LabResultMaediVisna, LabResult} from "../../../health.model";
 import {Router} from "@angular/router";
 import {AuthorizationComponent} from "./authorization/tableAuthorization.authorization";
 import {NSFOService} from "../../../../../global/services/nsfo/nsfo.service";
@@ -15,7 +15,7 @@ import {NSFOService} from "../../../../../global/services/nsfo/nsfo.service";
 
 export class HealthTableAuthorization {
     private requests: AnimalHealthRequest[] = [];
-    private results = [];
+    private lab_result:LabResult = new LabResult();
     private showAuthPage = false;
     private selectedRequest: AnimalHealthRequest = new AnimalHealthRequest();
 
@@ -36,25 +36,24 @@ export class HealthTableAuthorization {
         }
     }
     
-    // this.nsfo.doGetRequest(this.nsfo.URI_HEALTH_INSPECTIONS + '/' + inspectionId + '/results')
     private getResults(inspectionId) {
-        this.nsfo.doGetMockRequest('http://localhost:8081/api/results.json')
+        this.nsfo.doGetLabResultsRequest(inspectionId, this.selectedRequest.ubn)
             .subscribe(
                 res => {
-                    this.results = res.result;
+                    this.lab_result = res.result;
                 }
             )
     }
 
     private switchToAuthPage(request): void {
-        this.getResults(request.inspection_id);
         this.selectedRequest = request;
+        this.getResults(request.inspection_id);
         this.showAuthPage = true;
     }
 
     private switchToOverviewPage(switchPage): void {
         this.showAuthPage = switchPage;
         this.selectedRequest = new AnimalHealthRequest();
-        this.results = [];
+        this.lab_result = new LabResult;
     }
 }

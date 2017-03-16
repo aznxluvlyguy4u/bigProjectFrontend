@@ -6,7 +6,7 @@ import {SettingsService} from "../../../../../../global/services/settings/settin
 import {Datepicker} from "../../../../../../global/components/datepicker/datepicker.component";
 import {REACTIVE_FORM_DIRECTIVES} from "@angular/forms";
 import {ControlGroup, FormBuilder} from "@angular/common";
-import {AnimalHealthRequest} from "../../../../health.model";
+import {AnimalHealthRequest, LabResult} from "../../../../health.model";
 import {NSFOService} from "../../../../../../global/services/nsfo/nsfo.service";
 
 import { EditableComponent } from '../../../../../../global/components/editable/editable.component';
@@ -28,7 +28,7 @@ export class AuthorizationComponent {
     private suggestedHealthStatus: string;
     private counterValue = 0;
 
-    @Input() results = [];
+    @Input() labResult:LabResult = new LabResult();
     @Input() request: AnimalHealthRequest = new AnimalHealthRequest();
     @Output() showOverviewPage: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -41,8 +41,7 @@ export class AuthorizationComponent {
     }
 
     ngOnChanges() {
-        if(this.results) {
-            // this.getRequiredResultCount();
+        if(this.labResult) {
             this.getCurrentHealthStatus();
         }
     }
@@ -107,23 +106,23 @@ export class AuthorizationComponent {
     private suggestMaediVisnaHealthStatus(): string {
         let positiveCount = 0;
 
-        for(let result of this.results) {
-            if(result.mv_caepool == 'POSITIVE') {
+        for(let lab_result of this.labResult.lab_results) {
+            if(lab_result.mv_caepool == 'POSITIVE') {
                 positiveCount++
             }
         }
 
         if(this.currentHealthStatus == 'FREE (1 YEAR)' || this.currentHealthStatus == 'FREE (2 YEAR)') {
-            if(positiveCount > 0 || this.results.length < this.requiredCount) {
+            if(positiveCount > 0 || this.labResult.lab_results.length < this.requiredCount) {
                 return 'UNDER OBSERVATION'
             }
 
-            if(positiveCount == 0 && this.results.length >= this.requiredCount &&
+            if(positiveCount == 0 && this.labResult.lab_results.length >= this.requiredCount &&
                 this.currentHealthStatus == 'FREE (1 YEAR)') {
                 return 'FREE (2 YEAR)'
             }
 
-            if(positiveCount == 0 && this.results.length >= this.requiredCount &&
+            if(positiveCount == 0 && this.labResult.lab_results.length >= this.requiredCount &&
                 this.currentHealthStatus == 'FREE (2 YEAR)') {
                 return 'FREE (2 YEAR)'
             }
@@ -150,6 +149,24 @@ export class AuthorizationComponent {
         // TODO ADD LOGIC
 
         return '';
+    }
+
+    private saveLabResult(){
+        let body = {
+            result:this.labResult
+        }
+        this.savingInProgress = true;
+        this.nsfo.doPostRequest(this.nsfo.URI_LAB_RESULTS, body)
+        .subscribe(
+            res => {
+                console.log(res.result)
+                this.labResult = res.result;
+                this.savingInProgress = false;
+            },
+            err => {
+                this.savingInProgress = false;
+            }
+        );
     }
 
     private changeStatus(): void {

@@ -34,4 +34,4 @@
     </tbody>
 </table>
 
-<request-auth *ngIf="showAuthPage" [results]="results" [request]="selectedRequest" (showOverviewPage)="switchToOverviewPage($event)"></request-auth>
+<request-auth *ngIf="showAuthPage" [labResult]="lab_result" [request]="selectedRequest" (showOverviewPage)="switchToOverviewPage($event)"></request-auth>
