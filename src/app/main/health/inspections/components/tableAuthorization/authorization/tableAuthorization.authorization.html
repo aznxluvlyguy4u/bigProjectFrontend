@@ -1,30 +1,48 @@
 <div id="auth-page">
-    <pre>{{ labResult | json }}</pre>
     <span *ngIf="!isLoading && labResult.lab_results.length > 0">
-        <button type="button" (click)="goToOverviewPage()" class="small primary button">
-            <i class="fa fa-chevron-left fa-fw" aria-hidden="true"></i> {{ 'BACK TO OVERVIEW' | translate }}
-        </button>
+        <div class="row">
+            <div class="large-4 columns">
+                <button type="button" (click)="goToOverviewPage()" class="small primary button">
+                    <i class="fa fa-chevron-left fa-fw" aria-hidden="true"></i> {{ 'BACK TO OVERVIEW' | translate }}
+                </button>
+                <button type="button" (click)="saveLabResult()" class="small primary button">
+                    <i class="fa fa-floppy-o fa-fw" aria-hidden="true"></i> {{ 'SAVE LAB RESULT' | translate }} 
+                </button>
+            </div>
+            <div class="large-3 columns">
+                <div *ngIf="labResult.illness == 'SCRAPIE'">
+                    <strong>Scrapie Onderzoek</strong>
+                    <br>
+                    Referentie Nummer: {{ request.order_number }}
+                    <br>
+                    {{ 'CURRENT STATUS' | translate }}: {{ currentHStatus.scrapie_status | translate }}
+                    <br>
+                    Sinds: {{ currentHStatus.scrapie_check_date }}
+                </div>
+                <div *ngIf="labResult.illness == 'MAEDI VISNA'">
+                    <strong>Zwoegerziekte Onderzoek</strong>
+                    <br>
+                    Referentie Nummer: {{ request.order_number }}
+                    <br>
+                    {{ 'CURRENT STATUS' | translate }}: {{ currentHStatus.maedi_visna_status | translate }}
+                    <br>
+                    T/m: {{ currentHStatus.maedi_visna_check_date }}
+                </div>
+            </div>
+            <div class="large-3 columns">
+                <br>
+                {{ 'REQUIRED RESULTS COUNT' | translate }}: {{ request.required_animal_count }}
+                <br>
+                {{ 'RECEIVED RESULTS COUNT' | translate }}: {{ labResult.lab_results.length }}
+            </div>
 
-
-        <button type="button" (click)="saveLabResult()" class="small primary button">
-            <i class="fa fa-chevron-left fa-fw" aria-hidden="true"></i> {{ 'SAVE LAB RESULT' | translate }}
-        </button>
-
-
-        <span class="label-count">
-            {{ 'CURRENT STATUS' | translate }}: {{ currentHealthStatus | translate }}
-        </span>
-        <span *ngIf="currentHealthStatus == 'FREE (1 YEAR)' || currentHealthStatus == 'FREE (2 YEAR)'" class="label-count">
-            {{ 'REQUIRED RESULTS COUNT' | translate }}: {{ requiredCount }}
-        </span>
-        <span *ngIf="currentHealthStatus == 'FREE (1 YEAR)' || currentHealthStatus == 'FREE (2 YEAR)'" class="label-count">
-            {{ 'RECEIVED RESULTS COUNT' | translate }}: {{ labResult.lab_results.length }}
-        </span>
-        <span class="label-ubn pull-right">
-            {{ 'UBN' | translate }}: {{ request.ubn }}
-        </span>
-       
-        <strong>Revisie:</strong> {{ labResult.revision }}
+            <div class="large-2 columns">
+                 <span class="label-ubn pull-right">
+                    {{ 'UBN' | translate }}: {{ request.ubn }}
+                </span>
+            </div>
+        </div>
+        
         <div *ngFor="let lab_result_item of labResult.lab_results" class="callout">
             <div class="row result-container">
                 <div class="large-2 columns">
@@ -90,7 +108,7 @@
                 </div>
                 <div class="large-2 columns end">
                     <strong>{{ 'VET NAME' | translate }}: </strong>
-                    <editable-component [(editableValue)]="lab_result_item.veterinarian.name"></editable-component>
+                    <!--<editable-component [(editableValue)]="lab_result_item?.veterinarian?.name"></editable-component>-->
                 </div>
             </div>
         </div>
