@@ -27,6 +27,7 @@ export class AuthorizationComponent {
     private requiredCount: number;
     private suggestedHealthStatus: string;
     private counterValue = 0;
+    private currentHStatus:any;
 
     @Input() labResult:LabResult = new LabResult();
     @Input() request: AnimalHealthRequest = new AnimalHealthRequest();
@@ -50,27 +51,28 @@ export class AuthorizationComponent {
         this.nsfo.doGetRequest(this.nsfo.URI_HEALTH_UBN + '/' + this.request.ubn)
             .subscribe(
                 res => {
+                    this.currentHStatus = res.result;
                     let location = res.result;
                     let illness = this.request.inspection;
 
-                    if (illness == 'SCRAPIE') {
-                        this.currentHealthStatus = location.scrapie_status.replace(/-/g, ' ');
-                        this.suggestedHealthStatus = this.suggestScrapieHealthStatus();
+                    if (illness == 'SCRAPIE') {                     
+                            this.currentHealthStatus = location.scrapie_status; //.replace(/-/g, ' ');
+                            this.suggestedHealthStatus = this.suggestScrapieHealthStatus();                       
                     }
 
-                    if (illness == 'MAEDI VISNA') {
-                        this.currentHealthStatus = location.maedi_visna_status.replace(/-/g, ' ');
-                        this.suggestedHealthStatus = this.suggestMaediVisnaHealthStatus();
+                    if (illness == 'MAEDI VISNA') {                      
+                        this.currentHealthStatus = location.maedi_visna_status; //.replace(/-/g, ' ');
+                        this.suggestedHealthStatus = this.suggestMaediVisnaHealthStatus();                      
                     }
 
-                    if (illness == 'CAE') {
-                        this.currentHealthStatus = location.cae_status.replace(/-/g, ' ');
-                        this.suggestedHealthStatus = this.suggestMaediVisnaHealthStatus();
+                    if (illness == 'CAE') {                    
+                            this.currentHealthStatus = location.cae_status; //.replace(/-/g, ' ');
+                            this.suggestedHealthStatus = this.suggestMaediVisnaHealthStatus();                       
                     }
 
-                    if (illness == 'CL') {
-                        this.currentHealthStatus = location.cl_status.replace(/-/g, ' ');
-                        this.suggestedHealthStatus = this.suggestMaediVisnaHealthStatus();
+                    if (illness == 'CL') {                        
+                            this.currentHealthStatus = location.cl_status; //.replace(/-/g, ' ');
+                            this.suggestedHealthStatus = this.suggestMaediVisnaHealthStatus();                       
                     }
 
                     this.foundHealthStatusSuggestion = this.suggestedHealthStatus != '';
@@ -140,9 +142,12 @@ export class AuthorizationComponent {
             return 'UNDER INVESTIGATION'
         }
         
+        if(this.currentHealthStatus == null){
+            return '';
+        }
+
         return '';
     }
-
     private suggestScrapieHealthStatus(): string {
         let positiveCount = 0;
 
@@ -159,7 +164,6 @@ export class AuthorizationComponent {
         this.nsfo.doPostRequest(this.nsfo.URI_LAB_RESULTS, body)
         .subscribe(
             res => {
-                console.log(res.result)
                 this.labResult = res.result;
                 this.savingInProgress = false;
             },
@@ -186,7 +190,6 @@ export class AuthorizationComponent {
         this.nsfo.doPutRequest(this.nsfo.URI_HEALTH_INSPECTIONS, request)
             .subscribe(
                 res => {
-                    console.log(res);
                     let result = res.result;
                     this.request.status = result.status;
                     this.request.next_action = result.next_action;
@@ -194,9 +197,10 @@ export class AuthorizationComponent {
                         "first_name": result.action_taken_by.first_name,
                         "last_name": result.action_taken_by.last_name
                     };
-
+                    
+                    this.ngOnChanges();
                     this.savingInProgress = false;
-                    this.showOverviewPage.emit(true);
+                    this.showOverviewPage.emit(false);
                 },
                 err => {
                     this.savingInProgress = false;
