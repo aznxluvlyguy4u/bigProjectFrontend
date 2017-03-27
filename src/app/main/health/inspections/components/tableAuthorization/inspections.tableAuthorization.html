@@ -3,6 +3,7 @@
     <tr>
         <td> {{ 'UBN' | translate }} </td>
         <td> {{ 'NAME' | translate }} </td>
+        <td> {{ 'ORDER NUMBER' | translate }} </td>
         <td> {{ 'INSPECTION' | translate }} </td>
         <td> {{ 'REQUEST DATE' | translate }} </td>
         <td> {{ 'NEXT ACTION' | translate }} </td>
@@ -14,6 +15,7 @@
         <tr *ngFor="let request of requests">
             <td>{{ request.ubn }}</td>
             <td>{{ request.last_name }}</td>
+            <td>{{ request.order_number }}</td>
             <td>{{ request.inspection | translate }}</td>
             <td>
                 <span *ngIf="request.request_date">
