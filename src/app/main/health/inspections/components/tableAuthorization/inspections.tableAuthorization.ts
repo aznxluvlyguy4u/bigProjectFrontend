@@ -1,4 +1,4 @@
-import {Component, Input} from "@angular/core";
+import {Component, Input, Output} from "@angular/core";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {SettingsService} from "../../../../../global/services/settings/settings.service";
 import {AnimalHealthRequest, LabResultScrapie, LabResultMaediVisna, LabResult} from "../../../health.model";
@@ -18,7 +18,7 @@ export class HealthTableAuthorization {
     private lab_result:LabResult = new LabResult();
     private showAuthPage = false;
     private selectedRequest: AnimalHealthRequest = new AnimalHealthRequest();
-
+    
     @Input() animalHealthRequests: AnimalHealthRequest[];
 
     constructor(private settings: SettingsService, private router: Router, private nsfo: NSFOService) {}
@@ -53,6 +53,7 @@ export class HealthTableAuthorization {
 
     private switchToOverviewPage(switchPage): void {
         this.showAuthPage = switchPage;
+        this.getRequests();
         this.selectedRequest = new AnimalHealthRequest();
         this.lab_result = new LabResult;
     }
