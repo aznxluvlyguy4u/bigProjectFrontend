@@ -154,17 +154,25 @@
                             <td>
                                 <span *ngIf="!healthStatus.maedi_visna_status">--</span>
                                 <span *ngIf="healthStatus.maedi_visna_status">{{ healthStatus.maedi_visna_status | translate }}</span>
+                                <br>
+                                <button type="button" (click)="openLocationHealthModal(healthStatus, 'MAEDI_VISNA')" class="small primary button">
+                                    {{ 'EDIT' | translate }}
+                                </button>
                             </td>
                             <td>
                                 <span *ngIf="!healthStatus.scrapie_status">--</span>
                                 <span *ngIf="healthStatus.scrapie_status">{{ healthStatus.scrapie_status | translate }}</span>
+                                <br>
+                                <button type="button" (click)="openLocationHealthModal(healthStatus, 'SCRAPIE')" class="small primary button">
+                                    {{ 'EDIT' | translate }}
+                                </button>
                             </td>
                             <td>
-                                <span class="pull-right">
+                                <!--<span class="pull-right">
                                     <button type="button" (click)="openLocationHealthModal(healthStatus)" class="small primary button">
                                         {{ 'EDIT' | translate }}
                                     </button>
-                                </span>
+                                </span>-->
                             </td>
                         </tr>
                     </tbody>
@@ -345,7 +353,7 @@
 </div>
 
 <!--HEALTH STATUS MODAL-->
-<div class="reveal-overlay ghost-login-modal" [ngStyle]="{'display': locationHealthModalDisplay}">
+<!--<div class="reveal-overlay ghost-login-modal" [ngStyle]="{'display': locationHealthModalDisplay}">
     <div class="tiny reveal" [ngStyle]="{'display': locationHealthModalDisplay}">
         <div class="modal-header">
             {{ 'UBN' | translate }}: {{ selectedLocation.ubn }}
@@ -376,6 +384,87 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="large-2 columns">
+                            <label class="middle"> {{ 'SCRAPIE' | translate }} </label>
+                        </div>
+                        <div class="large-4 columns">
+                            <select [(ngModel)]="selectedLocation.scrapie_status">
+                                <option value=""> -- </option>
+                                <option *ngFor="let healthStatus of scrapieStatusOptions" value="{{ healthStatus }}">
+                                    {{ healthStatus | translate }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="large-2 columns">
+                            <label class="middle text-right"> {{ 'DATE SINCE' | translate }} </label>
+                        </div>
+                        <div class="large-4 columns end">
+                            <datepicker [formCtrl]="form.controls['scrapie_check_date']" [initDate]="selectedLocation.scrapie_check_date" [viewFormat]="settings.getViewDateFormat()" [modelFormat]="settings.getModelDateTimeFormat()"></datepicker>
+                        </div>
+                    </div>
+                    <div [formGroup]="form" class="row">
+                        <div class="large-2 columns">
+                            <label> {{ 'REASON OF CHANGE' | translate }} </label>
+                        </div>
+                        <div class="large-10 columns">
+                            <input formControlName="reason_of_change" type="text" maxlength="75">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <span class="pull-right">
+                <button class="tiny primary button" [disabled]="isChangingLocationHealth" (click)="setLocationHealthStatus()">
+                    <span *ngIf="!isChangingLocationHealth" (click)="setLocationHealthStatus()">
+                        {{ 'EDIT' | translate}}
+                    </span>
+                     <span *ngIf="isChangingLocationHealth">
+                         <i class="fa fa-gear fa-spin fa-fw"></i>
+                    </span>
+                </button>
+                <button class="tiny primary button" [disabled]="isChangingLocationHealth" (click)="closeLocationHealthModal(); cancelLocationHealth()">{{ 'CANCEL' | translate}}</button>
+            </span>
+        </div>
+    </div>
+</div>-->
+
+
+
+<!-- NEW MODAL -->
+<!--selectedLocationHealthStatusIllness-->
+<div class="reveal-overlay ghost-login-modal" [ngStyle]="{'display': locationHealthModalDisplay}">
+    <div class="tiny reveal" [ngStyle]="{'display': locationHealthModalDisplay}">
+        <div class="modal-header">
+            {{ 'UBN' | translate }}: {{ selectedLocation.ubn }}
+            <button type="button" class="pull-right" aria-label="Close modal" (click)="closeLocationHealthModal()">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            <div class="row">
+                <div class="large-12 columns">
+                    <div class="row" *ngIf="selectedLocationHealthStatusIllness == 'MAEDI_VISNA'">
+                        <div class="large-2 columns">
+                            <label class="middle"> {{ 'MAEDI VISNA' | translate }} </label>
+                        </div>
+                        <div class="large-4 columns">
+                            <select [(ngModel)]="selectedLocation.maedi_visna_status">
+                                <option value=""> -- </option>
+                                <option *ngFor="let healthStatus of maediVisnaStatusOptions" value="{{ healthStatus}}">
+                                    {{ healthStatus| translate }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="large-2 columns">
+                            <label class="middle text-right"> {{ 'DATE TILL' | translate }} </label>
+                        </div>
+                        <div class="large-4 columns end">
+                            <datepicker [formCtrl]="form.controls['maedi_visna_check_date']" [initDate]="selectedLocation.maedi_visna_check_date" [viewFormat]="settings.getViewDateFormat()" [modelFormat]="settings.getModelDateTimeFormat()"></datepicker>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="selectedLocationHealthStatusIllness == 'SCRAPIE'">
                         <div class="large-2 columns">
                             <label class="middle"> {{ 'SCRAPIE' | translate }} </label>
                         </div>

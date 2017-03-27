@@ -38,7 +38,10 @@ export class ClientDetailsComponent {
     private maediVisnaStatusOptions: string[] = MAEDI_VISNA_STATUS_OPTIONS;
     private scrapieStatusOptions: string[] = SCRAPIE_STATUS_OPTIONS;
     private form: ControlGroup;
-    
+    private selectedLocationHealthStatusIllness:string;
+    private selectedHealthStatus:any;
+
+
     constructor(
         private router: Router,
         private nsfo: NSFOService,
@@ -137,14 +140,36 @@ export class ClientDetailsComponent {
     private setLocationHealthStatus() {
         this.isChangingLocationHealth = true;
 
-        let request = {
-            "maedi_visna_status": this.selectedLocation.maedi_visna_status,
-            "maedi_visna_check_date": this.form.controls['maedi_visna_check_date'].value,
-            "scrapie_status": this.selectedLocation.scrapie_status,
-            "scrapie_check_date": this.form.controls['scrapie_check_date'].value,
-            "reason_of_change": this.form.controls['reason_of_change'].value
-        };
+        // let request = {
+        //     "maedi_visna_status": this.selectedLocation.maedi_visna_status,
+        //     "maedi_visna_check_date": this.form.controls['maedi_visna_check_date'].value,
+        //     "scrapie_status": this.selectedLocation.scrapie_status,
+        //     "scrapie_check_date": this.form.controls['scrapie_check_date'].value,
+        //     "reason_of_change": this.form.controls['reason_of_change'].value
+        // };
+        let request = {};
 
+        if(this.selectedLocationHealthStatusIllness == 'SCRAPIE')
+        {
+            request = {
+                "maedi_visna_status": this.selectedLocation.maedi_visna_status,
+                "maedi_visna_check_date": this.form.controls['maedi_visna_check_date'].value,
+                "scrapie_status": this.selectedLocation.scrapie_status,
+                "scrapie_check_date": this.form.controls['scrapie_check_date'].value,
+                "scrapie_reason_of_edit": this.form.controls['reason_of_change'].value
+            };
+        }
+        if(this.selectedLocationHealthStatusIllness == 'MAEDI_VISNA')
+        {
+            request = {
+                "maedi_visna_status": this.selectedLocation.maedi_visna_status,
+                "maedi_visna_check_date": this.form.controls['maedi_visna_check_date'].value,
+                "maedi_visna_reason_of_edit": this.form.controls['reason_of_change'].value
+                "scrapie_status": this.selectedLocation.scrapie_status,
+                "scrapie_check_date": this.form.controls['scrapie_check_date'].value,
+            };
+        }
+        
         this.nsfo.doPutRequest(this.nsfo.URI_HEALTH_UBN + '/' + this.selectedLocation.ubn, request)
             .subscribe(
                 res => {
@@ -169,7 +194,9 @@ export class ClientDetailsComponent {
         this.userModalDisplay = 'none';
     }
 
-    private openLocationHealthModal(location: LocationHealthStatus) {
+    private openLocationHealthModal(location: LocationHealthStatus, illness:string) {
+        this.form.controls['reason_of_change'].updateValue('');
+        this.selectedLocationHealthStatusIllness = illness;
         this.selectedLocation = location;
         this.tempSelectedLocation = _.clone(location);
         this.locationHealthModalDisplay = 'block';
