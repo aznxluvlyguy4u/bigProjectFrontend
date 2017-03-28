@@ -78,3 +78,9 @@ export class LabResultMaediVisna extends LabResultItem{
     mv_cae_ira:string;
     mv_caegid:string;
 }
+
+export class HealthStatus {
+    status:string;
+    check_date:string;
+    reason_of_edit:string;
+}
