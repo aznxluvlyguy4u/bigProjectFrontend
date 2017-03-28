@@ -5,6 +5,7 @@ const HtmlWebpack = require('html-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack');
 const ChunkWebpack = webpack.optimize.CommonsChunkPlugin;
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 
 /**
@@ -86,8 +87,37 @@ module.exports = {
         new webpack.DefinePlugin({
             NSFO_API_SERVER_URL: JSON.stringify(process.env.NSFO_API_SERVER_URL_STAGING),
             NSFO_USER_ENV_URL: JSON.stringify(process.env.NSFO_USER_ENV_URL_STAGING),
-        })
+        }),
+        new CopyWebpackPlugin([
+            {
+                context: 'src/assets',
+                from: 'i18n/*',
+                to: 'assets'
+            },
+            {
+                context: 'src/assets',
+                from: 'images/*',
+                to: 'assets'
+            },
+            {
+                context: 'src/assets',
+                from: 'js/*',
+                to: 'assets'
+            },
+            {
+                context: 'src/assets',
+                from: '.htaccess',
+                to:'.htaccess',
+                dot: true
+            },
+            {
+                context: 'api',
+                from: '*',
+                to: 'api'
+            }
+        ]),
     ],
+    
     resolve: {
         modulesDirectories: ['node_modules'],
         extensions: ['', '.js', '.ts']

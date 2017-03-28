@@ -116,7 +116,7 @@ module.exports = {
                 to: 'assets'
             },
             {
-                context: 'src',
+                context: 'src/assets',
                 from: '.htaccess',
                 dot: true
             },
