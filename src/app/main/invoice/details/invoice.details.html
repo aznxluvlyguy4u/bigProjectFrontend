@@ -13,7 +13,6 @@
         <div class="large-2 columns">
             <label>
                 {{ 'LAST NAME' | translate }}
-                <input type="text">
             </label>
         </div>
         <div class="large-2 columns end">
@@ -102,7 +101,7 @@
     <div class="row invoice-rules">
         <div class="large-6 columns">
             <label>
-                {{ 'INVOICE RULE' | translate }}
+                {{ 'STANDARD INVOICE RULE' | translate }}
                 <select [(ngModel)]="selectedInvoiceId">
                     <option value="">--</option>
                     <option *ngFor="let rule of invoiceRulesOptions" value="{{ rule.id }}">{{ rule.description }}</option>
@@ -112,7 +111,47 @@
         <div class="large-2 columns end">
             <label>
                 &nbsp;
-                <button [disabled]="!selectedInvoiceId" (click)="addInvoiceRule()" class="small primary button expanded">
+                <button [disabled]="!selectedInvoiceId" (click)="addInvoiceRuleTemplate()" class="small primary button expanded">
+                    <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
+                    {{ 'ADD' | translate }}
+                </button>
+            </label>
+        </div>
+    </div>
+    <div class="row invoice-rules" >
+        <div class="large-12 columns">
+            <label>{{'CUSTOM INVOICE RULE' | translate }}</label>
+        </div>
+        <div class="large-6 columns">
+            <div [formGroup]="form" id="invoiceRule">
+                <div class="large-12">
+                    <label>
+                        {{'DESCRIPTION' | translate}}
+                    </label>
+                    <input type="text" [(ngModel)]="temporaryRule.description" formControlName="description">
+                </div>
+                <div class="large-12">
+                    <label>
+                        {{'PRICE (EXCL. VAT)' | translate}}
+                    </label>
+                    <input type="text" [(ngModel)]="temporaryRule.price_excl_vat" formControlName="price_excl_vat">
+                </div>
+                <div class="large-12">
+                    <label>
+                        {{'VAT PERCENTAGE RATE' | translate}}
+                    </label>
+                    <select [(ngModel)]="temporaryRule.vat_percentage_rate" formControlName="vat_percentage_rate">
+                        <option value="0"> 0% </option>
+                        <option value="6"> 6% </option>
+                        <option value="21"> 21% </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="large-2 columns end">
+            <label>
+                &nbsp;
+                <button [disabled]="!temporaryRule" (click)="addInvoiceRule()" class="small primary button expanded">
                     <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
                     {{ 'ADD' | translate }}
                 </button>
