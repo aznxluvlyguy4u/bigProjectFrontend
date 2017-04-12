@@ -4,7 +4,7 @@
             <label class="middle"> {{ 'IBAN' | translate }} </label>
         </div>
         <div class="large-4 columns end">
-            <input type="text" formControlName="iban" maxlength="20">
+            <input type="text" [(ngModel)]="invoiceSenderDetails.iban" formControlName="iban" maxlength="20" value="{{invoiceSenderDetails.iban}}">
         </div>
     </div>
     <div class="row">
@@ -12,7 +12,7 @@
             <label class="middle"> {{ 'KVK NUMBER' | translate }} </label>
         </div>
         <div class="large-4 columns end">
-            <input type="text" formControlName="kvk_number" maxlength="20">
+            <input [(ngModel)]="invoiceSenderDetails.chamber_of_commerce_number" type="text" formControlName="kvk_number" maxlength="20" value="{{invoiceSenderDetails.chamber_of_commerce_number}}">
         </div>
     </div>
     <div class="row">
@@ -20,7 +20,7 @@
             <label class="middle"> {{ 'BTW NUMBER' | translate }} </label>
         </div>
         <div class="large-4 columns end">
-            <input type="text" formControlName="btw_number" maxlength="20">
+            <input type="text" [(ngModel)]="invoiceSenderDetails.vat_number" formControlName="btw_number" maxlength="20" value="{{invoiceSenderDetails.vat_number}}">
         </div>
     </div>
     <div class="row">
@@ -28,7 +28,7 @@
             <label class="middle"> {{ 'STREET NAME' | translate }} </label>
         </div>
         <div class="large-4 columns end">
-            <input type="text" formControlName="street_name" maxlength="30">
+            <input type="text" [(ngModel)]="senderAddress.street_name" formControlName="street_name" maxlength="30" value="{{senderAddress.street_name}}">
         </div>
     </div>
     <div class="row">
@@ -36,7 +36,7 @@
             <label class="middle"> {{ 'STREET NUMBER' | translate }} </label>
         </div>
         <div class="large-4 columns end">
-            <input type="text" formControlName="street_number" maxlength="10">
+            <input type="text" [(ngModel)]="senderAddress.address_number" formControlName="address_number" maxlength="10" value="{{senderAddress.address_number}}">
         </div>
     </div>
     <div class="row">
@@ -44,7 +44,7 @@
             <label class="middle"> {{ 'STREET NUMBER SUFFIX' | translate }} </label>
         </div>
         <div class="large-4 columns end">
-            <input type="text" formControlName="address_suffix" maxlength="10">
+            <input type="text" [(ngModel)]="senderAddress.suffix" formControlName="suffix" maxlength="10" value="{{senderAddress.suffix}}">
         </div>
     </div>
     <div class="row">
@@ -52,7 +52,7 @@
             <label class="middle"> {{ 'POSTAL CODE' | translate }} </label>
         </div>
         <div class="large-4 columns end">
-            <input type="text" formControlName="postal_code" maxlength="6">
+            <input type="text" [(ngModel)]="senderAddress.postal_code" formControlName="postal_code" maxlength="6" value="{{senderAddress.postal_code}}">
         </div>
     </div>
     <div class="row">
@@ -60,13 +60,13 @@
             <label class="middle"> {{ 'PAYMENT DEADLINE' | translate }} ({{ 'DAYS' | translate }}) </label>
         </div>
         <div class="large-4 columns end">
-            <input type="text" formControlName="payment_deadline" maxlength="3">
+            <input type="text" [(ngModel)]="invoiceSenderDetails.payment_deadline_in_days" formControlName="payment_deadline" maxlength="3">
         </div>
     </div>
     <div class="row">
         <div class="large-push-2 large-4 columns">
             <span class="pull-right">
-                <button class="tiny primary button">{{ 'SAVE' | translate }}</button>
+                <button [disabled]="selectedInvoiceSenderDetails" *ngIf="invoiceSenderDetails.id != undefined" (click)="UpdateInvoiceSenderDetails()" class="tiny primary button">{{ 'SAVE' | translate }}</button>
             </span>
         </div>
     </div>
