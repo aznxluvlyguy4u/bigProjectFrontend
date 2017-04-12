@@ -2,22 +2,22 @@ import _ = require("lodash");
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {Component} from "@angular/core";
 import {ROUTER_DIRECTIVES} from "@angular/router";
-import {InvoiceRule} from "../../config.model";
+import {InvoiceRuleTemplate} from "../../config.model";
 import {FormGroup, FormBuilder, REACTIVE_FORM_DIRECTIVES, Validators} from "@angular/forms";
 import {NSFOService} from "../../../../global/services/nsfo/nsfo.service";
 
 @Component({
     directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES],
-    template: require('./invoicesRules.invoices.html'),
+    template: require('./invoicesRuleTemplates.invoices.html'),
     pipes: [TranslatePipe]
 })
 
-export class InvoicesRulesComponent {
-    private rules: InvoiceRule[] = [];
-    private generalRules: InvoiceRule[] = [];
-    private animalHealthRules: InvoiceRule[] = [];
-    private selectedRule: InvoiceRule = new InvoiceRule();
-    private selectedRuleTemp: InvoiceRule;
+export class InvoicesRuleTemplatesComponent {
+    private rules: InvoiceRuleTemplate[] = [];
+    private generalRules: InvoiceRuleTemplate[] = [];
+    private animalHealthRules: InvoiceRuleTemplate[] = [];
+    private selectedRule: InvoiceRuleTemplate = new InvoiceRuleTemplate();
+    private selectedRuleTemp: InvoiceRuleTemplate;
     private displayModal: string = 'none';
     private isModalEditMode: boolean = false;
     private isValidForm: boolean = true;
@@ -38,7 +38,7 @@ export class InvoicesRulesComponent {
 
     private getInvoiceRules() {
         this.nsfo
-            .doGetRequest(this.nsfo.URI_SETTINGS + '/invoice-rules')
+            .doGetRequest(this.nsfo.URI_INVOICE_RULE_TEMPLATE)
             .subscribe(
                 res => {
                     this.rules = res.result;
@@ -73,7 +73,7 @@ export class InvoicesRulesComponent {
             this.selectedRule.sort_order = this.rules.length;
 
             this.nsfo
-                .doPostRequest(this.nsfo.URI_SETTINGS + '/invoice-rules' , this.selectedRule)
+                .doPostRequest(this.nsfo.URI_INVOICE_RULE_TEMPLATE , this.selectedRule)
                 .subscribe(
                     res => {
                         let rule = res.result;
@@ -103,7 +103,7 @@ export class InvoicesRulesComponent {
 
         if(this.form.valid) {
             this.nsfo
-                .doPutRequest(this.nsfo.URI_SETTINGS + '/invoice-rules' , this.selectedRule)
+                .doPutRequest(this.nsfo.URI_INVOICE_RULE_TEMPLATE, this.selectedRule)
                 .subscribe(
                     res => {
                         switch (this.selectedRule.category) {
@@ -126,10 +126,10 @@ export class InvoicesRulesComponent {
         }
     }
 
-    private removeInvoiceRule(rule: InvoiceRule) {
+    private removeInvoiceRule(rule: InvoiceRuleTemplate) {
         console.log('test');
         this.nsfo
-            .doDeleteRequest(this.nsfo.URI_SETTINGS + '/invoice-rules/' + rule.id)
+            .doDeleteRequest(this.nsfo.URI_INVOICE_RULE_TEMPLATE + '/' + rule.id)
             .subscribe(
                 res => {
                     console.log('test');
@@ -147,7 +147,7 @@ export class InvoicesRulesComponent {
         }
     }
     
-    private openModal(isEditMode: boolean = false, category: string, rule: InvoiceRule): void {
+    private openModal(isEditMode: boolean = false, category: string, rule: InvoiceRuleTemplate): void {
         this.isModalEditMode = isEditMode;
         this.displayModal = 'block';
 
@@ -171,7 +171,7 @@ export class InvoicesRulesComponent {
 
     private closeModal(): void {
         this.displayModal = 'none';
-        this.selectedRule = new InvoiceRule();
+        this.selectedRule = new InvoiceRuleTemplate();
         this.resetValidation();
     }
 
