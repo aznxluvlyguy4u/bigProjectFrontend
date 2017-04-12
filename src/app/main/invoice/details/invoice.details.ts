@@ -1,12 +1,15 @@
 var _ = require('lodash');
 import {Component} from "@angular/core";
 import {Subscription} from "rxjs/Rx";
-import {Router, ActivatedRoute} from "@angular/router";
+import {Router, ActivatedRoute, ROUTER_DIRECTIVES} from "@angular/router";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
+import {FormGroup, FormBuilder, REACTIVE_FORM_DIRECTIVES, Validators} from "@angular/forms";
 import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
-import {InvoiceRule, Invoice} from "../invoice.model";
+import {InvoiceRuleTemplate, Invoice, InvoiceRule} from "../invoice.model";
+
 
 @Component({
+    directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES],
     template: require('./invoice.details.html'),
     pipes: [TranslatePipe]
 })
@@ -17,16 +20,22 @@ export class InvoiceDetailsComponent {
     private pageMode: string;
     private invoiceId: string;
     private selectedInvoiceId: string = '';
-    private invoiceRulesOptions: InvoiceRule[] = [];
-    
+    private invoiceRuleTemplatesOptions: InvoiceRuleTemplate[] = [];
+    private temporaryRule = new InvoiceRuleTemplate();
     private invoice: Invoice = new Invoice;
-    
+    private form: FormGroup;
+
     private totalExclVAT: number = 0;
     private totalInclVAT: number = 0;
     private vatCalculations = [];
 
-    constructor(private router: Router, private activatedRoute: ActivatedRoute, private nsfo: NSFOService) {
+    constructor( private fb: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute, private nsfo: NSFOService) {
         this.getInvoiceRulesOptions();
+        this.form = fb.group({
+            description: ['', Validators.required],
+            price_excl_vat: ['', Validators.required],
+            vat_percentage_rate: ['', Validators.required],
+        });
     }
 
     ngOnInit() {
@@ -45,17 +54,23 @@ export class InvoiceDetailsComponent {
     }
 
     private getInvoiceRulesOptions(): void {
-        this.nsfo.doGetRequest(this.nsfo.URI_SETTINGS + '/invoice-rules')
+        this.nsfo.doGetRequest(this.nsfo.URI_INVOICE_RULE_TEMPLATE)
             .subscribe(
                 res => {
-                    this.invoiceRulesOptions = <InvoiceRule[]> res.result;
+                    this.invoiceRuleTemplatesOptions = <InvoiceRuleTemplate[]> res.result;
                 }
             )
     }
     
     private addInvoiceRule(): void {
+            this.invoice.rules.push(this.temporaryRule);
+            this.doVATCalculations();
+            this.temporaryRule = new InvoiceRuleTemplate();
+    }
+
+    private addInvoiceRuleTemplate(): void {
         if (this.selectedInvoiceId) {
-            let invoiceRule = _.find(this.invoiceRulesOptions, function(o) {
+            let invoiceRule = _.find(this.invoiceRuleTemplatesOptions, function(o) {
                 return o.id == this.selectedInvoiceId
             });
 
@@ -66,6 +81,12 @@ export class InvoiceDetailsComponent {
 
     private removeInvoiceRule(invoiceRule: InvoiceRule): void {
         let index = this.invoice.rules.indexOf(invoiceRule);
+        this.invoice.rules.splice(index, 1);
+        this.doVATCalculations();
+    }
+
+    private removeInvoiceRuleTemplate(invoiceRuleTemplate: InvoiceRuleTemplate): void {
+        let index = this.invoice.rules.indexOf(invoiceRuleTemplate);
         this.invoice.rules.splice(index, 1);
         this.doVATCalculations();
     }
