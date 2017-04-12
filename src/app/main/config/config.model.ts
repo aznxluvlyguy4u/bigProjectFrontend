@@ -20,11 +20,31 @@ export class HealthLetter {
     public first_name: string;
 }
 
-export class InvoiceRule {
+export class InvoiceRuleTemplate {
     public id: number;
     public description: string;
     public vat_percentage_rate: number;
     public price_excl_vat: number;
     public sort_order: number;
     public category: string;
+}
+
+export class InvoiceSenderDetails {
+    public id: number;
+    public address: Address;
+    public chamber_of_commerce_number: string;
+    public vat_number: string;
+    public iban: string;
+    public payment_deadline_in_days: number;
+    public is_deleted: boolean;
+}
+
+export class Address {
+    public street_name: string;
+    public address_number: string;
+    public suffix: string;
+    public postal_code: string;
+    public city: string;
+    public state: string;
+    public country: string;
 }
