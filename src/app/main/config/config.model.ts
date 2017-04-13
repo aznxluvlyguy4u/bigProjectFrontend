@@ -27,6 +27,7 @@ export class InvoiceRuleTemplate {
     public price_excl_vat: number;
     public sort_order: number;
     public category: string;
+    public type: string;
 }
 
 export class InvoiceSenderDetails {
