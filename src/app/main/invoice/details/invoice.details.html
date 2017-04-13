@@ -134,7 +134,7 @@
                     <label>
                         {{'PRICE (EXCL. VAT)' | translate}}
                     </label>
-                    <input type="text" [(ngModel)]="temporaryRule.price_excl_vat" formControlName="price_excl_vat">
+                    <input type="number" [(ngModel)]="temporaryRule.price_excl_vat" formControlName="price_excl_vat">
                 </div>
                 <div class="large-12">
                     <label>
@@ -179,7 +179,7 @@
                 <tbody>
                     <tr *ngFor="let rule of invoice.rules">
                         <td width="1">
-                            <i class="fa fa-times fa-fw remove-button" (click)="removeInvoiceRule(rule)" aria-hidden="true"></i>
+                            <i class="fa fa-times fa-fw remove-button" (click)="removeInvoiceRuleTemplate(rule)" aria-hidden="true"></i>
                         </td>
                         <td>
                             {{rule.description}}
