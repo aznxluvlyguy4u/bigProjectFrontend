@@ -8,7 +8,7 @@ export class Invoice {
     public invoice_date: string;
     public status: string;
     public reminders: number;
-    public rules: InvoiceRule[] = [];
+    public rules: InvoiceRuleTemplate[] = [];
 }
 
 export class InvoiceRule {
