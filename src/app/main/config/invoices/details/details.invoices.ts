@@ -21,7 +21,6 @@ export class InvoicesNSFODetailsComponent {
     constructor(private fb: FormBuilder, private nsfo: NSFOService) {
 
         this.getInvoiceSenderDetails();
-
         this.form = fb.group({
             iban: ['', Validators.required],
             kvk_number: ['', Validators.required],

@@ -68,7 +68,7 @@ export class InvoicesRuleTemplatesComponent {
     private addInvoiceRule() {
         this.isValidForm = true;
         this.isSending = true;
-
+        this.selectedRule.type = "standard";
         if(this.form.valid) {
             this.selectedRule.sort_order = this.rules.length;
 
@@ -129,7 +129,7 @@ export class InvoicesRuleTemplatesComponent {
     private removeInvoiceRule(rule: InvoiceRuleTemplate) {
         console.log('test');
         this.nsfo
-            .doDeleteRequest(this.nsfo.URI_INVOICE_RULE_TEMPLATE + '/' + rule.id)
+            .doDeleteRequest(this.nsfo.URI_INVOICE_RULE_TEMPLATE + '/' + rule.id.toString(), "")
             .subscribe(
                 res => {
                     console.log('test');
