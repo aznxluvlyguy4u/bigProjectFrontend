@@ -21,7 +21,8 @@ export class InvoiceDetailsComponent {
     private invoiceId: string;
     private selectedInvoiceId: string = '';
     private invoiceRuleTemplatesOptions: InvoiceRuleTemplate[] = [];
-    private temporaryRule = new InvoiceRuleTemplate();
+    private temporaryRule: InvoiceRuleTemplate = new InvoiceRuleTemplate();
+    private temporaryId: number;
     private invoice: Invoice = new Invoice;
     private form: FormGroup;
 
@@ -63,8 +64,14 @@ export class InvoiceDetailsComponent {
     }
     
     private addInvoiceRule(): void {
-            this.invoice.rules.push(this.temporaryRule);
-            this.doVATCalculations();
+            let temporaryInvoiceRule = new InvoiceRuleTemplate();
+            temporaryInvoiceRule.type = "custom";
+            temporaryInvoiceRule.category = "GENERAL";
+            temporaryInvoiceRule.sort_order = 1;
+            temporaryInvoiceRule.vat_percentage_rate = this.temporaryRule.vat_percentage_rate;
+            temporaryInvoiceRule.price_excl_vat = this.temporaryRule.price_excl_vat;
+            temporaryInvoiceRule.description = this.temporaryRule.description;
+            this.addCustomInvoiceRule(temporaryInvoiceRule);
             this.temporaryRule = new InvoiceRuleTemplate();
     }
 
@@ -79,14 +86,12 @@ export class InvoiceDetailsComponent {
         }
     }
 
-    private removeInvoiceRule(invoiceRule: InvoiceRule): void {
-        let index = this.invoice.rules.indexOf(invoiceRule);
-        this.invoice.rules.splice(index, 1);
-        this.doVATCalculations();
-    }
-
     private removeInvoiceRuleTemplate(invoiceRuleTemplate: InvoiceRuleTemplate): void {
         let index = this.invoice.rules.indexOf(invoiceRuleTemplate);
+        console.log(this.invoice.rules[index]);
+        if (this.invoice.rules[index].type == 'custom'){
+            this.deleteCustomInvoiceRule(this.invoice.rules[index].id);
+        }
         this.invoice.rules.splice(index, 1);
         this.doVATCalculations();
     }
@@ -126,5 +131,30 @@ export class InvoiceDetailsComponent {
         }
 
         this.totalInclVAT += this.totalExclVAT;
+    }
+
+    private addCustomInvoiceRule(newRule: InvoiceRuleTemplate){
+        this.nsfo
+            .doPostRequest(this.nsfo.URI_INVOICE_RULE_TEMPLATE, newRule)
+            .subscribe(
+                res => {
+                    this.invoice.rules.push(res.result);
+                    this.doVATCalculations();
+                }
+            );
+    }
+
+    private updateCustomInvoiceRule(){
+
+    }
+
+    private deleteCustomInvoiceRule(id: number){
+        this.nsfo
+            .doDeleteRequest(this.nsfo.URI_INVOICE_RULE_TEMPLATE + "/" + id.toString(), "")
+            .subscribe(
+                res => {
+                    console.log("custom rule deleted");
+                }
+            );
     }
 }
