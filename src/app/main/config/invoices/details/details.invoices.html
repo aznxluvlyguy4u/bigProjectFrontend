@@ -1,6 +1,14 @@
 <div id="nsfo-details" [formGroup]="form">
     <div class="row">
         <div class="large-2 columns">
+            <label class="middle">{{ 'NAME' | translate }}</label>
+        </div>
+        <div class="large-4 columns end">
+            <input type="text" [(ngModel)]="invoiceSenderDetails.name" formControlName="name" value="{{invoiceSenderDetails.name}}">
+        </div>
+    </div>
+    <div class="row">
+        <div class="large-2 columns">
             <label class="middle"> {{ 'IBAN' | translate }} </label>
         </div>
         <div class="large-4 columns end">
@@ -44,7 +52,7 @@
             <label class="middle"> {{ 'STREET NUMBER SUFFIX' | translate }} </label>
         </div>
         <div class="large-4 columns end">
-            <input type="text" [(ngModel)]="senderAddress.suffix" formControlName="suffix" maxlength="10" value="{{senderAddress.suffix}}">
+            <input type="text" [(ngModel)]="senderAddress.address_number_suffix" formControlName="suffix" maxlength="10" value="{{senderAddress.suffix}}">
         </div>
     </div>
     <div class="row">
@@ -66,7 +74,7 @@
     <div class="row">
         <div class="large-push-2 large-4 columns">
             <span class="pull-right">
-                <button [disabled]="selectedInvoiceSenderDetails" *ngIf="invoiceSenderDetails.id != undefined" (click)="UpdateInvoiceSenderDetails()" class="tiny primary button">{{ 'SAVE' | translate }}</button>
+                <button [disabled]="selectedInvoiceSenderDetails" (click)="CreateInvoiceSenderDetails()" class="tiny primary button">{{ 'SAVE' | translate }}</button>
             </span>
         </div>
     </div>
