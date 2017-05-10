@@ -26,6 +26,8 @@ export class NSFOService {
 
     public URI_CLIENTS: string = '/v1/companies';
 
+    public URI_COMPANIES_INVOICE: string = '/v1/companies/invoice/info';
+
     public URI_HEALTH_COMPANY: string = '/v1/health/company';
     public URI_HEALTH_UBN: string = '/v1/health/ubn';
     public URI_HEALTH_INSPECTIONS: string = '/v1/health_inspections';
