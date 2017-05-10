@@ -32,6 +32,7 @@ export class InvoiceRuleTemplate {
 
 export class InvoiceSenderDetails {
     public id: number;
+    public name: string;
     public address: Address;
     public chamber_of_commerce_number: string;
     public vat_number: string;
@@ -43,7 +44,7 @@ export class InvoiceSenderDetails {
 export class Address {
     public street_name: string;
     public address_number: string;
-    public suffix: string;
+    public address_number_suffix: string;
     public postal_code: string;
     public city: string;
     public state: string;
