@@ -1,14 +1,21 @@
 var _ = require('lodash');
-import {Component} from "@angular/core";
+import {ApplicationRef, Component, NgZone} from "@angular/core";
 import {Subscription} from "rxjs/Rx";
 import {Router, ActivatedRoute, ROUTER_DIRECTIVES} from "@angular/router";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {FormGroup, FormBuilder, REACTIVE_FORM_DIRECTIVES, Validators} from "@angular/forms";
 import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
-import {InvoiceRuleTemplate, Invoice, InvoiceRule} from "../invoice.model";
-
+import {InvoiceRuleTemplate, Invoice, Company, Local_Location, InvoiceSenderDetails, Address} from "../invoice.model";
 
 @Component({
+    selector: 'ng-select',
+    properties: [
+        'allowClear',
+        'placeholder',
+        'items',
+        'multiple',
+        'showSearchInputInDropdown'
+    ],
     directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES],
     template: require('./invoice.details.html'),
     pipes: [TranslatePipe]
@@ -16,22 +23,31 @@ import {InvoiceRuleTemplate, Invoice, InvoiceRule} from "../invoice.model";
 
 export class InvoiceDetailsComponent {
     private dataSub: Subscription;
+    private companies: Company[] = [];
+    private locations: Local_Location[] = [];
+    private senderDetails: InvoiceSenderDetails = new InvoiceSenderDetails();
     private pageTitle: string;
     private pageMode: string;
     private invoiceId: string;
-    private selectedInvoiceId: string = '';
+    private selectedCompany: Company = new Company();
+    private selectedLocation: Local_Location = new Local_Location();
+    private selectedInvoiceRuleId: number;
     private invoiceRuleTemplatesOptions: InvoiceRuleTemplate[] = [];
     private temporaryRule: InvoiceRuleTemplate = new InvoiceRuleTemplate();
-    private temporaryId: number;
+    private companyName: string = "";
     private invoice: Invoice = new Invoice;
     private form: FormGroup;
-
+    private company: FormGroup;
+    private showCompanies: boolean = false;
+    private showLocations: boolean = false;
+    private onlyView: boolean = false;
     private totalExclVAT: number = 0;
     private totalInclVAT: number = 0;
     private vatCalculations = [];
 
-    constructor( private fb: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute, private nsfo: NSFOService) {
+    constructor(private fb: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute, private nsfo: NSFOService) {
         this.getInvoiceRulesOptions();
+        this.getSenderDetails();
         this.form = fb.group({
             description: ['', Validators.required],
             price_excl_vat: ['', Validators.required],
@@ -40,18 +56,41 @@ export class InvoiceDetailsComponent {
     }
 
     ngOnInit() {
+        console.log("testing on init");
         this.dataSub = this.activatedRoute.params.subscribe(params => {
             this.pageMode = params['mode'];
-
             if(this.pageMode == 'edit') {
                 this.pageTitle = 'EDIT INVOICE';
                 this.invoiceId = params['id'];
+                this.nsfo.doGetRequest(this.nsfo.URI_INVOICE + "/" + this.invoiceId)
+                    .subscribe(res => {
+                        console.log(res.result);
+                        this.invoice = res.result;
+                        this.invoice.invoice_rules = res.result['invoice_rules'];
+                        this.doVATCalculations();
+                    });
             }
 
             if(this.pageMode == 'new') {
                 this.pageTitle = 'NEW INVOICE';
+                this.invoice.invoice_number = "--";
+            }
+
+            if (this.pageMode == "view") {
+                this.pageTitle = 'VIEW INVOICE';
+                this.invoiceId = params['id'];
+                this.nsfo.doGetRequest(this.nsfo.URI_INVOICE + "/" + this.invoiceId)
+                    .subscribe(res => {
+                        console.log(res.result);
+                        this.invoice = res.result;
+                        this.senderDetails = this.invoice['sender_details'];
+                        this.invoice.invoice_rules = res.result['invoice_rules_locked'];
+                        this.doVATCalculations();
+                    });
+                this.onlyView = true;
             }
         });
+        console.log(this.pageMode);
     }
 
     private getInvoiceRulesOptions(): void {
@@ -59,6 +98,7 @@ export class InvoiceDetailsComponent {
             .subscribe(
                 res => {
                     this.invoiceRuleTemplatesOptions = <InvoiceRuleTemplate[]> res.result;
+                    console.log(this.invoiceRuleTemplatesOptions);
                 }
             )
     }
@@ -76,23 +116,26 @@ export class InvoiceDetailsComponent {
     }
 
     private addInvoiceRuleTemplate(): void {
-        if (this.selectedInvoiceId) {
+        let selectedId = this.selectedInvoiceRuleId;
+        console.log(this.selectedInvoiceRuleId);
+        if (this.selectedInvoiceRuleId) {
             let invoiceRule = _.find(this.invoiceRuleTemplatesOptions, function(o) {
-                return o.id == this.selectedInvoiceId
+                console.log(selectedId);
+                return o.id == selectedId;
             });
 
-            this.invoice.rules.push(invoiceRule);
+            this.invoice.invoice_rules.push(invoiceRule);
             this.doVATCalculations();
         }
     }
 
     private removeInvoiceRuleTemplate(invoiceRuleTemplate: InvoiceRuleTemplate): void {
-        let index = this.invoice.rules.indexOf(invoiceRuleTemplate);
-        console.log(this.invoice.rules[index]);
-        if (this.invoice.rules[index].type == 'custom'){
-            this.deleteCustomInvoiceRule(this.invoice.rules[index].id);
+        let index = this.invoice.invoice_rules.indexOf(invoiceRuleTemplate);
+        console.log(this.invoice.invoice_rules[index]);
+        if (this.invoice.invoice_rules[index].type == 'custom'){
+            this.deleteCustomInvoiceRule(this.invoice.invoice_rules[index].id);
         }
-        this.invoice.rules.splice(index, 1);
+        this.invoice.invoice_rules.splice(index, 1);
         this.doVATCalculations();
     }
 
@@ -102,9 +145,9 @@ export class InvoiceDetailsComponent {
         this.totalInclVAT = 0;
 
         let calculations = [];
-        let categories = _.uniqBy(this.invoice.rules, 'vat_percentage_rate');
+        let categories = _.uniqBy(this.invoice.invoice_rules, 'vat_percentage_rate');
         for(let category of categories) {
-            let filteredArray = _.filter(this.invoice.rules, {'vat_percentage_rate': category.vat_percentage_rate});
+            let filteredArray = _.filter(this.invoice.invoice_rules, {'vat_percentage_rate': category.vat_percentage_rate});
             calculations.push(filteredArray);
         }
 
@@ -138,7 +181,7 @@ export class InvoiceDetailsComponent {
             .doPostRequest(this.nsfo.URI_INVOICE_RULE_TEMPLATE, newRule)
             .subscribe(
                 res => {
-                    this.invoice.rules.push(res.result);
+                    this.invoice.invoice_rules.push(res.result);
                     this.doVATCalculations();
                 }
             );
@@ -156,5 +199,134 @@ export class InvoiceDetailsComponent {
                     console.log("custom rule deleted");
                 }
             );
+    }
+
+    private getClients(){
+        this.nsfo
+            .doGetRequest(this.nsfo.URI_COMPANIES_INVOICE)
+            .subscribe(
+                res => {
+                    this.companies = res.result;
+                    console.log(this.companies);
+                    this.showLocations = true;
+                }
+            );
+    }
+
+    private searchCompanies() {
+        this.showCompanies = false;
+        this.nsfo.doGetRequest(this.nsfo.URI_CLIENTS + "/company/name?company_name=" + this.companyName)
+            .subscribe(
+                res => {
+                    this.companies = res.result;
+                    console.log(this.companies);
+                    this.showCompanies = true;
+                    console.log(this.selectedCompany);
+                }
+            );
+    }
+
+    private getCompanyLocations(){
+        console.log(this.selectedCompany);
+        console.log(JSON.stringify(this.selectedCompany));
+            this.nsfo.doGetRequest(this.nsfo.URI_CLIENTS + "/" + this.selectedCompany.company_id)
+                .subscribe(
+                    res => {
+                        console.log(res.result);
+                        this.selectedCompany = res.result;
+                        this.locations = res.result.locations;
+                        console.log(this.locations);
+                        this.showLocations = true;
+                    }
+                );
+    }
+
+    private setInvoiceRecipient() {
+        console.log(this.selectedLocation);
+        this.invoice.sender_details = this.senderDetails;
+        this.invoice.ubn = this.selectedLocation.ubn;
+        this.invoice.company = this.selectedCompany;
+        this.invoice.company_name = this.selectedCompany.company_name;
+        this.invoice.company_vat_number = this.selectedCompany.vat_number;
+        this.invoice.company_debtor_number = this.selectedCompany.debtor_number;
+        this.invoice.name = this.selectedCompany['owner'].first_name + this.selectedCompany['owner'].last_name;
+        console.log(this.invoice);
+        console.log(JSON.stringify(this.invoice));
+    }
+
+    private getSenderDetails() {
+        let details = new InvoiceSenderDetails();
+        let address = new Address();
+        this.nsfo.doGetRequest(this.nsfo.URI_INVOICE_SENDER_DETAILS)
+            .subscribe(
+                res => {
+                    details = res.result;
+                    if(details != undefined) {
+                        console.log(res);
+                        this.senderDetails = res.result;
+                        address = res.result.address;
+                        this.senderDetails.address = address;
+                        console.log(this.senderDetails);
+                    }
+                }
+            );
+    }
+
+    private sendInvoiceToClient() {
+        this.invoice.sender_details = this.senderDetails;
+        this.invoice.status = "UNPAID";
+        if (this.invoice.id) {
+            this.nsfo.doPutRequest(this.nsfo.URI_INVOICE + "/" + this.invoice.id ,this.invoice)
+                .subscribe(
+                    res => {
+                        this.navigateTo("/invoice");
+                    }
+                );
+        }
+        else {
+            this.nsfo.doPostRequest(this.nsfo.URI_INVOICE, this.invoice)
+                .subscribe(
+                    res => {
+                        this.navigateTo("/invoice");
+                    }
+                );
+        }
+    }
+
+    private saveInvoice() {
+        this.invoice.sender_details = this.senderDetails;
+        this.invoice.status = "NOT SEND";
+        if (!this.invoice.company_name) {
+            this.invoice.status = "INCOMPLETE";
+        }
+        if (this.pageMode == 'edit') {
+            this.nsfo.doPutRequest(this.nsfo.URI_INVOICE + "/" + this.invoice.id, this.invoice)
+                .subscribe(
+                    res => {
+                        this.navigateTo("/invoice");
+                    }
+                );
+        }
+        else {
+            this.nsfo.doPostRequest(this.nsfo.URI_INVOICE, this.invoice)
+                .subscribe(
+                    res => {
+                        this.navigateTo("/invoice");
+                    }
+                );
+        }
+    }
+
+    private deleteInvoice() {
+        this.nsfo.doDeleteRequest(this.nsfo.URI_INVOICE + "/" + this.invoiceId, this.invoice)
+            .subscribe(
+                res => {
+                    this.navigateTo("/invoice");
+                }
+            )
+    }
+
+    private navigateTo(url: string) {
+        this.router.navigate([url]);
     }
 }
