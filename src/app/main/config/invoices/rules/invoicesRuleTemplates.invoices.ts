@@ -31,8 +31,6 @@ export class InvoicesRuleTemplatesComponent {
             price_excl_vat: ['', Validators.required],
             vat_percentage_rate: ['', Validators.required],
         });
-
-
         this.getInvoiceRules();
     }
 
@@ -108,13 +106,20 @@ export class InvoicesRuleTemplatesComponent {
                     res => {
                         switch (this.selectedRule.category) {
                             case InvoiceCategory.General:
-                                this.removeInvoiceRule(this.selectedRuleTemp);
                                 this.generalRules.push(this.selectedRule);
                                 break;
 
                             case InvoiceCategory.AnimalHealth:
-                                this.removeInvoiceRule(this.selectedRuleTemp);
                                 this.animalHealthRules.push(this.selectedRule);
+                                break;
+                        }
+                        switch (this.selectedRuleTemp.category) {
+                            case InvoiceCategory.General:
+                                _.remove(this.generalRules, this.selectedRuleTemp);
+                                break;
+
+                            case InvoiceCategory.AnimalHealth:
+                                _.remove(this.animalHealthRules, this.selectedRuleTemp);
                                 break;
                         }
                         this.isSending = false;
@@ -127,15 +132,6 @@ export class InvoicesRuleTemplatesComponent {
     }
 
     private removeInvoiceRule(rule: InvoiceRuleTemplate) {
-        console.log('test');
-        this.nsfo
-            .doDeleteRequest(this.nsfo.URI_INVOICE_RULE_TEMPLATE + '/' + rule.id.toString(), "")
-            .subscribe(
-                res => {
-                    console.log('test');
-                }
-            );
-
         switch (rule.category) {
             case InvoiceCategory.General:
                 _.remove(this.generalRules, rule);
@@ -145,6 +141,8 @@ export class InvoicesRuleTemplatesComponent {
                 _.remove(this.animalHealthRules, rule);
                 break;
         }
+        this.nsfo.doDeleteRequest(this.nsfo.URI_INVOICE_RULE_TEMPLATE + "/" + rule.id, rule)
+            .subscribe();
     }
     
     private openModal(isEditMode: boolean = false, category: string, rule: InvoiceRuleTemplate): void {
