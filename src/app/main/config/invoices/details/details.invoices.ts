@@ -19,9 +19,10 @@ export class InvoicesNSFODetailsComponent {
     private senderAddress: Address = new Address();
 
     constructor(private fb: FormBuilder, private nsfo: NSFOService) {
-
         this.getInvoiceSenderDetails();
+        console.log(this.invoiceSenderDetails);
         this.form = fb.group({
+            name: ['', Validators.required],
             iban: ['', Validators.required],
             kvk_number: ['', Validators.required],
             btw_number: ['', Validators.required],
@@ -35,20 +36,18 @@ export class InvoicesNSFODetailsComponent {
     }
 
     private getInvoiceSenderDetails(){
+        let details = new InvoiceSenderDetails();
         this.nsfo.doGetRequest(this.nsfo.URI_INVOICE_SENDER_DETAILS).subscribe(
             res => {
                 console.log(res);
-                this.details = res.result;
-                for (let detail of this.details){
-                    console.log(detail);
-                    this.invoiceSenderDetails = detail;
-                    this.senderAddress = detail.address;
-                    console.log(this.senderAddress);
-                    console.log(this.invoiceSenderDetails);
+                details = res.result;
+                if (details != undefined && details.address.address_number_suffix == undefined) {
+                    details.address.address_number_suffix = "";
                 }
-                this.invoiceSenderDetails = res.result[0];
-                if (this.invoiceSenderDetails.address.suffix == undefined) {
-                    this.invoiceSenderDetails.address.suffix = "";
+                if(details != undefined) {
+                    this.senderAddress = res.result.address;
+                    this.invoiceSenderDetails = res.result;
+                    this.invoiceSenderDetails.address = this.senderAddress;
                 }
 
             }
@@ -57,10 +56,17 @@ export class InvoicesNSFODetailsComponent {
 
     private CreateInvoiceSenderDetails(){
             this.invoiceSenderDetails.address = this.senderAddress;
-            this.nsfo.doPostRequest(this.nsfo.URI_INVOICE_SENDER_DETAILS , this.form);
+            console.log(this.invoiceSenderDetails);
+            this.nsfo.doPostRequest(this.nsfo.URI_INVOICE_SENDER_DETAILS , this.invoiceSenderDetails).subscribe(
+                res => {
+                    console.log(res.result);
+                    this.invoiceSenderDetails = res.result;
+                }
+            );
     }
 
     private UpdateInvoiceSenderDetails(){
+        this.invoiceSenderDetails.address = this.senderAddress;
             this.nsfo.doPutRequest(this.nsfo.URI_INVOICE_SENDER_DETAILS + "/" + this.invoiceSenderDetails.id.toString() , this.invoiceSenderDetails)
                 .subscribe(
                 res => {
