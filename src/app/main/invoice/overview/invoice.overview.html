@@ -116,6 +116,9 @@
                         <span *ngIf="invoice.status == 'INCOMPLETE'" class="primary label">
                             {{'INCOMPLETE' | translate}}
                         </span>
+                        <span *ngIf="invoice.status == 'CANCELLED'" class="alert label">
+                            {{ 'CANCELLED' | translate }} ({{ calculateDays(invoice.invoice_date)}} {{ 'DAYS' | translate }})
+                        </span>
                     </td>
                     <td>
                         <span *ngIf="invoice.reminders > 0" class="alert label">
