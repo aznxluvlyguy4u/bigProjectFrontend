@@ -174,6 +174,7 @@ export class InvoiceDetailsComponent {
         }
 
         this.totalInclVAT += this.totalExclVAT;
+        this.invoice.total = this.totalInclVAT;
     }
 
     private addCustomInvoiceRule(newRule: InvoiceRuleTemplate){
@@ -246,6 +247,7 @@ export class InvoiceDetailsComponent {
         this.invoice.sender_details = this.senderDetails;
         this.invoice.ubn = this.selectedLocation.ubn;
         this.invoice.company = this.selectedCompany;
+        this.invoice.company_id = this.selectedCompany.company_id;
         this.invoice.company_name = this.selectedCompany.company_name;
         this.invoice.company_vat_number = this.selectedCompany.vat_number;
         this.invoice.company_debtor_number = this.selectedCompany.debtor_number;
@@ -275,6 +277,7 @@ export class InvoiceDetailsComponent {
     private sendInvoiceToClient() {
         this.invoice.sender_details = this.senderDetails;
         this.invoice.status = "UNPAID";
+        this.invoice.total = this.totalInclVAT;
         if (this.invoice.id) {
             this.nsfo.doPutRequest(this.nsfo.URI_INVOICE + "/" + this.invoice.id ,this.invoice)
                 .subscribe(
@@ -296,6 +299,7 @@ export class InvoiceDetailsComponent {
     private saveInvoice() {
         this.invoice.sender_details = this.senderDetails;
         this.invoice.status = "NOT SEND";
+        this.invoice.total = this.totalInclVAT;
         if (!this.invoice.company_name) {
             this.invoice.status = "INCOMPLETE";
         }
