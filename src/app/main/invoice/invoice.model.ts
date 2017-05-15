@@ -15,6 +15,7 @@ export class Invoice {
     public status: string;
     public reminders: number;
     public invoice_rules: InvoiceRuleTemplate[] = [];
+    public total: number;
 }
 
 export class InvoiceRule {
