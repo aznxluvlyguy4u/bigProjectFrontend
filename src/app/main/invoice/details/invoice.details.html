@@ -46,7 +46,7 @@
                         {{'SELECT LOCATION' | translate}}
                     </option>
                     <option *ngFor="let location of locations" value="{{location.ubn}}">{{location['address'].city}} -
-                        {{location['address'].street_name}} {{location['address'].address_number}}
+                        {{location['address'].street_name}} {{location['address'].address_number}} - {{location.ubn}}
                     </option>
                 </select>
             </div>
