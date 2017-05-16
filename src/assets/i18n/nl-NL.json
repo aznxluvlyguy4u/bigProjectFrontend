@@ -324,5 +324,6 @@
   "RECEIVED RESULTS COUNT": "Aantal resultaten ontvangen",
   "CURRENT STATUS": "Huidige status",
   "RETURN": "Terug",
-  "CANCELLED": "Betaling mislukt"
+  "CANCELLED": "Betaling mislukt",
+  "CANCELLED INVOICES": "Facturen met betalings fout"
 }
