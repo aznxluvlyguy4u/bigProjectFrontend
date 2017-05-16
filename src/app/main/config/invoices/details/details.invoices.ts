@@ -20,7 +20,6 @@ export class InvoicesNSFODetailsComponent {
 
     constructor(private fb: FormBuilder, private nsfo: NSFOService) {
         this.getInvoiceSenderDetails();
-        console.log(this.invoiceSenderDetails);
         this.form = fb.group({
             name: ['', Validators.required],
             iban: ['', Validators.required],
@@ -39,7 +38,6 @@ export class InvoicesNSFODetailsComponent {
         let details = new InvoiceSenderDetails();
         this.nsfo.doGetRequest(this.nsfo.URI_INVOICE_SENDER_DETAILS).subscribe(
             res => {
-                console.log(res);
                 details = res.result;
                 if (details != undefined && details.address.address_number_suffix == undefined) {
                     details.address.address_number_suffix = "";
@@ -56,10 +54,8 @@ export class InvoicesNSFODetailsComponent {
 
     private CreateInvoiceSenderDetails(){
             this.invoiceSenderDetails.address = this.senderAddress;
-            console.log(this.invoiceSenderDetails);
             this.nsfo.doPostRequest(this.nsfo.URI_INVOICE_SENDER_DETAILS , this.invoiceSenderDetails).subscribe(
                 res => {
-                    console.log(res.result);
                     this.invoiceSenderDetails = res.result;
                 }
             );
@@ -70,7 +66,6 @@ export class InvoicesNSFODetailsComponent {
             this.nsfo.doPutRequest(this.nsfo.URI_INVOICE_SENDER_DETAILS + "/" + this.invoiceSenderDetails.id.toString() , this.invoiceSenderDetails)
                 .subscribe(
                 res => {
-                    console.log(res);
                     this.invoiceSenderDetails = res.result;
                 }
             );

@@ -34,6 +34,12 @@ export class invoiceFilterPipe implements PipeTransform{
             });
         }
 
+        if (statusFilter == "CANCELLED INVOICES") {
+            filtered = filtered.filter(invoice => {
+                return invoice.status == 'CANCELLED';
+            });
+        }
+
         return filtered;
     }
 }

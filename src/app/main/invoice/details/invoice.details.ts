@@ -56,7 +56,6 @@ export class InvoiceDetailsComponent {
     }
 
     ngOnInit() {
-        console.log("testing on init");
         this.dataSub = this.activatedRoute.params.subscribe(params => {
             this.pageMode = params['mode'];
             if(this.pageMode == 'edit') {
@@ -64,7 +63,6 @@ export class InvoiceDetailsComponent {
                 this.invoiceId = params['id'];
                 this.nsfo.doGetRequest(this.nsfo.URI_INVOICE + "/" + this.invoiceId)
                     .subscribe(res => {
-                        console.log(res.result);
                         this.invoice = res.result;
                         this.invoice.invoice_rules = res.result['invoice_rules'];
                         this.doVATCalculations();
@@ -81,7 +79,6 @@ export class InvoiceDetailsComponent {
                 this.invoiceId = params['id'];
                 this.nsfo.doGetRequest(this.nsfo.URI_INVOICE + "/" + this.invoiceId)
                     .subscribe(res => {
-                        console.log(res.result);
                         this.invoice = res.result;
                         this.senderDetails = this.invoice['sender_details'];
                         this.invoice.invoice_rules = res.result['invoice_rules_locked'];
@@ -90,7 +87,6 @@ export class InvoiceDetailsComponent {
                 this.onlyView = true;
             }
         });
-        console.log(this.pageMode);
     }
 
     private getInvoiceRulesOptions(): void {
@@ -98,7 +94,6 @@ export class InvoiceDetailsComponent {
             .subscribe(
                 res => {
                     this.invoiceRuleTemplatesOptions = <InvoiceRuleTemplate[]> res.result;
-                    console.log(this.invoiceRuleTemplatesOptions);
                 }
             )
     }
@@ -117,10 +112,8 @@ export class InvoiceDetailsComponent {
 
     private addInvoiceRuleTemplate(): void {
         let selectedId = this.selectedInvoiceRuleId;
-        console.log(this.selectedInvoiceRuleId);
         if (this.selectedInvoiceRuleId) {
             let invoiceRule = _.find(this.invoiceRuleTemplatesOptions, function(o) {
-                console.log(selectedId);
                 return o.id == selectedId;
             });
 
@@ -131,7 +124,6 @@ export class InvoiceDetailsComponent {
 
     private removeInvoiceRuleTemplate(invoiceRuleTemplate: InvoiceRuleTemplate): void {
         let index = this.invoice.invoice_rules.indexOf(invoiceRuleTemplate);
-        console.log(this.invoice.invoice_rules[index]);
         if (this.invoice.invoice_rules[index].type == 'custom'){
             this.deleteCustomInvoiceRule(this.invoice.invoice_rules[index].id);
         }
@@ -197,7 +189,6 @@ export class InvoiceDetailsComponent {
             .doDeleteRequest(this.nsfo.URI_INVOICE_RULE_TEMPLATE + "/" + id.toString(), "")
             .subscribe(
                 res => {
-                    console.log("custom rule deleted");
                 }
             );
     }
@@ -208,7 +199,6 @@ export class InvoiceDetailsComponent {
             .subscribe(
                 res => {
                     this.companies = res.result;
-                    console.log(this.companies);
                     this.showLocations = true;
                 }
             );
@@ -220,30 +210,23 @@ export class InvoiceDetailsComponent {
             .subscribe(
                 res => {
                     this.companies = res.result;
-                    console.log(this.companies);
                     this.showCompanies = true;
-                    console.log(this.selectedCompany);
                 }
             );
     }
 
     private getCompanyLocations(){
-        console.log(this.selectedCompany);
-        console.log(JSON.stringify(this.selectedCompany));
             this.nsfo.doGetRequest(this.nsfo.URI_CLIENTS + "/" + this.selectedCompany.company_id)
                 .subscribe(
                     res => {
-                        console.log(res.result);
                         this.selectedCompany = res.result;
                         this.locations = res.result.locations;
-                        console.log(this.locations);
                         this.showLocations = true;
                     }
                 );
     }
 
     private setInvoiceRecipient() {
-        console.log(this.selectedLocation);
         this.invoice.sender_details = this.senderDetails;
         this.invoice.ubn = this.selectedLocation.ubn;
         this.invoice.company = this.selectedCompany;
@@ -252,8 +235,6 @@ export class InvoiceDetailsComponent {
         this.invoice.company_vat_number = this.selectedCompany.vat_number;
         this.invoice.company_debtor_number = this.selectedCompany.debtor_number;
         this.invoice.name = this.selectedCompany['owner'].first_name + this.selectedCompany['owner'].last_name;
-        console.log(this.invoice);
-        console.log(JSON.stringify(this.invoice));
     }
 
     private getSenderDetails() {
@@ -264,11 +245,9 @@ export class InvoiceDetailsComponent {
                 res => {
                     details = res.result;
                     if(details != undefined) {
-                        console.log(res);
                         this.senderDetails = res.result;
                         address = res.result.address;
                         this.senderDetails.address = address;
-                        console.log(this.senderDetails);
                     }
                 }
             );
