@@ -1,11 +1,14 @@
 var _ = require('lodash');
-import {ApplicationRef, Component, NgZone} from "@angular/core";
+import {Component} from "@angular/core";
 import {Subscription} from "rxjs/Rx";
 import {Router, ActivatedRoute, ROUTER_DIRECTIVES} from "@angular/router";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {FormGroup, FormBuilder, REACTIVE_FORM_DIRECTIVES, Validators} from "@angular/forms";
 import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
-import {InvoiceRuleTemplate, Invoice, Company, Local_Location, InvoiceSenderDetails, Address} from "../invoice.model";
+import {
+    InvoiceRuleTemplate, Invoice, Company, Local_Location, InvoiceSenderDetails, Address,
+    InvoiceRule
+} from "../invoice.model";
 
 @Component({
     selector: 'ng-select',
@@ -29,6 +32,7 @@ export class InvoiceDetailsComponent {
     private pageTitle: string;
     private pageMode: string;
     private invoiceId: string;
+    private selectedTemplate: InvoiceRuleTemplate = new InvoiceRuleTemplate();
     private selectedCompany: Company = new Company();
     private selectedLocation: Local_Location = new Local_Location();
     private selectedInvoiceRuleId: number;
@@ -46,8 +50,6 @@ export class InvoiceDetailsComponent {
     private vatCalculations = [];
 
     constructor(private fb: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute, private nsfo: NSFOService) {
-        this.getInvoiceRulesOptions();
-        this.getSenderDetails();
         this.form = fb.group({
             description: ['', Validators.required],
             price_excl_vat: ['', Validators.required],
@@ -56,6 +58,8 @@ export class InvoiceDetailsComponent {
     }
 
     ngOnInit() {
+        this.getInvoiceRulesOptions();
+        this.getSenderDetails();
         this.dataSub = this.activatedRoute.params.subscribe(params => {
             this.pageMode = params['mode'];
             if(this.pageMode == 'edit') {
@@ -71,7 +75,14 @@ export class InvoiceDetailsComponent {
 
             if(this.pageMode == 'new') {
                 this.pageTitle = 'NEW INVOICE';
-                this.invoice.invoice_number = "--";
+                this.invoice.status = "INCOMPLETE";
+                this.nsfo.doPostRequest(this.nsfo.URI_INVOICE, this.invoice)
+                    .subscribe(
+                        res => {
+                            this.invoice = res.result;
+                            this.invoice.invoice_number = res.result['invoice_number'];
+                        }
+                    )
             }
 
             if (this.pageMode == "view") {
@@ -81,7 +92,7 @@ export class InvoiceDetailsComponent {
                     .subscribe(res => {
                         this.invoice = res.result;
                         this.senderDetails = this.invoice['sender_details'];
-                        this.invoice.invoice_rules = res.result['invoice_rules_locked'];
+                        this.invoice.invoice_rules = res.result['invoice_rules'];
                         this.doVATCalculations();
                     });
                 this.onlyView = true;
@@ -90,7 +101,7 @@ export class InvoiceDetailsComponent {
     }
 
     private getInvoiceRulesOptions(): void {
-        this.nsfo.doGetRequest(this.nsfo.URI_INVOICE_RULE_TEMPLATE)
+        this.nsfo.doGetRequest(this.nsfo.URI_INVOICE_RULE_TEMPLATE + "?category=GENERAL")
             .subscribe(
                 res => {
                     this.invoiceRuleTemplatesOptions = <InvoiceRuleTemplate[]> res.result;
@@ -99,7 +110,7 @@ export class InvoiceDetailsComponent {
     }
     
     private addInvoiceRule(): void {
-            let temporaryInvoiceRule = new InvoiceRuleTemplate();
+            let temporaryInvoiceRule = new InvoiceRule();
             temporaryInvoiceRule.type = "custom";
             temporaryInvoiceRule.category = "GENERAL";
             temporaryInvoiceRule.sort_order = 1;
@@ -111,22 +122,26 @@ export class InvoiceDetailsComponent {
     }
 
     private addInvoiceRuleTemplate(): void {
+        let rule = new InvoiceRule();
         let selectedId = this.selectedInvoiceRuleId;
         if (this.selectedInvoiceRuleId) {
-            let invoiceRule = _.find(this.invoiceRuleTemplatesOptions, function(o) {
+            let invoiceRuleTemplate = _.find(this.invoiceRuleTemplatesOptions, function(o) {
                 return o.id == selectedId;
             });
-
-            this.invoice.invoice_rules.push(invoiceRule);
+            rule.description = invoiceRuleTemplate.description;
+            rule.vat_percentage_rate = invoiceRuleTemplate.vat_percentage_rate;
+            rule.price_excl_vat = invoiceRuleTemplate.price_excl_vat;
+            rule.type = "custom";
+            rule.category = "GENERAL";
+            rule.sort_order = 0;
+            this.addCustomInvoiceRule(rule);
             this.doVATCalculations();
         }
     }
 
-    private removeInvoiceRuleTemplate(invoiceRuleTemplate: InvoiceRuleTemplate): void {
-        let index = this.invoice.invoice_rules.indexOf(invoiceRuleTemplate);
-        if (this.invoice.invoice_rules[index].type == 'custom'){
-            this.deleteCustomInvoiceRule(this.invoice.invoice_rules[index].id);
-        }
+    private removeInvoiceRule(invoiceRule: InvoiceRule): void {
+        let index = this.invoice.invoice_rules.indexOf(invoiceRule);
+        this.deleteCustomInvoiceRule(this.invoice.invoice_rules[index].id);
         this.invoice.invoice_rules.splice(index, 1);
         this.doVATCalculations();
     }
@@ -169,9 +184,9 @@ export class InvoiceDetailsComponent {
         this.invoice.total = this.totalInclVAT;
     }
 
-    private addCustomInvoiceRule(newRule: InvoiceRuleTemplate){
+    private addCustomInvoiceRule(newRule: InvoiceRule){
         this.nsfo
-            .doPostRequest(this.nsfo.URI_INVOICE_RULE_TEMPLATE, newRule)
+            .doPostRequest(this.nsfo.URI_INVOICE+ "/" + this.invoice.id + "/invoice-rules", newRule)
             .subscribe(
                 res => {
                     this.invoice.invoice_rules.push(res.result);
@@ -186,7 +201,7 @@ export class InvoiceDetailsComponent {
 
     private deleteCustomInvoiceRule(id: number){
         this.nsfo
-            .doDeleteRequest(this.nsfo.URI_INVOICE_RULE_TEMPLATE + "/" + id.toString(), "")
+            .doDeleteRequest(this.nsfo.URI_INVOICE + "/" + this.invoice.id + "/invoice-rules" + "/" + id.toString(), "")
             .subscribe(
                 res => {
                 }
