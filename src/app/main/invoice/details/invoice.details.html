@@ -230,7 +230,7 @@
                 <tbody>
                     <tr *ngFor="let rule of invoice.invoice_rules">
                         <td width="1">
-                            <i *ngIf="!onlyView" class="fa fa-times fa-fw remove-button" (click)="removeInvoiceRuleTemplate(rule)" aria-hidden="true"></i>
+                            <i *ngIf="!onlyView" class="fa fa-times fa-fw remove-button" (click)="removeInvoiceRule(rule)" aria-hidden="true"></i>
                         </td>
                         <td>
                             {{rule.description}}
@@ -300,7 +300,7 @@
                     {{'DELETE' | translate}}
                 </button>
                 <button type="button" (click)="navigateTo('/invoice')" class="small primary button">
-                    {{ 'CANCEL' | translate }}
+                    {{ 'RETURN' | translate }}
                 </button>
             </span>
             <span *ngIf="onlyView" class="pull-right">
