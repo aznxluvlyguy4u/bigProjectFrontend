@@ -14,25 +14,24 @@ export class Invoice {
     public subscription_date: string;
     public status: string;
     public reminders: number;
-    public invoice_rules: InvoiceRuleTemplate[] = [];
+    public invoice_rules: InvoiceRule[] = [];
     public total: number;
 }
 
-export class InvoiceRule {
+export class InvoiceRuleTemplate {
     public id: number;
     public description: string;
     public price_excl_vat: number;
     public vat_percentage_rate: number;
 }
 
-export class InvoiceRuleTemplate {
+export class InvoiceRule {
     public id: number;
     public description: string;
     public vat_percentage_rate: number;
     public price_excl_vat: number;
     public sort_order: number;
     public category: string;
-    public locked_version: number;
     public type: string;
 }
 
