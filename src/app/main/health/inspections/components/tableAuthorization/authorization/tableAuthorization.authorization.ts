@@ -34,6 +34,7 @@ export class AuthorizationComponent implements OnInit{
 
     @Input() labResult:LabResult = new LabResult();
     @Output() showOverviewPage: EventEmitter<boolean> = new EventEmitter<boolean>();
+    @Output() _authorizeInspection = new EventEmitter();
 
     @Input()
     set inspection(inspection: LocationHealthInspection){
@@ -57,8 +58,6 @@ export class AuthorizationComponent implements OnInit{
         this.healthService.getLabResults(this._inspection)
             .subscribe(
                 res => {
-                    console.log('LAB RESULT RESPONSE = ');
-                    console.log(res);
                     this.labResult = res.result;
                     this.isLoading = false;
                 },
@@ -196,48 +195,24 @@ export class AuthorizationComponent implements OnInit{
     }
 
     private changeStatus(): void {
-        // this.savingInProgress = true;
 
-
-        // this.newHealthStatus = new HealthStatus();
-        // this.newHealthStatus.status = this.form.controls['health_status'].value;
-        // this.newHealthStatus.check_date = this.form.controls['check_date'].value;
-        // this.newHealthStatus.illness = this.inspection.illness_type;
-        // this.newHealthStatus.reason_of_edit = 'Authorization';
-
-        // this.nsfo.doPutRequest(this.nsfo.URI_HEALTH_UBN + '/' + this.inspection.ubn, this.newHealthStatus)
-        //     .subscribe(res => {
-        //         this.updateInspection();
-        //     });
-
-        // TODO ADD REQUEST TO CHANGE LOCATION HEALTH STATUS
-        // TODO THERE NEEDS TO BE AN ENDPOINT ON THE API SIDE WHERE YOU CAN SEND A REQUEST PER ILLNESS (RUDOLF?)
     }
-
-    // updateInspection(){
-    //     let request = _.cloneDeep(this.inspection);
-    //     this.nsfo.doPutRequest(this.nsfo.URI_HEALTH_INSPECTIONS, request)
-    //             .subscribe(
-    //                 res => {
-    //                     let result = res.result;
-    //                     this.inspection.status = result.status;
-    //                     this.inspection.next_action = result.next_action;
-    //                     this.inspection.action_taken_by = {
-    //                         "first_name": result.action_taken_by.first_name,
-    //                         "last_name": result.action_taken_by.last_name
-    //                     };
-
-    //                     this.ngOnChanges();
-    //                     this.savingInProgress = false;
-    //                     this.showOverviewPage.emit(false);
-    //                 },
-    //                 err => {
-    //                     this.savingInProgress = false;
-    //                 }
-    //             );
-    // }
 
     private goToOverviewPage() {
         this.showOverviewPage.emit(false);
+    }
+
+    private authorizeInspection(){
+      this.healthService.finishInspection(this._inspection)
+        .subscribe(
+              res => {
+                this.healthService.loadToAuthorize('maedi_visna');
+                this.healthService.loadFinished('maedi_visna');
+                this.goToOverviewPage();
+              },
+              err => {
+                // handle error
+              }
+          );
     }
 }

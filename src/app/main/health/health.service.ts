@@ -23,6 +23,20 @@ export class HealthService {
     // private finishedCount = new Subject<any>();
     // private expiredCount = new Subject<any>();
 
+    private toAnnounceIsLoading = new Subject<boolean>();
+    private announcedIsLoading = new Subject<boolean>();
+    private toReceiveLabResultsIsLoading = new Subject<boolean>();
+    private toAuthorizeIsLoading = new Subject<boolean>();
+    private finishedIsLoading = new Subject<boolean>();
+    private expiredIsLoading = new Subject<boolean>();
+
+    public toAnnounceIsLoading$ = this.toAnnounceIsLoading.asObservable();
+    public announcedIsLoading$ = this.announcedIsLoading.asObservable();
+    public toReceiveLabResultsIsLoading$ = this.toReceiveLabResultsIsLoading.asObservable();
+    public toAuthorizeIsLoading$ = this.toAuthorizeIsLoading.asObservable();
+    public finishedIsLoading$ = this.finishedIsLoading.asObservable();
+    public expiredIsLoading$ = this.expiredIsLoading.asObservable();
+
     public toAnnounce$ = this.toAnnounce.asObservable();
     public announced$ = this.announced.asObservable();
     public toReceiveLabResults$ = this.toReceiveLabResults.asObservable();
@@ -41,7 +55,14 @@ export class HealthService {
         finished:Array<LocationHealthInspection>,
         expired:Array<LocationHealthInspection>,
         loadingState:boolean,
-        isLoading:boolean
+        isLoading:boolean,
+
+        toAnnounceIsLoading: boolean,
+        announcedIsLoading: boolean,
+        toReceiveLabResultsIsLoading: boolean,
+        toAuthorizeIsLoading: boolean,
+        finishedIsLoading: boolean,
+        expiredIsLoading: boolean
     }
 
     constructor( private nsfoService:NSFOService ) {
@@ -54,16 +75,24 @@ export class HealthService {
             finished:[],
             expired:[],
             loadingState:false,
-            isLoading:false
+            isLoading:false,
+            toAnnounceIsLoading: false,
+            announcedIsLoading: false,
+            toReceiveLabResultsIsLoading: false,
+            toAuthorizeIsLoading: false,
+            finishedIsLoading: false,
+            expiredIsLoading: false
         };
     }
 
     /** Load Locations that need to be inspected soon and need to be Announced. and pass the latest result set in to the observable stream */
     public loadToAnnounce(illnessType: string){
+        this.toAnnounceIsLoading.next(true);
         this.nsfoService.doGetRequest(this.nsfoService.URI_LOCATIONS_TO_ANNOUNCE + '&illnessType=' + illnessType)
             .subscribe(res => {
                 this._dataStore.toAnnounce = res.result;
                 this.toAnnounce.next(this._dataStore.toAnnounce);
+                this.toAnnounceIsLoading.next(false);
             });
     }
 
@@ -72,10 +101,12 @@ export class HealthService {
     }
 
     public loadAnnounced(illnessType: string){
+        this.announcedIsLoading.next(true);
         this.nsfoService.doGetRequest(this.nsfoService.URI_LOCATIONS_ANNOUNCED + '&illnessType=' + illnessType)
             .subscribe(res => {
                 this._dataStore.announced = res.result;
                 this.announced.next(this._dataStore.announced);
+                this.announcedIsLoading.next(false);
             });
     }
 
@@ -85,10 +116,12 @@ export class HealthService {
 
     /** Load inspections waiting for the labresults coming in. and pass the latest result set in to the observable stream */
     public loadToReceiveLabResults(illnessType: string){
+        this.toReceiveLabResultsIsLoading.next(true);
         this.nsfoService.doGetRequest(this.nsfoService.URI_INSPECTIONS_TO_RECEIVE_LAB_RESULTS + '&illnessType=' + illnessType)
             .subscribe(res => {
                 this._dataStore.toReceiveLabResults = res.result;
                 this.toReceiveLabResults.next(this._dataStore.toReceiveLabResults);
+                this.toReceiveLabResultsIsLoading.next(false);
             });
     }
 
@@ -110,8 +143,8 @@ export class HealthService {
     }
 
     /** Load Finished inspections and pass the latest result set in to the observable stream */
-    public loadFinished(){
-        this.nsfoService.doGetRequest(this.nsfoService.URI_INSPECTIONS_FINISHED)
+    public loadFinished(illnessType: string){
+        this.nsfoService.doGetRequest(this.nsfoService.URI_INSPECTIONS_FINISHED + '&illnessType=' + illnessType)
             .subscribe(res => {
                 this._dataStore.finished = res.result;
                 this.finished.next(this._dataStore.finished);
@@ -119,8 +152,8 @@ export class HealthService {
     }
 
     /** Load Expired inspections and pass the latest result set in to the observable stream */
-    public loadExpired(){
-        this.nsfoService.doGetRequest(this.nsfoService.URI_INSPECTIONS_EXPIRED)
+    public loadExpired(illnessType: string){
+        this.nsfoService.doGetRequest(this.nsfoService.URI_INSPECTIONS_EXPIRED + '&illnessType=' + illnessType)
             .subscribe(res => {
                 this._dataStore.expired = res.result;
                 this.expired.next(this._dataStore.expired);
@@ -187,16 +220,53 @@ export class HealthService {
 
     /** Cancel an Announcement the Announcement will revert to the first swim lane */
     public cancelAnnouncement(announcement){
-        console.log('CANCELING ANNOUNCEMENT');
+        let body = {
+          new_status : "CANCELLED"
+        }
+        this.nsfoService.doPutRequest(this.nsfoService.URI_ANNOUNCEMENTS + '/' + announcement.ubn , body)
+            .subscribe(
+                res => {
+
+                },
+                err => {
+                  // handle error
+                }
+            );
     }
 
     /** Cancel an Inspection the Inspection will revert to the ... swim lane */
     public cancelInspection(inspection) {
+      console.log(inspection);
       console.log('CANCELING INSPECTION');
+      // return
+      let body = {
+          new_status : "CANCELLED"
+      }
+      return this.nsfoService.doPutRequest(this.nsfoService.URI_INSPECTIONS + '/' + inspection.inspection_id , body)
+          .subscribe(
+              res => {
+                this.loadToAuthorize('maedi_visna');
+                this.loadFinished('maedi_visna');
+                this.loadToReceiveLabResults('maedi_visna');
+              },
+              err => {
+                // handle error
+              }
+          );
+    }
+
+    /** Finish (Authorize) an Inspection the Inspection will be shown in the the finished swim lane */
+    public finishInspection(inspection) {
+      let body = {
+          new_status : "FINISHED"
+      }
+      return this.nsfoService.doPutRequest(this.nsfoService.URI_INSPECTIONS + '/' + inspection.inspection_id , body);
     }
 
     /** Create a single Announcement */
     public createAnnouncement(location, illness: string){
+      console.log(location);
+        this.toAnnounceIsLoading.next(true);
         let body = {
           illness: illness,
           ubn: location.ubn
@@ -206,6 +276,8 @@ export class HealthService {
                 res => {
                     // TODO: result should come back as an object
                     // TODO: failed should come back as an object
+                    console.log(' RES  = ')
+                    console.log(res);
                     this.loadToAnnounce(illness);
                     this.loadAnnounced(illness);
                     let body = {
@@ -223,7 +295,7 @@ export class HealthService {
 
     /** create Multiple Announcements */
     public createAnnouncements(locations: Array<any>, illness: string){
-
+        this.toAnnounceIsLoading.next(true);
         let testBatch = [
           locations[0],
           locations[1],
@@ -261,7 +333,6 @@ export class HealthService {
                         }
                         lettersRequest.push(body);
                     };
-
                     this.getAnnouncementLetters(lettersRequest);
                 },
                 err => {
@@ -272,23 +343,28 @@ export class HealthService {
 
     /** Create a batch of announcement pdf's for multiple ubn's */
     private getAnnouncementLetters(request){
+        this.toAnnounceIsLoading.next(true);
         let win = window.open('/loading', '_blank');
         this.nsfoService.doPostRequest(this.nsfoService.URI_ANNOUNCEMENTS_LETTERS , request)
             .subscribe(
                 res => {
                     // TODO: Check if failed array is filled
+                    this.toAnnounceIsLoading.next(false);
                     win.location.href = res.result.download_url;
+
                 }
             );
     }
 
     /** Create a single announcement pdf for a specific ubn */
     private getAnnouncementLetter(request){
+        this.toAnnounceIsLoading.next(true);
         let win = window.open('/loading', '_blank');
         this.nsfoService.doPostRequest(this.nsfoService.URI_ANNOUNCEMENTS_LETTERS + '/' + request.ubn , request)
             .subscribe(
                 res => {
                     // TODO: Check if failed
+                    this.toAnnounceIsLoading.next(false);
                     win.location.href = res.result.download_url;
                 }
             );

@@ -10,20 +10,20 @@
     </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let request of requests">
-            <td>{{ request.ubn }}</td>
-            <td>{{ request.last_name }}</td>
-            <td>{{ request.inspection | translate }}</td>
+        <tr *ngFor="let inspection of _expired">
+            <td>{{ inspection?.location?.ubn }}</td>
+            <td>{{ inspection?.location?.last_name }}</td>
+            <td>{{ inspection?.illness_type | translate }}</td>
             <td>
-                <span *ngIf="request.request_date">
-                    {{ settings.convertToViewDate(request.request_date) }}
+                <span *ngIf="inspection.request_date">
+                    {{ settings.convertToViewDate(inspection.request_date) }}
                 </span>
-                <span *ngIf="!request.request_date">
+                <span *ngIf="!inspection.request_date">
                     --
                 </span>
             </td>
-            <td>{{ request.next_action | translate }}</td>
-            <td>{{ request.action_taken_by.first_name + " " + request.action_taken_by.last_name }} ({{ settings.convertToViewDateTime(request.direction_date) }})</td>
+            <td>{{ inspection?.next_action | translate }}</td>
+            <td>{{ inspection?.action_taken_by?.first_name + " " + inspection?.action_taken_by?.last_name }} ({{ settings.convertToViewDateTime(inspection?.direction_date) }})</td>
         </tr>
     </tbody>
 </table>

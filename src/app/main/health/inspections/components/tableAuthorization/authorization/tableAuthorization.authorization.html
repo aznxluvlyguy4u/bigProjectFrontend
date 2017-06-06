@@ -153,7 +153,7 @@
                 <div class="row">
                     <div class="large-4 columns"> &nbsp; </div>
                     <div class="large-8 columns">
-                        <button type="button" (click)="changeStatus()" [disabled]="savingInProgress" class="small primary button expanded">
+                        <button type="button" (click)="authorizeInspection()" [disabled]="savingInProgress" class="small primary button expanded">
                             <span *ngIf="!savingInProgress">
                                 <i class="fa fa-floppy-o" aria-hidden="true"></i>
                                 {{ 'AUTHORIZE' | translate }}

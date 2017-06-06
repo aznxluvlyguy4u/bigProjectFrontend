@@ -10,44 +10,36 @@ import {LocationHealthInspection} from "../../../health.model";
 })
 
 export class HealthTableFinished {
-    private requests: LocationHealthInspection[] = [];
+    private _finished: Array<LocationHealthInspection> = [];
 
-    @Input() animalHealthRequests: LocationHealthInspection[];
+    @Input()
+    set finished(finished: Array<LocationHealthInspection>) {
+        this._finished = finished || [];
+    }
+    get finished(): Array<LocationHealthInspection> { return this._finished; }
 
     constructor(private settings: SettingsService) {}
 
-    ngOnChanges() {
-        this.getRequests();
-    }
-
-    private getRequests(): void {
-        for (let request of this.animalHealthRequests) {
-            if(request.status == 'FINISHED') {
-                this.requests.push(request);
-            }
-        }
-    }
-
     private changeStatus(request: LocationHealthInspection, event: Event): void {
-        let button = event.target;
-        button.disabled = true;
-        button.innerHTML = '<i class="fa fa-gear fa-spin fa-fw"></i>';
+        // let button = event.target;
+        // button.disabled = true;
+        // button.innerHTML = '<i class="fa fa-gear fa-spin fa-fw"></i>';
 
-        this.nsfo.doPutRequest(this.nsfo.URI_HEALTH_INSPECTIONS, request)
-            .subscribe(
-                res => {
-                    let result = res.result;
-                    request.status = result.status;
-                    request.next_action = result.next_action;
-                    request.directions = result.directions;
+        // this.nsfo.doPutRequest(this.nsfo.URI_HEALTH_INSPECTIONS, request)
+        //     .subscribe(
+        //         res => {
+        //             let result = res.result;
+        //             request.status = result.status;
+        //             request.next_action = result.next_action;
+        //             request.directions = result.directions;
 
-                    // this.ngOnChanges();
-                },
-                err => {
-                    button.disabled = false;
-                    this.translate.get('AUTHORIZE')
-                        .subscribe(val => button.innerHTML = val);
-                }
-            )
+        //             // this.ngOnChanges();
+        //         },
+        //         err => {
+        //             button.disabled = false;
+        //             this.translate.get('AUTHORIZE')
+        //                 .subscribe(val => button.innerHTML = val);
+        //         }
+        //     )
     }
 }

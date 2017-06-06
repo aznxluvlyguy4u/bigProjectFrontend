@@ -7,10 +7,10 @@
             <td> {{ 'REQUEST DATE' | translate }} </td>
             <td> {{ 'NEXT ACTION' | translate }} </td>
             <td> {{ _toAnnounce?.length }}
-                <button type="button" *ngIf="_toAnnounce?.length > 0" (click)="createAnnouncements()" class="tiny primary button pull-right">
-                    <i *ngIf="isLoading" class="fa fa-gear fa-spin fa-fw"></i>
-                    <span *ngIf="_toAnnounce.length > 0 && !isLoading" class="badge"> {{ _toAnnounce.length }} </span>
-                    {{ 'DOWNLOAD' | translate }}
+                <button [disabled]="_isLoading" type="button" *ngIf="_toAnnounce?.length > 0" (click)="createAnnouncements()" class="tiny primary button pull-right">
+                    <i *ngIf="_isLoading" class="fa fa-gear fa-spin fa-fw"></i>
+                    <span *ngIf="_toAnnounce.length > 0 && !_isLoading" class="badge"> {{ _toAnnounce.length }} </span>
+                    {{ 'ANNOUNCE' | translate }}
                 </button>
             </td>
         </tr>
@@ -32,12 +32,15 @@
             <td>{{ to_announce.next_action | translate }}</td>
             <td>
                 <span class="pull-right">
-                    <button class="small primary button" (click)="createAnnouncement(to_announce, $event)" type="button">
-                        {{ 'DOWNLOAD' | translate }}
+                    <button [disabled]="_isLoading" class="small primary button" (click)="createAnnouncement(to_announce, $event)" type="button">
+                        <i *ngIf="_isLoading" class="fa fa-gear fa-spin fa-fw"></i>
+                        <span *ngIf="!_isLoading">
+                            {{ 'ANNOUNCE' | translate }}
+                        </span>
                     </button>
-                    <button type="button" (click)="changeStatus(to_announce, $event);" class="small primary button">
+                    <!--<button [disabled]="_isLoading" type="button" (click)="changeStatus(to_announce, $event);" class="small primary button">
                         {{ 'ANNOUNCE' | translate }}
-                    </button>
+                    </button>-->
                 </span>
             </td>
         </tr>

@@ -12,7 +12,7 @@ import {HealthService} from '../../../health.service';
 
 export class HealthTableToAnnounce implements OnInit{
     private requests:any;
-    private isLoading:boolean;
+    private _isLoading: boolean;
     private _toAnnounce:Array<Announcement>;
     private editMode:boolean = false;
 
@@ -26,16 +26,22 @@ export class HealthTableToAnnounce implements OnInit{
     }
     get toAnnounce(): Array<Announcement> { return this._toAnnounce; }
 
+    @Input()
+    set isLoading(isLoading: boolean) {
+        this._isLoading = isLoading;
+    }
+
     constructor(private translate: TranslateService) {}
 
     ngOnInit(){ }
 
     private createAnnouncement(location: LocationHealthInspection): void {
+        this._isLoading = true;
         this._createAnnouncement.emit(location)
     }
 
     private createAnnouncements(): void {
-        console.log('FROM TABLE');
+        this._isLoading = true;
         this._createAnnouncements.emit(this._toAnnounce);
     }
 }

@@ -19,6 +19,9 @@ import { Announcement } from '../../../health.model';
 
 export class HealthTableAnnounced implements OnInit{
 
+    private _announced: Array<Announcement> = [];
+    private _isLoading: boolean;
+
     @Output() inspectionsUpdate = new EventEmitter();
     @Output() _createInspection = new EventEmitter();
     @Output() _cancelAnnouncement = new EventEmitter();
@@ -29,7 +32,11 @@ export class HealthTableAnnounced implements OnInit{
     }
     get announced(): Array<Announcement> { return this._announced; }
 
-    private _announced: Array<Announcement> = [];
+
+    @Input()
+    set isLoading(isLoading: boolean) {
+        this._isLoading = isLoading;
+    }
 
     // private requests: LocationHealthInspection[] = [];
     // private showModal: string = 'none';
@@ -47,10 +54,12 @@ export class HealthTableAnnounced implements OnInit{
     ngOnDestroy(){ }
 
     cancelAnnouncement(announcement){
-      this._cancelAnnouncement.emit(announcement)
+        this._isLoading = true;
+        this._cancelAnnouncement.emit(announcement)
     }
 
     createInspection(announcement){
+        this._isLoading = true;
         this._createInspection.emit(announcement);
     }
 

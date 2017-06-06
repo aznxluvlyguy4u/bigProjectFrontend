@@ -47,30 +47,45 @@
             *ngIf="selectedTab == 'ALL REQUESTS'"
             [(toAnnounce)]="toAnnounce"
             (_createAnnouncement)="createAnnouncement($event)"
-            (_createAnnouncements)="createAnnouncements($event)">
+            (_createAnnouncements)="createAnnouncements($event)"
+            [isLoading]="toAnnounceIsLoading">
         </health-table-to-announce>
 
         <health-table-announced
             *ngIf="selectedTab == 'ANNOUNCED INSPECTIONS'"
+            [(announced)]="announced"
             (_cancelAnnouncement)="cancelAnnouncement($event)"
             (_createInspection)="createInspection($event)"
-            [(announced)]="announced">
+            [isLoading]="announcedIsLoading">
         </health-table-announced>
 
         <health-table-to-receive-lab-results
             *ngIf="selectedTab == 'ONGOING INSPECTIONS'"
             [(toReceiveLabResults)]="toReceiveLabResults"
-            (_cancelInspection)="cancelInspection($event)">
+            (_cancelInspection)="cancelInspection($event)"
+            [isLoading]="toReceiveLabResultsIsLoading">
         </health-table-to-receive-lab-results>
 
         <health-table-authorization
             *ngIf="selectedTab == 'TO BE AUTHORIZED INSPECTIONS'"
-            [(toAuthorize)]="toAuthorize">
+            [(toAuthorize)]="toAuthorize"
+            [isLoading]="toAuthorizeIsLoading">
         </health-table-authorization>
-        <!--<health-table-finished *ngIf="selectedTab == 'FINISHED INSPECTIONS'" [animalHealthRequests]="animalHealthRequests"></health-table-finished>-->
-         <!--[animalHealthRequests]="animalHealthRequests"-->
-        <!--<health-table-expired *ngIf="selectedTab == 'EXPIRED TERM'"></health-table-expired>-->
-                <!--[animalHealthRequests]="animalHealthRequests"-->
+
+        <health-table-finished
+            *ngIf="selectedTab == 'FINISHED INSPECTIONS'"
+            [(finished)]="finished"
+            [isLoading]="finishedIsLoading">
+        </health-table-finished>
+
+        <health-table-expired
+            *ngIf="selectedTab == 'EXPIRED TERM'"
+            [(expired)]="expired"
+            [isLoading]="expiredIsLoading">
+        </health-table-expired>
+
+        <!--[animalHealthRequests]="animalHealthRequests"-->
+        <!--[animalHealthRequests]="animalHealthRequests"-->
 
     </div>
 </div>

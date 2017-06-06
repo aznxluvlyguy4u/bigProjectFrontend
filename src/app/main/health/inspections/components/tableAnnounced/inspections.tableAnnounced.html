@@ -40,13 +40,19 @@
             </td>
             <td>
                 <span class="pull-right">
-                    <label for="">{{ 'MINIMUM AMOUNT OF ANIMALS' | translate }}</label>
+                    <label>{{ 'MINIMUM AMOUNT OF ANIMALS' | translate }}</label>
                     <input type="number" [(ngModel)]="request.animal_count">
-                    <button type="button" (click)="createInspection(request)" class="small primary button">
-                        {{ 'START INSPECTION' | translate }}
+                    <button [disabled]="_isLoading" type="button" (click)="createInspection(request)" class="small primary button">
+                        <i *ngIf="_isLoading" class="fa fa-gear fa-spin fa-fw"></i>
+                        <span *ngIf="!_isLoading" >
+                            {{ 'START INSPECTION' | translate }}
+                        </span>
                     </button>
-                    <button type="button" (click)="cancelAnnouncement(request, $event, true)" class="small alert button">
-                        {{ 'CANCEL INSPECTION' | translate }}
+                    <button [disabled]="_isLoading" type="button" (click)="cancelAnnouncement(request, $event, true)" class="small alert button">
+                        <i *ngIf="_isLoading" class="fa fa-gear fa-spin fa-fw"></i>
+                        <span *ngIf="!_isLoading">
+                            {{ 'CANCEL INSPECTION' | translate }}
+                        </span>
                     </button>
                 </span>
             </td>

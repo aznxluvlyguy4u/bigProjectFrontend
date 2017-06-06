@@ -12,36 +12,17 @@ import { HealthService } from '../../../health.service';
 })
 
 export class HealthTableExpired implements OnInit{
-    private requests: LocationHealthInspection[];
 
-    @Input() animalHealthRequests: LocationHealthInspection[];
+    private _expired: LocationHealthInspection[];
 
-    constructor(private healthService:HealthService, private settings: SettingsService) {}
-
-    ngOnInit(){
-        this.healthService.toAuthorize$.subscribe(inspections => {
-            this.requests = inspections;
-        });
-        this.healthService.fetchExpired();
+    @Input()
+    set expired(expired: Array<LocationHealthInspection>) {
+        this._expired = expired || [];
+        console.log(expired);
     }
+    get expired(): Array<LocationHealthInspection> { return this._expired; }
 
-    // ngOnChanges() {
-    //     this.getRequests();
-    // }
+    constructor(private settings: SettingsService) {}
 
-    private getRequests(): void {
-        let count = 1;
-        this.requests = [];
-        this.requests = _.filter(this.animalHealthRequests, ['status', 'FINISHED']);
-        // for (let request of this.animalHealthRequests) 
-        // {
-        //     if(request.status == 'EXPIRED') 
-        //     {
-        //         this.requests.push(request);
-        //         console.log(count++);
-        //         console.log(request);
-        //     }
-        // }
-        console.log(this.requests);
-    }
+    ngOnInit(){ }
 }

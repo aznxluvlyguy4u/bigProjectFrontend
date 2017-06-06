@@ -44,6 +44,12 @@ export class HealthInspectionsComponent implements OnInit {
     private finished:Array<LocationHealthInspection>;
     private expired:Array<LocationHealthInspection>;
 
+    private toAnnounceIsLoading: boolean;
+    private announcedIsLoading: boolean;
+    private finishedIsLoading: boolean;
+    private toReceiveLabResultsIsLoading: boolean;
+    private expiredIsLoading: boolean;
+
     constructor(private healthService:HealthService) { }
 
 
@@ -52,6 +58,21 @@ export class HealthInspectionsComponent implements OnInit {
     }
 
     ngOnInit(){
+        this.healthService.toAnnounceIsLoading$.subscribe(res => {
+            this.toAnnounceIsLoading = res;
+        });
+        this.healthService.announcedIsLoading$.subscribe(res => {
+            this.announcedIsLoading = res;
+        });
+        this.healthService.toReceiveLabResultsIsLoading$.subscribe(res => {
+            this.toReceiveLabResultsIsLoading = res;
+        });
+        this.healthService.finishedIsLoading$.subscribe(res => {
+            this.finishedIsLoading = res;
+        });
+        this.healthService.expiredIsLoading$.subscribe(res => {
+            this.expiredIsLoading = res;
+        });
 
         // Suscribe and Load locations that should be announced
         this.healthService.toAnnounce$
@@ -62,6 +83,7 @@ export class HealthInspectionsComponent implements OnInit {
                 }
             });
         this.healthService.loadToAnnounce('maedi_visna');
+
 
         // // Suscribe and Load Announced inspections
         this.healthService.announced$
@@ -95,21 +117,24 @@ export class HealthInspectionsComponent implements OnInit {
           });
         this.healthService.loadToAuthorize('maedi_visna');
 
-        // // Suscribe and Load To Finished inspections
-        // this.healthService.finished$.subscribe(inspections => {
-        //     if(inspections) {
-        //         this.finishedCount = inspections.length;
-        //     }
-        // });
-        // this.healthService.loadFinished();
+        // Suscribe and Load To Finished inspections
+        this.healthService.finished$.subscribe(inspections => {
+            if(inspections) {
+                console.log(inspections);
+                this.finishedCount = inspections.length;
+                this.finished = inspections;
+            }
+        });
+        this.healthService.loadFinished('maedi_visna');
 
-        // // Suscribe and Load To Expired inspections
-        // this.healthService.expired$.subscribe(inspections => {
-        //     if(inspections) {
-        //         this.expiredCount = inspections.length;
-        //     }
-        // });
-        // this.healthService.loadExpired();
+        // Suscribe and Load To Expired inspections
+        this.healthService.expired$.subscribe(inspections => {
+            if(inspections) {
+                this.expiredCount = inspections.length;
+                this.expired = inspections;
+            }
+        });
+        this.healthService.loadExpired('maedi_visna');
     }
 
     private selectTab(selectedTab: string): void {

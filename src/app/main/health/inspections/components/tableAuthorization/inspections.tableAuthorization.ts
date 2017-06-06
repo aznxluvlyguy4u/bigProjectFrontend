@@ -19,6 +19,7 @@ export class HealthTableAuthorization implements OnInit{
     private lab_result:LabResult = new LabResult();
     private showAuthPage = false;
     private selectedInspection: LocationHealthInspection = new LocationHealthInspection();
+    private _isLoading: boolean;
 
     @Input() animalHealthRequests: LocationHealthInspection[];
 
@@ -32,36 +33,20 @@ export class HealthTableAuthorization implements OnInit{
     }
     get toAuthorize(): Array<LocationHealthInspection> { return this._toAuthorize; }
 
+    @Input()
+    set isLoading(isLoading: boolean) {
+        this._isLoading = isLoading;
+    }
+
     ngOnInit(){ }
 
-    // private getRequests(): void {
-    //     this.requests = [];
-    //     for (let request of this.animalHealthRequests) {
-    //         if(request.status == 'AUTHORIZATION') {
-    //             this.requests.push(request);
-    //         }
-    //     }
-    // }
-
-    // private getResults(inspectionId) {
-    //     this.nsfo.doGetLabResultsRequest(inspectionId, this.selectedRequest.ubn)
-    //         .subscribe(
-    //             res => {
-    //                 this.lab_result = res.result;
-    //             }
-    //         )
-    // }
-
     private switchToAuthPage(inspection): void {
-      console.log(inspection);
         this.selectedInspection = inspection;
-        //this.getResults(request.inspection_id);
         this.showAuthPage = true;
     }
 
     private switchToOverviewPage(switchPage): void {
         this.showAuthPage = switchPage;
-        //this.getRequests();
         this.selectedInspection = new LocationHealthInspection();
         this.lab_result = new LabResult;
     }
