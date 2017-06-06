@@ -1,7 +1,8 @@
 import {User} from "../client/client.model";
+import {Person} from "../config/config.model";
 import {Animal} from "../../global/components/livestock/livestock.model";
 
-export class AnimalHealthRequest {
+export class LocationHealthInspection {
     public request_id: string;
     public ubn: string;
     public last_name: string;
@@ -24,6 +25,23 @@ export class AnimalHealthRequest {
     public animals: Animal[] = []
 }
 
+export class ActionLog {
+    public id: number;
+    public logDate: string;
+    public userAccount: Person;
+    public actionBy: Person;
+    public userActionType: string;
+    public description: string;
+    public isCompleted: boolean;
+    public isUserEnvironment: boolean;
+}
+
+export class Announcement {
+    public id: number;
+    public actionLog: ActionLog;
+    public logDate: string;
+}
+
 export class Address {
     streetname_number:string;
     postal_code:string;
@@ -34,6 +52,7 @@ export class Owner {
     name:string;
     address:Address;
 }
+
 export class Veterinarian {
     name:string;
     address:Address;
@@ -83,4 +102,5 @@ export class HealthStatus {
     status:string;
     check_date:string;
     reason_of_edit:string;
+    illness:string;
 }
