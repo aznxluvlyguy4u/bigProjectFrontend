@@ -4,6 +4,16 @@ export class Choice {
     public order: string;
 }
 
+export class Person {
+    public id: number;
+    public person_id: string;
+    public first_name: string;
+    public last_name: string;
+    public email_address: string;
+    public username: string;
+    public cellphone_number: string;
+}
+
 export class Admin {
     public person_id: number;
     public email_address: string;
