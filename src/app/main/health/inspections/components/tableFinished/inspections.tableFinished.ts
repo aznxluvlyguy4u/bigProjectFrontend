@@ -1,7 +1,7 @@
 import {Component, Input} from "@angular/core";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {SettingsService} from "../../../../../global/services/settings/settings.service";
-import {AnimalHealthRequest} from "../../../health.model";
+import {LocationHealthInspection} from "../../../health.model";
 
 @Component({
     selector: 'health-table-finished',
@@ -10,9 +10,9 @@ import {AnimalHealthRequest} from "../../../health.model";
 })
 
 export class HealthTableFinished {
-    private requests: AnimalHealthRequest[] = [];
+    private requests: LocationHealthInspection[] = [];
 
-    @Input() animalHealthRequests: AnimalHealthRequest[];
+    @Input() animalHealthRequests: LocationHealthInspection[];
 
     constructor(private settings: SettingsService) {}
 
@@ -28,7 +28,7 @@ export class HealthTableFinished {
         }
     }
 
-    private changeStatus(request: AnimalHealthRequest, event: Event): void {
+    private changeStatus(request: LocationHealthInspection, event: Event): void {
         let button = event.target;
         button.disabled = true;
         button.innerHTML = '<i class="fa fa-gear fa-spin fa-fw"></i>';
@@ -41,7 +41,7 @@ export class HealthTableFinished {
                     request.next_action = result.next_action;
                     request.directions = result.directions;
 
-                    this.ngOnChanges();
+                    // this.ngOnChanges();
                 },
                 err => {
                     button.disabled = false;

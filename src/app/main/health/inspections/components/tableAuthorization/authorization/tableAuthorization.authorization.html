@@ -6,43 +6,43 @@
                     <i class="fa fa-chevron-left fa-fw" aria-hidden="true"></i> {{ 'BACK TO OVERVIEW' | translate }}
                 </button>
                 <button type="button" (click)="saveLabResult()" class="small primary button">
-                    <i class="fa fa-floppy-o fa-fw" aria-hidden="true"></i> {{ 'SAVE LAB RESULT' | translate }} 
+                    <i class="fa fa-floppy-o fa-fw" aria-hidden="true"></i> {{ 'SAVE LAB RESULT' | translate }}
                 </button>
             </div>
             <div class="large-3 columns">
                 <div *ngIf="labResult.illness == 'SCRAPIE'">
                     <strong>Scrapie Onderzoek</strong>
                     <br>
-                    Referentie Nummer: {{ request.order_number }}
+                    Referentie Nummer: {{ _inspection?.order_number }}
                     <br>
-                    {{ 'CURRENT STATUS' | translate }}: {{ currentHStatus.scrapie_status | translate }}
+                    {{ 'CURRENT STATUS' | translate }}: {{ currentHStatus?.scrapie_status | translate }}
                     <br>
-                    Sinds: {{ currentHStatus.scrapie_check_date }}
+                    Sinds: {{ currentHStatus?.scrapie_check_date }}
                 </div>
                 <div *ngIf="labResult.illness == 'MAEDI VISNA'">
                     <strong>Zwoegerziekte Onderzoek</strong>
                     <br>
-                    Referentie Nummer: {{ request.order_number }}
+                    Referentie Nummer: {{ _inspection?.order_number }}
                     <br>
-                    {{ 'CURRENT STATUS' | translate }}: {{ currentHStatus.maedi_visna_status | translate }}
+                    {{ 'CURRENT STATUS' | translate }}: {{ currentHStatus?.maedi_visna_status | translate }}
                     <br>
-                    T/m: {{ currentHStatus.maedi_visna_check_date }}
+                    T/m: {{ currentHStatus?.maedi_visna_check_date }}
                 </div>
             </div>
             <div class="large-3 columns">
                 <br>
-                {{ 'REQUIRED RESULTS COUNT' | translate }}: {{ request.required_animal_count }}
+                {{ 'REQUIRED RESULTS COUNT' | translate }}: {{ _inspection?.required_animal_count }}
                 <br>
                 {{ 'RECEIVED RESULTS COUNT' | translate }}: {{ labResult.lab_results.length }}
             </div>
 
             <div class="large-2 columns">
                  <span class="label-ubn pull-right">
-                    {{ 'UBN' | translate }}: {{ request.ubn }}
+                    {{ 'UBN' | translate }}: {{ _inspection?.ubn }}
                 </span>
             </div>
         </div>
-        
+
         <div *ngFor="let lab_result_item of labResult.lab_results" class="callout">
             <div class="row result-container">
                 <div class="large-2 columns">
@@ -54,28 +54,28 @@
 
                 <!-- SCRAPIE -->
                 <div *ngIf="labResult.illness == 'SCRAPIE'" class="large-4 columns">
-                    <span class="header-label">{{ 'MGX SAMPLE ID' | translate }}:</span> 
+                    <span class="header-label">{{ 'MGX SAMPLE ID' | translate }}:</span>
                     <editable-component [(editableValue)]="lab_result_item.mgx_sample_id"></editable-component>
                     <!--{{ lab_result_item.mgx_sample_id }}-->
                 </div>
                 <div class="large-2 columns">
-                    <span class="header-label">{{ 'RESULT DATE' | translate }}:</span> 
+                    <span class="header-label">{{ 'RESULT DATE' | translate }}:</span>
                     {{ settings.convertToViewDate(lab_result_item.result_date) }}
                 </div>
                 <div class="large-2 columns end">
-                    <span class="header-label">{{ 'RECEPTION DATE' | translate }}:</span> 
+                    <span class="header-label">{{ 'RECEPTION DATE' | translate }}:</span>
                     {{ settings.convertToViewDate(lab_result_item.reception_date) }}
                 </div>
             </div>
 
             <!-- ONLY FOR SCRAPIE -->
             <div *ngIf="labResult.illness == 'SCRAPIE'" class="row value-container">
-                <div class="large-2 columns">                    
-                    <strong>{{ 'GENOTYPE' | translate }}:</strong> 
+                <div class="large-2 columns">
+                    <strong>{{ 'GENOTYPE' | translate }}:</strong>
                     <editable-component [(editableValue)]="lab_result_item.genotype"></editable-component>
                 </div>
                 <div class="large-2 columns">
-                    <strong>{{ 'GENOTYPE CLASS' | translate }}:</strong> 
+                    <strong>{{ 'GENOTYPE CLASS' | translate }}:</strong>
                     <editable-component [(editableValue)]="lab_result_item.genotype_class"></editable-component>
                 </div>
                 <div class="large-3 columns end">
@@ -87,7 +87,7 @@
             <!-- MAEDI VISNA (Zwoeger ziekte) -->
             <div *ngIf="labResult.illness == 'MAEDI VISNA'" class="row value-container">
                 <div class="large-2 columns">
-                    <strong>{{ 'SUB REF' | translate }}:</strong> 
+                    <strong>{{ 'SUB REF' | translate }}:</strong>
                     <editable-component [(editableValue)]="lab_result_item.sub_ref"></editable-component>
                 </div>
                 <div class="large-2 columns">
@@ -95,15 +95,15 @@
                     <editable-component [(editableValue)]="lab_result_item.mvnp"></editable-component>
                 </div>
                 <div class="large-2 columns">
-                    <strong>{{ 'MV_CAE POOL' | translate }}:</strong> 
+                    <strong>{{ 'MV_CAE POOL' | translate }}:</strong>
                     {{ lab_result_item.mv_cae_pool | translate }}
                 </div>
                 <div class="large-2 columns">
-                    <strong>{{ 'MV_CAE IRA' | translate }}:</strong> 
+                    <strong>{{ 'MV_CAE IRA' | translate }}:</strong>
                     {{ lab_result_item.mv_cae_ira | translate }}
                 </div>
                 <div class="large-2 columns">
-                    <strong>{{ 'MV_CAEID' | translate }}: </strong> 
+                    <strong>{{ 'MV_CAEID' | translate }}: </strong>
                     {{ lab_result_item.mv_caegid | translate }}
                 </div>
                 <div class="large-2 columns end">
@@ -119,13 +119,13 @@
                         <label class="middle"> {{ 'STATUS' | translate }} </label>
                     </div>
                     <div class="large-8 columns">
-                        <select *ngIf="request.inspection == 'SCRAPIE'" [(ngModel)]="suggestedHealthStatus" [disabled]="foundHealthStatusSuggestion" formControlName="health_status">
+                        <select *ngIf="_inspection?.illness_type == 'SCRAPIE'" [(ngModel)]="suggestedHealthStatus" [disabled]="foundHealthStatusSuggestion" formControlName="health_status">
                             <option value="FREE"> {{ 'FREE' | translate }} </option>
                             <option value="RESISTANT"> {{ 'RESISTANT' | translate }} </option>
                             <option value="UNDER OBSERVATION"> {{ 'UNDER OBSERVATION' | translate }} </option>
                             <option value="UNDER INVESTIGATION"> {{ 'UNDER INVESTIGATION' | translate }} </option>
                         </select>
-                        <select *ngIf="request.inspection != 'SCRAPIE'" [(ngModel)]="suggestedHealthStatus" [disabled]="foundHealthStatusSuggestion" formControlName="health_status">
+                        <select *ngIf="_inspection?.inspection != 'SCRAPIE'" [(ngModel)]="suggestedHealthStatus" [disabled]="foundHealthStatusSuggestion" formControlName="health_status">
                             <option value="FREE (1 YEAR)"> {{ 'FREE (1 YEAR)' | translate }} </option>
                             <option value="FREE (2 YEAR)"> {{ 'FREE (2 YEAR)' | translate }} </option>
                             <option value="UNDER OBSERVATION"> {{ 'UNDER OBSERVATION' | translate }} </option>
@@ -133,20 +133,20 @@
                         </select>
                     </div>
                 </div>
-                <div *ngIf="request.inspection == 'SCRAPIE'" class="row">
+                <div *ngIf="_inspection?.illness_type == 'SCRAPIE'" class="row">
                     <div class="large-4 columns">
                         <label class="middle"> {{ 'DATE SINCE' | translate }} </label>
                     </div>
                     <div class="large-8 columns">
-                        <datepicker [formCtrl]="form.controls['date_since']" [viewFormat]="settings.getViewDateFormat()" [modelFormat]="settings.getModelDateTimeFormat()"></datepicker>
+                        <datepicker [formCtrl]="form.controls['check_date']" [viewFormat]="settings.getViewDateFormat()" [modelFormat]="settings.getModelDateTimeFormat()"></datepicker>
                     </div>
                 </div>
-                <div *ngIf="request.inspection == 'MAEDI VISNA'" class="row">
+                <div *ngIf="_inspection?.illness_type == 'MAEDI VISNA'" class="row">
                     <div class="large-4 columns">
                         <label class="middle"> {{ 'DATE TILL' | translate }} </label>
                     </div>
                     <div class="large-8 columns">
-                        <datepicker [formCtrl]="form.controls['date_till']" [viewFormat]="settings.getViewDateFormat()" [modelFormat]="settings.getModelDateTimeFormat()"></datepicker>
+                        <datepicker [formCtrl]="form.controls['check_date']" [viewFormat]="settings.getViewDateFormat()" [modelFormat]="settings.getModelDateTimeFormat()"></datepicker>
                     </div>
                 </div>
 

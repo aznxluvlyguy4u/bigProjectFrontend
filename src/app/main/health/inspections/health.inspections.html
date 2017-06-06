@@ -3,38 +3,38 @@
         <ul class="tabs">
             <li class="tabs-title">
                 <a (click)="selectTab('ALL REQUESTS')" [class.active]="selectedTab == 'ALL REQUESTS'">
-                    {{ 'TO ANNOUNCE' | translate }}
-                    <span *ngIf="getNewRequestAmount() > 0" class="badge">{{ getNewRequestAmount() }}</span>
+                    {{ 'TO ANNOUNCE' | translate }} {{ toAnnounceCount }}
+                    <span *ngIf="toAnnounceCount > 0" class="badge">{{ toAnnounceCount }}</span>
                 </a>
             </li>
             <li class="tabs-title">
                 <a (click)="selectTab('ANNOUNCED INSPECTIONS')" [class.active]="selectedTab == 'ANNOUNCED INSPECTIONS'">
-                    {{ 'BARCODE + FORM' | translate }}
-                    <span *ngIf="getAnnouncedRequestAmount() > 0" class="badge">{{ getAnnouncedRequestAmount() }}</span>
+                    {{ 'BARCODE + FORM' | translate }} {{ announcedCount }}
+                    <span *ngIf="announcedCount > 0" class="badge">{{ announcedCount }}</span>
                 </a>
             </li>
             <li class="tabs-title">
                 <a (click)="selectTab('ONGOING INSPECTIONS')" [class.active]="selectedTab == 'ONGOING INSPECTIONS'">
-                    {{ 'ONGOING INSPECTIONS' | translate }}
-                    <span *ngIf="getOngoingRequestAmount() > 0" class="badge">{{ getOngoingRequestAmount() }}</span>
+                    {{ 'ONGOING INSPECTIONS' | translate }} {{ ongoingCount }}
+                    <span *ngIf="ongoingCount > 0" class="badge">{{ ongoingCount }}</span>
                 </a>
             </li>
             <li class="tabs-title">
                 <a (click)="selectTab('TO BE AUTHORIZED INSPECTIONS')" [class.active]="selectedTab == 'TO BE AUTHORIZED INSPECTIONS'">
-                    {{ 'TO BE AUTHORIZED INSPECTIONS' | translate }}
-                    <span *ngIf="getAuthorizationRequestAmount() > 0" class="badge">{{ getAuthorizationRequestAmount() }}</span>
+                    {{ 'TO BE AUTHORIZED INSPECTIONS' | translate }} {{ toAuthorizeCount }}
+                    <span *ngIf="toAuthorize > 0" class="badge">{{ toAuthorizeCount }}</span>
                 </a>
             </li>
             <li class="tabs-title">
                 <a (click)="selectTab('FINISHED INSPECTIONS')" [class.active]="selectedTab == 'FINISHED INSPECTIONS'">
-                    {{ 'FINISHED INSPECTIONS' | translate }}
-                    <span *ngIf="getFinishedRequestAmount() > 0" class="badge">{{ getFinishedRequestAmount() }}</span>
+                    {{ 'FINISHED INSPECTIONS' | translate }} {{ finishedCount }}
+                    <span *ngIf="finishedCount > 0" class="badge">{{ finishedCount }}</span>
                 </a>
             </li>
             <li class="tabs-title">
                 <a (click)="selectTab('EXPIRED TERM')" [class.active]="selectedTab == 'EXPIRED TERM'">
-                    {{ 'EXPIRED TERM' | translate }}
-                    <span *ngIf="getExpiredRequestAmount() > 0" class="alert badge">{{ getFinishedRequestAmount() }}</span>
+                    {{ 'EXPIRED TERM' | translate }} {{ expiredCount }}
+                    <span *ngIf="expiredCount > 0" class="alert badge">{{ expiredCount }}</span>
                 </a>
             </li>
         </ul>
@@ -43,11 +43,34 @@
 
 <div class="row">
     <div class="large-12 columns">
-        <health-table-all *ngIf="selectedTab == 'ALL REQUESTS'" [animalHealthRequests]="animalHealthRequests"></health-table-all>
-        <health-table-announced *ngIf="selectedTab == 'ANNOUNCED INSPECTIONS'" [animalHealthRequests]="animalHealthRequests"></health-table-announced>
-        <health-table-ongoing *ngIf="selectedTab == 'ONGOING INSPECTIONS'" [animalHealthRequests]="animalHealthRequests"></health-table-ongoing>
-        <health-table-authorization *ngIf="selectedTab == 'TO BE AUTHORIZED INSPECTIONS'" [animalHealthRequests]="animalHealthRequests"></health-table-authorization>
-        <health-table-finished *ngIf="selectedTab == 'FINISHED INSPECTIONS'" [animalHealthRequests]="animalHealthRequests"></health-table-finished>
-        <health-table-expired *ngIf="selectedTab == 'EXPIRED TERM'" [animalHealthRequests]="animalHealthRequests"></health-table-expired>
+        <health-table-to-announce
+            *ngIf="selectedTab == 'ALL REQUESTS'"
+            [(toAnnounce)]="toAnnounce"
+            (_createAnnouncement)="createAnnouncement($event)"
+            (_createAnnouncements)="createAnnouncements($event)">
+        </health-table-to-announce>
+
+        <health-table-announced
+            *ngIf="selectedTab == 'ANNOUNCED INSPECTIONS'"
+            (_cancelAnnouncement)="cancelAnnouncement($event)"
+            (_createInspection)="createInspection($event)"
+            [(announced)]="announced">
+        </health-table-announced>
+
+        <health-table-to-receive-lab-results
+            *ngIf="selectedTab == 'ONGOING INSPECTIONS'"
+            [(toReceiveLabResults)]="toReceiveLabResults"
+            (_cancelInspection)="cancelInspection($event)">
+        </health-table-to-receive-lab-results>
+
+        <health-table-authorization
+            *ngIf="selectedTab == 'TO BE AUTHORIZED INSPECTIONS'"
+            [(toAuthorize)]="toAuthorize">
+        </health-table-authorization>
+        <!--<health-table-finished *ngIf="selectedTab == 'FINISHED INSPECTIONS'" [animalHealthRequests]="animalHealthRequests"></health-table-finished>-->
+         <!--[animalHealthRequests]="animalHealthRequests"-->
+        <!--<health-table-expired *ngIf="selectedTab == 'EXPIRED TERM'"></health-table-expired>-->
+                <!--[animalHealthRequests]="animalHealthRequests"-->
+
     </div>
 </div>

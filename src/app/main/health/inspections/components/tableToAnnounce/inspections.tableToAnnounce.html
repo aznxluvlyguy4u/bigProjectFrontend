@@ -1,0 +1,70 @@
+<table>
+    <thead>
+        <tr>
+            <td> {{ 'UBN' | translate }} </td>
+            <td> {{ 'NAME' | translate }} </td>
+            <td> {{ 'INSPECTION' | translate }} </td>
+            <td> {{ 'REQUEST DATE' | translate }} </td>
+            <td> {{ 'NEXT ACTION' | translate }} </td>
+            <td> {{ _toAnnounce?.length }}
+                <button type="button" *ngIf="_toAnnounce?.length > 0" (click)="createAnnouncements()" class="tiny primary button pull-right">
+                    <i *ngIf="isLoading" class="fa fa-gear fa-spin fa-fw"></i>
+                    <span *ngIf="_toAnnounce.length > 0 && !isLoading" class="badge"> {{ _toAnnounce.length }} </span>
+                    {{ 'DOWNLOAD' | translate }}
+                </button>
+            </td>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr *ngFor="let to_announce of _toAnnounce">
+            <td>{{ to_announce.ubn }}</td>
+            <td>{{ to_announce.last_name }}</td>
+            <td>{{ to_announce.inspection | translate }}</td>
+            <td>
+                <span *ngIf="to_announce?.request_date">
+                    {{ settings.convertToViewDate(to_announce.request_date) }}
+                </span>
+                <span *ngIf="!to_announce?.request_date">
+                    --
+                </span>
+            </td>
+            <td>{{ to_announce.next_action | translate }}</td>
+            <td>
+                <span class="pull-right">
+                    <button class="small primary button" (click)="createAnnouncement(to_announce, $event)" type="button">
+                        {{ 'DOWNLOAD' | translate }}
+                    </button>
+                    <button type="button" (click)="changeStatus(to_announce, $event);" class="small primary button">
+                        {{ 'ANNOUNCE' | translate }}
+                    </button>
+                </span>
+            </td>
+        </tr>
+
+        <!--<tr *ngFor="let request of requests?.maedi_visna">
+            <td>{{ request.ubn }}</td>
+            <td>{{ request.last_name }}</td>
+            <td>{{ request.inspection | translate }}</td>
+            <td>
+                <span *ngIf="request?.request_date">
+                    {{ settings.convertToViewDate(request.request_date) }}
+                </span>
+                <span *ngIf="!request?.request_date">
+                    --
+                </span>
+            </td>
+            <td>{{ request.next_action | translate }}</td>
+            <td>
+                <span class="pull-right">
+                    <button class="small primary button" (click)="getDocument(request)" type="button">
+                        Download
+                    </button>
+                    <button type="button" (click)="changeStatus(request, $event);" class="small primary button">
+                        {{ 'ANNOUNCE' | translate }}
+                    </button>
+                </span>
+            </td>
+        </tr>-->
+    </tbody>
+</table>

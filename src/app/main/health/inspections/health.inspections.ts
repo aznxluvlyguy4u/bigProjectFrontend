@@ -1,70 +1,140 @@
 import _ = require("lodash");
-import {Component} from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
-import {HealthTableAll} from "./components/tableAllRequests/inspections.tableAllRequests";
+import {HealthTableToAnnounce} from "./components/tableToAnnounce/inspections.tableToAnnounce";
+import {HealthTableToReceiveLabResults} from "./components/tableToReceiveLabResults/inspections.tableToReceiveLabResults";
 import {HealthTableOngoing} from "./components/tableOngoing/inspections.tableOngoing";
 import {HealthTableAuthorization} from "./components/tableAuthorization/inspections.tableAuthorization";
 import {HealthTableExpired} from "./components/tableExpired/inspections.tableExpired";
 import {HealthTableFinished} from "./components/tableFinished/inspections.tableFinished";
 import {HealthTableAnnounced} from "./components/tableAnnounced/inspections.tableAnnounced";
-import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
-import {AnimalHealthRequest} from "../health.model";
+import {LocationHealthInspection} from "../health.model";
+import { HealthService } from "../health.service";
 
 @Component({
     directives: [
-        HealthTableAll,
+        HealthTableToAnnounce,
         HealthTableAnnounced,
+        HealthTableToReceiveLabResults,
         HealthTableOngoing,
         HealthTableAuthorization,
         HealthTableExpired,
         HealthTableFinished
     ],
+    providers: [ HealthService ],
     template: require('./health.inspections.html'),
     pipes: [TranslatePipe]
 })
 
-export class HealthInspectionsComponent {
+export class HealthInspectionsComponent implements OnInit {
     private selectedTab: string = 'ALL REQUESTS';
-    private animalHealthRequests: AnimalHealthRequest[] = [];
-    
-    constructor(private nsfo: NSFOService) {
-        this.getAnimalHealthRequests();
+    private animalHealthRequests: LocationHealthInspection[] = [];
+
+    private toAnnounceCount:number = 0;
+    private announcedCount:number = 0;
+    private ongoingCount:number = 0;
+    private toAuthorizeCount:number = 0;
+    private finishedCount:number = 0;
+    private expiredCount:number = 0;
+
+    private toAnnounce:Array<any>;
+    private announced:Array<any>;
+    private toReceiveLabResults:Array<any>;
+
+    private ongoing:Array<LocationHealthInspection>;
+    private toAuthorize:Array<LocationHealthInspection>;
+    private finished:Array<LocationHealthInspection>;
+    private expired:Array<LocationHealthInspection>;
+
+    constructor(private healthService:HealthService) { }
+
+
+    ngOnDestroy(){
+        // TODO: Kill all subscriptions
     }
-    
+
+    ngOnInit(){
+
+        // Suscribe and Load locations that should be announced
+        this.healthService.toAnnounce$
+            .subscribe(locations => {
+                if(locations) {
+                    this.toAnnounceCount = locations.length;
+                    this.toAnnounce = locations;
+                }
+            });
+        this.healthService.loadToAnnounce('maedi_visna');
+
+        // // Suscribe and Load Announced inspections
+        this.healthService.announced$
+            .subscribe(inspections => {
+                if(inspections) {
+                    this.announcedCount = inspections.length;
+                    this.announced = inspections;
+                }
+            });
+        this.healthService.loadAnnounced('maedi_visna');
+
+        // Suscribe and Load To Ongoing inspections
+        this.healthService.toReceiveLabResults$
+            .subscribe(inspections => {
+                if(inspections) {
+                    this.ongoingCount = inspections.length;
+                    this.toReceiveLabResults = inspections;
+                }
+            });
+        this.healthService.loadToReceiveLabResults('maedi_visna');
+
+        // // Suscribe and Load To Authorize inspections
+        this.healthService.toAuthorize$
+            .subscribe(inspections => {
+                console.log('RESULT');
+                console.log(inspections);
+                if(inspections) {
+                    this.toAuthorizeCount = inspections.length;
+                    this.toAuthorize = inspections;
+                }
+          });
+        this.healthService.loadToAuthorize('maedi_visna');
+
+        // // Suscribe and Load To Finished inspections
+        // this.healthService.finished$.subscribe(inspections => {
+        //     if(inspections) {
+        //         this.finishedCount = inspections.length;
+        //     }
+        // });
+        // this.healthService.loadFinished();
+
+        // // Suscribe and Load To Expired inspections
+        // this.healthService.expired$.subscribe(inspections => {
+        //     if(inspections) {
+        //         this.expiredCount = inspections.length;
+        //     }
+        // });
+        // this.healthService.loadExpired();
+    }
+
     private selectTab(selectedTab: string): void {
         this.selectedTab = selectedTab;
     }
-    
-    private getAnimalHealthRequests(): void {
-        this.nsfo.doGetRequest(this.nsfo.URI_HEALTH_INSPECTIONS)
-            .subscribe(
-                res => {
-                    this.animalHealthRequests = res.result;
-                }
-            )
+
+    private createAnnouncement(location){
+        this.healthService.createAnnouncement(location, "MAEDI VISNA");
     }
 
-    private getNewRequestAmount(): number {
-        return _.filter(this.animalHealthRequests, ['status', 'NEW']).length
+    private createAnnouncements(locations){
+        this.healthService.createAnnouncements(locations, "MAEDI VISNA");
     }
 
-    private getAnnouncedRequestAmount(): number {
-        return _.filter(this.animalHealthRequests, ['status', 'ANNOUNCED']).length
+    private cancelAnnouncement(announcement) {
+      this.healthService.cancelAnnouncement(announcement);
     }
 
-    private getOngoingRequestAmount(): number {
-        return _.filter(this.animalHealthRequests, ['status', 'ONGOING']).length
+    private createInspection(announcement) {
+      this.healthService.createInspection(announcement, "MAEDI VISNA");
     }
 
-    private getAuthorizationRequestAmount(): number {
-        return _.filter(this.animalHealthRequests, ['status', 'AUTHORIZATION']).length
-    }
-
-    private getExpiredRequestAmount(): number {
-        return _.filter(this.animalHealthRequests, ['status', 'EXPIRED']).length
-    }
-
-    private getFinishedRequestAmount(): number {
-        return _.filter(this.animalHealthRequests, ['status', 'FINISHED']).length
+    private cancelInspection(inspection) {
+      this.healthService.cancelInspection(inspection);
     }
 }

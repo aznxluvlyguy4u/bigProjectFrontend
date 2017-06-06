@@ -17,26 +17,35 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let request of requests">
-            <td>{{ request.ubn }}</td>
-            <td>{{ request.last_name }}</td>
-            <td>{{ request.inspection | translate }}</td>
-            <td>
+        <tr *ngFor="let request of _announced">
+            <td>{{ request?.ubn }}</td>
+
+            <td>{{ request?.first_name }} {{ request?.last_name }}</td>
+            <td>TYPE EVENTUEEL SCHEIDEN</td>
+            <td>DATUM NOG </td>
+            <td>{{ 'Barcode + Begeleidende brief' | translate }}</td>
+            <!--<td>{{ request?.inspection | translate }}</td>-->
+            <!--<td>
                 <span *ngIf="request.request_date">
                     {{ settings.convertToViewDate(request.request_date) }}
                 </span>
                 <span *ngIf="!request.request_date">
                     --
                 </span>
+            </td>-->
+            <!--<td>{{ request?.next_action | translate }}</td>-->
+            <td>
+                {{ request?.action_taken_by?.first_name + " " + request?.action_taken_by?.last_name }}
+                <!--({{ settings.convertToViewDateTime(request.direction_date) }})-->
             </td>
-            <td>{{ request.next_action | translate }}</td>
-            <td>{{ request.action_taken_by.first_name + " " + request.action_taken_by.last_name }} ({{ settings.convertToViewDateTime(request.direction_date) }})</td>
             <td>
                 <span class="pull-right">
-                    <button type="button" (click)="getDocument(request); getBarCodeDocument(request); changeStatus(request, $event)" class="small primary button">
+                    <label for="">{{ 'MINIMUM AMOUNT OF ANIMALS' | translate }}</label>
+                    <input type="number" [(ngModel)]="request.animal_count">
+                    <button type="button" (click)="createInspection(request)" class="small primary button">
                         {{ 'START INSPECTION' | translate }}
                     </button>
-                    <button type="button" (click)="changeStatus(request, $event, true)" class="small alert button">
+                    <button type="button" (click)="cancelAnnouncement(request, $event, true)" class="small alert button">
                         {{ 'CANCEL INSPECTION' | translate }}
                     </button>
                 </span>
@@ -44,7 +53,7 @@
         </tr>
     </tbody>
 </table>
-
+<!--
 <div id="inspection-creation-modal" class="reveal-overlay" [ngStyle]="{'display': showModal}">
     <div class="large reveal" [ngStyle]="{'display': showModal}">
         <div class="modal-header">
@@ -135,4 +144,4 @@
             </span>
         </div>
     </div>
-</div>
+</div>-->

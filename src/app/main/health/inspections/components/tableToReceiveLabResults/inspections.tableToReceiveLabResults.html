@@ -1,0 +1,49 @@
+<table>
+    <thead>
+    <tr>
+        <td> {{ 'UBN' | translate }} </td>
+        <td> {{ 'NAME' | translate }} </td>
+        <td> {{ 'ORDER NUMBER' | translate }} </td>
+        <td> {{ 'INSPECTION' | translate }} </td>
+        <td> {{ 'REQUEST DATE' | translate }} </td>
+        <td> {{ 'START DATE' | translate }} </td>
+        <td> {{ 'NEXT ACTION' | translate }} </td>
+        <td> {{ 'LAST ACTION TAKEN BY' | translate }} </td>
+        <td></td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let inspection of _toReceiveLabResults">
+        <td>{{ inspection?.location?.ubn }}</td>
+        <td>{{ inspection?.location?.first_name }} {{ inspection?.location?.last_name }}</td>
+        <td>{{ inspection?.order_number }}</td>
+        <td>{{ inspection?.illness_type | translate }}</td>
+        <td>
+            <span *ngIf="request?.request_date">
+                {{ settings.convertToViewDate(request?.request_date) }}
+            </span>
+            <span *ngIf="!request?.request_date">
+                --
+            </span>
+        </td>
+        <td>
+            {{ settings.convertToViewDate(request?.date_started) }}
+        </td>
+        <td>
+            {{ 'RECEIVE LABRESULTS' | translate }}
+        </td>
+        <td>
+            PROPERTY MISSING
+            <!--{{ request?.action_taken_by?.first_name + " " + request?.action_taken_by?.last_name }}
+            ({{ settings.convertToViewDateTime(request.direction_date) }})-->
+        </td>
+        <td>
+            <span class="pull-right">
+                <button type="button" (click)="cancelInspection(request, $event, true)" class="small alert button">
+                    {{ 'CANCEL INSPECTION' | translate }}
+                </button>
+            </span>
+        </td>
+    </tr>
+    </tbody>
+</table>
