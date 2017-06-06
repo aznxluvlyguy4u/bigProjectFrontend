@@ -3,7 +3,6 @@ import {Component, OnInit} from "@angular/core";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {HealthTableToAnnounce} from "./components/tableToAnnounce/inspections.tableToAnnounce";
 import {HealthTableToReceiveLabResults} from "./components/tableToReceiveLabResults/inspections.tableToReceiveLabResults";
-import {HealthTableOngoing} from "./components/tableOngoing/inspections.tableOngoing";
 import {HealthTableAuthorization} from "./components/tableAuthorization/inspections.tableAuthorization";
 import {HealthTableExpired} from "./components/tableExpired/inspections.tableExpired";
 import {HealthTableFinished} from "./components/tableFinished/inspections.tableFinished";
@@ -16,7 +15,6 @@ import { HealthService } from "../health.service";
         HealthTableToAnnounce,
         HealthTableAnnounced,
         HealthTableToReceiveLabResults,
-        HealthTableOngoing,
         HealthTableAuthorization,
         HealthTableExpired,
         HealthTableFinished
