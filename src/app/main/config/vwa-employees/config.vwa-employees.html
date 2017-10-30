@@ -7,7 +7,7 @@
                         <td>{{ 'E-MAIL ADDRESS' | translate}}</td>
                         <td>{{ 'FIRST NAME' | translate}}</td>
                         <td>{{ 'LAST NAME' | translate}}</td>
-                        <td>{{ 'ACCESS LEVEL' | translate}}</td>
+                        <td>{{ 'LAST LOGIN DATE' | translate}}</td>
                         <td>
                             <button type="button" (click)="openModal(false)" class="small primary button pull-right">
                                 <i class="fa fa-user-plus fa-fw" aria-hidden="true"></i>
@@ -21,7 +21,7 @@
                         <td>{{ vwaEmployee.email_address }}</td>
                         <td>{{ vwaEmployee.first_name }}</td>
                         <td>{{ vwaEmployee.last_name }}</td>
-                        <td>{{ vwaEmployee.access_level | translate }}</td>
+                        <td>{{ vwaEmployee.last_login_date ? (vwaEmployee.last_login_date | date: 'dd-MM-yyyy @ HH:mm:ss') : 'NO LOGIN YET' | translate }}</td>
                         <td>
                             <span class="pull-right overview-controls">
                                 <a (click)="openModal(true, vwaEmployee)"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>

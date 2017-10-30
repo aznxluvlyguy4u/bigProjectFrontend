@@ -309,5 +309,7 @@
   "ARE YOU SURE YOU WANT TO REMOVE THIS VWA EMPLOYEE": "Weet u zeker dat u deze VWA medewerker wilt verwijderen?",
   "REMOVE VWA EMPLOYEE": "Verwijder VWA medewerker",
   "NEW VWA EMPLOYEE": "Nieuwe VWA medewerker",
-  "EDIT VWA EMPLOYEE": "Wijzig VWA medewerker"
+  "EDIT VWA EMPLOYEE": "Wijzig VWA medewerker",
+  "LAST LOGIN DATE": "Laatste inlog datum",
+  "NO LOGIN YET": "Nog geen inlog"
 }
