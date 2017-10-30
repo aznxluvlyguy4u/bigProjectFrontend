@@ -221,7 +221,7 @@
   "ACCESS LEVEL": "Rechten",
   "SUPER_ADMIN": "Superbeheerder",
   "ADD ADMIN": "Beheerder toevoegen",
-  "NEW ADMIN": "Nieuw beheerder",
+  "NEW ADMIN": "Nieuwe beheerder",
   "EDIT ADMIN": "Wijzig beheerder",
   "ADMINS": "Beheerders",
   "ARE YOU SURE YOU WANT TO REMOVE THIS ADMIN": "Weet u zeker dat u deze beheerder wilt verwijderen?",
@@ -303,5 +303,11 @@
   "FEMALE": "Vrouwelijk",
   "REQUIRED RESULTS COUNT": "Aantal resultaten vereist",
   "RECEIVED RESULTS COUNT": "Aantal resultaten ontvangen",
-  "CURRENT STATUS": "Huidige status"
+  "CURRENT STATUS": "Huidige status",
+  "VWA EMPLOYEES": "VWA medewerkers",
+  "INVITE VWA EMPLOYEE": "Nodig VWA medewerker uit",
+  "ARE YOU SURE YOU WANT TO REMOVE THIS VWA EMPLOYEE": "Weet u zeker dat u deze VWA medewerker wilt verwijderen?",
+  "REMOVE VWA EMPLOYEE": "Verwijder VWA medewerker",
+  "NEW VWA EMPLOYEE": "Nieuwe VWA medewerker",
+  "EDIT VWA EMPLOYEE": "Wijzig VWA medewerker"
 }
