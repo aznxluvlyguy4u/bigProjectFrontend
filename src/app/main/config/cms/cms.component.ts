@@ -6,7 +6,6 @@ import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
 declare var $;
 
 @Component({
-    directives: [CKEditor],
     template: require('./cms.component.html'),
     pipes: [TranslatePipe]
 })
