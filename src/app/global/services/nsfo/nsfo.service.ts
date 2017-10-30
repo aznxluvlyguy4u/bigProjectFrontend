@@ -31,6 +31,8 @@ export class NSFOService {
     
     public URI_SETTINGS: string = '/v1/settings';
 
+    public URI_VWA_EMPLOYEE: string = '/v1/vwa-employee';
+
     private content_type: string = "Content-Type";
     private authorization: string = "Authorization";
     public access_token: string = "AccessToken";
