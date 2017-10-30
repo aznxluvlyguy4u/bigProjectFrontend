@@ -29,6 +29,7 @@ import {InvoicesRuleTemplatesComponent} from "./main/config/invoices/rules/invoi
 import {InvoicesNSFODetailsComponent} from "./main/config/invoices/details/details.invoices";
 import {MaediVisnaAnnouncementComponent} from "./main/config/healthLetters/maediVisna/announcement/maediVisna.announcement";
 import {MaediVisnaSupportComponent} from "./main/config/healthLetters/maediVisna/support/maediVisna.support";
+import {ConfigVwaEmployeesComponent} from "./main/config/vwa-employees/config.vwa-employees";
 
 const routes: RouterConfig = [
     {
@@ -61,6 +62,7 @@ const routes: RouterConfig = [
                 children: [
                     {path: '', terminal: true, redirectTo: 'admins'},
                     {path: 'admins', component: ConfigAdminsComponent},
+                    {path: 'vwa-employees', component: ConfigVwaEmployeesComponent},
                     {path: 'cms', component: ConfigCMSComponent},
                     {path: 'invoices', component: ConfigInvoicesComponent,
                         children: [
