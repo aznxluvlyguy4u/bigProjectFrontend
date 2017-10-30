@@ -26,7 +26,8 @@ module.exports = {
     devServer: {
         contentBase: path.resolve(rootDir, 'src'),
         historyApiFallback: true,
-        open: true
+        open: true,
+        hot: true
     },
     devtool: 'source-map',
     entry: {
