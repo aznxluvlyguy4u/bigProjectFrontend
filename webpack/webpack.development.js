@@ -5,6 +5,7 @@ const HtmlWebpack = require('html-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack');
 const ChunkWebpack = webpack.optimize.CommonsChunkPlugin;
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 
 /**
@@ -79,6 +80,33 @@ module.exports = {
             inject: 'body',
             template: path.resolve(rootDir, 'src/index.html')
         }),
+        new CopyWebpackPlugin([
+            {
+                context: 'src/assets',
+                from: 'i18n/*',
+                to: 'assets'
+            },
+            {
+                context: 'src/assets',
+                from: 'images/*',
+                to: 'assets'
+            },
+            {
+                context: 'src/assets',
+                from: 'js/*',
+                to: 'assets'
+            },
+            {
+                context: 'src',
+                from: '.htaccess',
+                dot: true
+            },
+            {
+                context: 'api',
+                from: '*',
+                to: 'api'
+            }
+        ]),
         new webpack.ProvidePlugin({
             '$':          'jquery',
             'jQuery':     'jquery',
