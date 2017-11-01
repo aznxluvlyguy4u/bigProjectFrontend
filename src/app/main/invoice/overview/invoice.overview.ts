@@ -1,35 +1,39 @@
-import moment from "moment";
+import moment = require("moment");
 import {Component} from "@angular/core";
 import {PaginationService, PaginatePipe} from "ng2-pagination/index";
 import {PaginationComponent} from "../../../global/components/pagination/pagination.component";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
 import {Invoice} from "../invoice.model"
+import {invoiceFilterPipe} from "./pipes/invoiceFilter.pipe";
 import {SettingsService} from "../../../global/services/settings/settings.service";
-import {Router} from "@angular/router";
+import {ROUTER_DIRECTIVES, Router} from "@angular/router";
 
 @Component({
     providers: [PaginationService],
     directives: [PaginationComponent],
     template: require('./invoice.overview.html'),
-    pipes: [TranslatePipe, PaginatePipe]
+    pipes: [TranslatePipe, PaginatePipe, invoiceFilterPipe]
 })
 
 export class InvoiceOverviewComponent {
     private invoices: Invoice[] = [];
+    private isLoaded: boolean = false;
+    private status: string = 'ALL';
+    private filterAmount: number = 10;
 
     constructor(private nsfo: NSFOService, private settings: SettingsService, private router: Router) {
         this.getInvoicesList();
     }
 
     private getInvoicesList() {
-        // TODO ADD API ENDPOINT TO GET ALL INVOICES
-        // this.nsfo.doGetRequest()
-        //     .subscribe(
-        //         res => {
-        //             this.invoices = <Invoice[]> res.result;
-        //         }
-        //     );
+        this.nsfo.doGetRequest(this.nsfo.URI_INVOICE)
+            .subscribe(
+                res => {
+                    this.invoices = <Invoice[]> res.result;
+                    this.isLoaded = true;
+                }
+            );
     }
 
     private calculateDays(date: string) {

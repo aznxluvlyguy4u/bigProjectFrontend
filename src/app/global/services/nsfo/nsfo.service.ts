@@ -15,12 +15,18 @@ export class NSFOService {
     public URI_ADMIN_DEACTIVATE: string = '/v1/admins-deactivate';
     public URI_ADMIN_ACCESS_LEVEL: string = '/v1/admins-access-levels';
     public URI_ADMIN_PROFILE: string = '/v1/profiles-admin';
+    public URI_INVOICE = '/v1/invoices';
+    public URI_INVOICE_RULE = '/v1/invoice-rules';
+    public URI_INVOICE_RULE_TEMPLATE = '/v1/invoice-rule-templates';
+    public URI_INVOICE_SENDER_DETAILS = '/v1/invoice-sender-details';
 
     public URI_CMS: string = '/v1/cms';
     public URI_DASHBOARD: string = '/v1/admin/dashboard';
     public URI_MENUBAR: string = '/v1/components/admin-menu-bar';
 
     public URI_CLIENTS: string = '/v1/companies';
+
+    public URI_COMPANIES_INVOICE: string = '/v1/companies/invoice/info';
 
     public URI_HEALTH_COMPANY: string = '/v1/health/company';
     public URI_HEALTH_UBN: string = '/v1/health/ubn';
@@ -46,6 +52,8 @@ export class NSFOService {
     public URI_ANNOUNCEMENTS_LETTERS = '/v1/announcements/letters';
     public URI_INSPECTIONS_LETTERS = '/v1/inspections/letters';
     public URI_BARCODES = '/v1/lab-results/barcodes';
+
+    public URI_VWA_EMPLOYEE: string = '/v1/vwa-employee';
 
     private content_type: string = "Content-Type";
     private authorization: string = "Authorization";

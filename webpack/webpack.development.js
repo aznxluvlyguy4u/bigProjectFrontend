@@ -27,7 +27,8 @@ module.exports = {
     devServer: {
         contentBase: path.resolve(rootDir, 'src'),
         historyApiFallback: true,
-        open: true
+        open: true,
+        hot: true
     },
     devtool: 'source-map',
     entry: {
@@ -79,6 +80,33 @@ module.exports = {
             inject: 'body',
             template: path.resolve(rootDir, 'src/index.html')
         }),
+        new CopyWebpackPlugin([
+            {
+                context: 'src/assets',
+                from: 'i18n/*',
+                to: 'assets'
+            },
+            {
+                context: 'src/assets',
+                from: 'images/*',
+                to: 'assets'
+            },
+            {
+                context: 'src/assets',
+                from: 'js/*',
+                to: 'assets'
+            },
+            {
+                context: 'src',
+                from: '.htaccess',
+                dot: true
+            },
+            {
+                context: 'api',
+                from: '*',
+                to: 'api'
+            }
+        ]),
         new webpack.ProvidePlugin({
             '$':          'jquery',
             'jQuery':     'jquery',
