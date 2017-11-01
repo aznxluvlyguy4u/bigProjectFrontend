@@ -25,7 +25,7 @@ import {ScrapieAnnouncementComponent} from "./main/config/healthLetters/scrapie/
 import {ScrapieSupportComponent} from "./main/config/healthLetters/scrapie/support/scrapie.support";
 import {LoadingComponent} from "./loading/loading.component";
 import {ConfigInvoicesComponent} from "./main/config/invoices/invoices.component";
-import {InvoicesRulesComponent} from "./main/config/invoices/rules/invoicesRules.invoices";
+import {InvoicesRuleTemplatesComponent} from "./main/config/invoices/rules/invoicesRuleTemplates.invoices";
 import {InvoicesNSFODetailsComponent} from "./main/config/invoices/details/details.invoices";
 import {MaediVisnaAnnouncementComponent} from "./main/config/healthLetters/maediVisna/announcement/maediVisna.announcement";
 import {MaediVisnaSupportComponent} from "./main/config/healthLetters/maediVisna/support/maediVisna.support";
@@ -66,9 +66,9 @@ const routes: RouterConfig = [
                     {path: 'cms', component: ConfigCMSComponent},
                     {path: 'invoices', component: ConfigInvoicesComponent,
                         children: [
-                            {path: '', terminal: true, redirectTo: 'invoices_rules'},
-                            {path: 'invoices_rules', component: InvoicesRulesComponent},
-                            {path: 'invoices_details', component: InvoicesNSFODetailsComponent},      
+                            {path: '', terminal: true, redirectTo: 'invoices_rule_templates'},
+                            {path: 'invoices_rule_templates', component: InvoicesRuleTemplatesComponent},
+                            {path: 'invoices_details', component: InvoicesNSFODetailsComponent},
                         ]},
                     {path: 'health_letters', component: HealthLettersComponent,
                         children: [

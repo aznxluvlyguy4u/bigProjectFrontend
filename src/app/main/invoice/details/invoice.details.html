@@ -3,116 +3,206 @@
         <div class="page-title">{{ pageTitle | translate }}</div>
     </div>
 
-    <div class="row client-selection">
-        <div class="large-2 columns">
+    <div *ngIf="!onlyView" class="row client-selection">
+        <div class="large-12 columns">
             <label>
-                {{ 'UBN' | translate }}
-                <input type="text">
+                {{ 'FIND COMPANY' | translate }}
             </label>
+            <div class="large-4">
+                <input type="text" [(ngModel)]="companyName">
+            </div>
+            <div class="large-2">
+                <label>
+                    <button (click)="searchCompanies()" class="small primary button expanded">
+                        {{ 'SEARCH COMPANIES' | translate }}
+                    </button>
+                </label>
+            </div>
         </div>
-        <div class="large-2 columns">
+        <div *ngIf="showCompanies" class="large-12 columns">
             <label>
-                {{ 'LAST NAME' | translate }}
-                <input type="text">
+                {{'COMPANY SELECTION' | translate }}
             </label>
+            <div class="large-4">
+                <select [(ngModel)]="selectedCompany.company_id" name="" id="companies">
+                <option *ngFor="let company of companies" value="{{company.company_id}}">{{company.company_name}}</option>
+                </select>
+            </div>
+            <div class="large-2 end">
+                <label *ngIf="showCompanies">
+                    <button (click)="getCompanyLocations()" class="small primary button expanded">
+                        {{ 'SELECT COMPANY' | translate }}
+                    </button>
+                </label>
+            </div>
         </div>
-        <div class="large-2 columns end">
+        <div *ngIf="showLocations" class="large-12 columns">
             <label>
-                &nbsp;
-                <button class="small primary button expanded">
-                    {{ 'SELECT' | translate }}
-                </button>
+                {{'LOCATION SELECTION' | translate }}
             </label>
+            <div class="large-4">
+                <select name="" [(ngModel)]="selectedLocation.ubn" id="locations">
+                    <option value="undefined" disabled>
+                        {{'SELECT LOCATION' | translate}}
+                    </option>
+                    <option *ngFor="let location of locations" value="{{location.ubn}}">{{location['address'].city}} -
+                        {{location['address'].street_name}} {{location['address'].address_number}} - {{location.ubn}}
+                    </option>
+                </select>
+            </div>
+            <div class="large-2 end">
+                <label>
+                    <button (click)="setInvoiceRecipient()" class="small primary button expanded">
+                        {{ 'CONFIRM SELECTION' | translate }}
+                    </button>
+                </label>
+            </div>
         </div>
     </div>
 <hr>
     <div class="row information-overview">
         <div class="large-3 columns">
-            <div class="row">
-                <div class="large-12 columns section-title">
-                    {{ 'CLIENT INFORMATION' | translate }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="large-6 columns">
-                    {{ 'UBN' | translate }}
-                </div>
-                <div class="large-6 columns">
-                    123123112
-                </div>
-            </div>
-            <div class="row">
-                <div class="large-6 columns">
-                    {{ 'INVOICE NUMBER' | translate }}
-                </div>
-                <div class="large-6 columns">
-                    123123112
-                </div>
-            </div>
-            <div class="row">
-                <div class="large-6 columns">
-                    {{ 'NAME' | translate }}
-                </div>
-                <div class="large-6 columns">
-                    Jansen
-                </div>
-            </div>
-            <div class="row">
-                <div class="large-6 columns">
-                    {{ 'VAT NUMBER' | translate }}
-                </div>
-                <div class="large-6 columns">
-                    12391723981
-                </div>
-            </div>
+            <table>
+                <tr>
+                    <td class="large-12 columns section-title">
+                        {{ 'CLIENT INFORMATION' | translate }}
+                    </td>
+                </tr>
+                <tr >
+                    <td class="large-6 columns">
+                        {{ 'UBN' | translate }}
+                    </td>
+                    <td class="large-6 columns">
+                        <span>
+                            {{ invoice.ubn }}
+                        </span>
+                    </td>
+                </tr>
+                <tr class="row">
+                    <td class="large-6 columns">
+                        {{ 'INVOICE NUMBER' | translate }}
+                    </td>
+                    <td class="large-6 columns">
+                        {{ invoice.invoice_number}}
+                    </td>
+                </tr>
+                <tr class="row">
+                    <td class="large-6 columns">
+                        {{ 'NAME' | translate }}
+                    </td>
+                    <td class="large-6 columns">
+                        <span>
+                            {{ invoice.company_name }}
+                        </span>
+                    </td>
+                </tr>
+                <tr class="row">
+                    <td class="large-6 columns">
+                        {{ 'VAT NUMBER' | translate }}
+                    </td>
+                    <td class="large-6 columns">
+                        <span>
+                            {{ invoice.company_vat_number }}
+                        </span>
+                    </td>
+                </tr>
+            </table>
         </div>
         <div class="large-3 columns end">
-            <div class="row">
-                <div class="large-12 columns section-title">
-                    {{ 'YOUR INFORMATION' | translate }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="large-6 columns">
-                    {{ 'NAME' | translate }}
-                </div>
-                <div class="large-6 columns">
-                    Burp
-                </div>
-            </div>
-            <div class="row">
-                <div class="large-6 columns">
-                    {{ 'IBAN' | translate }}
-                </div>
-                <div class="large-6 columns">
-                    NLING123123112
-                </div>
-            </div>
-            <div class="row">
-                <div class="large-6 columns">
-                    {{ 'VAT NUMBER' | translate }}
-                </div>
-                <div class="large-6 columns">
-                    12391723981
-                </div>
-            </div>
+            <table>
+                <tr class="row">
+                    <td class="large-12 columns section-title">
+                        {{ 'YOUR INFORMATION' | translate }}
+                    </td>
+                </tr>
+                <tr class="row">
+                    <td class="large-6 columns">
+                        {{ 'NAME' | translate }}
+                    </td>
+                    <td class="large-6 columns">
+                        <span>
+                            {{ senderDetails.name }}
+                        </span>
+                    </td>
+                </tr>
+                <tr class="row">
+                    <td class="large-6 columns">
+                        {{ 'IBAN' | translate }}
+                    </td>
+                    <td class="large-6 columns">
+                        <span>
+                            {{senderDetails.iban}}
+                        </span>
+                    </td>
+                </tr>
+                <tr class="row">
+                    <td class="large-6 columns">
+                        {{ 'VAT NUMBER' | translate }}
+                    </td>
+                    <td class="large-6 columns">
+                        <span>
+                            {{senderDetails.vat_number}}
+                        </span>
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
 
-    <div class="row invoice-rules">
+    <div *ngIf="!onlyView" class="row invoice-rules">
         <div class="large-6 columns">
             <label>
-                {{ 'INVOICE RULE' | translate }}
-                <select [(ngModel)]="selectedInvoiceId">
+                {{ 'STANDARD INVOICE RULE' | translate }}
+                <select [(ngModel)]="selectedInvoiceRuleId">
                     <option value="">--</option>
-                    <option *ngFor="let rule of invoiceRulesOptions" value="{{ rule.id }}">{{ rule.description }}</option>
+                    <option *ngFor="let rule of invoiceRuleTemplatesOptions" value="{{ rule.id }}">{{ rule.description }}</option>
                 </select>
             </label>
         </div>
         <div class="large-2 columns end">
             <label>
                 &nbsp;
-                <button [disabled]="!selectedInvoiceId" (click)="addInvoiceRule()" class="small primary button expanded">
+                <button (click)="addInvoiceRuleTemplate()" class="small primary button expanded">
+                    <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
+                    {{ 'ADD' | translate }}
+                </button>
+            </label>
+        </div>
+    </div>
+    <div *ngIf="!onlyView" class="row invoice-rules" >
+        <div class="large-12 columns">
+            <label>{{'CUSTOM INVOICE RULE' | translate }}</label>
+        </div>
+        <div class="large-6 columns">
+            <div [formGroup]="form" id="invoiceRule">
+                <div class="large-12">
+                    <label>
+                        {{'DESCRIPTION' | translate}}
+                    </label>
+                    <input type="text" [(ngModel)]="temporaryRule.description" formControlName="description">
+                </div>
+                <div class="large-12">
+                    <label>
+                        {{'PRICE (EXCL. VAT)' | translate}}
+                    </label>
+                    <input type="number" [(ngModel)]="temporaryRule.price_excl_vat" formControlName="price_excl_vat">
+                </div>
+                <div class="large-12">
+                    <label>
+                        {{'VAT PERCENTAGE RATE' | translate}}
+                    </label>
+                    <select [(ngModel)]="temporaryRule.vat_percentage_rate" formControlName="vat_percentage_rate">
+                        <option value="0"> 0% </option>
+                        <option value="6"> 6% </option>
+                        <option value="21"> 21% </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="large-2 columns end">
+            <label>
+                &nbsp;
+                <button [disabled]="!temporaryRule" (click)="addInvoiceRule()" class="small primary button expanded">
                     <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
                     {{ 'ADD' | translate }}
                 </button>
@@ -138,9 +228,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let rule of invoice.rules">
+                    <tr *ngFor="let rule of invoice.invoice_rules">
                         <td width="1">
-                            <i class="fa fa-times fa-fw remove-button" (click)="removeInvoiceRule(rule)" aria-hidden="true"></i>
+                            <i *ngIf="!onlyView" class="fa fa-times fa-fw remove-button" (click)="removeInvoiceRule(rule)" aria-hidden="true"></i>
                         </td>
                         <td>
                             {{rule.description}}
@@ -153,7 +243,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td *ngIf="invoice.rules.length == 0" colspan="4" class="text-center">
+                        <td *ngIf="invoice.invoice_rules.length == 0" colspan="4" class="text-center">
                             {{ 'ADD A INVOICE RULE' | translate }}
                         </td>
                     </tr>
@@ -199,15 +289,23 @@
 
     <div class="row">
         <div class="large-12 columns">
-            <span class="pull-right">
-                <button type="button" class="small primary button">
+            <span *ngIf="!onlyView" class="pull-right">
+                <button [disabled]="!invoice.company_name" type="button" (click)="sendInvoiceToClient()" class="small primary button">
                     {{ 'SEND INVOICE' | translate }}
                 </button>
-                <button type="button" class="small primary button">
+                <button type="button" (click)="saveInvoice()" class="small primary button">
                     {{ 'SAVE' | translate }}
                 </button>
-                <button type="button" class="small alert button">
-                    {{ 'CANCEL' | translate }}
+                <button *ngIf="!onlyView" [disabled]="invoice.status != 'NOT SEND' && invoice.status != 'INCOMPLETE'" type="button" (click)="deleteInvoice()" class="small alert button">
+                    {{'DELETE' | translate}}
+                </button>
+                <button type="button" (click)="navigateTo('/invoice')" class="small primary button">
+                    {{ 'RETURN' | translate }}
+                </button>
+            </span>
+            <span *ngIf="onlyView" class="pull-right">
+                <button type="button" (click)="navigateTo('/invoice')" class="small primary button">
+                    {{ 'RETURN' | translate }}
                 </button>
             </span>
         </div>

@@ -8,6 +8,6 @@
     "moment": "registry:npm/moment#2.10.5+20160211003958"
   },
   "globalDependencies": {
-    "node": "registry:dt/node#6.0.0+20170104205751"
+    "node": "registry:dt/node#7.0.0+20170322231424"
   }
 }

@@ -3,6 +3,10 @@ const zip = require('gulp-zip');
 const env = require('gulp-env');
 const s3 = require('gulp-s3-upload')(awsConfig);
 
+var fs = require('fs');
+var packageJson = JSON.parse(fs.readFileSync('./package.json'));
+var version = packageJson.version;
+var filename = 'nsfo-admin-build';
 
 /**
  * Load environment variables from JSON File.
@@ -23,7 +27,6 @@ var awsConfig = {
     useIAM: true
 };
 
-
 /**
  * Task to zip the build directory
  */
@@ -31,14 +34,14 @@ var awsConfig = {
 gulp.task('zip:staging', () => {
     return gulp
         .src(['build/**/*'],{dot: true})
-        .pipe(zip('nsfo-admin-build-staging.zip'))
+        .pipe(zip(filename+'-staging-'+version+'.zip'))
         .pipe(gulp.dest('dist'));
 });
 
 gulp.task('zip:prod', () => {
     return gulp
         .src(['build/**/*'],{dot: true})
-        .pipe(zip('nsfo-admin-build-prod.zip'))
+        .pipe(zip(filename+'-prod-'+version+'.zip'))
         .pipe(gulp.dest('dist'));
 });
 
@@ -48,7 +51,7 @@ gulp.task('zip:prod', () => {
  */
 
 gulp.task('publish:staging', function() {
-    return gulp.src('dist/nsfo-admin-build-staging.zip')
+    return gulp.src('dist/nsfo-admin-build-staging'+version+'.zip')
         .pipe(s3({
             Bucket: 'nsfo/deployments/frontend',
             ACL:    'public-read'
