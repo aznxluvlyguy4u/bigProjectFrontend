@@ -351,6 +351,7 @@
   "IS USER ENVIRONMENT": "gebruikersomgeving",
   "IS VWA ENVIRONMENT": "VWA-omgeving",
   "LOGIN ENVIRONMENT": "inlogomgeving",
+  "ENVIRONMENT": "omgeving",
   "IS RVO MESSAGE": "Meldingtype, bericht naar RVO",
   "LOG SEARCH INFO": "Zoeken in gebruikersnaam, 'gedaan door' naam en omschrijving",
   "INACTIVE": "INACTIEF",

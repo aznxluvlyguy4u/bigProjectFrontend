@@ -133,7 +133,7 @@
                 </select>
             </label>
         </div>
-        <div class="large-1 columns end">
+        <div class="large-1 columns">
             <label>
                 {{ 'PER PAGE' | translate }}
                 <select [(ngModel)]="filterAmount" (change)="page = 1">
@@ -142,11 +142,29 @@
             </label>
         </div>
 
-        <div class="large-2 columns end">
+        <div class="large-2 columns">
             <label>
                 {{'PROCESSED IN API' | translate}}
                 <select [(ngModel)]="filterIsCompleted" (change)="page = 1">
                     <option *ngFor="let option of filterIsCompletedOptions" [value]="option">{{getBoolDrowDownText(option)}}</option>
+                </select>
+            </label>
+        </div>
+
+        <div class="large-1 columns">
+            <label>
+                {{'ENVIRONMENT' | translate | lowercase}}
+                <select [(ngModel)]="filterLoginEnvironment" (change)="page = 1">
+                    <option *ngFor="let option of filterLoginEnvironmentOptions" [value]="option">{{option == undefined ? 'Alles' : option}}</option>
+                </select>
+            </label>
+        </div>
+
+        <div class="large-1 columns end">
+            <label>
+                {{'RVO' | translate | lowercase}}
+                <select [(ngModel)]="filterIsRvoMessage" (change)="page = 1">
+                    <option *ngFor="let option of filterIsRvoMessageOptions" [value]="option">{{getBoolDrowDownText(option)}}</option>
                 </select>
             </label>
         </div>
@@ -171,8 +189,8 @@
                     <td>{{ 'USER ACTION TYPE' | translate }}</td>
                     <td>{{ 'DESCRIPTION' | translate }}</td>
                     <td title="{{ 'IS COMPLETED' | translate }}">{{'PROCESSED IN API' | translate}} <i class="fa fa-info-circle" aria-hidden="true" title="Goed ontvangen en verwerkt door de API en verstuurd naar de externe worker queue"></i></td>
-                    <td title="{{ 'LOGIN ENVIRONMENT' | translate }}">omgeving</td>
-                    <td title="{{ 'IS RVO MESSAGE' | translate }}">rvo</td>
+                    <td title="{{'ENVIRONMENT' | translate | lowercase }}">omgeving</td>
+                    <td title="{{ 'IS RVO MESSAGE' | translate }}">{{'RVO' | translate | lowercase}}</td>
                 </tr>
             </thead>
             <tbody>

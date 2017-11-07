@@ -1,4 +1,5 @@
 import {Pipe, PipeTransform} from "@angular/core";
+import { ADMIN, USER, VWA } from '../../../global/constants/login-environments.contant';
 
 @Pipe({
     name: 'logFilter'
@@ -10,10 +11,32 @@ export class LogFilterPipe implements PipeTransform {
 
         let search_input: string = args[0];
         let is_completed_option: boolean = this.getBoolVal(args[1]);
-        let is_user_environment_option: boolean =this.getBoolVal( args[2]);
-        let is_vwa_environment_option: boolean = this.getBoolVal(args[3]);
-        let is_rvo_message_option: boolean = this.getBoolVal(args[4]);
-        let user_action_type_options: string = args[5];
+        let login_environment: string = args[2];
+        let is_rvo_message_option: boolean = this.getBoolVal(args[3]);
+        let user_action_type_options: string = args[4];
+
+				let is_user_environment_option = null;
+				let is_vwa_environment_option = null;
+
+				switch (login_environment) {
+					case ADMIN:
+						is_user_environment_option = false;
+						is_vwa_environment_option = false;
+						break;
+
+					case USER:
+						is_user_environment_option = true;
+						is_vwa_environment_option = false;
+						break;
+
+					case VWA:
+						is_user_environment_option = false;
+						is_vwa_environment_option = true;
+						break;
+
+					default:
+						break;
+				}
 
         let filtered = list;
 

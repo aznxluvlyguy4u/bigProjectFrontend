@@ -18,11 +18,12 @@ import { LoginEnvironmentPipe } from './pipes/login-environment.pipe';
 import { CheckMarkComponent } from '../../global/components/checkmark/check-mark.component';
 import { SortOrder, SortService } from '../../global/services/utils/sort.service';
 import { SortSwitchComponent } from '../../global/components/sortswitch/sort-switch.component';
+import { ADMIN, USER, VWA } from '../../global/constants/login-environments.contant';
 
 declare var $;
 
 @Component({
-    providers: [PaginationService, SortService],
+    providers: [PaginationService, SortService, LoginEnvironmentPipe],
     directives: [REACTIVE_FORM_DIRECTIVES, ROUTER_DIRECTIVES, PaginationComponent, SearchComponent, Datepicker, CheckMarkComponent, SortSwitchComponent],
     template: require('./technical-log-overview.component.html'),
     pipes: [TranslatePipe, LogFilterPipe, PaginatePipe, SearchPipe, LoginEnvironmentPipe]
@@ -48,8 +49,7 @@ export class TechnicalLogOverviewComponent {
 
     private filterSearch: string = '';
     private filterIsCompleted: boolean;
-    private filterIsUserEnvironment: boolean;
-    private filterIsVwaEnvironment: boolean;
+    private filterLoginEnvironment: string;
     private filterIsRvoMessage: boolean;
     private filterUserActionTypes: string = 'ALL';
 
@@ -57,6 +57,8 @@ export class TechnicalLogOverviewComponent {
     private filterAmountOptions = [10, 25, 50];
 
     private filterIsCompletedOptions = [undefined, true, false];
+    private filterIsRvoMessageOptions = [undefined, true, false];
+    private filterLoginEnvironmentOptions: string[] = [undefined, ADMIN, USER, VWA];
 
     private isDateSortAscending: boolean;
 
@@ -68,7 +70,8 @@ export class TechnicalLogOverviewComponent {
 		private dateForm: ControlGroup;
 
     constructor(private nsfo: NSFOService, private formBuilder: FormBuilder,
-								private settings: SettingsService, private sortService: SortService) {
+								private settings: SettingsService, private sortService: SortService,
+								private loginEnvironmentPipe: LoginEnvironmentPipe) {
 
 				this.selectedStartDate = this.settings.convertToViewDate(new Date());
 				this.selectedEndDate = this.settings.convertToViewDate(new Date());
@@ -147,8 +150,7 @@ export class TechnicalLogOverviewComponent {
     		return [
 						this.filterSearch,
 						this.filterIsCompleted,
-						this.filterIsUserEnvironment,
-						this.filterIsVwaEnvironment,
+						this.filterLoginEnvironment,
 						this.filterIsRvoMessage,
 						this.filterUserActionTypes,
 				];
