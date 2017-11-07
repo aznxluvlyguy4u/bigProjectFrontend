@@ -16,12 +16,14 @@ import { REACTIVE_FORM_DIRECTIVES, Validators } from '@angular/forms';
 import { ControlGroup, FormBuilder } from '@angular/common';
 import { LoginEnvironmentPipe } from './pipes/login-environment.pipe';
 import { CheckMarkComponent } from '../../global/components/checkmark/check-mark.component';
+import { SortOrder, SortService } from '../../global/services/utils/sort.service';
+import { SortSwitchComponent } from '../../global/components/sortswitch/sort-switch.component';
 
 declare var $;
 
 @Component({
-    providers: [PaginationService],
-    directives: [REACTIVE_FORM_DIRECTIVES, ROUTER_DIRECTIVES, PaginationComponent, SearchComponent, Datepicker, CheckMarkComponent],
+    providers: [PaginationService, SortService],
+    directives: [REACTIVE_FORM_DIRECTIVES, ROUTER_DIRECTIVES, PaginationComponent, SearchComponent, Datepicker, CheckMarkComponent, SortSwitchComponent],
     template: require('./technical-log-overview.component.html'),
     pipes: [TranslatePipe, LogFilterPipe, PaginatePipe, SearchPipe, LoginEnvironmentPipe]
 })
@@ -53,6 +55,8 @@ export class TechnicalLogOverviewComponent {
 
     private filterAmount: number = 10;
 
+    private isDateSortAscending: boolean;
+
     private isLoadedFoundation: boolean;
 
     private searchTerm: string;
@@ -60,7 +64,8 @@ export class TechnicalLogOverviewComponent {
 
 		private dateForm: ControlGroup;
 
-    constructor(private nsfo: NSFOService, private formBuilder: FormBuilder, private settings: SettingsService) {
+    constructor(private nsfo: NSFOService, private formBuilder: FormBuilder,
+								private settings: SettingsService, private sortService: SortService) {
 
 				this.selectedStartDate = this.settings.convertToViewDate(new Date());
 				this.selectedEndDate = this.settings.convertToViewDate(new Date());
@@ -128,6 +133,8 @@ export class TechnicalLogOverviewComponent {
 						.subscribe(
 								res => {
 									this.actionLogs = <ActionLog[]> res.result;
+									this.isDateSortAscending = false;
+									this.sortByDate();
 									this.isLogsLoaded = true;
 								}
 						);
@@ -213,6 +220,22 @@ export class TechnicalLogOverviewComponent {
 
 		getMaxMonthsPeriod(): number {
     	return this.maxMonthsPeriod;
+		}
+
+		onSortByDateToggle() {
+			//toggle sort direction
+			this.isDateSortAscending = !this.isDateSortAscending;
+    	this.sortByDate();
+		}
+
+		sortByDate() {
+			const sortOrder = new SortOrder();
+			sortOrder.variableName = 'log_date';
+			sortOrder.isDate = false; //it is a dateString
+			sortOrder.ascending = !this.isDateSortAscending; //to sort as dateString flip boolean
+
+			this.actionLogs = this.sortService.sort(this.actionLogs, [sortOrder]);
+			console.log(this.isDateSortAscending);
 		}
 }
 

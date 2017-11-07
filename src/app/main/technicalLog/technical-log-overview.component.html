@@ -153,7 +153,12 @@
         <table class="stack client-overview">
             <thead>
                 <tr>
-                    <td>{{ 'LOG DATE' | translate }}</td>
+                    <td>{{ 'LOG DATE' | translate }}
+                        <app-sort-switch
+                            [pointsUp]="isDateSortAscending"
+                            (sortSwitchToggled)="onSortByDateToggle()">
+                        </app-sort-switch>
+                    </td>
                     <td>{{ 'USER ACCOUNT' | translate }}</td>
                     <td>{{ 'ACTION BY' | translate }}</td>
                     <td>{{ 'USER ACTION TYPE' | translate }}</td>
