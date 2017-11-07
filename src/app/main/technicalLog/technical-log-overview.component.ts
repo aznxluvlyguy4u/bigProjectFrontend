@@ -54,6 +54,9 @@ export class TechnicalLogOverviewComponent {
     private filterUserActionTypes: string = 'ALL';
 
     private filterAmount: number = 10;
+    private filterAmountOptions = [10, 25, 50];
+
+    private filterIsCompletedOptions = [undefined, true, false];
 
     private isDateSortAscending: boolean;
 
@@ -202,6 +205,18 @@ export class TechnicalLogOverviewComponent {
 
 		getUserSelectionWasDone() {
     	return this.includeAllUsers || this.selectedUser != null;
+		}
+
+		getBoolDrowDownText(string: string|boolean): string {
+    	if (string === 'true' || string === true) {
+    		return 'waar';
+			}
+
+			if (string === 'false' || string === false) {
+				return 'onwaar';
+			}
+
+			return 'alles';
 		}
 
 		getPersonType(user: User): string {

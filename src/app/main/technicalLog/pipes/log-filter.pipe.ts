@@ -9,10 +9,10 @@ export class LogFilterPipe implements PipeTransform {
     transform(list: any, args: any[]): any {
 
         let search_input: string = args[0];
-        let is_completed_option: boolean = args[1];
-        let is_user_environment_option: boolean = args[2];
-        let is_vwa_environment_option: boolean = args[3];
-        let is_rvo_message_option: boolean = args[4];
+        let is_completed_option: boolean = this.getBoolVal(args[1]);
+        let is_user_environment_option: boolean =this.getBoolVal( args[2]);
+        let is_vwa_environment_option: boolean = this.getBoolVal(args[3]);
+        let is_rvo_message_option: boolean = this.getBoolVal(args[4]);
         let user_action_type_options: string = args[5];
 
         let filtered = list;
@@ -23,8 +23,8 @@ export class LogFilterPipe implements PipeTransform {
 
 						filtered = filtered.filter(actionLog => {
 
-							let account_first_name = false;
-							let account_last_name = false;
+							let account_first_name = null;
+							let account_last_name = null;
 							if (actionLog.user_account) {
 								if (typeof actionLog.user_account.first_name === 'string') {
 									account_first_name = actionLog.user_account.first_name.toLowerCase();
@@ -63,6 +63,7 @@ export class LogFilterPipe implements PipeTransform {
 
         // FILTER: IS COMPLETED
 				if (typeof is_completed_option === 'boolean') {
+					console.log('Hey!', is_completed_option);
 						filtered = filtered.filter(actionLog => {
 								return actionLog.is_completed === is_completed_option;
 						});
@@ -99,4 +100,13 @@ export class LogFilterPipe implements PipeTransform {
 
         return filtered
     }
+
+
+    private getBoolVal(string: string): any {
+    	switch (string) {
+				case 'true': return true;
+				case 'false': return false;
+				default: return string;
+			}
+		}
 }
