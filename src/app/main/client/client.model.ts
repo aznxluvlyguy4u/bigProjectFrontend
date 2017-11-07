@@ -34,6 +34,21 @@ export class User {
     public first_name: string;
     public email_address: string;
     public primary_contactperson: string | boolean;
+    public relation_number_keeper: string;
+    public is_active: boolean;
+    public type: string;
+}
+
+export class ActionLog {
+    public log_date: string;
+    public user_account: User;
+    public action_by: User;
+    public user_action_type: string;
+    public description: string;
+    public is_completed: boolean;
+    public is_user_environment: boolean;
+    public is_vwa_environment: boolean;
+    public is_rvo_message: boolean;
 }
 
 class Address {
@@ -123,6 +138,11 @@ export class ClientNote {
     public creation_date: string;
     public creator: User = new User();
     public message: string;
+}
+
+export class QueryParam {
+    public key: string;
+    public value: any;
 }
 
 export const MAEDI_VISNA_STATUS_OPTIONS = [

@@ -1,5 +1,6 @@
 import {Injectable} from "@angular/core";
 import {Http, Headers} from "@angular/http";
+import { QueryParam } from '../../../main/client/client.model';
 
 @Injectable()
 export class NSFOService {
@@ -36,6 +37,8 @@ export class NSFOService {
     public URI_LIVESTOCK: string = '/v1/animals-livestock';
     
     public URI_SETTINGS: string = '/v1/settings';
+
+	  public URI_TECHNICAL_LOG = '/v1/log/action';
 
     public URI_VWA_EMPLOYEE: string = '/v1/vwa-employee';
 
@@ -94,5 +97,17 @@ export class NSFOService {
 
     public getUserEnvURL(): string {
         return this.USER_ENV_URL;
+    }
+
+    public parseQueryParamsString(queryParams: QueryParam[]): string {
+        if (queryParams.length === 0) { return ''; }
+
+			  let queryString =  '?';
+        let prefix = '';
+        for(let queryParam of queryParams) {
+            queryString = queryString + prefix + queryParam.key + '=' + queryParam.value;
+					  prefix = '&';
+        }
+        return queryString;
     }
 }
