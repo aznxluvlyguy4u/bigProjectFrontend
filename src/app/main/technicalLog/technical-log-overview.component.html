@@ -163,7 +163,7 @@
                     <td>{{ 'LOG DATE' | translate }}
                         <app-sort-switch
                             [pointsUp]="isDateSortAscending"
-                            (sortSwitchToggled)="onSortByDateToggle()">
+                            (sortSwitchToggled)="onSortByDateToggle(); page = 1">
                         </app-sort-switch>
                     </td>
                     <td>{{ 'USER ACCOUNT' | translate }}</td>

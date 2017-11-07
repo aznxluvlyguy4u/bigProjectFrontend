@@ -247,7 +247,7 @@ export class TechnicalLogOverviewComponent {
 			const sortOrder = new SortOrder();
 			sortOrder.variableName = 'log_date';
 			sortOrder.isDate = false; //it is a dateString
-			sortOrder.ascending = !this.isDateSortAscending; //to sort as dateString flip boolean
+			sortOrder.ascending = this.isDateSortAscending;
 
 			this.actionLogs = this.sortService.sort(this.actionLogs, [sortOrder]);
 			console.log(this.isDateSortAscending);
