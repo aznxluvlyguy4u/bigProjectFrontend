@@ -63,7 +63,6 @@ export class LogFilterPipe implements PipeTransform {
 
         // FILTER: IS COMPLETED
 				if (typeof is_completed_option === 'boolean') {
-					console.log('Hey!', is_completed_option);
 						filtered = filtered.filter(actionLog => {
 								return actionLog.is_completed === is_completed_option;
 						});
