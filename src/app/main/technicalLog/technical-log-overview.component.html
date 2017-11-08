@@ -23,11 +23,20 @@
         </ng-template>
 
         <ng-template *ngIf="isUsersLoaded">
-            <button
-                    (click)="showAccountSelect = !showAccountSelect"
-                    class="button"
-            > {{'SELECT A USER' | translate}}
-            </button>
+            <ng-template *ngIf="!showAccountSelect">
+                <button type="button" class="button"
+                        (click)="showAccountSelect = !showAccountSelect"
+                        class="button"
+                >{{'SELECT A USER' | translate}}
+                </button>
+            </ng-template>
+            <ng-template *ngIf="showAccountSelect">
+                <button type="button" class="alert button" style="background-color: darkred"
+                        (click)="showAccountSelect = !showAccountSelect"
+                        class="button"
+                >{{'CLOSE DROPDOWN' | translate}}
+                </button>
+            </ng-template>
             <div *ngIf="showAccountSelect">
                 <app-search-component (update)="searchTerm = $event"></app-search-component>
                 <ul style="position: absolute; z-index: 1000; background: #fff; height:300px; width:600px; overflow-y:scroll">

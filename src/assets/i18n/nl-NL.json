@@ -358,5 +358,6 @@
   "START DATE": "startdatum",
   "END DATE": "einddatum",
   "PROCESSED IN API": "Verwerkt in API",
-  "PER PAGE": "Per Pagina"
+  "PER PAGE": "Per Pagina",
+  "CLOSE DROPDOWN": "Sluit Dropdown"
 }
