@@ -75,10 +75,7 @@ export class TechnicalLogOverviewComponent {
 								private dateTimeService: DateTimeService, private formUtilService: FormUtilService) {
 
     		this.resetFilterOptions();
-
-    		this.selectedUserActionType = 'ALL';
-				this.selectedStartDate = this.settings.convertToViewDate(new Date());
-				this.selectedEndDate = this.settings.convertToViewDate(new Date());
+    		this.resetForm();
 
 				this.dateForm = this.formBuilder.group({
 					startDate: [this.selectedStartDate, Validators.required],
@@ -88,6 +85,19 @@ export class TechnicalLogOverviewComponent {
 
     		this.getUserList();
     }
+
+    resetForm() {
+			this.selectedUserActionType = 'ALL';
+			this.selectedStartDate = this.settings.convertToViewDate(new Date());
+			this.selectedEndDate = this.settings.convertToViewDate(new Date());
+
+				if (this.dateForm) {
+						this.resetErrors();
+						this.setFormValue('startDate',this.selectedStartDate);
+						this.setFormValue('endDate',this.selectedEndDate);
+						this.setFormValue('selectedUserActionType',this.selectedUserActionType);
+				}
+		}
 
     private getUserList() {
         this.nsfo.doGetRequest(this.nsfo.URI_TECHNICAL_LOG + '-account-owners')
@@ -126,7 +136,9 @@ export class TechnicalLogOverviewComponent {
 
 				this.validateFormInput();
 
-				this.getLogs();
+				if (this.errors.length === 0) {
+					this.getLogs();
+				}
 		}
 
 		getLogs() {
@@ -165,17 +177,21 @@ export class TechnicalLogOverviewComponent {
 		}
 
 		validateFormInput() {
-    		// reset errors
-				this.errors = [];
-				this.setErrors(null, 'startDate');
-				this.setErrors(null, 'endDate');
-				this.setErrors(null);
-
+    		this.resetErrors();
 				this.validateDateInterval();
 				this.validateChronological();
 		}
 
+		resetErrors() {
+				this.errors = [];
+				this.setErrors(null, 'startDate');
+				this.setErrors(null, 'endDate');
+				this.setErrors(null);
+		}
+
 		validateDateInterval() {
+    		if (this.selectedUser !== null) { return; }
+
 				const absoluteMonthsInterval = Math.abs(this.dateTimeService.getApproxDateStringIntervalInMonths(
 					this.selectedStartDate, this.selectedEndDate));
 
@@ -186,7 +202,7 @@ export class TechnicalLogOverviewComponent {
 					this.addSubErrorsToForm('endDate', error);
 					this.addTotalErrorsToForm(error);
 
-					this.errors.push('Het maximale tijdsinterval is ' + this.maxMonthsPeriod + ' maanden');
+					this.errors.push('Het maximale tijdsinterval is ' + this.maxMonthsPeriod + ' maanden wanneer alle gebruikers zijn geselecteerd');
 				}
 		}
 
@@ -222,6 +238,10 @@ export class TechnicalLogOverviewComponent {
 				} else {
 					(<Control>this.dateForm.controls[controlKey]).setErrors(errors);
 				}
+		}
+
+		setFormValue(controlKey: string, value: string) {
+				(<Control>this.dateForm.controls[controlKey]).updateValue(value);
 		}
 
     getFilterOptions(): any[] {
@@ -262,6 +282,9 @@ export class TechnicalLogOverviewComponent {
 
 
 		onSelectUserClick(user: User) {
+    	if (this.errors.length > 0) {
+					this.resetForm();
+			}
     	this.selectedUser = user;
     	this.showAccountSelect = false;
     	this.includeAllUsers = false;
