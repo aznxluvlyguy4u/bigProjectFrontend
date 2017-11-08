@@ -8,7 +8,7 @@
     <!-- PRE LOG REQUEST FILTER -->
 
     <div class="large-2 columns">
-        <h5>{{ 'STEP 1' | translate }} <i class="fa fa-info-circle" aria-hidden="true" title="Als ALLE gebruikers wordt gekozen mag de maximaal gekozen periode niet langer zijn dan {{getMaxMonthsPeriod()}} maanden. Anders duurt het ophalen van de logs veels te lang."></i></h5>
+        <h5>{{ 'STEP 1' | translate }} <i class="fa fa-info-circle" aria-hidden="true" title="De logs worden opgehaald waarbij deze gebruiker een actie had ondernomen of waarvan deze gebruiker de eigenaar is van de account. Als ALLE gebruikers wordt gekozen mag de maximaal gekozen periode niet langer zijn dan {{getMaxMonthsPeriod()}} maanden. Anders duurt het ophalen van de logs veels te lang."></i></h5>
     </div>
 
     <div class="large-2 columns">
@@ -225,7 +225,7 @@
                         </div>
                     </td>
                 </tr>
-                <ng-container *ngIf="isLogsLoaded">
+                <ng-container *ngIf="isLogsLoaded && actionLogs.length > 0">
                 <tr *ngFor="let log of actionLogs | logFilter:getFilterOptions() | paginate: {itemsPerPage: filterAmount, currentPage: page}; let i = index">
                     <td>
                         {{ log.log_date | date: 'dd-MM-yyyy @HH:mm:ss' }}
