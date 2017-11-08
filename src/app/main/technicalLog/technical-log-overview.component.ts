@@ -19,23 +19,24 @@ import { CheckMarkComponent } from '../../global/components/checkmark/check-mark
 import { SortOrder, SortService } from '../../global/services/utils/sort.service';
 import { SortSwitchComponent } from '../../global/components/sortswitch/sort-switch.component';
 import { ADMIN, USER, VWA } from '../../global/constants/login-environments.contant';
+import { DateTimeService } from '../../global/services/utils/date-time.service';
 
 declare var $;
 
 @Component({
-    providers: [PaginationService, SortService, LoginEnvironmentPipe],
+    providers: [PaginationService, SortService, DateTimeService],
     directives: [REACTIVE_FORM_DIRECTIVES, ROUTER_DIRECTIVES, PaginationComponent, SearchComponent, Datepicker, CheckMarkComponent, SortSwitchComponent],
     template: require('./technical-log-overview.component.html'),
     pipes: [TranslatePipe, LogFilterPipe, PaginatePipe, SearchPipe, LoginEnvironmentPipe]
 })
 export class TechnicalLogOverviewComponent {
     private isUsersLoaded: boolean = false;
-    private isLogsLoaded: boolean = false;
+    private isLogsLoaded: boolean = true; // only false during the getLogs call
 	  private isLogTypeSelected: boolean = false;
 	  private includeAllUsers: boolean = false;
-	  private savingInProgress: boolean = false;
+	  private savingInProgress: boolean = false; // used by DatePicker
 
-	  private maxMonthsPeriod: number = 3;
+	  private maxMonthsPeriod: number = 12;
 
     private userList: User[] = [];
 	  private logTypesList: string[] = [];
@@ -47,31 +48,31 @@ export class TechnicalLogOverviewComponent {
 		private selectedStartDate: string;
 		private selectedEndDate: string;
 
-    private filterSearch: string = '';
+    private filterSearch: string;
     private filterIsCompleted: boolean;
     private filterLoginEnvironment: string;
     private filterIsRvoMessage: boolean;
-    private filterUserActionTypes: string = 'ALL';
+    private filterUserActionTypes: string;
 
     private filterAmount: number = 10;
-    private filterAmountOptions = [10, 25, 50];
 
+    private filterAmountOptions = [10, 25, 50];
     private filterIsCompletedOptions = [undefined, true, false];
     private filterIsRvoMessageOptions = [undefined, true, false];
     private filterLoginEnvironmentOptions: string[] = [undefined, ADMIN, USER, VWA];
 
     private isDateSortAscending: boolean;
 
-    private isLoadedFoundation: boolean;
-
-    private searchTerm: string;
+    private userDropDownSearchTerm: string;
 		private showAccountSelect: boolean = false;
 
 		private dateForm: ControlGroup;
 
     constructor(private nsfo: NSFOService, private formBuilder: FormBuilder,
 								private settings: SettingsService, private sortService: SortService,
-								private loginEnvironmentPipe: LoginEnvironmentPipe) {
+								private dateTimeService: DateTimeService) {
+
+    		this.resetFilterOptions();
 
 				this.selectedStartDate = this.settings.convertToViewDate(new Date());
 				this.selectedEndDate = this.settings.convertToViewDate(new Date());
@@ -83,11 +84,6 @@ export class TechnicalLogOverviewComponent {
 				});
 
     		this.getUserList();
-    }
-
-
-    ngAfterViewChecked() {
-        $(document).foundation();
     }
 
     private getUserList() {
@@ -116,24 +112,37 @@ export class TechnicalLogOverviewComponent {
             );
     }
 
+		onSubmit() {
+				console.log(this.dateForm);
+
+				this.selectedUserActionType = this.dateForm.value.selectedUserActionType;
+				const startDate = new Date(this.dateForm.value.startDate);
+				const endDate = new Date(this.dateForm.value.endDate);
+
+				this.selectedStartDate = this.dateTimeService.getDateString(startDate);
+				this.selectedEndDate = this.dateTimeService.getDateString(endDate);
+
+				this.getLogs();
+		}
+
 		getLogs() {
     		let queryParams: QueryParam[] = [
-						{ key: START_DATE, value: '2017-01-31' },
-						{ key: END_DATE, value: '2017-10-31' },
+						{ key: START_DATE, value: this.selectedStartDate },
+						{ key: END_DATE, value: this.selectedEndDate },
 				];
 
     		if (this.selectedUserActionType !== 'ALL' && this.selectedUserActionType != null) {
     				queryParams.push({ key: USER_ACTION_TYPE, value: this.selectedUserActionType },)
 				}
 
-				//FOR TESTING
-				queryParams.push({ key: USER_ACCOUNT_ID, value: 'c1ea3948b10f7f2de07e92da5d4cea4d3b444577' },)
-
-				// if (this.selectedUser !== null) {
-				// 	queryParams.push({ key: USER_ACCOUNT_ID, value: this.selectedUser.person_id },)
-				// }
+				if (this.selectedUser !== null) {
+					queryParams.push({ key: USER_ACCOUNT_ID, value: this.selectedUser.person_id },)
+				}
 
     		const queryParamsString = this.nsfo.parseQueryParamsString(queryParams);
+
+    		// Reset values right before call
+    		this.isLogsLoaded = false;
 
 				this.nsfo.doGetRequest(this.nsfo.URI_TECHNICAL_LOG + queryParamsString)
 						.subscribe(
@@ -141,6 +150,11 @@ export class TechnicalLogOverviewComponent {
 									this.actionLogs = <ActionLog[]> res.result;
 									this.isDateSortAscending = false;
 									this.sortByDate();
+									this.resetFilterOptions();
+									this.isLogsLoaded = true;
+								},
+								error => {
+									alert("Iets is mis gegaan. Probeer minder logs per keer op te halen.");
 									this.isLogsLoaded = true;
 								}
 						);
@@ -154,6 +168,14 @@ export class TechnicalLogOverviewComponent {
 						this.filterIsRvoMessage,
 						this.filterUserActionTypes,
 				];
+		}
+
+		resetFilterOptions() {
+				this.filterSearch = '';
+				this.filterIsCompleted = undefined;
+				this.filterLoginEnvironment = undefined;
+				this.filterIsRvoMessage = undefined;
+				this.filterUserActionTypes = 'ALL';
 		}
 
 		getFullName(user: User) {
@@ -211,14 +233,14 @@ export class TechnicalLogOverviewComponent {
 
 		getBoolDrowDownText(string: string|boolean): string {
     	if (string === 'true' || string === true) {
-    		return 'waar';
+    		return 'TRUE';
 			}
 
 			if (string === 'false' || string === false) {
-				return 'onwaar';
+				return 'FALSE';
 			}
 
-			return 'alles';
+			return 'ALL';
 		}
 
 		getPersonType(user: User): string {
@@ -229,10 +251,6 @@ export class TechnicalLogOverviewComponent {
 				case 'Inspector ': return 'Inspecteur';
 				default: return user.type;
 			}
-		}
-
-		onSubmit() {
-    	console.log(this.dateForm);
 		}
 
 		getMaxMonthsPeriod(): number {
@@ -252,7 +270,6 @@ export class TechnicalLogOverviewComponent {
 			sortOrder.ascending = this.isDateSortAscending;
 
 			this.actionLogs = this.sortService.sort(this.actionLogs, [sortOrder]);
-			console.log(this.isDateSortAscending);
 		}
 }
 

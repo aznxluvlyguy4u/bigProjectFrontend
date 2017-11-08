@@ -38,14 +38,14 @@
                 </button>
             </ng-template>
             <div *ngIf="showAccountSelect">
-                <app-search-component (update)="searchTerm = $event"></app-search-component>
+                <app-search-component (update)="userDropDownSearchTerm = $event"></app-search-component>
                 <ul style="position: absolute; z-index: 1000; background: #fff; height:300px; width:600px; overflow-y:scroll">
                     <li>
                         <a (click)="onIncludeAllUsersClick()">
                             {{ 'ALL USERS' | translate }}
                         </a>
                     </li>
-                    <li *ngFor="let user of userList | searchPipe: searchTerm ">
+                    <li *ngFor="let user of userList | searchPipe: userDropDownSearchTerm ">
                         <a (click)="onSelectUserClick(user)">
                             {{getFullName(user)}} | {{getPersonType(user)}} | {{user.email_address}}
                             {{ user.is_active ? '' : ' | ' + ('INACTIVE' | translate) }}
@@ -97,7 +97,7 @@
 
             <div class="large-2 medium-3 small-12 columns">
                 <label class="left"> {{ 'END DATE' | translate }}</label>
-                <datepicker [formCtrl]="dateForm.controls['startDate']" [initDate]="selectedStartDate" [viewFormat]="settings.getViewDateFormat()" [modelFormat]="settings.getModelDateTimeFormat()" [editMode]="!savingInProgress">
+                <datepicker [formCtrl]="dateForm.controls['endDate']" [initDate]="selectedEndDate" [viewFormat]="settings.getViewDateFormat()" [modelFormat]="settings.getModelDateTimeFormat()" [editMode]="!savingInProgress">
                 </datepicker>
             </div>
 
@@ -105,8 +105,7 @@
                 <button
                    class="button"
                    type="submit"
-                   (click)="getLogs()"
-                   [disabled]="!getUserSelectionWasDone() || dateForm.invalid"
+                   [disabled]="!getUserSelectionWasDone() || dateForm.invalid || !isLogsLoaded"
                    (pageChange)="page = 1"
                 >{{ 'GET LOGS' | translate }}</button>
             </div>
@@ -118,7 +117,7 @@
 
 </ng-template>
 
-<ng-template *ngIf="isLogsLoaded">
+<ng-template *ngIf="isLogsLoaded && actionLogs.length > 0">
 
     <!-- POST LOG REQUEST FILTER -->
     <div class="row table-options-container"  style="margin: 1rem auto 1rem auto">
@@ -155,7 +154,7 @@
             <label>
                 {{'PROCESSED IN API' | translate}}
                 <select [(ngModel)]="filterIsCompleted" (change)="page = 1">
-                    <option *ngFor="let option of filterIsCompletedOptions" [value]="option">{{getBoolDrowDownText(option)}}</option>
+                    <option *ngFor="let option of filterIsCompletedOptions" [value]="option">{{getBoolDrowDownText(option) | translate}}</option>
                 </select>
             </label>
         </div>
@@ -164,7 +163,7 @@
             <label>
                 {{'ENVIRONMENT' | translate | lowercase}}
                 <select [(ngModel)]="filterLoginEnvironment" (change)="page = 1">
-                    <option *ngFor="let option of filterLoginEnvironmentOptions" [value]="option">{{option == undefined ? 'Alles' : option}}</option>
+                    <option *ngFor="let option of filterLoginEnvironmentOptions" [value]="option">{{option == undefined ? ('ALL'|translate) : option}}</option>
                 </select>
             </label>
         </div>
@@ -173,7 +172,7 @@
             <label>
                 {{'RVO' | translate | lowercase}}
                 <select [(ngModel)]="filterIsRvoMessage" (change)="page = 1">
-                    <option *ngFor="let option of filterIsRvoMessageOptions" [value]="option">{{getBoolDrowDownText(option)}}</option>
+                    <option *ngFor="let option of filterIsRvoMessageOptions" [value]="option">{{getBoolDrowDownText(option) | translate}}</option>
                 </select>
             </label>
         </div>
@@ -203,8 +202,9 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngIf="!isUsersLoaded">
+                <tr *ngIf="!isLogsLoaded">
                     <td colspan="10">
+                        <p class="text-center">{{'LOGS ARE BEING RETRIEVED'|translate}}</p>
                         <div class="spinner">
                             <div class="bounce1"></div>
                             <div class="bounce2"></div>
@@ -212,6 +212,7 @@
                         </div>
                     </td>
                 </tr>
+                <ng-container *ngIf="isLogsLoaded">
                 <tr *ngFor="let log of actionLogs | logFilter:getFilterOptions() | paginate: {itemsPerPage: filterAmount, currentPage: page}; let i = index">
                     <td>
                         {{ log.log_date | date: 'dd-MM-yyyy @HH:mm:ss' }}
@@ -240,6 +241,7 @@
                         <app-check-mark [boolVal]="log.is_rvo_message"></app-check-mark>
                     </td>
                 </tr>
+                </ng-container>
             </tbody>
         </table>
 
