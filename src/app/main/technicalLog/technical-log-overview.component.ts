@@ -13,18 +13,19 @@ import { SettingsService } from '../../global/services/settings/settings.service
 import { END_DATE, START_DATE, USER_ACCOUNT_ID, USER_ACTION_TYPE } from '../../global/constants/query-params.constant';
 import { SERVER_ERROR_MESSAGE } from '../../global/constants/messages.constant';
 import { REACTIVE_FORM_DIRECTIVES, Validators } from '@angular/forms';
-import { ControlGroup, FormBuilder } from '@angular/common';
+import { Control, ControlGroup, FormBuilder } from '@angular/common';
 import { LoginEnvironmentPipe } from './pipes/login-environment.pipe';
 import { CheckMarkComponent } from '../../global/components/checkmark/check-mark.component';
 import { SortOrder, SortService } from '../../global/services/utils/sort.service';
 import { SortSwitchComponent } from '../../global/components/sortswitch/sort-switch.component';
 import { ADMIN, USER, VWA } from '../../global/constants/login-environments.contant';
 import { DateTimeService } from '../../global/services/utils/date-time.service';
+import { FormUtilService } from '../../global/services/utils/form-util.service';
 
 declare var $;
 
 @Component({
-    providers: [PaginationService, SortService, DateTimeService],
+    providers: [PaginationService, SortService, DateTimeService, FormUtilService],
     directives: [REACTIVE_FORM_DIRECTIVES, ROUTER_DIRECTIVES, PaginationComponent, SearchComponent, Datepicker, CheckMarkComponent, SortSwitchComponent],
     template: require('./technical-log-overview.component.html'),
     pipes: [TranslatePipe, LogFilterPipe, PaginatePipe, SearchPipe, LoginEnvironmentPipe]
@@ -67,20 +68,22 @@ export class TechnicalLogOverviewComponent {
 		private showAccountSelect: boolean = false;
 
 		private dateForm: ControlGroup;
+		private errors: string[] = [];
 
     constructor(private nsfo: NSFOService, private formBuilder: FormBuilder,
 								private settings: SettingsService, private sortService: SortService,
-								private dateTimeService: DateTimeService) {
+								private dateTimeService: DateTimeService, private formUtilService: FormUtilService) {
 
     		this.resetFilterOptions();
 
+    		this.selectedUserActionType = 'ALL';
 				this.selectedStartDate = this.settings.convertToViewDate(new Date());
 				this.selectedEndDate = this.settings.convertToViewDate(new Date());
 
 				this.dateForm = this.formBuilder.group({
 					startDate: [this.selectedStartDate, Validators.required],
 					endDate: [this.selectedEndDate, Validators.required],
-					selectedUserActionType: [null, Validators.required],
+					selectedUserActionType: [this.selectedUserActionType, Validators.required],
 				});
 
     		this.getUserList();
@@ -113,7 +116,6 @@ export class TechnicalLogOverviewComponent {
     }
 
 		onSubmit() {
-				console.log(this.dateForm);
 
 				this.selectedUserActionType = this.dateForm.value.selectedUserActionType;
 				const startDate = new Date(this.dateForm.value.startDate);
@@ -121,6 +123,8 @@ export class TechnicalLogOverviewComponent {
 
 				this.selectedStartDate = this.dateTimeService.getDateString(startDate);
 				this.selectedEndDate = this.dateTimeService.getDateString(endDate);
+
+				this.validateFormInput();
 
 				this.getLogs();
 		}
@@ -158,6 +162,66 @@ export class TechnicalLogOverviewComponent {
 									this.isLogsLoaded = true;
 								}
 						);
+		}
+
+		validateFormInput() {
+    		// reset errors
+				this.errors = [];
+				this.setErrors(null, 'startDate');
+				this.setErrors(null, 'endDate');
+				this.setErrors(null);
+
+				this.validateDateInterval();
+				this.validateChronological();
+		}
+
+		validateDateInterval() {
+				const absoluteMonthsInterval = Math.abs(this.dateTimeService.getApproxDateStringIntervalInMonths(
+					this.selectedStartDate, this.selectedEndDate));
+
+				if (Math.floor(absoluteMonthsInterval) > this.maxMonthsPeriod) {
+
+					const error = {'maxDateIntervalExceeded': true};
+					this.addSubErrorsToForm('startDate', error);
+					this.addSubErrorsToForm('endDate', error);
+					this.addTotalErrorsToForm(error);
+
+					this.errors.push('Het maximale tijdsinterval is ' + this.maxMonthsPeriod + ' maanden');
+				}
+		}
+
+		validateChronological() {
+    		const intervalInDays = this.dateTimeService.getDateStringIntervalInDays(
+    			this.selectedStartDate, this.selectedEndDate);
+
+				if (intervalInDays < 0) {
+						const error = {'antiChronologicalDates': true};
+						this.addSubErrorsToForm('startDate', error);
+						this.addSubErrorsToForm('endDate', error);
+						this.addTotalErrorsToForm(error);
+
+						this.errors.push('Startdatum mag niet groter zijn dan de einddatum');
+				}
+		}
+
+		addSubErrorsToForm(controlKey: string, error: any) {
+				const currentErrors = this.dateForm.controls[controlKey].errors;
+				const newErrors = this.formUtilService.mergeErrors(currentErrors, error);
+				this.setErrors(newErrors, controlKey);
+		}
+
+		addTotalErrorsToForm(error: any) {
+				const currentErrors = this.dateForm.errors;
+				const newErrors = this.formUtilService.mergeErrors(currentErrors, error);
+				this.setErrors(newErrors);
+		}
+
+		setErrors(errors: any, controlKey ?: string) {
+    		if (controlKey == null) {
+						(<ControlGroup>this.dateForm).setErrors(errors);
+				} else {
+					(<Control>this.dateForm.controls[controlKey]).setErrors(errors);
+				}
 		}
 
     getFilterOptions(): any[] {

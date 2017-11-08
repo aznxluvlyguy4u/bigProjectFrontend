@@ -105,12 +105,25 @@
                 <button
                    class="button"
                    type="submit"
-                   [disabled]="!getUserSelectionWasDone() || dateForm.invalid || !isLogsLoaded"
+                   [disabled]="!getUserSelectionWasDone() || !isLogsLoaded ||
+                   (dateForm.errors != null
+                    && dateForm.value['startDate'] = selectedStartDate
+                    && dateForm.value['endDate'] = selectedEndDate
+                    )"
                    (pageChange)="page = 1"
                 >{{ 'GET LOGS' | translate }}</button>
             </div>
-
         </form>
+    </div>
+
+    <div class="text-center" style="color: darkred"
+            *ngIf="(dateForm.errors != null
+                && dateForm.value['startDate'] = selectedStartDate
+                && dateForm.value['endDate'] = selectedEndDate
+                )"
+    >
+        <p *ngFor="let errorMessage of errors">{{errorMessage}}</p>
+        <p> {{'CORRECT STARTDATE AND/OR ENDDATE'|translate}} </p>
     </div>
 
     <hr style="margin-top: 0">
