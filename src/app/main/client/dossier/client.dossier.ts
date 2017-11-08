@@ -180,7 +180,7 @@ export class ClientDossierComponent {
                     .subscribe(
                         res => {
                             this.savingInProgress = false;
-                            this.navigateTo('/client');
+                            this.navigateTo('/log');
                         },
                         err => {
                             let error = err.json();
@@ -231,7 +231,7 @@ export class ClientDossierComponent {
                 this.nsfo.doPutRequest(this.nsfo.URI_CLIENTS + '/' + this.client.company_id, newClient)
                     .subscribe(
                         res => {
-                            this.navigateTo('/client');
+                            this.navigateTo('/log');
                         },
                         err => {
                             let error = err.json();
@@ -252,7 +252,7 @@ export class ClientDossierComponent {
 
     private navigateToClientOverview(){
         if(this.checkForChanges()){
-            this.navigateTo('/client');
+            this.navigateTo('/log');
         } else {
             this.openChangeModal();
         }

@@ -30,6 +30,7 @@ import {InvoicesNSFODetailsComponent} from "./main/config/invoices/details/detai
 import {MaediVisnaAnnouncementComponent} from "./main/config/healthLetters/maediVisna/announcement/maediVisna.announcement";
 import {MaediVisnaSupportComponent} from "./main/config/healthLetters/maediVisna/support/maediVisna.support";
 import {ConfigVwaEmployeesComponent} from "./main/config/vwa-employees/config.vwa-employees";
+import { TechnicalLogOverviewComponent } from './main/technicalLog/technical-log-overview.component';
 
 const routes: RouterConfig = [
     {
@@ -81,6 +82,7 @@ const routes: RouterConfig = [
                     {path: 'choice_fields', component: ConfigChoiceFieldsComponent}
                 ]},
             {path: 'report', terminal: true, component: ReportComponent},
+					  {path: 'log', terminal: true, component: TechnicalLogOverviewComponent},
             {path: 'profile', terminal: true, component: ProfileComponent}
         ]
     },
