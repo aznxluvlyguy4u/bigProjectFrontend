@@ -1,0 +1,47 @@
+<div id="treatment">
+
+    <!--BREADCRUMBS-->
+    <div class="row widescreen">
+        <ul class="breadcrumbs">
+            <li><a routerLink="/dashboard">{{ 'DASHBOARD' | translate }}</a></li>
+            <li>{{ 'CONFIGURATIONS' | translate }}</li>
+        </ul>
+    </div>
+
+    <div class="row">
+        <div class="page-header">
+            <div class="page-title">{{ 'TREATMENTS' | translate }}</div>
+        </div>
+    </div>
+
+    <!--TABS MEDIUM/LARGE SCREENS-->
+    <div class="row hide-for-small-only">
+        <ul class="tabs">
+            <!--<li class="tabs-title">-->
+                <!--<a routerLink="/treatment/prescriptions" routerLinkActive="active">{{ 'TREATMENT PRESCIPTIONS' | translate }}</a>-->
+            <!--</li>-->
+            <li class="tabs-title">
+                <a routerLink="/treatment/templates" routerLinkActive="active">{{ 'TREATMEMT TEMPLATES' | translate }}</a>
+            </li>
+            <li class="tabs-title">
+                <a routerLink="/treatment/types" routerLinkActive="active">{{ 'TREATMENT TYPES' | translate }}</a>
+            </li>
+        </ul>
+    </div>
+
+    <!--TABS SMALL SCREENS-->
+    <div class="row show-for-small-only">
+        <label> {{ 'TAB' | translate }}
+            <select [(ngModel)]="selectedRoute" (change)="navigateTo($event.target.value)">
+                <!--<option value="/treatment/prescriptions">{{ 'TREATMENT PRESCIPTIONS' | translate }}</option>-->
+                <option value="/treatment/templates">{{ 'TREATMEMT TEMPLATES' | translate }}</option>
+                <option value="/treatment/types">{{ 'TREATMENT TYPES' | translate }}</option>
+            </select>
+        </label>
+    </div>
+
+    <!--PAGE CONTENT-->
+    <div class="row">
+        <router-outlet></router-outlet>
+    </div>
+</div>

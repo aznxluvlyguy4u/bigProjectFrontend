@@ -363,5 +363,9 @@
   "CLOSE DROPDOWN": "Sluit Dropdown",
   "FALSE": "Onwaar",
   "TRUE": "Waar",
-  "CORRECT STARTDATE AND/OR ENDDATE": "Corrigeer de start en/of einddatum"
+  "CORRECT STARTDATE AND/OR ENDDATE": "Corrigeer de start en/of einddatum",
+  "TREATMENTS": "Behandelingen",
+  "TREATMENT PRESCIPTIONS": "Behandelingsplannen",
+  "TREATMEMT TEMPLATES": "Behandelingentemplates",
+  "TREATMENT TYPES": "Behandelingstypes"
 }
