@@ -319,15 +319,7 @@ export class TechnicalLogOverviewComponent {
 		}
 
 		getBoolDrowDownText(string: string|boolean): string {
-    	if (string === 'true' || string === true) {
-    		return 'TRUE';
-			}
-
-			if (string === 'false' || string === false) {
-				return 'FALSE';
-			}
-
-			return 'ALL';
+    		return this.formUtilService.getBoolDrowDownText(string);
 		}
 
 		getPersonType(user: User): string {

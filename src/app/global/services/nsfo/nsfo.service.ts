@@ -40,6 +40,9 @@ export class NSFOService {
 
 	  public URI_TECHNICAL_LOG = '/v1/log/action';
 
+	  public URI_TREATMENTS = '/v1/treatments';
+	  public URI_TREATMENT_TYPES = '/v1/treatment-types';
+
     public URI_VWA_EMPLOYEE: string = '/v1/vwa-employee';
 
     private content_type: string = "Content-Type";
