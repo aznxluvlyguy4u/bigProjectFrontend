@@ -11,13 +11,15 @@ import { TreatmentType } from './treatment-type.model';
 import { NSFOService } from '../../../global/services/nsfo/nsfo.service';
 import { CheckMarkComponent } from '../../../global/components/checkmark/check-mark.component';
 import { TreatmentTypeFilterPipe } from './treatment-type-filter.pipe';
+import { SortSwitchComponent } from '../../../global/components/sortswitch/sort-switch.component';
+import { SortOrder, SortService } from '../../../global/services/utils/sort.service';
 
 @Component({
 	selector: 'app-treatment-type',
-	directives: [CheckMarkComponent, REACTIVE_FORM_DIRECTIVES],
+	directives: [CheckMarkComponent, REACTIVE_FORM_DIRECTIVES, SortSwitchComponent],
 	template: require('./treatment-type.component.html'),
 	pipes: [TranslatePipe, TreatmentTypeFilterPipe],
-	providers: [FormUtilService]
+	providers: [FormUtilService, SortService]
 })
 export class TreatmentTypeComponent {
 	// FILTER
@@ -26,6 +28,9 @@ export class TreatmentTypeComponent {
 	private filterSearch: string;
 	private filterType: string;
 	private filterIsActiveStatus: boolean;
+
+	// SORT
+	private isDescriptionSortAscending: boolean;
 
 	// DATA
 	private loadingTreatmentTypes: boolean = true;
@@ -46,6 +51,7 @@ export class TreatmentTypeComponent {
 	constructor(private nsfo: NSFOService,
 							private fb: FormBuilder,
 							private formUtilService: FormUtilService,
+							private sortService: SortService,
 	) {
 		this.resetFilterOptions();
 		this.getTreatmentTypes();
@@ -67,6 +73,8 @@ export class TreatmentTypeComponent {
 				res => {
 					this.treatmentTypes= <TreatmentType[]> res.result;
 					this.loadingTreatmentTypes = false;
+					this.isDescriptionSortAscending = true;
+					this.sortByDescription();
 					this.resetFilterOptions();
 				}
 			);
@@ -87,6 +95,7 @@ export class TreatmentTypeComponent {
 						this.treatmentType = res.result;
 						this.treatmentTypes.push(this.treatmentType);
 						this.isSaving = false;
+						this.sortByDescription();
 						this.closeModal();
 					},
 					err => {
@@ -111,6 +120,7 @@ export class TreatmentTypeComponent {
 						this.treatmentType = res.result;
 						this.treatmentTypes.push(this.treatmentType);
 						this.isSaving = false;
+						this.sortByDescription();
 						this.closeModal();
 					},
 					err => {
@@ -134,6 +144,7 @@ export class TreatmentTypeComponent {
 					this.treatmentType = res.result;
 					this.treatmentTypes.push(this.treatmentType);
 					this.isSaving = false;
+					this.sortByDescription();
 					this.closeRemoveModal();
 				},
 				err => {
@@ -207,5 +218,20 @@ export class TreatmentTypeComponent {
 		this.filterSearch = '';
 		this.filterType = 'ALL';
 		this.filterIsActiveStatus = true;
+	}
+
+	onSortByDescriptionToggle() {
+		//toggle sort direction
+		this.isDescriptionSortAscending = !this.isDescriptionSortAscending;
+		this.sortByDescription();
+	}
+
+	sortByDescription() {
+		const sortOrder = new SortOrder();
+		sortOrder.variableName = 'description';
+		sortOrder.isDate = false; //it is a dateString
+		sortOrder.ascending = this.isDescriptionSortAscending;
+
+		this.treatmentTypes = this.sortService.sort(this.treatmentTypes, [sortOrder]);
 	}
 }

@@ -48,7 +48,12 @@
                 <tr>
                     <td>{{ 'ACTIVE' | translate}}</td>
                     <td>{{ 'KIND' | translate}}</td>
-                    <td>{{ 'DESCRIPTION' | translate}}</td>
+                    <td>{{ 'DESCRIPTION' | translate}}
+                        <app-sort-switch
+                                [pointsUp]="isDescriptionSortAscending"
+                                (sortSwitchToggled)="onSortByDescriptionToggle(); page = 1">
+                        </app-sort-switch>
+                    </td>
                     <td>{{ 'LOG DATE' | translate}}</td>
                     <td>
                         <button type="button" (click)="openModal(false)" class="small primary button pull-right">
@@ -70,7 +75,7 @@
                             <a (click)="openRemoveModal(treatmentType)" class="remove-button"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
                         </span>
                         <span *ngIf="!treatmentType.is_active" class="pull-right overview-controls">
-                            <a (click)="openReactivateModal(treatmentType)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i><i class="fa fa-info-circle" aria-hidden="true">{{'REACTIVATE' | translate}}</i></a>
+                            <a (click)="openReactivateModal(treatmentType)"><i class="fa fa-plus fa-fw" aria-hidden="true" title="{{'REACTIVATE' | translate}}"></i></a>
                         </span>
                     </td>
                 </tr>
