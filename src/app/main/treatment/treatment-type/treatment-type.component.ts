@@ -10,20 +10,22 @@ import { FormUtilService } from '../../../global/services/utils/form-util.servic
 import { TreatmentType } from './treatment-type.model';
 import { NSFOService } from '../../../global/services/nsfo/nsfo.service';
 import { CheckMarkComponent } from '../../../global/components/checkmark/check-mark.component';
+import { TreatmentTypeFilterPipe } from './treatment-type-filter.pipe';
 
 @Component({
 	selector: 'app-treatment-type',
 	directives: [CheckMarkComponent, REACTIVE_FORM_DIRECTIVES],
 	template: require('./treatment-type.component.html'),
-	pipes: [TranslatePipe],
+	pipes: [TranslatePipe, TreatmentTypeFilterPipe],
 	providers: [FormUtilService]
 })
 export class TreatmentTypeComponent {
-	// SELECTION
+	// FILTER
 	private activeStatuses: boolean[] = [undefined, true, false];
 	private treatmentTypeKinds: string[] = [LOCATION, INDIVIDUAL];
-	private selectedActiveStatus: boolean = true;
-	private selectedTreatmentTypeKind: string = 'ALL';
+	private filterSearch: string;
+	private filterType: string;
+	private filterIsActiveStatus: boolean;
 
 	// DATA
 	private loadingTreatmentTypes: boolean = true;
@@ -45,6 +47,7 @@ export class TreatmentTypeComponent {
 							private fb: FormBuilder,
 							private formUtilService: FormUtilService,
 	) {
+		this.resetFilterOptions();
 		this.getTreatmentTypes();
 
 		this.form = fb.group({
@@ -64,6 +67,7 @@ export class TreatmentTypeComponent {
 				res => {
 					this.treatmentTypes= <TreatmentType[]> res.result;
 					this.loadingTreatmentTypes = false;
+					this.resetFilterOptions();
 				}
 			);
 	}
@@ -188,5 +192,20 @@ export class TreatmentTypeComponent {
 
 	private resetValidation(): void {
 		this.isValidForm = true;
+	}
+
+
+	getFilterOptions(): any[] {
+		return [
+			this.filterSearch,
+			this.filterType,
+			this.filterIsActiveStatus,
+		];
+	}
+
+	resetFilterOptions() {
+		this.filterSearch = '';
+		this.filterType = 'ALL';
+		this.filterIsActiveStatus = true;
 	}
 }
