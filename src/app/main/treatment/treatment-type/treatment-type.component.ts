@@ -100,7 +100,7 @@ export class TreatmentTypeComponent {
 					},
 					err => {
 						this.isSaving = false;
-						this.errorMessage = "SOMETHING WENT WRONG. TRY ANOTHER TIME."
+						this.errorMessage = this.nsfo.getErrorMessage(err);
 					}
 				);
 
@@ -125,7 +125,7 @@ export class TreatmentTypeComponent {
 					},
 					err => {
 						this.isSaving = false;
-						this.errorMessage = "SOMETHING WENT WRONG. TRY ANOTHER TIME."
+						this.errorMessage = this.nsfo.getErrorMessage(err);
 					}
 				);
 		} else {
@@ -149,7 +149,7 @@ export class TreatmentTypeComponent {
 				},
 				err => {
 					this.isSaving = false;
-					this.errorMessage = "SOMETHING WENT WRONG. TRY ANOTHER TIME."
+					this.errorMessage = this.nsfo.getErrorMessage(err);
 					this.treatmentTypes.push(this.treatmentType);
 				}
 			);

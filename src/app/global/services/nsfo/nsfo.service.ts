@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {Http, Headers} from "@angular/http";
+import { Http, Headers, Response } from '@angular/http';
 import { QueryParam } from '../../../main/client/client.model';
 
 @Injectable()
@@ -112,5 +112,13 @@ export class NSFOService {
 					  prefix = '&';
         }
         return queryString;
+    }
+
+    public getErrorMessage(err: Response): string {
+			if (err.status !== 500) {
+				return err.json().result.message;
+			} else {
+				return "SOMETHING WENT WRONG. TRY ANOTHER TIME."
+			}
     }
 }
