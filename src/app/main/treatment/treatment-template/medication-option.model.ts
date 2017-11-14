@@ -5,4 +5,5 @@ export class MedicationOption {
 	treatment_template: TreatmentTemplate;
 	description: string;
 	dosage: number;
+	is_active: boolean; // !note remove inactive MedicationOptions when sending them to the API
 }

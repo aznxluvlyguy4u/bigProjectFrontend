@@ -22,10 +22,10 @@ export class Client {
 }
 
 export class Location {
-    public location_id: string;
+    public location_id ?: string;
     public ubn: string;
-    public address: Address = new Address();
-    public is_active: boolean;
+    public address ?: Address = new Address();
+    public is_active ?: boolean;
 }
 
 export class User {

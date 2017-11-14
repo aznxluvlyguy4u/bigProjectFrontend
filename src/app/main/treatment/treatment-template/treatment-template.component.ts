@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, REACTIVE_FORM_DIRECTIVES } from '@angular/forms';
 import { Validators } from '@angular/common';
 import { TranslatePipe } from 'ng2-translate';
@@ -15,19 +15,23 @@ import { SortSwitchComponent } from '../../../global/components/sortswitch/sort-
 import { SortOrder, SortService } from '../../../global/services/utils/sort.service';
 import { TreatmentType } from '../treatment-type/treatment-type.model';
 import { Location } from '../../client/client.model';
+import { MedicationOption } from './medication-option.model';
+import { MedicineFormEntryComponent } from './medicine-form-entry/medicine-form-entry.component';
 
 @Component({
 	selector: 'app-treatment-template',
-	directives: [CheckMarkComponent, REACTIVE_FORM_DIRECTIVES, SortSwitchComponent],
+	directives: [CheckMarkComponent, REACTIVE_FORM_DIRECTIVES, SortSwitchComponent, MedicineFormEntryComponent],
 	template: require('./treatment-template.component.html'),
 	pipes: [TranslatePipe, TreatmentTemplateFilterPipe],
 	providers: [FormUtilService, SortService]
 })
-export class TreatmentTemplateComponent {
+export class TreatmentTemplateComponent implements OnInit {
 	// DATA: GENERAL
 	private loadingTreatmentTypes: boolean = true;
 	private loadingLocations: boolean = true;
 	private treatmentTypes: TreatmentType[] = [];
+	private treatmentTypesIndividual: string[] = [];
+	private treatmentTypesLocation: string[] = [];
 	private locations: Location[] = [];
 	private treatmentTemplateKinds: string[] = [LOCATION, INDIVIDUAL];
 
@@ -43,6 +47,14 @@ export class TreatmentTemplateComponent {
 	private treatmentTemplate: TreatmentTemplate = new TreatmentTemplate();
 	private treatmentTemplateTemp: TreatmentTemplate = new TreatmentTemplate();
 
+	// CREATE
+	private newIsDefaultTemplate: boolean;
+	private newSelectedUbn: string;
+	private medicationId: number;
+	private defaultType = LOCATION;
+	private newTreatmentTemplate: TreatmentTemplate;
+	private newMedications: MedicationOption[] = [];
+
 	// FILTER
 	private activeStatuses: boolean[] = [undefined, true, false];
 	private filterSearch: string;
@@ -53,9 +65,11 @@ export class TreatmentTemplateComponent {
 
 	// FORM
 	private form: FormGroup;
+	private cuForm: FormGroup;
 	private displayModal: string = 'none';
 	private displayRemoveModal: string = 'none';
 	private displayReactivateModal: string = 'none';
+	private displayInfoModal: string = 'none';
 	private isModalEditMode: boolean = false;
 	private isValidForm: boolean = true;
 	private errorMessage: string = '';
@@ -70,9 +84,14 @@ export class TreatmentTemplateComponent {
 		this.wasCaseSelected = false;
 		this.selectedTreatmentTypeKind = LOCATION;
 		this.resetFilterOptions();
+		this.resetCreateOptions();
 		this.getGeneralData();
+	}
 
-		this.form = fb.group({
+	ngOnInit() {
+		this.initCuForm();
+
+		this.form = this.fb.group({
 			description: ['', Validators.required],
 			type: ['', Validators.required]
 		});
@@ -101,6 +120,17 @@ export class TreatmentTemplateComponent {
 			.subscribe(
 				res => {
 					this.treatmentTypes= <TreatmentType[]> res.result;
+
+					for(let treatmentType of this.treatmentTypes) {
+						if (treatmentType.is_active) {
+							if (treatmentType.type === LOCATION) {
+								this.treatmentTypesLocation.push(treatmentType.description);
+							} else if (treatmentType.type === INDIVIDUAL) {
+								this.treatmentTypesIndividual.push(treatmentType.description);
+							}
+						}
+					}
+
 					this.loadingTreatmentTypes = false;
 					this.resetFilterOptions();
 				}
@@ -129,7 +159,7 @@ export class TreatmentTemplateComponent {
 		const ubnPart = this.selectedUbn != null ? '/' + this.selectedUbn : '';
 		const kindPart = this.selectedTreatmentTypeKind.toLowerCase();
 
-		this.nsfo.doGetRequest(this.nsfo.URI_TREATMENTS + '/template/' + kindPart + ubnPart)
+		this.nsfo.doGetRequest(this.nsfo.URI_TREATMENTS + '/template/' + kindPart + ubnPart + '?active_only=false')
 			.subscribe(
 				res => {
 					this.treatmentTemplates= <TreatmentTemplate[]> res.result;
@@ -137,6 +167,7 @@ export class TreatmentTemplateComponent {
 					this.isDescriptionSortAscending = true;
 					this.sortByDescription();
 					this.resetFilterOptions();
+					console.log(this.treatmentTemplates);
 				}
 			);
 	}
@@ -145,40 +176,96 @@ export class TreatmentTemplateComponent {
 			return this.loadingTreatmentTemplates;
 	}
 
+	getTreatmentTypesByKindInCreateUpdateModal(): string[] {
+		if (this.newTreatmentTemplate.type === LOCATION) {
+			return this.treatmentTypesLocation;
+
+		} else if(this.newTreatmentTemplate.type === INDIVIDUAL) {
+			return this.treatmentTypesIndividual;
+		}
+		return [];
+	}
+
 	addTreatmentTemplate() {
-		this.isValidForm = true;
+		this.validateForm();
 		this.isSaving = true;
 
-		if(this.form.valid && this.isValidForm) {
+		if(this.isValidForm) {
 
-			this.nsfo.doPostRequest(this.nsfo.URI_TREATMENTS, this.treatmentTemplate)
+			//Correctly format the output and strip unneeded parts
+			if (!this.newIsDefaultTemplate) {
+				this.newTreatmentTemplate.location = {ubn: this.newSelectedUbn};
+			}
+
+			let medications: MedicationOption[] = [];
+			for(let medication of this.newMedications) {
+				if (medication.is_active) {
+					medications.push(medication);
+				}
+			}
+
+			// Only delete the keys of the duplicate to make sure that during an error returned from the API
+			// no data is lost.
+			for(let medication of medications) {
+				delete medication.id;
+				delete medication.is_active;
+			}
+
+			this.newTreatmentTemplate.medications = medications;
+			const type = this.newTreatmentTemplate.type.toLowerCase();
+
+			let treatmentTemplate = _.cloneDeep(this.newTreatmentTemplate);
+			delete treatmentTemplate.type;
+
+			console.log(treatmentTemplate);
+
+			this.nsfo.doPostRequest(this.nsfo.URI_TREATMENTS + '/' + type + '/template', treatmentTemplate)
 				.subscribe(
 					res => {
-						if (this.treatmentTemplateTemp) {
-							_.remove(this.treatmentTemplates, {id: this.treatmentTemplateTemp.id});
-						}
 						this.treatmentTemplate = res.result;
 						this.treatmentTemplates.push(this.treatmentTemplate);
-						this.isSaving = false;
+						this.resetCreateOptions();
 						this.sortByDescription();
 						this.closeModal();
+						this.isSaving = false;
+
+						console.log('SAVED!');
 					},
 					err => {
 						this.isSaving = false;
-						this.errorMessage = "SOMETHING WENT WRONG. TRY ANOTHER TIME."
+						this.errorMessage = this.nsfo.getErrorMessage(err);
 					}
 				);
 
 		} else {
-			this.isValidForm = false;
 			this.isSaving = false;
 		}
+	}
+
+	validateForm(): boolean {
+			const hasValidLocationData = this.isDefaultTemplate ? this.newSelectedUbn == null : this.newSelectedUbn != null;
+
+			let hasCompleteMedicationData = true;
+			for(let medication of this.newMedications) {
+				if (medication.description == null || medication.dosage == null) {
+					hasCompleteMedicationData = false;
+				}
+			}
+
+			console.log(this.newMedications,this.newTreatmentTemplate.type != null, this.newTreatmentTemplate.type);
+
+			const hasAtLeastOneMedication = this.newMedications.length > 0;
+
+			this.isValidForm = this.newTreatmentTemplate.type != null &&
+				this.newTreatmentTemplate.description != null && hasValidLocationData && hasCompleteMedicationData && hasAtLeastOneMedication;
+
+			return this.isValidForm;
 	}
 
 	editTreatmentTemplate() {
 		this.isSaving = true;
 		if(this.form.valid && this.isValidForm) {
-			this.nsfo.doPutRequest(this.nsfo.URI_TREATMENT_TYPES + '/' + this.treatmentTemplate.id, this.treatmentTemplate)
+			this.nsfo.doPutRequest(this.nsfo.URI_TREATMENTS + '/' + this.treatmentTemplate.id, this.treatmentTemplate)
 				.subscribe(
 					res => {
 						_.remove(this.treatmentTemplates, {id: this.treatmentTemplateTemp.id});
@@ -202,28 +289,49 @@ export class TreatmentTemplateComponent {
 	removeTreatmentTemplate() {
 		this.isSaving = true;
 
-		_.remove(this.treatmentTemplates, {id: this.treatmentTemplate.id});
-		this.nsfo.doDeleteRequest(this.nsfo.URI_TREATMENT_TYPES + '/' + this.treatmentTemplate.id, this.treatmentTemplate)
+		const type = this.treatmentTemplate.type.toLowerCase();
+
+		this.nsfo.doDeleteRequest(this.nsfo.URI_TREATMENTS + '/' + type + '/template/' + this.treatmentTemplate.id, this.treatmentTemplate)
 			.subscribe(
 				res => {
 					this.treatmentTemplate = res.result;
-					this.treatmentTemplates.push(this.treatmentTemplate);
+
+					const index = _.findIndex(this.treatmentTemplates, {id: this.treatmentTemplate.id});
+					this.treatmentTemplates.splice(index, 1, this.treatmentTemplate);
+
 					this.isSaving = false;
 					this.sortByDescription();
 					this.closeRemoveModal();
 				},
 				err => {
 					this.isSaving = false;
-					this.errorMessage = "SOMETHING WENT WRONG. TRY ANOTHER TIME."
-					this.treatmentTemplates.push(this.treatmentTemplate);
+					this.errorMessage = this.nsfo.getErrorMessage(err);
 				}
 			);
 	}
 
 	reactivateTreatmentTemplate() {
-		_.remove(this.treatmentTemplates, {id: this.treatmentTemplate.id});
-		this.addTreatmentTemplate();
-		this.closeReactivateModal();
+		this.isSaving = true;
+
+		const type = this.treatmentTemplate.type.toLowerCase();
+
+		this.nsfo.doPatchRequest(this.nsfo.URI_TREATMENTS + '/' + type + '/template/' + this.treatmentTemplate.id, this.treatmentTemplate)
+			.subscribe(
+				res => {
+					this.treatmentTemplate = res.result;
+
+					const index = _.findIndex(this.treatmentTemplates, {id: this.treatmentTemplate.id});
+					this.treatmentTemplates.splice(index, 1, this.treatmentTemplate);
+
+					this.isSaving = false;
+					this.sortByDescription();
+					this.closeReactivateModal();
+				},
+				err => {
+					this.isSaving = false;
+					this.errorMessage = this.nsfo.getErrorMessage(err);
+				}
+			);
 	}
 
 
@@ -244,6 +352,7 @@ export class TreatmentTemplateComponent {
 		this.errorMessage = '';
 		this.treatmentTemplate = new TreatmentTemplate();
 		this.resetValidation();
+		this.resetCreateOptions();
 	}
 
 	private openRemoveModal(treatmentTemplate: TreatmentTemplate) {
@@ -266,6 +375,16 @@ export class TreatmentTemplateComponent {
 		this.displayReactivateModal = 'none';
 	}
 
+	private openInfoModal(treatmentTemplate: TreatmentTemplate) {
+		this.treatmentTemplate = treatmentTemplate;
+		this.displayInfoModal = 'block';
+	}
+
+	private closeInfoModal() {
+		this.errorMessage = '';
+		this.displayInfoModal = 'none';
+	}
+
 	private resetValidation(): void {
 		this.isValidForm = true;
 	}
@@ -281,6 +400,52 @@ export class TreatmentTemplateComponent {
 	resetFilterOptions() {
 		this.filterSearch = '';
 		this.filterIsActiveStatus = true;
+	}
+
+	resetSelectedUbn() {
+		if (!this.isDefaultTemplate) {
+			this.selectedUbn = null;
+		}
+	}
+
+	resetNewSelectedUbn() {
+		if (!this.newIsDefaultTemplate) {
+			this.newSelectedUbn = null;
+		}
+	}
+
+	resetCreateOptions() {
+		this.newTreatmentTemplate = new TreatmentTemplate();
+		this.newTreatmentTemplate.type = this.defaultType;
+		this.newIsDefaultTemplate = false;
+		this.newSelectedUbn = null;
+		this.newMedications = [];
+		this.medicationId = 0;
+	}
+
+	initCuForm() {
+		this.cuForm = this.fb.group({
+			allUbnSwitch: ['', Validators.required],
+			ubn: [''],
+			description: ['', Validators.required],
+			type: ['', Validators.required],
+		});
+	}
+
+	removeMedication(medicationOption: MedicationOption) {
+		_.remove(this.newMedications, {id: medicationOption.id});
+	}
+
+	updateMedication(medicationOption: MedicationOption) {
+		const index = _.findIndex(this.newMedications, {id: medicationOption.id});
+		this.newMedications.splice(index, 1, medicationOption);
+	}
+
+	onAddNewBlankMedication() {
+		let medicationOption = new MedicationOption();
+		medicationOption.id = this.medicationId++;
+		medicationOption.is_active = false;
+		this.newMedications.push(medicationOption);
 	}
 
 	onSortByDescriptionToggle() {

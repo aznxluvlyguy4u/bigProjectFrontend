@@ -16,14 +16,22 @@ export class TreatmentTemplateFilterPipe implements PipeTransform {
 				if (search_input) {
 						const needle = args[0].toLowerCase();
 
-						filtered = filtered.filter(treatmentType => {
+						filtered = filtered.filter(treatmentTemplate => {
 
 							let description = null;
-							if (typeof treatmentType.description === 'string') {
-								description = treatmentType.description.toLowerCase();
+							if (typeof treatmentTemplate.description === 'string') {
+								description = treatmentTemplate.description.toLowerCase();
 							}
 
-							const haystack = description; // + add other variables to search in here
+							let haystack = description; // + add other variables to search in here
+
+							if (treatmentTemplate.medications != null) {
+								for(let medication of treatmentTemplate.medications) {
+									if (typeof medication.description === 'string') {
+										haystack = haystack + medication.description.toLowerCase();
+									}
+								}
+							}
 
 							return haystack.indexOf(needle) !== -1;
 						});

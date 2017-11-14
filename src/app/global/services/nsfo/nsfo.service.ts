@@ -64,40 +64,36 @@ export class NSFOService {
             .map(res => res.json());
     }
 
-    public doPostRequest(uri:string, data) {
-        let headers = new Headers();
-        headers.append(this.content_type, "application/json");
-        headers.append(this.access_token, localStorage[this.ACCESS_TOKEN_NAMESPACE]);
+	  getHeadersWithToken() {
+			let headers = new Headers();
+			headers.append(this.content_type, "application/json");
+			headers.append(this.access_token, localStorage[this.ACCESS_TOKEN_NAMESPACE]);
+			return headers;
+	  }
 
-        return this.http.post(this.API_SERVER_URL + uri, JSON.stringify(data), {headers: headers})
+    public doPostRequest(uri:string, data) {
+        return this.http.post(this.API_SERVER_URL + uri, JSON.stringify(data), {headers: this.getHeadersWithToken()})
             .map(res => res.json());
     }
 
     public doGetRequest(uri:string) {
-        let headers = new Headers();
-        headers.append(this.content_type, "application/json");
-        headers.append(this.access_token, localStorage[this.ACCESS_TOKEN_NAMESPACE]);
-
-        return this.http.get(this.API_SERVER_URL + uri, {headers: headers})
+        return this.http.get(this.API_SERVER_URL + uri, {headers: this.getHeadersWithToken()})
             .map(res => res.json());
     }
 
     public doPutRequest(uri:string, data) {
-        let headers = new Headers();
-        headers.append(this.content_type, "application/json");
-        headers.append(this.access_token, localStorage[this.ACCESS_TOKEN_NAMESPACE]);
-
-        return this.http.put(this.API_SERVER_URL + uri, JSON.stringify(data), {headers: headers})
+        return this.http.put(this.API_SERVER_URL + uri, JSON.stringify(data), {headers: this.getHeadersWithToken()})
             .map(res => res.json());
     }
 
     public doDeleteRequest(uri:string, data) {
-        let headers = new Headers();
-        headers.append(this.content_type, "application/json");
-        headers.append(this.access_token, localStorage[this.ACCESS_TOKEN_NAMESPACE]);
-
-        return this.http.delete(this.API_SERVER_URL + uri, {headers: headers})
+        return this.http.delete(this.API_SERVER_URL + uri, {headers: this.getHeadersWithToken()})
             .map(res => res.json());
+    }
+
+    public doPatchRequest(uri:string, data) {
+        return this.http.patch(this.API_SERVER_URL + uri, data, {headers: this.getHeadersWithToken()})
+          .map(res => res.json());
     }
 
     public getUserEnvURL(): string {
