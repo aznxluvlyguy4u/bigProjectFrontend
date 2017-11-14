@@ -45,7 +45,6 @@ export class TreatmentTemplateComponent implements OnInit {
 	private selectedTreatmentTypeKind: string;
 	private wasCaseSelected: boolean;
 	private treatmentTemplate: TreatmentTemplate = new TreatmentTemplate();
-	private treatmentTemplateTemp: TreatmentTemplate = new TreatmentTemplate();
 
 	// CREATE
 	private newIsDefaultTemplate: boolean;
@@ -167,7 +166,6 @@ export class TreatmentTemplateComponent implements OnInit {
 					this.isDescriptionSortAscending = true;
 					this.sortByDescription();
 					this.resetFilterOptions();
-					console.log(this.treatmentTemplates);
 				}
 			);
 	}
@@ -192,34 +190,9 @@ export class TreatmentTemplateComponent implements OnInit {
 
 		if(this.isValidForm) {
 
-			//Correctly format the output and strip unneeded parts
-			if (!this.newIsDefaultTemplate) {
-				this.newTreatmentTemplate.location = {ubn: this.newSelectedUbn};
-			}
-
-			let medications: MedicationOption[] = [];
-			for(let medication of this.newMedications) {
-				if (medication.is_active) {
-					medications.push(medication);
-				}
-			}
-
-			// Only delete the keys of the duplicate to make sure that during an error returned from the API
-			// no data is lost.
-			for(let medication of medications) {
-				delete medication.id;
-				delete medication.is_active;
-			}
-
-			this.newTreatmentTemplate.medications = medications;
 			const type = this.newTreatmentTemplate.type.toLowerCase();
 
-			let treatmentTemplate = _.cloneDeep(this.newTreatmentTemplate);
-			delete treatmentTemplate.type;
-
-			console.log(treatmentTemplate);
-
-			this.nsfo.doPostRequest(this.nsfo.URI_TREATMENTS + '/' + type + '/template', treatmentTemplate)
+			this.nsfo.doPostRequest(this.nsfo.URI_TREATMENTS + '/' + type + '/template', this.getFormattedTreatmentTypeBody())
 				.subscribe(
 					res => {
 						this.treatmentTemplate = res.result;
@@ -228,8 +201,6 @@ export class TreatmentTemplateComponent implements OnInit {
 						this.sortByDescription();
 						this.closeModal();
 						this.isSaving = false;
-
-						console.log('SAVED!');
 					},
 					err => {
 						this.isSaving = false;
@@ -242,8 +213,36 @@ export class TreatmentTemplateComponent implements OnInit {
 		}
 	}
 
+	getFormattedTreatmentTypeBody() {
+		if (!this.newIsDefaultTemplate) {
+			this.newTreatmentTemplate.location = {ubn: this.newSelectedUbn};
+		}
+
+		let medications: MedicationOption[] = [];
+		for(let medication of this.newMedications) {
+			if (medication.is_active !== false) {
+				medications.push(medication);
+			}
+		}
+
+		// Only delete the keys of the duplicate to make sure that during an error returned from the API
+		// no data is lost.
+		for(let medication of medications) {
+			delete medication.id;
+			delete medication.is_active;
+		}
+
+		this.newTreatmentTemplate.medications = medications;
+		const type = this.newTreatmentTemplate.type.toLowerCase();
+
+		let treatmentTemplate = _.cloneDeep(this.newTreatmentTemplate);
+		delete treatmentTemplate.type;
+
+		return treatmentTemplate;
+	}
+
 	validateForm(): boolean {
-			const hasValidLocationData = this.isDefaultTemplate ? this.newSelectedUbn == null : this.newSelectedUbn != null;
+			const hasValidLocationData = this.isDefaultTemplate === true ? this.newSelectedUbn == null : this.newSelectedUbn != null;
 
 			let hasCompleteMedicationData = true;
 			for(let medication of this.newMedications) {
@@ -252,32 +251,40 @@ export class TreatmentTemplateComponent implements OnInit {
 				}
 			}
 
-			console.log(this.newMedications,this.newTreatmentTemplate.type != null, this.newTreatmentTemplate.type);
-
-			const hasAtLeastOneMedication = this.newMedications.length > 0;
-
 			this.isValidForm = this.newTreatmentTemplate.type != null &&
-				this.newTreatmentTemplate.description != null && hasValidLocationData && hasCompleteMedicationData && hasAtLeastOneMedication;
+				this.newTreatmentTemplate.description != null && hasValidLocationData && hasCompleteMedicationData && this.hasAtLeastOneMedication();
 
 			return this.isValidForm;
 	}
 
+	hasAtLeastOneMedication() {
+		return this.newMedications != null ? this.newMedications.length > 0 : false;
+	}
+
 	editTreatmentTemplate() {
+		this.validateForm();
 		this.isSaving = true;
-		if(this.form.valid && this.isValidForm) {
-			this.nsfo.doPutRequest(this.nsfo.URI_TREATMENTS + '/' + this.treatmentTemplate.id, this.treatmentTemplate)
+
+		if(this.isValidForm) {
+
+			const treatmentTemplate = this.getFormattedTreatmentTypeBody();
+
+			console.log(treatmentTemplate);
+
+			const type = this.newTreatmentTemplate.type.toLowerCase();
+
+			this.nsfo.doPutRequest(this.nsfo.URI_TREATMENTS + '/' + type + '/template/' + treatmentTemplate.id, treatmentTemplate)
 				.subscribe(
 					res => {
-						_.remove(this.treatmentTemplates, {id: this.treatmentTemplateTemp.id});
 						this.treatmentTemplate = res.result;
-						this.treatmentTemplates.push(this.treatmentTemplate);
+						this.updateInTreatmentTemplates(this.treatmentTemplate);
 						this.isSaving = false;
 						this.sortByDescription();
 						this.closeModal();
 					},
 					err => {
 						this.isSaving = false;
-						this.errorMessage = "SOMETHING WENT WRONG. TRY ANOTHER TIME."
+						this.errorMessage = this.nsfo.getErrorMessage(err);
 					}
 				);
 		} else {
@@ -295,10 +302,7 @@ export class TreatmentTemplateComponent implements OnInit {
 			.subscribe(
 				res => {
 					this.treatmentTemplate = res.result;
-
-					const index = _.findIndex(this.treatmentTemplates, {id: this.treatmentTemplate.id});
-					this.treatmentTemplates.splice(index, 1, this.treatmentTemplate);
-
+					this.updateInTreatmentTemplates(this.treatmentTemplate);
 					this.isSaving = false;
 					this.sortByDescription();
 					this.closeRemoveModal();
@@ -319,10 +323,7 @@ export class TreatmentTemplateComponent implements OnInit {
 			.subscribe(
 				res => {
 					this.treatmentTemplate = res.result;
-
-					const index = _.findIndex(this.treatmentTemplates, {id: this.treatmentTemplate.id});
-					this.treatmentTemplates.splice(index, 1, this.treatmentTemplate);
-
+					this.updateInTreatmentTemplates(this.treatmentTemplate);
 					this.isSaving = false;
 					this.sortByDescription();
 					this.closeReactivateModal();
@@ -335,16 +336,41 @@ export class TreatmentTemplateComponent implements OnInit {
 	}
 
 
+	updateInTreatmentTemplates(treatmentTemplate: TreatmentTemplate) {
+		const index = _.findIndex(this.treatmentTemplates, {id: treatmentTemplate.id});
+		this.treatmentTemplates.splice(index, 1, treatmentTemplate);
+	}
+
+
 	private openModal(editMode: boolean, treatmentTemplate: TreatmentTemplate): void {
 		this.isModalEditMode = editMode;
 		this.displayModal = 'block';
 		this.isValidForm = true;
 
-		this.treatmentTemplateTemp = _.cloneDeep(treatmentTemplate);
+		this.resetCreateOptions();
 
 		if(editMode) {
-			this.treatmentTemplate = _.cloneDeep(treatmentTemplate);
+			this.newTreatmentTemplate = _.cloneDeep(treatmentTemplate);
+
+			this.newIsDefaultTemplate = true;
+			this.newSelectedUbn = null;
+			if (this.treatmentTemplate.location) {
+				const ubn = this.treatmentTemplate.location.ubn;
+				if (ubn != null) {
+					this.newIsDefaultTemplate = false;
+					this.newSelectedUbn = ubn;
+				}
+			}
+
+			for(let medication of treatmentTemplate.medications) {
+				medication.id = this.medicationId++;
+				this.newMedications.push(medication);
+			}
 		}
+	}
+
+	getNewIsDefaultTemplateAsYesOrNo() {
+		return this.newIsDefaultTemplate ? 'YES' : 'NO';
 	}
 
 	private closeModal(): void {

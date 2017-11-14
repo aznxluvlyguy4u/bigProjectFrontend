@@ -162,7 +162,7 @@
 
 <!--CREATE MODAL-->
 <div class="reveal-overlay" [ngStyle]="{'display': displayModal}">
-    <div class="tiny reveal" [ngStyle]="{'display': displayModal}" style="width: 50em; max-width: 95vw">
+    <div class="tiny reveal" [ngStyle]="{'display': displayModal}" style="padding: 2em; width: 50em; max-width: 95vw">
         <div class="modal-header">
             <span *ngIf="!isModalEditMode">{{ 'NEW TREATMENT TYPE' | translate }}</span>
             <span *ngIf="isModalEditMode">{{ 'EDIT TREATMENT TYPE DATA' | translate }}</span>
@@ -180,24 +180,33 @@
                     <label class="middle"> {{ 'DEFAULT TEMPLATES FOR ALL UBNS' | translate }} * </label>
                 </div>
                 <div class="large-3 columns">
-                    <div class="switch large">
-                        <input class="switch-input"
-                               id="yes-no-for-create-edit"
-                               type="checkbox"
-                               name="allUbnSwitch"
-                               [(ngModel)]="newIsDefaultTemplate"
-                               [disabled]="isSaving"
-                               (click)="resetNewSelectedUbn()">
-                        <label class="switch-paddle" for="yes-no-for-create-edit">
-                            <span class="show-for-sr">{{ 'CREATE DEFAULT TEMPLATE FOR ALL UBNS' | translate }}</span>
-                            <span class="switch-active" aria-hidden="true"
-                                  value="true"
-                            >{{ 'YES' | translate }}</span>
-                            <span class="switch-inactive" aria-hidden="true"
-                                  value="false"
-                            >{{ 'NO' | translate }}</span>
-                        </label>
-                    </div>
+                    <ng-template *ngIf="!isModalEditMode">
+                        <div class="switch large">
+                            <input class="switch-input"
+                                   id="yes-no-for-create-edit"
+                                   type="checkbox"
+                                   name="allUbnSwitch"
+                                   [(ngModel)]="newIsDefaultTemplate"
+                                   [disabled]="isSaving || isModalEditMode"
+                                   (click)="resetNewSelectedUbn()">
+                            <label class="switch-paddle" for="yes-no-for-create-edit">
+                                <span class="show-for-sr">{{ 'CREATE DEFAULT TEMPLATE FOR ALL UBNS' | translate }}</span>
+                                <span class="switch-active" aria-hidden="true"
+                                      value="true"
+                                >{{ 'YES' | translate }}</span>
+                                <span class="switch-inactive" aria-hidden="true"
+                                      value="false"
+                                >{{ 'NO' | translate }}</span>
+                            </label>
+                        </div>
+                    </ng-template>
+                    <ng-template *ngIf="isModalEditMode">
+                        <div class="large-8 columns">
+                            <input [disabled]="true" type="text" style="background-color: whitesmoke; color: black;"
+                                   placeholder="{{getNewIsDefaultTemplateAsYesOrNo() | translate}}">
+                        </div>
+                    </ng-template>
+
                 </div>
             </div>
 
@@ -209,7 +218,7 @@
                 </div>
                 <div class="large-8 columns">
                     <select
-                            [disabled]="newIsDefaultTemplate || isSaving"
+                            [disabled]="newIsDefaultTemplate || isSaving || isModalEditMode"
                             [(ngModel)]="newSelectedUbn"
                             name="ubn"
                     >
@@ -244,7 +253,7 @@
                 </div>
                 <div class="large-8 columns">
                     <select
-                            [disabled]="isSaving"
+                            [disabled]="isSaving || isModalEditMode"
                             [(ngModel)]="newTreatmentTemplate.description"
                             name="description"
                             formControlName="description"
@@ -262,7 +271,7 @@
 
             <div class="row">
             {{ 'MEDICATIONS' | translate }}
-                <span class="pull-right" *ngIf="newMedications.length === 0">
+                <span class="pull-right" *ngIf="!hasAtLeastOneMedication()">
                     <p>   {{ 'INCLUDE AT LEAST ONE MEDICATION' | translate }}</p>
                 </span>
             </div>
@@ -399,8 +408,14 @@
         </table>
 
         <div class="modal-footer">
+            <span class="pull-left">
+            <button class="tiny primary button" [disabled]="isSaving" (click)="openModal(true, treatmentTemplate); closeInfoModal()">{{ 'EDIT' | translate}}</button>
+            </span>
+        </div>
+
+        <div class="modal-footer">
             <span class="pull-right">
-            <button class="tiny primary button" [disabled]="isSaving" (click)="closeInfoModal()">{{ 'CLOSE' | translate}}</button>
+            <button class="tiny alert button" [disabled]="isSaving" (click)="closeInfoModal()">{{ 'CLOSE' | translate}}</button>
             </span>
         </div>
     </div>
