@@ -70,6 +70,8 @@ export class User {
     public last_name: string;
     public first_name: string;
     public email_address: string;
+    public type: string;
+    public is_active: boolean;
 }
 
 export class InvoiceSenderDetails {

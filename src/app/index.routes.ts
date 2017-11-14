@@ -30,6 +30,11 @@ import {InvoicesNSFODetailsComponent} from "./main/config/invoices/details/detai
 import {MaediVisnaAnnouncementComponent} from "./main/config/healthLetters/maediVisna/announcement/maediVisna.announcement";
 import {MaediVisnaSupportComponent} from "./main/config/healthLetters/maediVisna/support/maediVisna.support";
 import {ConfigVwaEmployeesComponent} from "./main/config/vwa-employees/config.vwa-employees";
+import { TechnicalLogOverviewComponent } from './main/technicalLog/technical-log-overview.component';
+import { TreatmentMainComponent } from './main/treatment/treatment-main.component';
+import { TreatmentTemplateComponent } from './main/treatment/treatment-template/treatment-template.component';
+import { TreatmentTypeComponent } from './main/treatment/treatment-type/treatment-type.component';
+import { TreatmentPrescriptionComponent } from './main/treatment/treatment-prescription/treatment-prescription.component';
 
 const routes: RouterConfig = [
     {
@@ -81,7 +86,16 @@ const routes: RouterConfig = [
                     {path: 'choice_fields', component: ConfigChoiceFieldsComponent}
                 ]},
             {path: 'report', terminal: true, component: ReportComponent},
-            {path: 'profile', terminal: true, component: ProfileComponent}
+					  {path: 'log', terminal: true, component: TechnicalLogOverviewComponent},
+            {path: 'profile', terminal: true, component: ProfileComponent},
+					  // {path: 'treatment', terminal: true, component: TreatmentMainComponent}
+					  {path: 'treatment', component: TreatmentMainComponent,
+							children: [
+								{path: '', terminal: true, redirectTo: 'templates'},
+								{path: 'prescriptions', component: TreatmentPrescriptionComponent},
+								{path: 'templates', component: TreatmentTemplateComponent},
+								{path: 'types', component: TreatmentTypeComponent},
+							]},
         ]
     },
     {path: 'ghostlogin/:person', component: GhostLoginComponent, canActivate: [AuthenticatedGuard]},

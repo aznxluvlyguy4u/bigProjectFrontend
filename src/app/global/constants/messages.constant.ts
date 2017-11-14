@@ -1,0 +1,1 @@
+export const SERVER_ERROR_MESSAGE = 'Er gaat iets fout probeer het later nog eens';

@@ -21,12 +21,6 @@
             </a>
         </li>
         <li>
-            <a routerLink="/health" routerLinkActive="active">
-                <i class="fa fa-medkit fa-fw" aria-hidden="true"></i>
-                {{ 'ANIMAL HEALTH' | translate }}
-            </a>
-        </li>
-        <li>
             <a routerLink="/client" routerLinkActive="active">
                 <i class="fa fa-users fa-fw" aria-hidden="true"></i>
                 {{ 'CLIENTS' | translate }}
@@ -39,9 +33,27 @@
             </a>
         </li>
         <li>
+            <a routerLink="/health" routerLinkActive="active">
+                <i class="fa fa-flask fa-fw" aria-hidden="true"></i>
+                {{ 'ANIMAL HEALTH' | translate }}
+            </a>
+        </li>
+        <li>
+            <a routerLink="/treatment" routerLinkActive="active">
+                <i class="fa fa-medkit fa-fw" aria-hidden="true"></i>
+                {{ 'TREATMENTS' | translate }}
+            </a>
+        </li>
+        <li>
             <a routerLink="/configuration" routerLinkActive="active">
                 <i class="fa fa-cogs fa-fw" aria-hidden="true"></i>
                 {{ 'CONFIGURATIONS' | translate }}
+            </a>
+        </li>
+        <li>
+            <a routerLink="/log" routerLinkActive="active">
+                <i class="fa fa-history fa-fw" aria-hidden="true"></i>
+                {{ 'TECHNICAL LOG' | translate }}
             </a>
         </li>
         <li>

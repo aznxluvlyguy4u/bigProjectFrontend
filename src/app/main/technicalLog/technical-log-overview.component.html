@@ -1,0 +1,263 @@
+<div class="page-header">
+    <div class="page-title">{{ 'TECHNICAL LOG' | translate }}</div>
+</div>
+
+
+<div class="row table-options-container">
+
+    <!-- PRE LOG REQUEST FILTER -->
+
+    <div class="large-2 columns">
+        <h5>{{ 'STEP 1' | translate }} <i class="fa fa-info-circle" aria-hidden="true" title="De logs worden opgehaald waarbij deze gebruiker een actie had ondernomen of waarvan deze gebruiker de eigenaar is van de account. Als ALLE gebruikers wordt gekozen mag de maximaal gekozen periode niet langer zijn dan {{getMaxMonthsPeriod()}} maanden. Anders duurt het ophalen van de logs veels te lang."></i></h5>
+    </div>
+
+    <div class="large-2 columns">
+
+        <ng-template *ngIf="!isUsersLoaded">
+            Gebruikers worden opgehaald
+            <div class="spinner">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
+            </div>
+        </ng-template>
+
+        <ng-template *ngIf="isUsersLoaded">
+            <ng-template *ngIf="!showAccountSelect">
+                <button type="button" class="button"
+                        (click)="showAccountSelect = !showAccountSelect"
+                        class="button"
+                >{{'SELECT A USER' | translate}}
+                </button>
+            </ng-template>
+            <ng-template *ngIf="showAccountSelect">
+                <button type="button" class="alert button" style="background-color: darkred"
+                        (click)="showAccountSelect = !showAccountSelect"
+                        class="button"
+                >{{'CLOSE DROPDOWN' | translate}}
+                </button>
+            </ng-template>
+            <div *ngIf="showAccountSelect">
+                <app-search-component (update)="userDropDownSearchTerm = $event"></app-search-component>
+                <ul style="position: absolute; z-index: 1000; background: #fff; height:300px; width:600px; overflow-y:scroll">
+                    <li>
+                        <a (click)="onIncludeAllUsersClick()">
+                            {{ 'ALL USERS' | translate }}
+                        </a>
+                    </li>
+                    <li *ngFor="let user of userList | searchPipe: userDropDownSearchTerm ">
+                        <a (click)="onSelectUserClick(user)">
+                            {{getFullName(user)}} | {{getPersonType(user)}} | {{user.email_address}}
+                            {{ user.is_active ? '' : ' | ' + ('INACTIVE' | translate) }}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </ng-template>
+    </div>
+
+    <div class="large-8 columns" style="margin-bottom: 2rem">
+        <h5>{{getSelectedUserDisplayPrefix() | translate}} {{getSelectedUserDisplay() | translate}}</h5>
+    </div>
+
+</div>
+
+<hr style="margin-top: 0">
+
+<ng-template *ngIf="getUserSelectionWasDone()">
+
+    <div class="row table-options-container">
+
+        <form [formGroup]="dateForm" (submit)="onSubmit()">
+
+            <div class="large-2 medium-12 columns">
+                <h5>{{ 'STEP 2' | translate }}</h5>
+            </div>
+
+            <div class="large-3 medium-3 small-12 columns">
+                <label class="left">
+                    {{ 'USER ACTION TYPES' | translate }}
+                    <select
+                            [(ngModel)]="selectedUserActionType"
+                            [disabled]="!getUserSelectionWasDone()"
+                            (change)="page = 1"
+                            [formControl]="dateForm.controls['selectedUserActionType']"
+                    >
+                        <option value="ALL">{{ 'ALL' | translate }}</option>
+                        <option *ngFor="let logType of logTypesList"  value="{{logType}}">{{ logType | translate }}</option>
+                    </select>
+                </label>
+            </div>
+
+            <div class="large-2 medium-3 small-12 columns">
+                <label class="left"> {{ 'START DATE' | translate }}</label>
+                <datepicker [formCtrl]="dateForm.controls['startDate']" [initDate]="selectedStartDate" [viewFormat]="settings.getViewDateFormat()" [modelFormat]="settings.getModelDateTimeFormat()" [editMode]="!savingInProgress">
+                </datepicker>
+            </div>
+
+            <div class="large-2 medium-3 small-12 columns">
+                <label class="left"> {{ 'END DATE' | translate }}</label>
+                <datepicker [formCtrl]="dateForm.controls['endDate']" [initDate]="selectedEndDate" [viewFormat]="settings.getViewDateFormat()" [modelFormat]="settings.getModelDateTimeFormat()" [editMode]="!savingInProgress">
+                </datepicker>
+            </div>
+
+            <div class="large-2 medium-3 small-12 columns end" style="margin-top: 1.5rem">
+                <button
+                   class="button"
+                   type="submit"
+                   [disabled]="!getUserSelectionWasDone() || !isLogsLoaded ||
+                   (dateForm.errors != null
+                    && dateForm.value['startDate'] = selectedStartDate
+                    && dateForm.value['endDate'] = selectedEndDate
+                    )"
+                   (pageChange)="page = 1"
+                >{{ 'GET LOGS' | translate }}</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="text-center" style="color: darkred"
+            *ngIf="(dateForm.errors != null
+                && dateForm.value['startDate'] = selectedStartDate
+                && dateForm.value['endDate'] = selectedEndDate
+                )"
+    >
+        <p *ngFor="let errorMessage of errors">{{errorMessage}}</p>
+        <p> {{'CORRECT STARTDATE AND/OR ENDDATE'|translate}} </p>
+    </div>
+
+    <hr style="margin-top: 0">
+
+</ng-template>
+
+<ng-template *ngIf="isLogsLoaded && actionLogs.length > 0">
+
+    <!-- POST LOG REQUEST FILTER -->
+    <div class="row table-options-container"  style="margin: 1rem auto 1rem auto">
+
+        <div class="large-2 medium-12 columns">
+            <h5>{{ 'FILTERS' | translate }}</h5>
+        </div>
+
+        <div class="large-2 columns">
+            <label>
+                {{ 'SEARCH' | translate }} <i class="fa fa-info-circle" aria-hidden="true" title="{{ 'LOG SEARCH INFO' | translate}}"></i>
+                <input type="text" [(ngModel)]="filterSearch" (keydown)="page = 1" placeholder="{{ 'SEARCH' | translate }}" maxlength="50">
+            </label>
+        </div>
+        <div class="large-3 columns">
+            <label>
+                {{ 'USER ACTION TYPES' | translate }}
+                <select [(ngModel)]="filterUserActionTypes" (change)="page = 1">
+                    <option value="ALL">{{ 'ALL' | translate }}</option>
+                    <option *ngFor="let logType of logTypesFilterList"  value="{{logType}}">{{ logType | translate }}</option>
+                </select>
+            </label>
+        </div>
+        <div class="large-1 columns">
+            <label>
+                {{ 'PER PAGE' | translate }}
+                <select [(ngModel)]="filterAmount" (change)="page = 1">
+                    <option *ngFor="let option of filterAmountOptions" [value]="option">{{option}}</option>
+                </select>
+            </label>
+        </div>
+
+        <div class="large-2 columns">
+            <label>
+                {{'PROCESSED IN API' | translate}}
+                <select [(ngModel)]="filterIsCompleted" (change)="page = 1">
+                    <option *ngFor="let option of filterIsCompletedOptions" [value]="option">{{getBoolDrowDownText(option) | translate}}</option>
+                </select>
+            </label>
+        </div>
+
+        <div class="large-1 columns">
+            <label>
+                {{'ENVIRONMENT' | translate | lowercase}}
+                <select [(ngModel)]="filterLoginEnvironment" (change)="page = 1">
+                    <option *ngFor="let option of filterLoginEnvironmentOptions" [value]="option">{{option == undefined ? ('ALL'|translate) : option}}</option>
+                </select>
+            </label>
+        </div>
+
+        <div class="large-1 columns end">
+            <label>
+                {{'RVO' | translate | lowercase}}
+                <select [(ngModel)]="filterIsRvoMessage" (change)="page = 1">
+                    <option *ngFor="let option of filterIsRvoMessageOptions" [value]="option">{{getBoolDrowDownText(option) | translate}}</option>
+                </select>
+            </label>
+        </div>
+    </div>
+
+</ng-template>
+
+<!-- Full width table -->
+<div class="row" style="width: 100%; margin-left: auto; margin-right: auto; max-width: initial;">
+    <div class="large-12 columns">
+        <table class="stack client-overview">
+            <thead>
+                <tr>
+                    <td>{{ 'LOG DATE' | translate }}
+                        <app-sort-switch
+                            [pointsUp]="isDateSortAscending"
+                            (sortSwitchToggled)="onSortByDateToggle(); page = 1">
+                        </app-sort-switch>
+                    </td>
+                    <td>{{ 'USER ACCOUNT' | translate }}</td>
+                    <td>{{ 'ACTION BY' | translate }}</td>
+                    <td>{{ 'USER ACTION TYPE' | translate }}</td>
+                    <td>{{ 'DESCRIPTION' | translate }}</td>
+                    <td title="{{ 'IS COMPLETED' | translate }}">{{'PROCESSED IN API' | translate}} <i class="fa fa-info-circle" aria-hidden="true" title="Goed ontvangen en verwerkt door de API en verstuurd naar de externe worker queue"></i></td>
+                    <td title="{{'ENVIRONMENT' | translate | lowercase }}">omgeving</td>
+                    <td title="{{ 'IS RVO MESSAGE' | translate }}">{{'RVO' | translate | lowercase}}</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngIf="!isLogsLoaded">
+                    <td colspan="10">
+                        <p class="text-center">{{'LOGS ARE BEING RETRIEVED'|translate}}</p>
+                        <div class="spinner">
+                            <div class="bounce1"></div>
+                            <div class="bounce2"></div>
+                            <div class="bounce3"></div>
+                        </div>
+                    </td>
+                </tr>
+                <ng-container *ngIf="isLogsLoaded && actionLogs.length > 0">
+                <tr *ngFor="let log of actionLogs | logFilter:getFilterOptions() | paginate: {itemsPerPage: filterAmount, currentPage: page}; let i = index">
+                    <td>
+                        {{ log.log_date | date: 'dd-MM-yyyy @HH:mm:ss' }}
+                    </td>
+                    <td>
+                        {{getFullName(log.user_account)}}
+                    </td>
+                    <td>
+                        {{getFullName(log.action_by)}}
+                    </td>
+                    <td>
+                        {{ log.user_action_type }}
+                    </td>
+                    <td>
+                        {{ log.description }}
+                    </td>
+                    <td>
+                        <app-check-mark [boolVal]="log.is_completed"></app-check-mark>
+                    </td>
+                    <td>
+                        <div class="text-center"
+                             [innerHTML]="log | loginEnvironment"
+                        ></div>
+                    </td>
+                    <td>
+                        <app-check-mark [boolVal]="log.is_rvo_message"></app-check-mark>
+                    </td>
+                </tr>
+                </ng-container>
+            </tbody>
+        </table>
+
+        <pagination (pageChange)="page = $event"></pagination>
+    </div>
+</div>

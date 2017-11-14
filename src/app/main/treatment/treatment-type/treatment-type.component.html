@@ -1,0 +1,216 @@
+<ng-template *ngIf="loadingTreatmentTypes">
+    <p class="text-center">{{'TREATMENT TYPES ARE BEING RETRIEVED'|translate}}</p>
+    <div class="spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+</ng-template>
+
+<ng-template *ngIf="!loadingTreatmentTypes">
+<div class="row table-options-container">
+    <div class="large-2 medium-3 small-12 columns end">
+        <label>
+            {{ 'SEARCH' | translate }}
+            <input type="text" [(ngModel)]="filterSearch" (keydown)="page = 1" placeholder="{{ 'SEARCH' | translate }}" maxlength="50">
+        </label>
+    </div>
+    <div class="large-2 medium-3 small-12 columns end">
+        <label class="left">
+            {{ 'KIND' | translate }}
+            <select
+                    [(ngModel)]="filterType"
+                    (change)="page = 1"
+            >
+                <option value="ALL">{{ 'ALL' | translate }}</option>
+                <option *ngFor="let kind of treatmentTypeKinds"  value="{{kind}}">{{ kind | translate }}</option>
+            </select>
+        </label>
+    </div>
+    <div class="large-2 medium-2 small-12 columns end">
+        <label class="left">
+            {{ 'ACTIVE' | translate }}
+            <select
+                    [(ngModel)]="filterIsActiveStatus"
+                    (change)="page = 1"
+            >
+                <option *ngFor="let status of activeStatuses" [value]="status">{{getBoolDrowDownText(status) | translate}}</option>
+            </select>
+        </label>
+    </div>
+</div>
+
+<div id="treatment-type-table">
+    <div class="row">
+        <div class="large-12 columns">
+            <table class="stacked">
+                <thead>
+                <tr>
+                    <td>{{ 'ACTIVE' | translate}}</td>
+                    <td>{{ 'KIND' | translate}}</td>
+                    <td>{{ 'DESCRIPTION' | translate}}
+                        <app-sort-switch
+                                [pointsUp]="isDescriptionSortAscending"
+                                (sortSwitchToggled)="onSortByDescriptionToggle(); page = 1">
+                        </app-sort-switch>
+                    </td>
+                    <td>{{ 'LOG DATE' | translate}}</td>
+                    <td>
+                        <button type="button" (click)="openModal(false)" class="small primary button pull-right">
+                            <i class="fa fa-user-plus fa-fw" aria-hidden="true"></i>
+                            {{ 'ADD TREATMENT TYPE' | translate }}
+                        </button>
+                    </td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let treatmentType of treatmentTypes | treatmentTypeFilter:getFilterOptions() ">
+                    <td><app-check-mark [boolVal]="treatmentType.is_active"></app-check-mark></td>
+                    <td>{{ treatmentType.type | translate }}</td>
+                    <td>{{ treatmentType.description }}</td>
+                    <td>{{ treatmentType.log_date ? (treatmentType.log_date | date: 'dd-MM-yyyy @ HH:mm:ss') : '' }}</td>
+                    <td>
+                        <span *ngIf="treatmentType.is_active" class="pull-right overview-controls">
+                            <a (click)="openModal(true, treatmentType)"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
+                            <a (click)="openRemoveModal(treatmentType)" class="remove-button"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+                        </span>
+                        <span *ngIf="!treatmentType.is_active" class="pull-right overview-controls">
+                            <a (click)="openReactivateModal(treatmentType)"><i class="fa fa-plus fa-fw" aria-hidden="true" title="{{'REACTIVATE' | translate}}"></i></a>
+                        </span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</ng-template>
+
+<!--ADD REASON MODAL-->
+<div class="reveal-overlay" [ngStyle]="{'display': displayModal}">
+    <div class="tiny reveal" [ngStyle]="{'display': displayModal}">
+        <div class="modal-header">
+            <span *ngIf="!isModalEditMode">{{ 'NEW TREATMENT TYPE' | translate }}</span>
+            <span *ngIf="isModalEditMode">{{ 'EDIT TREATMENT TYPE DATA' | translate }}</span>
+            <button type="button" class="pull-right" aria-label="Close modal" (click)="closeModal()">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div [formGroup]="form" class="modal-body">
+            <div class="row">
+                <div class="large-4 columns">
+                    <label class="middle"> {{ 'DESCRIPTION' | translate }} * </label>
+                </div>
+                <div class="large-8 columns">
+                    <input type="text" [(ngModel)]="treatmentType.description" formControlName="description" maxlength="250" (keydown)="resetValidation()">
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-4 columns">
+                    <label class="middle"> {{ 'KIND' | translate }} <span *ngIf="!isModalEditMode">*</span></label>
+                </div>
+                <div class="large-8 columns">
+                    <select type="text"
+                            [(ngModel)]="treatmentType.type"
+                            formControlName="type"
+                            (change)="page = 1"
+                            (keydown)="resetValidation()"
+                            [disabled]="isModalEditMode"
+                    >
+                        <option *ngIf="isModalEditMode" value="{{treatmentType.type}}">{{ treatmentType.type | translate }}</option>
+                        <option *ngIf="!isModalEditMode" *ngFor="let kind of treatmentTypeKinds" value="{{kind}}">{{ kind | translate }}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="large-12 columns">
+                    <span class="pull-right required-description"> * {{ 'IS A REQUIRED FIELD' | translate }} </span>
+                </div>
+            </div>
+            <span class="pull-left">
+                <label *ngIf="!isValidForm" class="input-error-msg">{{ 'FILL IN ALL THE REQUIRED FIELDS' | translate }}</label>
+                <label *ngIf="errorMessage" class="input-error-msg">{{ errorMessage | translate }}</label>
+            </span>
+            <span class="pull-right">
+                <button *ngIf="!isModalEditMode" [disabled]="isSaving" (click)="addTreatmentType()" class="tiny primary button">
+                    <span *ngIf="!isSaving">
+                        {{ 'ADD' | translate}}
+                    </span>
+                    <span *ngIf="isSaving">
+                        <i class="fa fa-gear fa-spin fa-fw"></i>
+                    </span>
+                </button>
+                <button *ngIf="isModalEditMode" [disabled]="isSaving" (click)="editTreatmentType()" class="tiny primary button">
+                    <span *ngIf="!isSaving">
+                        {{ 'EDIT' | translate}}
+                    </span>
+                    <span *ngIf="isSaving">
+                        <i class="fa fa-gear fa-spin fa-fw"></i>
+                    </span>
+                </button>
+                <button (click)="closeModal()" [disabled]="isSaving" class="tiny alert button">{{ 'CANCEL' | translate}}</button>
+            </span>
+        </div>
+    </div>
+</div>
+
+<!--REMOVE MODAL-->
+<div class="reveal-overlay" [ngStyle]="{'display': displayRemoveModal}">
+    <div class="tiny reveal" [ngStyle]="{'display': displayRemoveModal}">
+        <div class="modal-header">
+            {{ 'REMOVE TREATMENT TYPE' | translate }}
+            <button type="button" (click)="closeRemoveModal()" class="pull-right" aria-label="Close modal">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="modal-body"> {{ 'ARE YOU SURE YOU WANT TO REMOVE THIS TREATMENT TYPE' | translate }} </div>
+        <div class="modal-footer">
+            <span class="pull-left">
+                <label *ngIf="errorMessage" class="input-error-msg">{{ errorMessage | translate }}</label>
+            </span>
+            <span class="pull-right">
+            <button class="tiny alert button" [disabled]="isSaving" (click)="removeTreatmentType()">
+                <span *ngIf="!isSaving">
+                    {{ 'REMOVE' | translate}}
+                </span>
+                <span *ngIf="isSaving">
+                    <i class="fa fa-gear fa-spin fa-fw"></i>
+                </span>
+            </button>
+            <button class="tiny primary button" [disabled]="isSaving" (click)="closeRemoveModal()">{{ 'CANCEL' | translate}}</button>
+            </span>
+        </div>
+    </div>
+</div>
+
+<!--REACTIVATE MODAL-->
+<div class="reveal-overlay" [ngStyle]="{'display': displayReactivateModal}">
+    <div class="tiny reveal" [ngStyle]="{'display': displayReactivateModal}">
+        <div class="modal-header">
+            {{ 'REACTIVATE TREATMENT TYPE' | translate }}
+            <button type="button" (click)="closeReactivateModal()" class="pull-right" aria-label="Close modal">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="modal-body"> {{ 'ARE YOU SURE YOU WANT TO REACTIVATE THIS TREATMENT TYPE' | translate }} </div>
+        <div class="modal-footer">
+            <span class="pull-left">
+                <label *ngIf="errorMessage" class="input-error-msg">{{ errorMessage | translate }}</label>
+            </span>
+            <span class="pull-right">
+            <button class="tiny alert button" [disabled]="isSaving" (click)="reactivateTreatmentType()">
+                <span *ngIf="!isSaving">
+                    {{ 'REACTIVATE' | translate}}
+                </span>
+                <span *ngIf="isSaving">
+                    <i class="fa fa-gear fa-spin fa-fw"></i>
+                </span>
+            </button>
+            <button class="tiny primary button" [disabled]="isSaving" (click)="closeReactivateModal()">{{ 'CANCEL' | translate}}</button>
+            </span>
+        </div>
+    </div>
+</div>
