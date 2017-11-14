@@ -47,4 +47,17 @@ export class FormUtilService {
 				}
 				return newErrors;
 		}
+
+
+		getBoolDrowDownText(string: string|boolean): string {
+				if (string === 'true' || string === true) {
+						return 'TRUE';
+				}
+
+				if (string === 'false' || string === false) {
+						return 'FALSE';
+				}
+
+				return 'ALL';
+		}
 }

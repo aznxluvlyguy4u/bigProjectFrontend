@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {Http, Headers} from "@angular/http";
+import { Http, Headers, Response } from '@angular/http';
 import { QueryParam } from '../../../main/client/client.model';
 
 @Injectable()
@@ -40,6 +40,11 @@ export class NSFOService {
 
 	  public URI_TECHNICAL_LOG = '/v1/log/action';
 
+	  public URI_TREATMENTS = '/v1/treatments';
+	  public URI_TREATMENT_TYPES = '/v1/treatment-types';
+
+	  public URI_UBNS = '/v1/ubns';
+
     public URI_VWA_EMPLOYEE: string = '/v1/vwa-employee';
 
     private content_type: string = "Content-Type";
@@ -59,40 +64,36 @@ export class NSFOService {
             .map(res => res.json());
     }
 
-    public doPostRequest(uri:string, data) {
-        let headers = new Headers();
-        headers.append(this.content_type, "application/json");
-        headers.append(this.access_token, localStorage[this.ACCESS_TOKEN_NAMESPACE]);
+	  getHeadersWithToken() {
+			let headers = new Headers();
+			headers.append(this.content_type, "application/json");
+			headers.append(this.access_token, localStorage[this.ACCESS_TOKEN_NAMESPACE]);
+			return headers;
+	  }
 
-        return this.http.post(this.API_SERVER_URL + uri, JSON.stringify(data), {headers: headers})
+    public doPostRequest(uri:string, data) {
+        return this.http.post(this.API_SERVER_URL + uri, JSON.stringify(data), {headers: this.getHeadersWithToken()})
             .map(res => res.json());
     }
 
     public doGetRequest(uri:string) {
-        let headers = new Headers();
-        headers.append(this.content_type, "application/json");
-        headers.append(this.access_token, localStorage[this.ACCESS_TOKEN_NAMESPACE]);
-
-        return this.http.get(this.API_SERVER_URL + uri, {headers: headers})
+        return this.http.get(this.API_SERVER_URL + uri, {headers: this.getHeadersWithToken()})
             .map(res => res.json());
     }
 
     public doPutRequest(uri:string, data) {
-        let headers = new Headers();
-        headers.append(this.content_type, "application/json");
-        headers.append(this.access_token, localStorage[this.ACCESS_TOKEN_NAMESPACE]);
-
-        return this.http.put(this.API_SERVER_URL + uri, JSON.stringify(data), {headers: headers})
+        return this.http.put(this.API_SERVER_URL + uri, JSON.stringify(data), {headers: this.getHeadersWithToken()})
             .map(res => res.json());
     }
 
     public doDeleteRequest(uri:string, data) {
-        let headers = new Headers();
-        headers.append(this.content_type, "application/json");
-        headers.append(this.access_token, localStorage[this.ACCESS_TOKEN_NAMESPACE]);
-
-        return this.http.delete(this.API_SERVER_URL + uri, {headers: headers})
+        return this.http.delete(this.API_SERVER_URL + uri, {headers: this.getHeadersWithToken()})
             .map(res => res.json());
+    }
+
+    public doPatchRequest(uri:string, data) {
+        return this.http.patch(this.API_SERVER_URL + uri, data, {headers: this.getHeadersWithToken()})
+          .map(res => res.json());
     }
 
     public getUserEnvURL(): string {
@@ -109,5 +110,13 @@ export class NSFOService {
 					  prefix = '&';
         }
         return queryString;
+    }
+
+    public getErrorMessage(err: Response): string {
+			if (err.status !== 500) {
+				return err.json().result.message;
+			} else {
+				return "SOMETHING WENT WRONG. TRY ANOTHER TIME."
+			}
     }
 }
