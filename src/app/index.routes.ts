@@ -67,7 +67,7 @@ const routes: RouterConfig = [
                 children: [
                     {path: '', terminal: true, redirectTo: 'admins'},
                     {path: 'admins', component: ConfigAdminsComponent},
-                    {path: 'vwa-employees', component: ConfigVwaEmployeesComponent},
+                    {path: 'third-party-users', component: ConfigVwaEmployeesComponent},
                     {path: 'cms', component: ConfigCMSComponent},
                     {path: 'invoices', component: ConfigInvoicesComponent,
                         children: [
