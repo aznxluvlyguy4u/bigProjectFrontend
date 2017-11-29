@@ -50,7 +50,9 @@ export class ClientDetailsComponent {
         this.form = fb.group({
             "scrapie_check_date" : [''],
             "maedi_visna_check_date" : [''],
-            "reason_of_change": ['']
+            "reason_of_change": [''],
+            "scrapie_reason_of_edit": [''],
+            "maedi_visna_reason_of_edit": ['']
         });
     }
 
@@ -142,7 +144,8 @@ export class ClientDetailsComponent {
             "maedi_visna_check_date": this.form.controls['maedi_visna_check_date'].value,
             "scrapie_status": this.selectedLocation.scrapie_status,
             "scrapie_check_date": this.form.controls['scrapie_check_date'].value,
-            "reason_of_change": this.form.controls['reason_of_change'].value
+            "maedi_visna_reason_of_edit": this.form.controls['maedi_visna_reason_of_edit'].value,
+            "scrapie_reason_of_edit": this.form.controls['scrapie_reason_of_edit'].value,
         };
 
         this.nsfo.doPutRequest(this.nsfo.URI_HEALTH_UBN + '/' + this.selectedLocation.ubn, request)
