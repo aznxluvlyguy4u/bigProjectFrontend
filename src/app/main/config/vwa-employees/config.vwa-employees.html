@@ -11,7 +11,7 @@
                         <td>
                             <button type="button" (click)="openModal(false)" class="small primary button pull-right">
                                 <i class="fa fa-user-plus fa-fw" aria-hidden="true"></i>
-                                {{ 'INVITE VWA EMPLOYEE' | translate }}
+                                {{ 'INVITE THIRD PARTY USER' | translate }}
                             </button>
                         </td>
                     </tr>
@@ -39,8 +39,8 @@
 <div class="reveal-overlay" [ngStyle]="{'display': displayModal}">
     <div class="tiny reveal" [ngStyle]="{'display': displayModal}">
         <div class="modal-header">
-            <span *ngIf="!isModalEditMode">{{ 'NEW VWA EMPLOYEE' | translate }}</span>
-            <span *ngIf="isModalEditMode">{{ 'EDIT VWA EMPLOYEE' | translate }}</span>
+            <span *ngIf="!isModalEditMode">{{ 'NEW THIRD PARTY USER' | translate }}</span>
+            <span *ngIf="isModalEditMode">{{ 'EDIT THIRD PARTY USER' | translate }}</span>
             <button type="button" class="pull-right" aria-label="Close modal" (click)="closeModal()">
                 <i class="fa fa-times" aria-hidden="true"></i>
             </button>
@@ -109,12 +109,12 @@
 <div class="reveal-overlay" [ngStyle]="{'display': displayRemoveModal}">
     <div class="tiny reveal" [ngStyle]="{'display': displayRemoveModal}">
         <div class="modal-header">
-            {{ 'REMOVE VWA EMPLOYEE' | translate }}
+            {{ 'REMOVE THIRD PARTY USER' | translate }}
             <button type="button" (click)="closeRemoveModal()" class="pull-right" aria-label="Close modal">
                 <i class="fa fa-times" aria-hidden="true"></i>
             </button>
         </div>
-        <div class="modal-body"> {{ 'ARE YOU SURE YOU WANT TO REMOVE THIS VWA EMPLOYEE' | translate }} </div>
+        <div class="modal-body"> {{ 'ARE YOU SURE YOU WANT TO REMOVE THIS THIRD PARTY USER' | translate }} </div>
         <div class="modal-footer">
             <span class="pull-left">
                 <label *ngIf="errorMessage" class="input-error-msg">{{ errorMessage | translate }}</label>
