@@ -156,6 +156,14 @@ export class ClientDetailsComponent {
                 },
                 err => {
                     this.isChangingLocationHealth = false;
+
+									let errorMessagesString;
+                    if (err.json().code === 500) {
+											  errorMessagesString = "SOMETHING WENT WRONG. TRY ANOTHER TIME.";
+                    } else {
+											  errorMessagesString = "De invoer is verkeerd. Controleer of the datums niet in het verleden liggen.";
+                    }
+                    alert(errorMessagesString);
                 }
             );
     }
