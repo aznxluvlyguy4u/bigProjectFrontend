@@ -3,7 +3,7 @@ import moment = require("moment");
 import {Component} from "@angular/core";
 import {Subscription} from "rxjs/Rx";
 import {ActivatedRoute, Router} from "@angular/router";
-import {TranslatePipe} from "ng2-translate/ng2-translate";
+import { TranslatePipe, TranslateService } from 'ng2-translate/ng2-translate';
 import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
 import {
     ClientDetails, ClientNote, LocationHealthStatus, SCRAPIE_STATUS_OPTIONS,
@@ -45,7 +45,8 @@ export class ClientDetailsComponent {
         private activatedRoute: ActivatedRoute,
         private settings: SettingsService,
         private utils: UtilsService,
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private translate: TranslateService,
     ) {
         this.form = fb.group({
             "scrapie_check_date" : [''],
@@ -156,16 +157,29 @@ export class ClientDetailsComponent {
                 },
                 err => {
                     this.isChangingLocationHealth = false;
-
-									let errorMessagesString;
-                    if (err.json().code === 500) {
-											  errorMessagesString = "SOMETHING WENT WRONG. TRY ANOTHER TIME.";
-                    } else {
-											  errorMessagesString = "De invoer is verkeerd. Controleer of the datums niet in het verleden liggen.";
-                    }
-                    alert(errorMessagesString);
+                    alert(this.getLocationHealthErrorMessage(err));
                 }
             );
+    }
+
+    private getLocationHealthErrorMessage(err: any): string {
+        const body = err.json();
+
+        if (body.code === 500) {
+            return "SOMETHING WENT WRONG. TRY ANOTHER TIME.";
+        }
+
+			  const errors = body.errors;
+			  let errorMessages = (Object.keys(errors).length === 1 ? 'Error': 'Errors') + ': ';
+			  let i = 1;
+			  console.log(Object.keys(errors).length);
+        for (let errorMessageKey in errors) {
+					  errorMessages += i + '. ' + this.translate.instant(errors[errorMessageKey]) + '.   ';
+					  i++;
+					  console.log(errors[errorMessageKey], this.translate.instant(errors[errorMessageKey]));
+        }
+
+        return errorMessages;
     }
 
     private navigateTo(url: string): void {
