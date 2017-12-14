@@ -35,6 +35,7 @@ import { TreatmentMainComponent } from './main/treatment/treatment-main.componen
 import { TreatmentTemplateComponent } from './main/treatment/treatment-template/treatment-template.component';
 import { TreatmentTypeComponent } from './main/treatment/treatment-type/treatment-type.component';
 import { TreatmentPrescriptionComponent } from './main/treatment/treatment-prescription/treatment-prescription.component';
+import { ErrorLogOverviewComponent } from './main/errorlog/error-log-overview.component';
 
 const routes: RouterConfig = [
     {
@@ -87,6 +88,7 @@ const routes: RouterConfig = [
                 ]},
             {path: 'report', terminal: true, component: ReportComponent},
 					  {path: 'log', terminal: true, component: TechnicalLogOverviewComponent},
+					  {path: 'error-log', terminal: true, component: ErrorLogOverviewComponent},
             {path: 'profile', terminal: true, component: ProfileComponent},
 					  // {path: 'treatment', terminal: true, component: TreatmentMainComponent}
 					  {path: 'treatment', component: TreatmentMainComponent,

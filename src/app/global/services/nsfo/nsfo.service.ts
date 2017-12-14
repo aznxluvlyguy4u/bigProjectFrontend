@@ -38,6 +38,11 @@ export class NSFOService {
     
     public URI_SETTINGS: string = '/v1/settings';
 
+    public URI_ERRORS: string = '/v1/errors';
+    public URI_ERRORS_DECLARE_TYPES: string = '/v1/errors-declare-types';
+    public URI_ERRORS_HIDDEN_STATUS: string = '/v1/errors-hidden-status';
+    public URI_ERRORS_NON_IR: string = '/v1/errors/non-ir';
+
 	  public URI_TECHNICAL_LOG = '/v1/log/action';
 
 	  public URI_TREATMENTS = '/v1/treatments';

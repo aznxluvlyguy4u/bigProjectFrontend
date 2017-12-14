@@ -6,6 +6,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 })
 export class SortSwitchComponent {
 	@Input() pointsUp: boolean;
+	@Input() neutral: boolean = false;
 	@Output() sortSwitchToggled = new EventEmitter<boolean>();
 
 	onClick() {

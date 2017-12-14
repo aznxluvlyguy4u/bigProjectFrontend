@@ -1,9 +1,13 @@
 <button (click)="onClick()">
-<ng-template *ngIf="pointsUp">
+<ng-template *ngIf="pointsUp && !neutral">
     <i class="fa fa-caret-up" aria-hidden="true"></i>
 </ng-template>
 
-<ng-template *ngIf="!pointsUp">
+<ng-template *ngIf="!pointsUp && !neutral">
     <i class="fa fa-caret-down" aria-hidden="true"></i>
+</ng-template>
+
+<ng-template *ngIf="neutral">
+    <i class="fa fa-minus" aria-hidden="true"></i>
 </ng-template>
 </button>
