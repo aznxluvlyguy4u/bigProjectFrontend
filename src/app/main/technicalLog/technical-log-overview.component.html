@@ -45,7 +45,7 @@
                             {{ 'ALL USERS' | translate }}
                         </a>
                     </li>
-                    <li *ngFor="let user of userList | searchPipe: userDropDownSearchTerm ">
+                    <li *ngFor="let user of userList | userSearchPipe: userDropDownSearchTerm ">
                         <a (click)="onSelectUserClick(user)">
                             {{getFullName(user)}} | {{getPersonType(user)}} | {{user.email_address}}
                             {{ user.is_active ? '' : ' | ' + ('INACTIVE' | translate) }}

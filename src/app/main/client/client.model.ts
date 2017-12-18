@@ -1,3 +1,5 @@
+import { Company } from '../invoice/invoice.model';
+
 export class Client {
     public company_id: number;
     public debtor_number: string;
@@ -38,6 +40,7 @@ export class User {
     public relation_number_keeper: string;
     public is_active: boolean;
     public type: string;
+    public companies: Company[]
 }
 
 export class ActionLog {

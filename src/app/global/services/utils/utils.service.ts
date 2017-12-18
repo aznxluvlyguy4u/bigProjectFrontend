@@ -1,6 +1,7 @@
 import {Injectable} from "@angular/core";
 import {NSFOService} from "../nsfo/nsfo.service";
 import {ReplaySubject} from "rxjs/Rx";
+import { User } from '../../../main/client/client.model';
 
 @Injectable()
 export class UtilsService {
@@ -42,5 +43,15 @@ export class UtilsService {
 
     public getProvinces() {
         return this.provinces.asObservable();
+    }
+
+    static getPersonType(user: User): string {
+			switch(user.type) {
+				case 'Client': return 'Gebruiker';
+				case 'Employee': return 'Admin';
+				case 'VwaEmployee ': return 'VWA-medewerker';
+				case 'Inspector ': return 'Inspecteur';
+				default: return user.type;
+			}
     }
 }

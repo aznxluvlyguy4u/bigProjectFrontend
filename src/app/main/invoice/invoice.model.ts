@@ -43,7 +43,7 @@ export class Company {
     public company_name: string;
     public debtor_number: string;
     public owner: User;
-    public company_addres: Address;
+    public address: Address;
     public invoices: Invoice[] = [];
 }
 
@@ -51,6 +51,8 @@ export class Local_Location {
     public id: number;
     public location_id: number;
     public ubn: string;
+    public is_active: boolean;
+    public location_holder: string;
     public location_address: Address;
 }
 
