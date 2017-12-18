@@ -252,7 +252,7 @@ export class ClientDossierComponent {
 
     private navigateToClientOverview(){
         if(this.checkForChanges()){
-            this.navigateTo('/log');
+            this.navigateTo('/client');
         } else {
             this.openChangeModal();
         }
