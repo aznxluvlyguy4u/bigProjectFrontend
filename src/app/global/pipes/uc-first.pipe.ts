@@ -1,6 +1,4 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { User } from '../../main/client/client.model';
-import { UtilsService } from '../services/utils/utils.service';
 
 @Pipe({name: 'ucFirstPipe'})
 
