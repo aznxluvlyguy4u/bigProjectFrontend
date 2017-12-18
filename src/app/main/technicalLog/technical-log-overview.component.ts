@@ -13,7 +13,7 @@ import { SettingsService } from '../../global/services/settings/settings.service
 import { END_DATE, START_DATE, USER_ACCOUNT_ID, USER_ACTION_TYPE } from '../../global/constants/query-params.constant';
 import { SERVER_ERROR_MESSAGE } from '../../global/constants/messages.constant';
 import { REACTIVE_FORM_DIRECTIVES, Validators } from '@angular/forms';
-import { Control, ControlGroup, FormBuilder } from '@angular/common';
+import { Control, ControlGroup, FormBuilder, LowerCasePipe, UpperCasePipe } from '@angular/common';
 import { LoginEnvironmentPipe } from './pipes/login-environment.pipe';
 import { CheckMarkComponent } from '../../global/components/checkmark/check-mark.component';
 import { SortOrder, SortService } from '../../global/services/utils/sort.service';
@@ -28,7 +28,7 @@ declare var $;
     providers: [PaginationService, SortService, DateTimeService, FormUtilService],
     directives: [REACTIVE_FORM_DIRECTIVES, ROUTER_DIRECTIVES, PaginationComponent, SearchComponent, Datepicker, CheckMarkComponent, SortSwitchComponent],
     template: require('./technical-log-overview.component.html'),
-    pipes: [TranslatePipe, LogFilterPipe, PaginatePipe, SearchPipe, LoginEnvironmentPipe]
+    pipes: [TranslatePipe, LogFilterPipe, PaginatePipe, SearchPipe, LoginEnvironmentPipe, UpperCasePipe, LowerCasePipe ]
 })
 export class TechnicalLogOverviewComponent {
     private isUsersLoaded: boolean = false;
