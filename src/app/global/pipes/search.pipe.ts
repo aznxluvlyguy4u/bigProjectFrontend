@@ -8,10 +8,12 @@ export class SearchPipe implements PipeTransform {
 			return value;
 		}
 		return value.filter((item) => {
-			const searchTerm = term.toLowerCase();
+			const needle = term.toLowerCase();
 			const firstName = item['first_name'].toLowerCase();
 			const lastName = item['last_name'].toLowerCase();
-			return lastName.startsWith(searchTerm) || firstName.startsWith(searchTerm);
+			const haystack = firstName + lastName;
+
+			return haystack.indexOf(needle) !== -1;
 		});
 	}
 }
