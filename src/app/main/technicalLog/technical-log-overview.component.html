@@ -199,19 +199,19 @@
         <table class="stack client-overview">
             <thead>
                 <tr>
-                    <td>{{ 'LOG DATE' | translate }}
+                    <td>{{ 'LOG DATE' | translate | ucFirstPipe }}
                         <app-sort-switch
                             [pointsUp]="isDateSortAscending"
                             (sortSwitchToggled)="onSortByDateToggle(); page = 1">
                         </app-sort-switch>
                     </td>
-                    <td>{{ 'USER ACCOUNT' | translate }}</td>
-                    <td>{{ 'ACTION BY' | translate }}</td>
-                    <td>{{ 'USER ACTION TYPE' | translate }}</td>
-                    <td>{{ 'DESCRIPTION' | translate }}</td>
-                    <td title="{{ 'IS COMPLETED' | translate }}">{{'PROCESSED IN API' | translate}} <i class="fa fa-info-circle" aria-hidden="true" title="Goed ontvangen en verwerkt door de API en verstuurd naar de externe worker queue"></i></td>
-                    <td title="{{'ENVIRONMENT' | translate | lowercase }}">omgeving</td>
-                    <td title="{{ 'IS RVO MESSAGE' | translate }}">{{'RVO' | translate | uppercase }}</td>
+                    <td>{{ 'USER ACCOUNT' | translate | ucFirstPipe }}</td>
+                    <td>{{ 'ACTION BY' | translate | ucFirstPipe }}</td>
+                    <td>{{ 'USER ACTION TYPE' | translate | ucFirstPipe }}</td>
+                    <td>{{ 'DESCRIPTION' | translate | ucFirstPipe }}</td>
+                    <td>{{'PROCESSED IN API' | translate}} <i class="fa fa-info-circle" aria-hidden="true" title="Goed ontvangen en verwerkt door de API en verstuurd naar de externe worker queue"></i></td>
+                    <td>{{'ENVIRONMENT' | translate | ucFirstPipe }}</td>
+                    <td title="{{ 'IS RVO MESSAGE' | translate | ucFirstPipe }}">{{'RVO' | translate | uppercase }}</td>
                 </tr>
             </thead>
             <tbody>
