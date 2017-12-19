@@ -362,7 +362,6 @@
                         </div>
                         <div class="large-4 columns">
                             <select [(ngModel)]="selectedLocation.maedi_visna_status">
-                                <option value=""> -- </option>
                                 <option *ngFor="let healthStatus of maediVisnaStatusOptions" value="{{ healthStatus}}">
                                     {{ healthStatus| translate }}
                                 </option>
@@ -381,7 +380,6 @@
                         </div>
                         <div class="large-4 columns">
                             <select [(ngModel)]="selectedLocation.scrapie_status">
-                                <option value=""> -- </option>
                                 <option *ngFor="let healthStatus of scrapieStatusOptions" value="{{ healthStatus }}">
                                     {{ healthStatus | translate }}
                                 </option>
