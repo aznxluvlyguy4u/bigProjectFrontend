@@ -51,7 +51,6 @@ export class ClientDetailsComponent {
         this.form = fb.group({
             "scrapie_check_date" : [''],
             "maedi_visna_check_date" : [''],
-            "reason_of_change": [''],
             "scrapie_reason_of_edit": [''],
             "maedi_visna_reason_of_edit": ['']
         });
@@ -95,6 +94,8 @@ export class ClientDetailsComponent {
 
                     this.form.controls['scrapie_check_date'].updateValue(healthStatus.scrapie_check_date);
                     this.form.controls['maedi_visna_check_date'].updateValue(healthStatus.maedi_visna_check_date);
+                    this.form.controls['scrapie_reason_of_edit'].updateValue(healthStatus.scrapie_reason_of_edit);
+                    this.form.controls['maedi_visna_reason_of_edit'].updateValue(healthStatus.maedi_visna_reason_of_edit);
                 }
             });
     }
