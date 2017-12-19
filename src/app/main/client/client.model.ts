@@ -95,7 +95,10 @@ export class LocationHealthStatus {
     public cae_check_date: string;
     public cl_status: string;
     public cl_check_date: string;
-    public reason_of_change: string;
+    public scrapie_reason_of_edit: string;
+    public maedi_visna_reason_of_edit: string;
+	  public cl_reason_of_edit: string;
+	  public cae_reason_of_edit: string;
 }
 
 class BreederNumber {
@@ -159,7 +162,6 @@ export const MAEDI_VISNA_STATUS_OPTIONS = [
 ];
 
 export const SCRAPIE_STATUS_OPTIONS = [
-    "FREE",
     "RESISTANT",
     "UNDER OBSERVATION",
     "UNDER INVESTIGATION"
