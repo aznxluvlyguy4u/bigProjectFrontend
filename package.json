@@ -1,6 +1,6 @@
 {
   "name": "nsfo-online-admin",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "scripts": {
     "typings": "typings",
     "postinstall": "typings install",
