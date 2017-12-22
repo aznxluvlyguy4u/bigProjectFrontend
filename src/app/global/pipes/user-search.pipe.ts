@@ -3,7 +3,6 @@ import { User } from '../../main/client/client.model';
 import { UtilsService } from '../services/utils/utils.service';
 
 @Pipe({name: 'userSearchPipe'})
-
 export class UserSearchPipe implements PipeTransform {
 	transform(value, term) {
 		if (!term) {

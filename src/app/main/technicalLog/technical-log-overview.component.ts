@@ -6,7 +6,7 @@ import { LogFilterPipe } from './pipes/log-filter.pipe';
 import { PaginationComponent } from '../../global/components/pagination/pagination.component';
 import { ActionLog, QueryParam, User } from '../client/client.model';
 import { SearchComponent } from '../../global/components/searchbox/seach-box.component';
-import { UserSearchPipe } from '../../global/pipes/search.pipe';
+import { UserSearchPipe } from '../../global/pipes/user-search.pipe';
 import { Datepicker } from '../../global/components/datepicker/datepicker.component';
 import { NSFOService } from '../../global/services/nsfo/nsfo.service';
 import { SettingsService } from '../../global/services/settings/settings.service';
