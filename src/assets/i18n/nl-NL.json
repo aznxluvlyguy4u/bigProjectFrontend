@@ -403,5 +403,6 @@
   "INVALID SCRAPIE STATUS": "Ongeldige scrapie status",
   "INPUT IS INVALID": "Invoer is ongeldig",
   "THE ANIMAL HEALTH SUBSCRIPTION IS LINKED TO THE ENTIRE COMPANY. NOT JUST A SINGLE UBN.": "Het diergezondheid lidmaatschap is gerelateerd aan de klant. Niet alleen een enkele UBN.",
-  "IF THE ANIMAL HEALTH SUBSCRIPTION IS DISABLED, THEN THE HEALTH STATUS WILL BE BLANK.": "Als het diergezondheid lidmaatschap is uitgeschakeld, dan zullen alle gezondheidsstatussen leeg blijven."
+  "IF THE ANIMAL HEALTH SUBSCRIPTION IS DISABLED, THEN THE HEALTH STATUS WILL BE BLANK.": "Als het diergezondheid lidmaatschap is uitgeschakeld, dan zullen alle gezondheidsstatussen leeg blijven.",
+  "BLANK": "-"
 }

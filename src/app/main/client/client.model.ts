@@ -154,6 +154,7 @@ export class QueryParam {
 }
 
 export const MAEDI_VISNA_STATUS_OPTIONS = [
+    "BLANK",
     "FREE",
     "FREE 1 YEAR",
     "FREE 2 YEAR",
@@ -163,6 +164,7 @@ export const MAEDI_VISNA_STATUS_OPTIONS = [
 ];
 
 export const SCRAPIE_STATUS_OPTIONS = [
+    "BLANK",
     "RESISTANT",
     "UNDER OBSERVATION",
     "UNDER INVESTIGATION"

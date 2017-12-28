@@ -34,6 +34,8 @@ export class ClientDetailsComponent {
     private isChangingLocationHealth: boolean = false;
     animalHealthSubscriptionSelection: string;
     animalHealthSubscription = false;
+    showScrapieDatePicker: boolean;
+    showMaediVisnaDatePicker: boolean;
     private healthStatusses: LocationHealthStatus[] = [];
     private selectedLocation: LocationHealthStatus = new LocationHealthStatus();
     private tempSelectedLocation: LocationHealthStatus = new LocationHealthStatus();
@@ -62,6 +64,8 @@ export class ClientDetailsComponent {
     ngOnInit() {
 			  this.animalHealthSubscriptionSelection = this.translate.instant('NO');
 			  this.setAnimalHealthSubscription();
+			  this.showScrapieDatePicker = true;
+			  this.showMaediVisnaDatePicker = true;
 
         this.dataSub = this.activatedRoute.params.subscribe(params => {
             this.clientId = params['id'];
@@ -112,6 +116,16 @@ export class ClientDetailsComponent {
 						LocationHealthStatus.maedi_visna_check_date = this.settings.convertToViewDate(LocationHealthStatus.maedi_visna_check_date);
 				}
 
+        if (LocationHealthStatus.scrapie_status == null) {
+            LocationHealthStatus.scrapie_status = 'BLANK';
+					  this.showScrapieDatePicker = false;
+        }
+
+        if (LocationHealthStatus.maedi_visna_status == null) {
+            LocationHealthStatus.maedi_visna_status = 'BLANK';
+					  this.showMaediVisnaDatePicker = false;
+        }
+
         this.animalHealthSubscription = LocationHealthStatus.animal_health_subscription;
         this.form.controls['scrapie_check_date'].updateValue(LocationHealthStatus.scrapie_check_date);
         this.form.controls['maedi_visna_check_date'].updateValue(LocationHealthStatus.maedi_visna_check_date);
@@ -159,11 +173,15 @@ export class ClientDetailsComponent {
 
     private setLocationHealthStatus() {
         if (this.animalHealthSubscription) {
+
+        		const maediVisnaCheckDate = !this.showMaediVisnaDatePicker ? undefined : this.form.controls['maedi_visna_check_date'].value;
+        		const scrapieCheckDate = !this.showScrapieDatePicker ? undefined : this.form.controls['scrapie_check_date'].value;
+
             let request = {
                 "maedi_visna_status": this.selectedLocation.maedi_visna_status,
-                "maedi_visna_check_date": this.form.controls['maedi_visna_check_date'].value,
+                "maedi_visna_check_date": maediVisnaCheckDate,
                 "scrapie_status": this.selectedLocation.scrapie_status,
-                "scrapie_check_date": this.form.controls['scrapie_check_date'].value,
+                "scrapie_check_date": scrapieCheckDate,
                 "maedi_visna_reason_of_edit": this.form.controls['maedi_visna_reason_of_edit'].value,
                 "scrapie_reason_of_edit": this.form.controls['scrapie_reason_of_edit'].value,
                 "animal_health_subscription": this.animalHealthSubscription,
@@ -253,6 +271,14 @@ export class ClientDetailsComponent {
         } else {
 					  this.animalHealthSubscriptionSelection = this.translate.instant('NO');
         }
+    }
+
+    updateMaediVisnaInput() {
+    		this.showMaediVisnaDatePicker = this.selectedLocation.maedi_visna_status !== 'BLANK';
+    }
+
+    updateScrapieInput() {
+				this.showScrapieDatePicker = this.selectedLocation.scrapie_status !== 'BLANK';
     }
 }
 
