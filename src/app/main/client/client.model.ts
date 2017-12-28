@@ -99,6 +99,7 @@ export class LocationHealthStatus {
     public maedi_visna_reason_of_edit: string;
 	  public cl_reason_of_edit: string;
 	  public cae_reason_of_edit: string;
+	  public animal_health_subscription: boolean;
 }
 
 class BreederNumber {

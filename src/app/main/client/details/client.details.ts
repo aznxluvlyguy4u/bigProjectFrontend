@@ -32,6 +32,8 @@ export class ClientDetailsComponent {
     private isSavingNote: boolean = false;
     private isSending: boolean = false;
     private isChangingLocationHealth: boolean = false;
+    animalHealthSubscriptionSelection: string;
+    animalHealthSubscription = false;
     private healthStatusses: LocationHealthStatus[] = [];
     private selectedLocation: LocationHealthStatus = new LocationHealthStatus();
     private tempSelectedLocation: LocationHealthStatus = new LocationHealthStatus();
@@ -49,6 +51,7 @@ export class ClientDetailsComponent {
         private translate: TranslateService,
     ) {
         this.form = fb.group({
+            "animal_health_subscription": [false],
             "scrapie_check_date" : [''],
             "maedi_visna_check_date" : [''],
             "scrapie_reason_of_edit": [''],
@@ -57,6 +60,9 @@ export class ClientDetailsComponent {
     }
 
     ngOnInit() {
+			  this.animalHealthSubscriptionSelection = this.translate.instant('NO');
+			  this.setAnimalHealthSubscription();
+
         this.dataSub = this.activatedRoute.params.subscribe(params => {
             this.clientId = params['id'];
             this.getClientDetails();
@@ -87,17 +93,30 @@ export class ClientDetailsComponent {
     private getHealthStatusses(): void {
         this.nsfo.doGetRequest(this.nsfo.URI_HEALTH_COMPANY + '/' + this.clientId)
             .subscribe(res => {
-                this.healthStatusses = <LocationHealthStatus[]> res.result;
-                for(let healthStatus of this.healthStatusses) {
-                    healthStatus.scrapie_check_date = this.settings.convertToViewDate(healthStatus.scrapie_check_date);
-                    healthStatus.maedi_visna_check_date = this.settings.convertToViewDate(healthStatus.maedi_visna_check_date);
-
-                    this.form.controls['scrapie_check_date'].updateValue(healthStatus.scrapie_check_date);
-                    this.form.controls['maedi_visna_check_date'].updateValue(healthStatus.maedi_visna_check_date);
-                    this.form.controls['scrapie_reason_of_edit'].updateValue(healthStatus.scrapie_reason_of_edit);
-                    this.form.controls['maedi_visna_reason_of_edit'].updateValue(healthStatus.maedi_visna_reason_of_edit);
-                }
+                this.setHealthResults(res);
             });
+    }
+
+    private setHealthResults(healthStatusResult: any) {
+        this.healthStatusses = <LocationHealthStatus[]> healthStatusResult.result;
+        for(let healthStatus of this.healthStatusses) {
+            this.setLocationHealthEditModalValues(healthStatus, true);
+        }
+
+        this.setAnimalHealthSubscriptionSelection();
+    }
+
+    setLocationHealthEditModalValues(LocationHealthStatus: LocationHealthStatus, isInitialSetting: boolean = false) {
+    		if (isInitialSetting) {
+						LocationHealthStatus.scrapie_check_date = this.settings.convertToViewDate(LocationHealthStatus.scrapie_check_date);
+						LocationHealthStatus.maedi_visna_check_date = this.settings.convertToViewDate(LocationHealthStatus.maedi_visna_check_date);
+				}
+
+        this.animalHealthSubscription = LocationHealthStatus.animal_health_subscription;
+        this.form.controls['scrapie_check_date'].updateValue(LocationHealthStatus.scrapie_check_date);
+        this.form.controls['maedi_visna_check_date'].updateValue(LocationHealthStatus.maedi_visna_check_date);
+        this.form.controls['scrapie_reason_of_edit'].updateValue(LocationHealthStatus.scrapie_reason_of_edit);
+        this.form.controls['maedi_visna_reason_of_edit'].updateValue(LocationHealthStatus.maedi_visna_reason_of_edit);
     }
     
     private addClientNote(): void {
@@ -139,28 +158,43 @@ export class ClientDetailsComponent {
     }
 
     private setLocationHealthStatus() {
-        this.isChangingLocationHealth = true;
+        if (this.animalHealthSubscription) {
+            let request = {
+                "maedi_visna_status": this.selectedLocation.maedi_visna_status,
+                "maedi_visna_check_date": this.form.controls['maedi_visna_check_date'].value,
+                "scrapie_status": this.selectedLocation.scrapie_status,
+                "scrapie_check_date": this.form.controls['scrapie_check_date'].value,
+                "maedi_visna_reason_of_edit": this.form.controls['maedi_visna_reason_of_edit'].value,
+                "scrapie_reason_of_edit": this.form.controls['scrapie_reason_of_edit'].value,
+                "animal_health_subscription": this.animalHealthSubscription,
+            };
 
-        let request = {
-            "maedi_visna_status": this.selectedLocation.maedi_visna_status,
-            "maedi_visna_check_date": this.form.controls['maedi_visna_check_date'].value,
-            "scrapie_status": this.selectedLocation.scrapie_status,
-            "scrapie_check_date": this.form.controls['scrapie_check_date'].value,
-            "maedi_visna_reason_of_edit": this.form.controls['maedi_visna_reason_of_edit'].value,
-            "scrapie_reason_of_edit": this.form.controls['scrapie_reason_of_edit'].value,
-        };
+            this.setLocationHealthStatusBase(request);
 
-        this.nsfo.doPutRequest(this.nsfo.URI_HEALTH_UBN + '/' + this.selectedLocation.ubn, request)
-            .subscribe(
-                res => {
-                    this.closeLocationHealthModal();
-                    this.isChangingLocationHealth = false;
-                },
-                err => {
-                    this.isChangingLocationHealth = false;
-                    alert(this.getLocationHealthErrorMessage(err));
-                }
-            );
+        } else {
+					let request = {
+						"animal_health_subscription": this.animalHealthSubscription,
+					};
+
+					this.setLocationHealthStatusBase(request);
+        }
+    }
+
+    private setLocationHealthStatusBase(request: any) {
+			this.isChangingLocationHealth = true;
+
+			this.nsfo.doPutRequest(this.nsfo.URI_HEALTH_UBN + '/' + this.selectedLocation.ubn, request)
+				.subscribe(
+					res => {
+						this.setHealthResults(res);
+						this.closeLocationHealthModal();
+						this.isChangingLocationHealth = false;
+					},
+					err => {
+						this.isChangingLocationHealth = false;
+						alert(this.getLocationHealthErrorMessage(err));
+					}
+				);
     }
 
     private getLocationHealthErrorMessage(err: any): string {
@@ -207,6 +241,18 @@ export class ClientDetailsComponent {
 
     private cancelLocationHealth() {
         this.selectedLocation = _.clone(this.tempSelectedLocation);
+    }
+
+	  setAnimalHealthSubscription() {
+        this.animalHealthSubscription = this.animalHealthSubscriptionSelection === this.translate.instant('YES');
+    }
+
+    setAnimalHealthSubscriptionSelection() {
+        if (this.animalHealthSubscription) {
+            this.animalHealthSubscriptionSelection = this.translate.instant('YES');
+        } else {
+					  this.animalHealthSubscriptionSelection = this.translate.instant('NO');
+        }
     }
 }
 
