@@ -242,7 +242,7 @@ export class TreatmentTemplateComponent implements OnInit {
 	}
 
 	validateForm(): boolean {
-			const hasValidLocationData = this.isDefaultTemplate === true ? this.newSelectedUbn == null : this.newSelectedUbn != null;
+			const hasValidLocationData = this.newIsDefaultTemplate === true ? this.newSelectedUbn == null : this.newSelectedUbn != null;
 
 			let hasCompleteMedicationData = true;
 			for(let medication of this.newMedications) {
@@ -354,15 +354,15 @@ export class TreatmentTemplateComponent implements OnInit {
 
 			this.newIsDefaultTemplate = true;
 			this.newSelectedUbn = null;
-			if (this.treatmentTemplate.location) {
-				const ubn = this.treatmentTemplate.location.ubn;
+			if (this.newTreatmentTemplate.location) {
+				const ubn = this.newTreatmentTemplate.location.ubn;
 				if (ubn != null) {
 					this.newIsDefaultTemplate = false;
 					this.newSelectedUbn = ubn;
 				}
 			}
 
-			for(let medication of treatmentTemplate.medications) {
+			for(let medication of this.newTreatmentTemplate.medications) {
 				medication.id = this.medicationId++;
 				this.newMedications.push(medication);
 			}
@@ -376,9 +376,12 @@ export class TreatmentTemplateComponent implements OnInit {
 	private closeModal(): void {
 		this.displayModal = 'none';
 		this.errorMessage = '';
-		this.treatmentTemplate = new TreatmentTemplate();
 		this.resetValidation();
 		this.resetCreateOptions();
+
+		if (!this.isModalEditMode) {
+			this.treatmentTemplate = new TreatmentTemplate();
+		}
 	}
 
 	private openRemoveModal(treatmentTemplate: TreatmentTemplate) {

@@ -4,7 +4,7 @@ import { PaginationComponent } from '../../global/components/pagination/paginati
 import { ROUTER_DIRECTIVES } from '@angular/router';
 import { CheckMarkComponent } from '../../global/components/checkmark/check-mark.component';
 import { PaginatePipe, PaginationService } from 'ng2-pagination';
-import { SearchPipe } from '../../global/pipes/search.pipe';
+import { UserSearchPipe } from '../../global/pipes/user-search.pipe';
 import { FormUtilService } from '../../global/services/utils/form-util.service';
 import { REACTIVE_FORM_DIRECTIVES, Validators } from '@angular/forms';
 import { SortSwitchComponent } from '../../global/components/sortswitch/sort-switch.component';
@@ -28,7 +28,7 @@ import { DeclareName } from './models/declare-names.model';
 		providers: [PaginationService, SortService, DateTimeService, FormUtilService],
 		directives: [REACTIVE_FORM_DIRECTIVES, ROUTER_DIRECTIVES, PaginationComponent, SearchComponent, Datepicker, CheckMarkComponent, SortSwitchComponent],
 		template: require('./error-log-overview.component.html'),
-		pipes: [TranslatePipe, ErrorLogFilterPipe, PaginatePipe, SearchPipe]
+		pipes: [TranslatePipe, ErrorLogFilterPipe, PaginatePipe, UserSearchPipe]
 })
 export class ErrorLogOverviewComponent implements OnInit {
 

@@ -161,7 +161,8 @@
                             </td>
                             <td>
                                 <span class="pull-right">
-                                    <button type="button" (click)="openLocationHealthModal(healthStatus)" class="small primary button">
+                                    <button type="button" (click)="openLocationHealthModal(healthStatus); setLocationHealthEditModalValues(healthStatus)"
+                                            class="small primary button">
                                         {{ 'EDIT' | translate }}
                                     </button>
                                 </span>
@@ -355,63 +356,120 @@
         </div>
         <div class="modal-body">
             <div class="row">
-                <div class="large-12 columns">
-                    <div class="row">
-                        <div class="large-2 columns">
-                            <label class="middle"> {{ 'MAEDI VISNA' | translate }} </label>
-                        </div>
-                        <div class="large-4 columns">
-                            <select [(ngModel)]="selectedLocation.maedi_visna_status">
-                                <option value=""> -- </option>
-                                <option *ngFor="let healthStatus of maediVisnaStatusOptions" value="{{ healthStatus}}">
-                                    {{ healthStatus| translate }}
-                                </option>
-                            </select>
-                        </div>
-                        <div class="large-2 columns">
-                            <label class="middle text-right"> {{ 'DATE TILL' | translate }} </label>
-                        </div>
-                        <div class="large-4 columns end">
-                            <datepicker [formCtrl]="form.controls['maedi_visna_check_date']" [initDate]="selectedLocation.maedi_visna_check_date" [viewFormat]="settings.getViewDateFormat()" [modelFormat]="settings.getModelDateTimeFormat()"></datepicker>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="large-2 columns">
-                            <label class="middle"> {{ 'SCRAPIE' | translate }} </label>
-                        </div>
-                        <div class="large-4 columns">
-                            <select [(ngModel)]="selectedLocation.scrapie_status">
-                                <option value=""> -- </option>
-                                <option *ngFor="let healthStatus of scrapieStatusOptions" value="{{ healthStatus }}">
-                                    {{ healthStatus | translate }}
-                                </option>
-                            </select>
-                        </div>
-                        <div class="large-2 columns">
-                            <label class="middle text-right"> {{ 'DATE SINCE' | translate }} </label>
-                        </div>
-                        <div class="large-4 columns end">
-                            <datepicker [formCtrl]="form.controls['scrapie_check_date']" [initDate]="selectedLocation.scrapie_check_date" [viewFormat]="settings.getViewDateFormat()" [modelFormat]="settings.getModelDateTimeFormat()"></datepicker>
-                        </div>
-                    </div>
-                    <div [formGroup]="form" class="row">
-                        <div class="large-4 columns">
-                            <label> {{ 'REASON OF CHANGE' | translate }}: {{'SCRAPIE' | translate}} </label>
-                        </div>
-                        <div class="large-8 columns">
-                            <input formControlName="scrapie_reason_of_edit" type="text" maxlength="75">
-                        </div>
-                    </div>
-                    <div [formGroup]="form" class="row">
-                        <div class="large-4 columns">
-                            <label> {{ 'REASON OF CHANGE' | translate }}: {{'MAEDI VISNA' | translate}} </label>
-                        </div>
-                        <div class="large-8 columns">
-                            <input formControlName="maedi_visna_reason_of_edit" type="text" maxlength="75">
-                        </div>
-                    </div>
+                <div class="large-4 columns">
+                    <label class="middle"> {{ 'ANIMAL HEALTH SUBSCRIPTION' | translate }}
+                        <i class="fa fa-info-circle" aria-hidden="true" title="{{ 'THE ANIMAL HEALTH SUBSCRIPTION IS LINKED TO THE ENTIRE COMPANY. NOT JUST A SINGLE UBN.' | translate }}"></i>
+                    </label>
+                </div>
+                <div class="large-2 columns">
+                    <select [(ngModel)]="animalHealthSubscriptionSelection" (click)="setAnimalHealthSubscription()">
+                        <option>{{ 'NO' | translate }}</option>
+                        <option>{{ 'YES' | translate }}</option>
+                    </select>
                 </div>
             </div>
+
+            <ng-template *ngIf="animalHealthSubscription">
+
+                <div class="row">
+                    <div class="large-12 columns">
+
+                        <div class="row">
+                            <div class="large-12 columns">
+                                <label class="modal-subheader middle"> {{ 'MAEDI VISNA' | translate }} </label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="large-2 columns">
+                                <label class="middle"> {{ 'STATUS' | translate }} </label>
+                            </div>
+                            <div class="large-4 columns" [ngClass]="{end: !showMaediVisnaDatePicker}">
+                                <select [(ngModel)]="selectedLocation.maedi_visna_status" (click)="updateMaediVisnaInput()">
+                                    <option *ngFor="let healthStatus of maediVisnaStatusOptions" value="{{ healthStatus}}">
+                                        {{ healthStatus| translate }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <ng-template *ngIf="showMaediVisnaDatePicker">
+                                <div class="large-2 columns">
+                                    <label class="middle text-right"> {{ 'DATE TILL' | translate }} </label>
+                                </div>
+                                <div class="large-4 columns end">
+                                    <datepicker [formCtrl]="form.controls['maedi_visna_check_date']" [initDate]="selectedLocation.maedi_visna_check_date" [viewFormat]="settings.getViewDateFormat()" [modelFormat]="settings.getModelDateTimeFormat()"></datepicker>
+                                </div>
+                            </ng-template>
+
+                        </div>
+
+                        <div [formGroup]="form" class="row">
+                            <div class="large-3 columns">
+                                <label> {{ 'REASON OF CHANGE' | translate }} </label>
+                            </div>
+                            <div class="large-9 columns">
+                                <input formControlName="maedi_visna_reason_of_edit" type="text" maxlength="75">
+                            </div>
+                        </div>
+
+
+
+                        <div class="row">
+                            <div class="large-12 columns">
+                                <label class="middle modal-subheader"> {{ 'SCRAPIE' | translate }} </label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="large-2 columns">
+                                <label class="middle"> {{ 'STATUS' | translate }} </label>
+                            </div>
+                            <div class="large-4 columns" [ngClass]="{end: !showScrapieDatePicker}">
+                                <select [(ngModel)]="selectedLocation.scrapie_status" (click)="updateScrapieInput()">
+                                    <option *ngFor="let healthStatus of scrapieStatusOptions" value="{{ healthStatus }}">
+                                        {{ healthStatus | translate }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <ng-template *ngIf="showScrapieDatePicker">
+                                <div class="large-2 columns">
+                                    <label class="middle text-right"> {{ 'DATE SINCE' | translate }} </label>
+                                </div>
+                                <div class="large-4 columns end">
+                                    <datepicker [formCtrl]="form.controls['scrapie_check_date']" [initDate]="selectedLocation.scrapie_check_date" [viewFormat]="settings.getViewDateFormat()" [modelFormat]="settings.getModelDateTimeFormat()"></datepicker>
+                                </div>
+                            </ng-template>
+
+                        </div>
+                        <div [formGroup]="form" class="row">
+                            <div class="large-3 columns">
+                                <label> {{ 'REASON OF CHANGE' | translate }} </label>
+                            </div>
+                            <div class="large-9 columns">
+                                <input formControlName="scrapie_reason_of_edit" type="text" maxlength="75">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <hr style="margin-top: 0px">
+
+            </ng-template>
+
+            <ng-template *ngIf="!animalHealthSubscription">
+
+                <hr style="margin-top: 0px">
+
+                <div class="row">
+                    <div class="large-12 columns">
+                        <p>{{ 'IF THE ANIMAL HEALTH SUBSCRIPTION IS DISABLED, THEN THE HEALTH STATUS WILL BE BLANK.' | translate }}</p>
+                    </div>
+                </div>
+
+            </ng-template>
+
         </div>
         <div class="modal-footer">
             <span class="pull-right">

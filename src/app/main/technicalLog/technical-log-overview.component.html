@@ -45,7 +45,7 @@
                             {{ 'ALL USERS' | translate }}
                         </a>
                     </li>
-                    <li *ngFor="let user of userList | searchPipe: userDropDownSearchTerm ">
+                    <li *ngFor="let user of userList | userSearchPipe: userDropDownSearchTerm ">
                         <a (click)="onSelectUserClick(user)">
                             {{getFullName(user)}} | {{getPersonType(user)}} | {{user.email_address}}
                             {{ user.is_active ? '' : ' | ' + ('INACTIVE' | translate) }}
@@ -183,7 +183,7 @@
 
         <div class="large-1 columns end">
             <label>
-                {{'RVO' | translate | lowercase}}
+                {{'RVO' | translate | uppercase }}
                 <select [(ngModel)]="filterIsRvoMessage" (change)="page = 1">
                     <option *ngFor="let option of filterIsRvoMessageOptions" [value]="option">{{getBoolDrowDownText(option) | translate}}</option>
                 </select>
@@ -199,19 +199,19 @@
         <table class="stack client-overview">
             <thead>
                 <tr>
-                    <td>{{ 'LOG DATE' | translate }}
+                    <td>{{ 'LOG DATE' | translate | ucFirstPipe }}
                         <app-sort-switch
                             [pointsUp]="isDateSortAscending"
                             (sortSwitchToggled)="onSortByDateToggle(); page = 1">
                         </app-sort-switch>
                     </td>
-                    <td>{{ 'USER ACCOUNT' | translate }}</td>
-                    <td>{{ 'ACTION BY' | translate }}</td>
-                    <td>{{ 'USER ACTION TYPE' | translate }}</td>
-                    <td>{{ 'DESCRIPTION' | translate }}</td>
-                    <td title="{{ 'IS COMPLETED' | translate }}">{{'PROCESSED IN API' | translate}} <i class="fa fa-info-circle" aria-hidden="true" title="Goed ontvangen en verwerkt door de API en verstuurd naar de externe worker queue"></i></td>
-                    <td title="{{'ENVIRONMENT' | translate | lowercase }}">omgeving</td>
-                    <td title="{{ 'IS RVO MESSAGE' | translate }}">{{'RVO' | translate | lowercase}}</td>
+                    <td>{{ 'USER ACCOUNT' | translate | ucFirstPipe }}</td>
+                    <td>{{ 'ACTION BY' | translate | ucFirstPipe }}</td>
+                    <td>{{ 'USER ACTION TYPE' | translate | ucFirstPipe }}</td>
+                    <td>{{ 'DESCRIPTION' | translate | ucFirstPipe }}</td>
+                    <td>{{'PROCESSED IN API' | translate}} <i class="fa fa-info-circle" aria-hidden="true" title="Goed ontvangen en verwerkt door de API en verstuurd naar de externe worker queue"></i></td>
+                    <td>{{'ENVIRONMENT' | translate | ucFirstPipe }}</td>
+                    <td title="{{ 'IS RVO MESSAGE' | translate | ucFirstPipe }}">{{'RVO' | translate | uppercase }}</td>
                 </tr>
             </thead>
             <tbody>

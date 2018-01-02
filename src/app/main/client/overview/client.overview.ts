@@ -2,7 +2,7 @@ import {Component} from "@angular/core";
 import {ROUTER_DIRECTIVES, Router} from "@angular/router";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
-import {Client, User, MAEDI_VISNA_STATUS_OPTIONS, SCRAPI_STATUS_OPTIONS} from "../client.model";
+import {Client} from "../client.model";
 import {ClientFilterPipe} from "./pipes/clientFilter.pipe";
 import {PaginationService, PaginatePipe} from "ng2-pagination/index";
 import {PaginationComponent} from "../../../global/components/pagination/pagination.component";

@@ -1,3 +1,5 @@
+import { Company } from '../invoice/invoice.model';
+
 export class Client {
     public company_id: number;
     public debtor_number: string;
@@ -38,6 +40,7 @@ export class User {
     public relation_number_keeper: string;
     public is_active: boolean;
     public type: string;
+    public companies: Company[]
 }
 
 export class ActionLog {
@@ -92,7 +95,11 @@ export class LocationHealthStatus {
     public cae_check_date: string;
     public cl_status: string;
     public cl_check_date: string;
-    public reason_of_change: string;
+    public scrapie_reason_of_edit: string;
+    public maedi_visna_reason_of_edit: string;
+	  public cl_reason_of_edit: string;
+	  public cae_reason_of_edit: string;
+	  public animal_health_subscription: boolean;
 }
 
 class BreederNumber {
@@ -147,17 +154,18 @@ export class QueryParam {
 }
 
 export const MAEDI_VISNA_STATUS_OPTIONS = [
+    "BLANK",
     "FREE",
-    "FREE_1_YEAR",
-    "FREE_2_YEAR",
-    "UNDER_OBSERVATION",
-    "UNDER_INVESTIGATION",
-    "STATUS_KNOWN_BY_AHD"
+    "FREE 1 YEAR",
+    "FREE 2 YEAR",
+    "UNDER OBSERVATION",
+    "UNDER INVESTIGATION",
+    "STATUS KNOWN BY AHD"
 ];
 
 export const SCRAPIE_STATUS_OPTIONS = [
-    "FREE",
+    "BLANK",
     "RESISTANT",
-    "UNDER_OBSERVATION",
-    "UNDER_INVESTIGATION"
+    "UNDER OBSERVATION",
+    "UNDER INVESTIGATION"
 ];
