@@ -409,5 +409,10 @@
   "INPUT IS INVALID": "Invoer is ongeldig",
   "THE ANIMAL HEALTH SUBSCRIPTION IS LINKED TO THE ENTIRE COMPANY. NOT JUST A SINGLE UBN.": "Het diergezondheid lidmaatschap is gerelateerd aan de klant. Niet alleen een enkele UBN.",
   "IF THE ANIMAL HEALTH SUBSCRIPTION IS DISABLED, THEN THE HEALTH STATUS WILL BE BLANK.": "Als het diergezondheid lidmaatschap is uitgeschakeld, dan zullen alle gezondheidsstatussen leeg blijven.",
-  "BLANK": "-"
+  "BLANK": "-",
+  "VIEW_DATE_FORMAT": "JJJJ-MM-DD",
+  "CLIENT": "Gebruiker",
+  "DEVELOPER": "Developer",
+  "HIDDEN": "Verborgen",
+  "ERROR MESSAGE IS HIDDEN FOR ADMINS": "Foutbericht is verborgen voor Admins"
 }

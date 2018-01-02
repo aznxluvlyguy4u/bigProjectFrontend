@@ -1,5 +1,5 @@
 <div class="page-header">
-    <div class="page-title">{{ 'TECHNICAL LOG' | translate }}</div>
+    <div class="page-title">{{ 'ERROR LOG' | translate }}</div>
 </div>
 
 
@@ -11,48 +11,56 @@
     <div class="row table-options-container">
 
         <div class="large-2 medium-12 columns">
-            <h5>{{ 'DATE' | translate }} {{ 'FILTERS' | translate }}</h5>
+            <h5>{{ 'FILTERS' | translate }}</h5>
         </div>
 
-        <label>{{ 'LOG DATE' | translate }} {{ 'START' | translate }}
-            <input
-                    [(ngModel)]="filterLogDateStart"
-                    type="text"
-                    #startDateField (keyup)="0"
-                    id="filter_log_date_start"
-                    placeholder="{{ 'VIEW_DATE_FORMAT' | translate }}"
-            >
-        </label>
+        <div class="large-2 medium-3 columns">
+            <label>{{ 'LOG DATE' | translate }} {{ 'START' | translate }}
+                <input
+                        [(ngModel)]="filterLogDateStart"
+                        type="text"
+                        #startDateField (keyup)="0"
+                        id="filter_log_date_start"
+                        placeholder="{{ 'VIEW_DATE_FORMAT' | translate }}"
+                >
+            </label>
+        </div>
 
-        <label>{{ 'LOG DATE' | translate }} {{ 'END' | translate }}
-            <input
-                    [(ngModel)]="filterLogDateEnd"
-                    type="text"
-                    #startDateField (keyup)="0"
-                    id="filter_log_date_end"
-                    placeholder="{{ 'VIEW_DATE_FORMAT' | translate }}"
-            >
-        </label>
+        <div class="large-2 medium-3 columns">
+            <label>{{ 'LOG DATE' | translate }} {{ 'END' | translate }}
+                <input
+                        [(ngModel)]="filterLogDateEnd"
+                        type="text"
+                        #startDateField (keyup)="0"
+                        id="filter_log_date_end"
+                        placeholder="{{ 'VIEW_DATE_FORMAT' | translate }}"
+                >
+            </label>
+        </div>
 
-        <label>{{ 'EVENT DATE' | translate }} {{ 'START' | translate }}
-            <input
-                    [(ngModel)]="filterEventDateStart"
-                    type="text"
-                    #startDateField (keyup)="0"
-                    id="filter_log_event_start"
-                    placeholder="{{ 'VIEW_DATE_FORMAT' | translate }}"
-            >
-        </label>
+        <div class="large-2 medium-3 columns">
+            <label>{{ 'EVENT DATE' | translate }} {{ 'START' | translate }}
+                <input
+                        [(ngModel)]="filterEventDateStart"
+                        type="text"
+                        #startDateField (keyup)="0"
+                        id="filter_log_event_start"
+                        placeholder="{{ 'VIEW_DATE_FORMAT' | translate }}"
+                >
+            </label>
+        </div>
 
-        <label>{{ 'EVENT DATE' | translate }} {{ 'END' | translate }}
-            <input
-                    [(ngModel)]="filterEventDateEnd"
-                    type="text"
-                    #startDateField (keyup)="0"
-                    id="filter_log_event_end"
-                    placeholder="{{ 'VIEW_DATE_FORMAT' | translate }}"
-            >
-        </label>
+        <div class="large-2 medium-3 columns end">
+            <label>{{ 'EVENT DATE' | translate }} {{ 'END' | translate }}
+                <input
+                        [(ngModel)]="filterEventDateEnd"
+                        type="text"
+                        #startDateField (keyup)="0"
+                        id="filter_log_event_end"
+                        placeholder="{{ 'VIEW_DATE_FORMAT' | translate }}"
+                >
+            </label>
+        </div>
 
     </div>
 
@@ -61,17 +69,13 @@
     <!-- NON-DATE FILTER -->
     <div class="row table-options-container"  style="margin: 1rem auto 1rem auto">
 
-        <div class="large-2 medium-12 columns">
-            <h5>{{ 'FILTERS' | translate }}</h5>
-        </div>
-
-        <div class="large-2 columns">
+        <div class="large-3 columns">
             <label>
                 {{ 'SEARCH' | translate }} <i class="fa fa-info-circle" aria-hidden="true" title="{{ 'LOG SEARCH INFO' | translate}}"></i>
                 <input type="text" [(ngModel)]="filterSearch" (keydown)="page = 1" placeholder="{{ 'SEARCH' | translate }}" maxlength="50">
             </label>
         </div>
-        <div class="large-3 columns">
+        <div class="large-2 columns">
             <label>
                 {{ 'ACTION BY TYPE' | translate }}
                 <select [(ngModel)]="filterActionByType" (change)="page = 1">
@@ -97,20 +101,22 @@
             </label>
         </div>
 
-        <div class="large-1 columns">
+        <div class="large-2 columns">
             <label>
                 {{'TYPE' | translate | lowercase}}
                 <select [(ngModel)]="filterType" (change)="page = 1">
-                    <option *ngFor="let actionByTypes of getDeclareTypes()" [value]="actionByTypes">{{actionByTypes == undefined ? ('ALL'|translate) : option}}</option>
+                    <option *ngFor="let actionByTypes of getDeclareTypes()" [value]="actionByTypes">{{actionByTypes == undefined ? ('ALL'|translate) : actionByTypes}}</option>
                 </select>
             </label>
         </div>
 
-        <div class="large-1 columns end">
+        <div class="large-2 columns end">
             <label>
-                {{'IS HIDDEN' | translate | lowercase}}
+                {{'HIDDEN' | translate | lowercase}} <i class="fa fa-info-circle" aria-hidden="true" title="{{ 'ERROR MESSAGE IS HIDDEN FOR ADMINS' | translate }}"></i>
                 <select [(ngModel)]="filterIsHiddenForAdmin" (change)="page = 1">
-                    <option *ngFor="let option of filterIsHiddenForAdminOptions" [value]="option">{{getBoolDrowDownText(option) | translate}}</option>
+                    <option *ngFor="let option of filterIsHiddenForAdminOptions" [value]="option">
+                        {{getBoolDrowDownText(option) | translate}}
+                    </option>
                 </select>
             </label>
         </div>
@@ -144,11 +150,12 @@
                 <td>{{ 'ACTION BY' | translate }}</td>
                 <td>{{ 'ACTION BY TYPE' | translate }}</td>
                 <td>{{ 'DESCRIPTION' | translate }}</td>
-                <td title="{{ 'IS RVO MESSAGE' | translate }}">{{'RVO' | translate | lowercase}}</td>
+                <td title="{{ 'ERROR MESSAGE IS HIDDEN FOR ADMINS' | translate }}">{{'HIDDEN' | translate | lowercase}}<i class="fa fa-info-circle" aria-hidden="true" title="{{ 'ERROR MESSAGE IS HIDDEN FOR ADMINS' | translate }}"></i>
+                </td>
             </tr>
             </thead>
             <tbody>
-            <tr *ngIf="!isLogsLoaded">
+            <tr *ngIf="!isErrorsLoaded">
                 <td colspan="10">
                     <p class="text-center">{{'LOGS ARE BEING RETRIEVED'|translate}}</p>
                     <div class="spinner">
@@ -158,7 +165,7 @@
                     </div>
                 </td>
             </tr>
-            <ng-container *ngIf="isLogsLoaded && actionLogs.length > 0">
+            <ng-container *ngIf="isErrorsLoaded && errors.length > 0">
                 <tr *ngFor="let error of errors | errorLogFilter:getFilterOptions() | paginate: {itemsPerPage: filterAmount, currentPage: page}; let i = index">
                     <td>
                         {{ error.log_date | date: 'dd-MM-yyyy @HH:mm:ss' }}
@@ -179,13 +186,13 @@
                         {{ error.action_by }}
                     </td>
                     <td>
-                        {{ error.action_by_type }}
+                        {{ error.action_by_type | translate }}
                     </td>
                     <td>
                         {{ error.declare_info }}
                     </td>
                     <td>
-                        <app-check-mark [boolVal]="!error.hide_for_admin"></app-check-mark>
+                        <app-check-mark [boolVal]="error.hide_for_admin"></app-check-mark>
                     </td>
                 </tr>
             </ng-container>

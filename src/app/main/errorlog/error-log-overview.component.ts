@@ -23,6 +23,7 @@ import { HideErrorResponse } from './models/hide-error-response.model';
 
 import _ = require("lodash");
 import { DeclareName } from './models/declare-names.model';
+import { findIndex } from 'rxjs/operator/findIndex';
 
 @Component({
 		providers: [PaginationService, SortService, DateTimeService, FormUtilService],
@@ -37,7 +38,9 @@ export class ErrorLogOverviewComponent implements OnInit {
 		private isUpdatingHiddenStatus = false;
 
 		public errors: ErrorMessage[];
-		private informalDeclareNames: DeclareName[] = [];
+		private declareType = 'informal';
+		private declareNames: DeclareName[] = [];
+		private declareTypesForDropdown;
 
 		private filterAmount: number = 10;
 		private filterAmountOptions = [10, 25, 50];
@@ -61,6 +64,8 @@ export class ErrorLogOverviewComponent implements OnInit {
 		}
 
 		public ngOnInit() {
+				this.filterType = null;
+				this.filterIsHiddenForAdmin = false;
 				this.getErrors();
 				this.doGetDeclareTypesRequest(true);
 				this.doGetDeclareTypesRequest(false);
@@ -89,7 +94,13 @@ export class ErrorLogOverviewComponent implements OnInit {
 
 
 		public getDeclareTypes() {
-				return _.map(this.informalDeclareNames, 'informal');
+				if (!this.declareTypesForDropdown) {
+						this.declareTypesForDropdown = _.map(this.declareNames, this.declareType);
+						this.declareTypesForDropdown = this.declareTypesForDropdown.sort();
+						this.declareTypesForDropdown.unshift(null);
+				}
+
+				return this.declareTypesForDropdown;
 		}
 
 
@@ -101,12 +112,38 @@ export class ErrorLogOverviewComponent implements OnInit {
 					res => {
 						for(let key in res.result) {
 							const value = res.result[key];
-							let declareName = new DeclareName();
-							declareName.formal = key;
-							declareName.informal = key;
-							this.informalDeclareNames.push(declareName)
+
+							const index = _.findIndex(this.declareNames, {key: key});
+							if (index === -1) {
+									let declareName = new DeclareName();
+									declareName.key = key;
+
+									if (useFormalDeclareNames) {
+											declareName.formal = value;
+									} else {
+											declareName.informal = value;
+									}
+
+									this.declareNames.push(declareName)
+
+							} else {
+									let declareName = _.find(this.declareNames, {key: key});
+
+									if (useFormalDeclareNames) {
+											declareName.formal = value;
+									} else {
+											declareName.informal = value;
+									}
+
+									this.declareNames.splice(index, 1, declareName);
+							}
+
 						}
-						this.isInformalNamesLoaded = true;
+
+						if (!useFormalDeclareNames) {
+								this.isInformalNamesLoaded = true;
+						}
+
 					},
 					error => {
 						alert(this.nsfo.getErrorMessage(error));
@@ -192,5 +229,9 @@ export class ErrorLogOverviewComponent implements OnInit {
 				this.filterType,
 				this.filterActionByType,
 			];
+		}
+
+		getBoolDrowDownText(string: string|boolean): string {
+				return this.formUtilService.getBoolDrowDownText(string);
 		}
 }
