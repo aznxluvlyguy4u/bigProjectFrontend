@@ -50,7 +50,7 @@
             </label>
         </div>
 
-        <div class="large-2 medium-3 columns end">
+        <div class="large-2 medium-3 columns">
             <label>{{ 'EVENT DATE' | translate }} {{ 'END' | translate }}
                 <input
                         [(ngModel)]="filterEventDateEnd"
@@ -59,54 +59,6 @@
                         id="filter_log_event_end"
                         placeholder="{{ 'VIEW_DATE_FORMAT' | translate }}"
                 >
-            </label>
-        </div>
-
-    </div>
-
-    <hr style="margin-top: 0">
-
-    <!-- NON-DATE FILTER -->
-    <div class="row table-options-container"  style="margin: 1rem auto 1rem auto">
-
-        <div class="large-3 columns">
-            <label>
-                {{ 'SEARCH' | translate }} <i class="fa fa-info-circle" aria-hidden="true" title="{{ 'LOG SEARCH INFO' | translate}}"></i>
-                <input type="text" [(ngModel)]="filterSearch" (keydown)="page = 1" placeholder="{{ 'SEARCH' | translate }}" maxlength="50">
-            </label>
-        </div>
-        <div class="large-2 columns">
-            <label>
-                {{ 'ACTION BY TYPE' | translate }}
-                <select [(ngModel)]="filterActionByType" (change)="page = 1">
-                    <option value="ALL">{{ 'ALL' | translate }}</option>
-                    <option *ngFor="let typeOption of getActionByTypeOptions()" value="{{typeOption}}">{{ typeOption |
-                        translate }}</option>
-                </select>
-            </label>
-        </div>
-        <div class="large-1 columns">
-            <label>
-                {{ 'PER PAGE' | translate }}
-                <select [(ngModel)]="filterAmount" (change)="page = 1">
-                    <option *ngFor="let option of filterAmountOptions" [value]="option">{{option}}</option>
-                </select>
-            </label>
-        </div>
-
-        <div class="large-2 columns">
-            <label>
-                {{ 'UBN' | translate }} <i class="fa fa-info-circle" aria-hidden="true" title="{{ 'LOG SEARCH INFO' | translate}}"></i>
-                <input type="text" [(ngModel)]="filterUbn" (keydown)="page = 1" placeholder="{{ 'UBN' | translate }}" maxlength="15">
-            </label>
-        </div>
-
-        <div class="large-2 columns">
-            <label>
-                {{'TYPE' | translate | lowercase}}
-                <select [(ngModel)]="filterType" (change)="page = 1">
-                    <option *ngFor="let actionByTypes of getDeclareTypes()" [value]="actionByTypes">{{actionByTypes == undefined ? ('ALL'|translate) : actionByTypes}}</option>
-                </select>
             </label>
         </div>
 
@@ -120,6 +72,64 @@
                 </select>
             </label>
         </div>
+
+    </div>
+
+    <hr style="margin-top: 0">
+
+    <!-- NON-DATE FILTER -->
+    <div class="row table-options-container"  style="margin: 1rem auto 1rem auto">
+
+        <div class="large-3 columns">
+            <label>
+                {{ 'SEARCH' | translate }} <i class="fa fa-info-circle" aria-hidden="true" title="{{ 'ERROR LOG SEARCH INFO' | translate}}"></i>
+                <input type="text" [(ngModel)]="filterSearch" (keydown)="page = 1" placeholder="{{ 'SEARCH' | translate }}" maxlength="50">
+            </label>
+        </div>
+
+        <div class="large-2 columns">
+            <label>
+                {{'DECLARE TYPE' | translate | lowercase}}
+                <select [(ngModel)]="filterType" (change)="page = 1">
+                    <option *ngFor="let actionByTypes of getDeclareTypes()" [value]="actionByTypes">{{actionByTypes == undefined ? ('ALL'|translate) : actionByTypes}}</option>
+                </select>
+            </label>
+        </div>
+
+        <div class="large-1 columns">
+            <label>
+                {{ 'PER PAGE' | translate }}
+                <select [(ngModel)]="filterAmount" (change)="page = 1">
+                    <option *ngFor="let option of filterAmountOptions" [value]="option">{{option}}</option>
+                </select>
+            </label>
+        </div>
+
+        <div class="large-2 columns">
+            <label>
+                {{ 'UBN' | translate }}
+                <input type="text" [(ngModel)]="filterUbn" (keydown)="page = 1" placeholder="{{ 'UBN' | translate }}" maxlength="15">
+            </label>
+        </div>
+
+        <div class="large-2 columns">
+            <label>
+                {{ 'RELATED' | translate }} {{ 'UBN' | translate }}
+                <input type="text" [(ngModel)]="filterRelatedUbn" (keydown)="page = 1" placeholder="{{ 'RELATED' | translate }} {{ 'UBN' | translate }}" maxlength="15">
+            </label>
+        </div>
+
+        <div class="large-2 columns">
+            <label>
+                {{ 'ACTION BY TYPE' | translate }}
+                <select [(ngModel)]="filterActionByType" (change)="page = 1">
+                    <option value="ALL">{{ 'ALL' | translate }}</option>
+                    <option *ngFor="let typeOption of getActionByTypeOptions()" value="{{typeOption}}">{{ typeOption |
+                        translate }}</option>
+                </select>
+            </label>
+        </div>
+
     </div>
 
 </ng-template>

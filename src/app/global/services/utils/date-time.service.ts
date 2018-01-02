@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
+import moment = require('moment');
 
 export const SECONDS_PER_DAY = 86400000;
+export const YYYY_MM_DD_format = 'YYYY-MM-DD';
 
 @Injectable()
 export class DateTimeService {
@@ -33,5 +35,9 @@ export class DateTimeService {
 				return 0;
 			}
 			return (intervalDays / 366) * 12;
+	}
+
+	static hasYYYYMMDDFormat(dateString: string): boolean {
+			return moment(dateString, YYYY_MM_DD_format, true).isValid();
 	}
 }

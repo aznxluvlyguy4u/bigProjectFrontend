@@ -53,6 +53,7 @@ export class ErrorLogOverviewComponent implements OnInit {
 		private filterSearch: string; // Search in action_by and declare_info
 		private filterIsHiddenForAdmin: boolean;
 		private filterUbn: string; // filter in ubn and related_ubn
+		private filterRelatedUbn: string; // filter in ubn and related_ubn
 		private filterType: string;
 		private filterActionByType: string;
 
@@ -205,13 +206,14 @@ export class ErrorLogOverviewComponent implements OnInit {
 
 
 		private resetFilterOptions() {
+				this.filterSearch = '';
 				this.filterLogDateStart = '';
 				this.filterLogDateEnd = '';
 				this.filterEventDateStart = '';
 				this.filterEventDateEnd = '';
-				this.filterSearch = '';
 				this.filterIsHiddenForAdmin = undefined;
 				this.filterUbn = '';
+				this.filterRelatedUbn = '';
 				this.filterType = 'ALL';
 				this.filterActionByType = 'ALL';
 		}
@@ -219,13 +221,14 @@ export class ErrorLogOverviewComponent implements OnInit {
 
 		getFilterOptions(): any[] {
 			return [
+				this.filterSearch,
 				this.filterLogDateStart,
 				this.filterLogDateEnd,
 				this.filterEventDateStart,
 				this.filterEventDateEnd,
-				this.filterSearch,
 				this.filterIsHiddenForAdmin,
 				this.filterUbn,
+				this.filterRelatedUbn,
 				this.filterType,
 				this.filterActionByType,
 			];

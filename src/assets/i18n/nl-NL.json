@@ -414,5 +414,9 @@
   "CLIENT": "Gebruiker",
   "DEVELOPER": "Developer",
   "HIDDEN": "Verborgen",
-  "ERROR MESSAGE IS HIDDEN FOR ADMINS": "Foutbericht is verborgen voor Admins"
+  "ERROR MESSAGE IS HIDDEN FOR ADMINS": "Foutbericht is verborgen voor Admins en bij het verversen van de pagina worden alleen foutberichten getoond die niet verborgen zijn",
+  "ACTION BY TYPE": "Gedaan door type",
+  "DECLARE TYPE": "Meldingstype",
+  "RELATED": "Gerelateerd",
+  "ERROR LOG SEARCH INFO": "Zoeken in 'gedaan door' naam en omschrijving"
 }
