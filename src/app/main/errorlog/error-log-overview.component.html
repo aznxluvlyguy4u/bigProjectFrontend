@@ -134,11 +134,20 @@
         <ng-template *ngIf="errors && errors.length > 0">
             <div class="large-1 columns end">
                 <button
+                    *ngIf="!isUpdatingHiddenStatus"
                     class="button alert"
                     title="{{'HIDE ALL FILTERED ERRORS IN THE CURRENT LIST INCLUDING THOSE ON OTHER PAGES' | translate}}"
-                    (click)="hideShownErrorsForAdmin()"
+                    (click)="openModal()"
                 >
                     {{'HIDE ALL' | translate}}
+                </button>
+
+                <button
+                    *ngIf="isUpdatingHiddenStatus"
+                    class="button  disabled"
+                    [disabled]="true"
+                >
+                    <span><i class="fa fa-gear fa-spin fa-fw"></i> </span>
                 </button>
             </div>
         </ng-template>
@@ -226,4 +235,43 @@
     </div>
 </div>
 
+</div>
+
+<!--HIDE ALL WARNING MODAL-->
+<div class="reveal-overlay" [ngStyle]="{'display': modalDisplay}">
+    <div class="tiny reveal" [ngStyle]="{'display': modalDisplay}">
+        <div class="modal-header" *ngIf="toHideCount > 0">
+            {{ 'CONFIRMATION NOTIFICATION' | translate }}
+            <button type="button" class="pull-right" aria-label="Close modal" (click)="closeModal()">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+        </div>
+
+        <ng-template *ngIf="toHideCount > 0">
+            <div class="modal-body">
+                <hr>
+                <div class="row">
+                    {{ 'SELECTED ERROR MESSAGES COUNT' | translate}}: {{toHideCount}}
+                </div>
+                <div class="row">
+                    {{ 'HIDE ALL FILTERED ERRORS IN THE CURRENT LIST INCLUDING THOSE ON OTHER PAGES' | translate }}?
+                </div>
+            </div>
+            <hr>
+            <div class="modal-footer">
+                <button class="tiny primary button pull-left" (click)="hideShownErrorsForAdmin()">{{ 'OK' | translate}}</button>
+                <button class="tiny alert button pull-right" (click)="closeModal()">{{ 'NO' | translate}}</button>
+            </div>
+        </ng-template>
+
+        <ng-template *ngIf="toHideCount === 0">
+            <div class="modal-body">
+                {{ 'NO ERROR MESSAGES SELECTED' | translate}}
+            </div>
+            <div class="modal-footer">
+                <button class="tiny alert button pull-right" (click)="closeModal()">{{ 'CLOSE' | translate}}</button>
+            </div>
+        </ng-template>
+
+    </div>
 </div>

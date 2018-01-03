@@ -420,5 +420,8 @@
   "RELATED": "Gerelateerd",
   "ERROR LOG SEARCH INFO": "Zoeken in 'gedaan door' naam en omschrijving",
   "HIDE ALL": "Verberg Alles",
-  "HIDE ALL FILTERED ERRORS IN THE CURRENT LIST INCLUDING THOSE ON OTHER PAGES": "Verberg alle gefilterde foutmeldingen in de huidige lijst, inclusief die op andere pagina's"
+  "HIDE ALL FILTERED ERRORS IN THE CURRENT LIST INCLUDING THOSE ON OTHER PAGES": "Verberg alle gefilterde foutmeldingen in de huidige lijst, inclusief die op andere pagina's",
+  "CONFIRMATION NOTIFICATION": "Bevestigingsnotificatie",
+  "NO ERROR MESSAGES SELECTED": "Geen foutmeldingen geselecteerd",
+  "SELECTED ERROR MESSAGES COUNT": "Aantal geselecteerde foutberichten"
 }

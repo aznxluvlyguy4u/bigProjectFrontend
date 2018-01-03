@@ -57,6 +57,9 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 		private filterType: string;
 		private filterActionByType: string;
 
+		private modalDisplay: string = 'none';
+		private toHideCount: number = 0;
+
 		constructor(private nsfo: NSFOService, private formBuilder: FormBuilder,
 								private settings: SettingsService, private sortService: SortService,
 								private dateTimeService: DateTimeService, private formUtilService: FormUtilService,
@@ -160,9 +163,22 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 		}
 
 
+		getErrorMessagesToHide() {
+				return this.errorLogFilterService.transform(this.errors, this.getFilterOptions()).filter(
+					errorMessage => {
+						return errorMessage.hide_for_admin === false;
+					});
+		}
+
+
+		updateToHideCount() {
+				this.toHideCount = this.getErrorMessagesToHide().length;
+		}
+
+
 		hideShownErrorsForAdmin() {
-				const errorMessagesToHide = this.errorLogFilterService.transform(this.errors, this.getFilterOptions());
-				// TODO built in modal double check
+				const errorMessagesToHide = this.getErrorMessagesToHide();
+				this.closeModal();
 				this.hideErrorsForAdmin(errorMessagesToHide);
 		}
 
@@ -194,12 +210,14 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 						// For now we only hide on IR level.
 						// It is for example also possible to hide a whole litter, but we will keep it simple for now
 
-						let errorToEdit = new HideError();
-						errorToEdit.message_id = errorMessage.request_id;
-						errorToEdit.is_ir_message = true;
-						errorToEdit.hide_for_admin = hideForAdmin;
+						if (errorMessage.hide_for_admin !== hideForAdmin) {
+								let errorToEdit = new HideError();
+								errorToEdit.message_id = errorMessage.request_id;
+								errorToEdit.is_ir_message = true;
+								errorToEdit.hide_for_admin = hideForAdmin;
 
-						edits.push(errorToEdit);
+								edits.push(errorToEdit);
+						}
 				}
 
 				const body = {
@@ -216,9 +234,10 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 								error => {
 										alert(this.nsfo.getErrorMessage(error));
 
-										if (error.result.success_count > 0) {
+										if (error && error.result && error.result.success_count > 0) {
 												this.updateErrorMessagesFromUpdateResponse(error);
 										}
+										this.isUpdatingHiddenStatus = false;
 								},
 								() => {
 										this.isUpdatingHiddenStatus = false;
@@ -284,5 +303,14 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 
 		getBoolDrowDownText(string: string|boolean): string {
 				return this.formUtilService.getBoolDrowDownText(string);
+		}
+
+		openModal() {
+			this.updateToHideCount();
+			this.modalDisplay = 'block';
+		}
+
+		closeModal() {
+			this.modalDisplay = 'none';
 		}
 }
