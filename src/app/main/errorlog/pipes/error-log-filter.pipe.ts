@@ -5,7 +5,6 @@ import moment = require('moment');
 @Pipe({
     name: 'errorLogFilter'
 })
-
 export class ErrorLogFilterPipe implements PipeTransform {
 
     transform(list: any, args: any[]): any {
@@ -109,7 +108,6 @@ export class ErrorLogFilterPipe implements PipeTransform {
 						userActionType = userActionType.toLowerCase();
 						filtered = filtered.filter(errorMessage => {
 							return errorMessage.action_by_type.toLowerCase() === userActionType;
-							// return errorMessage.action_by_type.toLowerCase().indexOf(userActionType) !== -1;
 						});
 				}
 

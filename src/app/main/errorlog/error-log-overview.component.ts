@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SortService } from '../../global/services/utils/sort.service';
 import { PaginationComponent } from '../../global/components/pagination/pagination.component';
 import { ROUTER_DIRECTIVES } from '@angular/router';
@@ -6,7 +6,7 @@ import { CheckMarkComponent } from '../../global/components/checkmark/check-mark
 import { PaginatePipe, PaginationService } from 'ng2-pagination';
 import { UserSearchPipe } from '../../global/pipes/user-search.pipe';
 import { FormUtilService } from '../../global/services/utils/form-util.service';
-import { REACTIVE_FORM_DIRECTIVES, Validators } from '@angular/forms';
+import { REACTIVE_FORM_DIRECTIVES } from '@angular/forms';
 import { SortSwitchComponent } from '../../global/components/sortswitch/sort-switch.component';
 import { SearchComponent } from '../../global/components/searchbox/seach-box.component';
 import { Datepicker } from '../../global/components/datepicker/datepicker.component';
@@ -15,23 +15,23 @@ import { TranslatePipe } from 'ng2-translate';
 import { ErrorLogFilterPipe } from './pipes/error-log-filter.pipe';
 import { SettingsService } from '../../global/services/settings/settings.service';
 import { NSFOService } from '../../global/services/nsfo/nsfo.service';
-import { ControlGroup, FormBuilder } from '@angular/common';
+import { FormBuilder } from '@angular/common';
 import { FORMAL, SHOW_HIDDEN } from '../../global/constants/query-params.constant';
 import { ErrorMessage } from './models/error-message.model';
 import { HideError } from './models/hide-error.model';
-import { HideErrorResponse } from './models/hide-error-response.model';
 
 import _ = require("lodash");
 import { DeclareName } from './models/declare-names.model';
-import { findIndex } from 'rxjs/operator/findIndex';
+import { HideErrorsUpdateResult } from './models/hide-errors-update-result.model';
+import { Response } from '@angular/http/src/static_response';
 
 @Component({
-		providers: [PaginationService, SortService, DateTimeService, FormUtilService],
+		providers: [PaginationService, SortService, DateTimeService, FormUtilService, ErrorLogFilterPipe],
 		directives: [REACTIVE_FORM_DIRECTIVES, ROUTER_DIRECTIVES, PaginationComponent, SearchComponent, Datepicker, CheckMarkComponent, SortSwitchComponent],
 		template: require('./error-log-overview.component.html'),
 		pipes: [TranslatePipe, ErrorLogFilterPipe, PaginatePipe, UserSearchPipe]
 })
-export class ErrorLogOverviewComponent implements OnInit {
+export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 
 		private isErrorsLoaded = false;
 		private isInformalNamesLoaded = false;
@@ -59,7 +59,8 @@ export class ErrorLogOverviewComponent implements OnInit {
 
 		constructor(private nsfo: NSFOService, private formBuilder: FormBuilder,
 								private settings: SettingsService, private sortService: SortService,
-								private dateTimeService: DateTimeService, private formUtilService: FormUtilService
+								private dateTimeService: DateTimeService, private formUtilService: FormUtilService,
+								private errorLogFilterService: ErrorLogFilterPipe
 		) {
 				this.resetFilterOptions();
 		}
@@ -70,6 +71,12 @@ export class ErrorLogOverviewComponent implements OnInit {
 				this.getErrors();
 				this.doGetDeclareTypesRequest(true);
 				this.doGetDeclareTypesRequest(false);
+		}
+
+
+		ngOnDestroy() {
+				this.errors = [];
+				this.declareNames = [];
 		}
 
 
@@ -153,13 +160,20 @@ export class ErrorLogOverviewComponent implements OnInit {
 		}
 
 
-		private hideErrorForAdmin(errorMessage: ErrorMessage) {
-				this.toggleErrorHideForAdminStatus(errorMessage, true);
+		hideShownErrorsForAdmin() {
+				const errorMessagesToHide = this.errorLogFilterService.transform(this.errors, this.getFilterOptions());
+				// TODO built in modal double check
+				this.hideErrorsForAdmin(errorMessagesToHide);
 		}
 
 
-		private revealErrorForAdmin(errorMessage: ErrorMessage) {
-				this.toggleErrorHideForAdminStatus(errorMessage, false);
+		private hideErrorsForAdmin(errorMessages: ErrorMessage[]) {
+				this.toggleErrorHideForAdminStatus(errorMessages, true);
+		}
+
+
+		private revealErrorsForAdmin(errorMessages: ErrorMessage[]) {
+				this.toggleErrorHideForAdminStatus(errorMessages, false);
 		}
 
 
@@ -168,30 +182,64 @@ export class ErrorLogOverviewComponent implements OnInit {
 		 * 1. DeclareBirth.hideForAdmin = true OR DeclareBirth.getLitter().hideForAdmin = true.
 		 * To keep it simple, only the hideForAdmin state on the DeclareBirth will the toggled.
 		 *
-		 * @param {ErrorMessage} errorMessage
+		 * @param {ErrorMessage} errorMessages with the new
 		 * @param {boolean} hideForAdmin
 		 */
-		private toggleErrorHideForAdminStatus(errorMessage: ErrorMessage, hideForAdmin: boolean) {
+		private toggleErrorHideForAdminStatus(errorMessages: ErrorMessage[], hideForAdmin: boolean) {
 
-				let body = new HideError();
-				body.message_id = errorMessage.request_id;
-				body.is_ir_message = false;
-				body.hide_for_admin = hideForAdmin;
+				let edits: HideError[] = [];
+
+				for(let errorMessage of errorMessages) {
+
+						// For now we only hide on IR level.
+						// It is for example also possible to hide a whole litter, but we will keep it simple for now
+
+						let errorToEdit = new HideError();
+						errorToEdit.message_id = errorMessage.request_id;
+						errorToEdit.is_ir_message = true;
+						errorToEdit.hide_for_admin = hideForAdmin;
+
+						edits.push(errorToEdit);
+				}
+
+				const body = {
+					is_multi_edit: true,
+					edits: edits
+				};
 
 				this.isUpdatingHiddenStatus = true;
 				this.nsfo.doPutRequest(this.nsfo.URI_ERRORS_HIDDEN_STATUS, body)
 						.subscribe(
 						res => {
-										errorMessage.hide_for_admin = <HideErrorResponse> res.result.hide_for_admin;
-										//todo update error in errors list
+										this.updateErrorMessagesFromUpdateResponse(res);
 								},
 								error => {
 										alert(this.nsfo.getErrorMessage(error));
+
+										if (error.result.success_count > 0) {
+												this.updateErrorMessagesFromUpdateResponse(error);
+										}
 								},
 								() => {
 										this.isUpdatingHiddenStatus = false;
 								}
 						);
+		}
+
+
+		private updateErrorMessagesFromUpdateResponse(response: HideErrorsUpdateResult) {
+				const successfulEdits = response.result.successful_edits;
+
+				for(let successfulEdit of successfulEdits) {
+
+						let currentErrorMessage = _.find(this.errors, {request_id: successfulEdit.message_id});
+
+						if (currentErrorMessage && currentErrorMessage.hide_for_admin !== successfulEdit.hide_for_admin) {
+								const index = _.findIndex(this.errors, {request_id: successfulEdit.message_id});
+								currentErrorMessage.hide_for_admin = successfulEdit.hide_for_admin;
+								this.errors.splice(index, 1, currentErrorMessage);
+						}
+				}
 		}
 
 

@@ -96,14 +96,15 @@
             </label>
         </div>
 
-        <div class="large-1 columns">
-            <label>
-                {{ 'PER PAGE' | translate }}
-                <select [(ngModel)]="filterAmount" (change)="page = 1">
-                    <option *ngFor="let option of filterAmountOptions" [value]="option">{{option}}</option>
-                </select>
-            </label>
-        </div>
+        <!-- DISABLED BECAUSE PAGINATION IS A BIT BROKEN -->
+        <!--<div class="large-1 columns">-->
+            <!--<label>-->
+                <!--{{ 'PER PAGE' | translate }}-->
+                <!--<select [(ngModel)]="filterAmount" (change)="page = 1">-->
+                    <!--<option *ngFor="let option of filterAmountOptions" [value]="option">{{option}}</option>-->
+                <!--</select>-->
+            <!--</label>-->
+        <!--</div>-->
 
         <div class="large-2 columns">
             <label>
@@ -129,6 +130,18 @@
                 </select>
             </label>
         </div>
+
+        <ng-template *ngIf="errors && errors.length > 0">
+            <div class="large-1 columns end">
+                <button
+                    class="button alert"
+                    title="{{'HIDE ALL FILTERED ERRORS IN THE CURRENT LIST INCLUDING THOSE ON OTHER PAGES' | translate}}"
+                    (click)="hideShownErrorsForAdmin()"
+                >
+                    {{'HIDE ALL' | translate}}
+                </button>
+            </div>
+        </ng-template>
 
     </div>
 
@@ -211,4 +224,6 @@
 
         <pagination (pageChange)="page = $event"></pagination>
     </div>
+</div>
+
 </div>
