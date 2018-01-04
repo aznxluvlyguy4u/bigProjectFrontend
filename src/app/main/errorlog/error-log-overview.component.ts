@@ -23,11 +23,12 @@ import { HideError } from './models/hide-error.model';
 import _ = require("lodash");
 import { DeclareName } from './models/declare-names.model';
 import { HideErrorsUpdateResult } from './models/hide-errors-update-result.model';
-import { Response } from '@angular/http/src/static_response';
+import { HideButtonComponent } from '../../global/components/hidebutton/hide-button.component';
 
 @Component({
 		providers: [PaginationService, SortService, DateTimeService, FormUtilService, ErrorLogFilterPipe],
-		directives: [REACTIVE_FORM_DIRECTIVES, ROUTER_DIRECTIVES, PaginationComponent, SearchComponent, Datepicker, CheckMarkComponent, SortSwitchComponent],
+		directives: [REACTIVE_FORM_DIRECTIVES, ROUTER_DIRECTIVES, PaginationComponent, SearchComponent, Datepicker,
+			CheckMarkComponent, SortSwitchComponent, HideButtonComponent],
 		template: require('./error-log-overview.component.html'),
 		pipes: [TranslatePipe, ErrorLogFilterPipe, PaginatePipe, UserSearchPipe]
 })
@@ -36,6 +37,7 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 		private isErrorsLoaded = false;
 		private isInformalNamesLoaded = false;
 		private isUpdatingHiddenStatus = false;
+		private updatedSingleHiddenStatusMessageId: string;
 
 		public errors: ErrorMessage[];
 		private declareType = 'informal';
@@ -75,7 +77,7 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 
 		public ngOnInit() {
 				this.filterType = null;
-				this.filterIsHiddenForAdmin = false;
+				this.filterIsHiddenForAdmin = undefined; // show all
 				this.getErrors();
 				this.doGetDeclareTypesRequest(true);
 				this.doGetDeclareTypesRequest(false);
@@ -190,13 +192,18 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 		}
 
 
+		hideSingleErrorForAdminStatus(errorMessage: ErrorMessage) {
+				this.toggleErrorsHideForAdminStatus([errorMessage], true);
+		}
+
+
 		private hideErrorsForAdmin(errorMessages: ErrorMessage[]) {
-				this.toggleErrorHideForAdminStatus(errorMessages, true);
+				this.toggleErrorsHideForAdminStatus(errorMessages, true);
 		}
 
 
 		private revealErrorsForAdmin(errorMessages: ErrorMessage[]) {
-				this.toggleErrorHideForAdminStatus(errorMessages, false);
+				this.toggleErrorsHideForAdminStatus(errorMessages, false);
 		}
 
 
@@ -208,7 +215,7 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 		 * @param {ErrorMessage} errorMessages with the new
 		 * @param {boolean} hideForAdmin
 		 */
-		private toggleErrorHideForAdminStatus(errorMessages: ErrorMessage[], hideForAdmin: boolean) {
+		private toggleErrorsHideForAdminStatus(errorMessages: ErrorMessage[], hideForAdmin: boolean) {
 
 				let edits: HideError[] = [];
 
@@ -227,12 +234,21 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 						}
 				}
 
+				if (edits.length === 0) {
+						return;
+				}
+
 				const body = {
 					is_multi_edit: true,
 					edits: edits
 				};
 
-				this.isUpdatingHiddenStatus = true;
+				if (errorMessages.length === 1) {
+						this.updatedSingleHiddenStatusMessageId = errorMessages.pop().request_id;
+				} else {
+						this.isUpdatingHiddenStatus = true;
+				}
+
 				this.nsfo.doPutRequest(this.nsfo.URI_ERRORS_HIDDEN_STATUS, body)
 						.subscribe(
 						res => {
@@ -245,9 +261,11 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 												this.updateErrorMessagesFromUpdateResponse(error);
 										}
 										this.isUpdatingHiddenStatus = false;
+										this.updatedSingleHiddenStatusMessageId = null;
 								},
 								() => {
 										this.isUpdatingHiddenStatus = false;
+										this.updatedSingleHiddenStatusMessageId = null;
 								}
 						);
 		}
