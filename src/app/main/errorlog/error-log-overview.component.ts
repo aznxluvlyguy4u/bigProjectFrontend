@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { SortService } from '../../global/services/utils/sort.service';
+import { SortOrder, SortService } from '../../global/services/utils/sort.service';
 import { PaginationComponent } from '../../global/components/pagination/pagination.component';
 import { ROUTER_DIRECTIVES } from '@angular/router';
 import { CheckMarkComponent } from '../../global/components/checkmark/check-mark.component';
@@ -59,6 +59,11 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 
 		private modalDisplay: string = 'none';
 		private toHideCount: number = 0;
+
+		isLogDateSortAscending: boolean;
+		isLogDateSortNeutral: boolean;
+		isEventDateSortAscending: boolean;
+		isEventDateSortNeutral: boolean;
 
 		constructor(private nsfo: NSFOService, private formBuilder: FormBuilder,
 								private settings: SettingsService, private sortService: SortService,
@@ -154,6 +159,8 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 						if (!useFormalDeclareNames) {
 								this.isInformalNamesLoaded = true;
 						}
+
+						this.initializeDateSortValues();
 
 					},
 					error => {
@@ -313,4 +320,48 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 		closeModal() {
 			this.modalDisplay = 'none';
 		}
+
+
+		initializeDateSortValues() {
+				this.isLogDateSortAscending = true;
+				this.isLogDateSortNeutral = false;
+				this.isEventDateSortAscending = true;
+				this.isEventDateSortNeutral = true;
+		}
+
+		onSortByLogDateToggle() {
+				//toggle sort direction
+				this.isLogDateSortAscending = !this.isLogDateSortAscending;
+				this.isEventDateSortNeutral = true;
+				this.isLogDateSortNeutral = false;
+				this.sortByLogDate();
+		}
+
+		onSortByEventDateToggle() {
+				//toggle sort direction
+				this.isEventDateSortAscending = !this.isEventDateSortAscending;
+				this.isEventDateSortNeutral = false;
+				this.isLogDateSortNeutral = true;
+				this.sortByEventDate();
+		}
+
+
+		sortByLogDate() {
+				const sortOrder = new SortOrder();
+				sortOrder.variableName = 'log_date';
+				sortOrder.isDate = false; //it is a dateString
+				sortOrder.ascending = this.isLogDateSortAscending;
+
+				this.errors = this.sortService.sort(this.errors, [sortOrder]);
+		}
+
+		sortByEventDate() {
+				const sortOrder = new SortOrder();
+				sortOrder.variableName = 'event_date';
+				sortOrder.isDate = false; //it is a dateString
+				sortOrder.ascending = this.isEventDateSortAscending;
+
+				this.errors = this.sortService.sort(this.errors, [sortOrder]);
+		}
+
 }
