@@ -69,11 +69,21 @@ class Pedigree {
     public number: string;
 }
 
-export class ClientDetails {
+export class GhostLoginDetails {
+	public owner: User = new User();
+	public users: User[] = [];
+}
+
+export class GhostLoginDetailsWithUbn extends GhostLoginDetails {
+	public ubn: string;
+	public is_active: boolean;
+	public has_ghost_login: boolean;
+}
+
+export class ClientDetails extends GhostLoginDetails {
     public company_id: number;
     public company_name: string;
     public telephone_number: string;
-    public owner: User = new User();
     public status: string;
     public subscription_date: string;
     public livestock: LivestockStats = new LivestockStats();
@@ -81,7 +91,6 @@ export class ClientDetails {
     public breeder_numbers: BreederNumber[] = [];
     public invoices: Invoice[] = [];
     public animal_health: AnimalHealth[] = [];
-    public users: User[] = [];
     public health_statusses: LocationHealthStatus[] = [];
 }
 

@@ -425,5 +425,6 @@
   "NO ERROR MESSAGES SELECTED": "Geen foutmeldingen geselecteerd",
   "SELECTED ERROR MESSAGES COUNT": "Aantal geselecteerde foutberichten",
   "HIDE": "Verberg",
-  "DISPLAY": "Toon"
+  "DISPLAY": "Toon",
+  "NO GHOST LOGIN POSSIBLE FOR THIS UBN": "Inloggen op dit UBN is niet mogelijk"
 }

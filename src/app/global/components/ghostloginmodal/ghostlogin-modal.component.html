@@ -1,0 +1,67 @@
+<ng-template *ngIf="ghostLoginDetails != null && userModalDisplay === 'block'">
+
+    <div class="reveal-overlay ghost-login-modal" [ngStyle]="{'display': userModalDisplay}">
+        <div class="reveal" [ngStyle]="{'display': userModalDisplay}">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="column large-4">
+                        {{ 'LOGIN AS' | translate }}:
+                    </div>
+                    <div class="column large-4">
+                        <span class="" *ngIf="ghostLoginDetails.ubn != null">UBN: {{ghostLoginDetails.ubn}}</span>
+                    </div>
+                    <div class="column large-4">
+                        <button type="button" class="pull-right" aria-label="Close modal" (click)="closeUserModal()">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <table>
+                    <thead>
+                    <tr>
+                        <td>{{ 'USER' | translate }}</td>
+                        <td>{{ 'E-MAIL ADDRESS' | translate }}</td>
+                        <td></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{{ ghostLoginDetails.owner.first_name + ' ' + ghostLoginDetails.owner.last_name }}</td>
+                        <td>{{ ghostLoginDetails.owner.email_address }}</td>
+                        <td>
+                            <span class="pull-right">
+                                <button type="button" (click)="loginAsGhost(ghostLoginDetails.owner.person_id)" class="small primary button">
+                                    <i class="fa fa-sign-in fa-fw" aria-hidden="true"></i>
+                                    {{ 'LOGIN' |  translate}}
+                                </button>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr *ngFor="let user of ghostLoginDetails.users">
+                        <td>
+                            {{ user.first_name + ' ' + user.last_name }}
+                        </td>
+                        <td>
+                            {{ user.email_address }}
+                        </td>
+                        <td>
+                            <span class="pull-right">
+                                <button type="button" (click)="loginAsGhost(user.person_id)" class="small primary button">
+                                    <i class="fa fa-sign-in fa-fw" aria-hidden="true"></i>
+                                    {{ 'LOGIN' |  translate}}
+                                </button>
+                            </span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="tiny primary button pull-right" (click)="closeUserModal()">{{ 'CLOSE' | translate}}</button>
+            </div>
+        </div>
+    </div>
+
+</ng-template>

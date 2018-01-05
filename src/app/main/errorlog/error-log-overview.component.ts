@@ -11,7 +11,7 @@ import { SortSwitchComponent } from '../../global/components/sortswitch/sort-swi
 import { SearchComponent } from '../../global/components/searchbox/seach-box.component';
 import { Datepicker } from '../../global/components/datepicker/datepicker.component';
 import { DateTimeService } from '../../global/services/utils/date-time.service';
-import { TranslatePipe } from 'ng2-translate';
+import { TranslatePipe, TranslateService } from 'ng2-translate';
 import { ErrorLogFilterPipe } from './pipes/error-log-filter.pipe';
 import { SettingsService } from '../../global/services/settings/settings.service';
 import { NSFOService } from '../../global/services/nsfo/nsfo.service';
@@ -24,25 +24,30 @@ import _ = require("lodash");
 import { DeclareName } from './models/declare-names.model';
 import { HideErrorsUpdateResult } from './models/hide-errors-update-result.model';
 import { HideButtonComponent } from '../../global/components/hidebutton/hide-button.component';
+import { GhostLoginDetailsWithUbn } from '../client/client.model';
+import { GhostLoginModalComponent } from '../../global/components/ghostloginmodal/ghostlogin-modal.component';
 
 @Component({
 		providers: [PaginationService, SortService, DateTimeService, FormUtilService, ErrorLogFilterPipe],
 		directives: [REACTIVE_FORM_DIRECTIVES, ROUTER_DIRECTIVES, PaginationComponent, SearchComponent, Datepicker,
-			CheckMarkComponent, SortSwitchComponent, HideButtonComponent],
+			CheckMarkComponent, SortSwitchComponent, HideButtonComponent, GhostLoginModalComponent],
 		template: require('./error-log-overview.component.html'),
 		pipes: [TranslatePipe, ErrorLogFilterPipe, PaginatePipe, UserSearchPipe]
 })
 export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 
-		private isErrorsLoaded = false;
-		private isInformalNamesLoaded = false;
-		private isUpdatingHiddenStatus = false;
+		private isErrorsLoaded: boolean;
+		private isGhostLoginDataLoaded: boolean;
+		private isInformalNamesLoaded: boolean;
+		private isUpdatingHiddenStatus: boolean;
 		private updatedSingleHiddenStatusMessageId: string;
 
 		public errors: ErrorMessage[];
 		private declareType = 'informal';
 		private declareNames: DeclareName[] = [];
 		private declareTypesForDropdown;
+
+		ghostLoginData: GhostLoginDetailsWithUbn[] = [];
 
 		private filterAmount: number = 10;
 		private filterAmountOptions = [10, 25, 50];
@@ -61,6 +66,8 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 
 		private modalDisplay: string = 'none';
 		private toHideCount: number = 0;
+		private ghostLoginModalDisplay: string = 'none';
+		selectedGhostLoginDetails: GhostLoginDetailsWithUbn;
 
 		isLogDateSortAscending: boolean;
 		isLogDateSortNeutral: boolean;
@@ -70,9 +77,22 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 		constructor(private nsfo: NSFOService, private formBuilder: FormBuilder,
 								private settings: SettingsService, private sortService: SortService,
 								private dateTimeService: DateTimeService, private formUtilService: FormUtilService,
-								private errorLogFilterService: ErrorLogFilterPipe
+								private errorLogFilterService: ErrorLogFilterPipe,
+								private translateService: TranslateService
 		) {
+				this.initializeValues();
 				this.resetFilterOptions();
+		}
+
+		private initializeValues() {
+				this.errors = [];
+				this.declareNames = [];
+				this.ghostLoginData = [];
+				this.isErrorsLoaded = false;
+				this.isGhostLoginDataLoaded = false;
+				this.isInformalNamesLoaded = false;
+				this.isUpdatingHiddenStatus = false;
+				this.updatedSingleHiddenStatusMessageId = null;
 		}
 
 		public ngOnInit() {
@@ -81,12 +101,11 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 				this.getErrors();
 				this.doGetDeclareTypesRequest(true);
 				this.doGetDeclareTypesRequest(false);
+				this.doGetUbnsWithGhostLoginDataRequest();
 		}
 
-
 		ngOnDestroy() {
-				this.errors = [];
-				this.declareNames = [];
+				this.initializeValues();
 		}
 
 
@@ -163,6 +182,7 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 						}
 
 						this.initializeDateSortValues();
+						this.updateGhostLoginValuesInErrorMessages();
 
 					},
 					error => {
@@ -172,7 +192,44 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 		}
 
 
-		getErrorMessagesToHide() {
+		private doGetUbnsWithGhostLoginDataRequest() {
+				const queryParam = '?include_ghost_login_data=true';
+
+				this.nsfo.doGetRequest(this.nsfo.URI_UBNS + queryParam)
+						.subscribe(
+								res => {
+										this.ghostLoginData = res.result;
+										this.isGhostLoginDataLoaded = true;
+										this.updateGhostLoginValuesInErrorMessages();
+								},
+								error => {
+										alert(this.nsfo.getErrorMessage(error));
+								}
+					);
+		}
+
+
+		private updateGhostLoginValuesInErrorMessages() {
+				if (this.errors.length === 0 || this.ghostLoginData.length === 0) {
+						return;
+				}
+
+				for(let error of this.errors) {
+						error.has_ghost_login = this.hasUbnGhostLogin(error.ubn);
+				}
+		}
+
+
+		private hasUbnGhostLogin(ubn: string): boolean {
+				const ghostLoginDetailsWithUbn = _.find(this.ghostLoginData, {ubn: ubn});
+				if (ghostLoginDetailsWithUbn) {
+						return ghostLoginDetailsWithUbn.has_ghost_login;
+				}
+				return false;
+		}
+
+
+		getErrorMessagesToHide(): ErrorMessage[] {
 				return this.errorLogFilterService.transform(this.errors, this.getFilterOptions()).filter(
 					errorMessage => {
 						return errorMessage.hide_for_admin === false;
@@ -382,4 +439,28 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 				this.errors = this.sortService.sort(this.errors, [sortOrder]);
 		}
 
+		loginAsGhost(ubn: string) {
+				const ghostLoginDetailsWithUbn = _.find(this.ghostLoginData, {ubn: ubn});
+				if (ghostLoginDetailsWithUbn) {
+						this.selectedGhostLoginDetails = ghostLoginDetailsWithUbn;
+						this.openGhostLoginModal();
+				} else {
+						alert(this.translateService.instant('NO GHOST LOGIN POSSIBLE FOR THIS UBN'));
+				}
+		}
+
+		afterGhostLogin() {
+			 this.selectedGhostLoginDetails = null;
+			 this.closeGhostLoginModal();
+
+			 // TODO display error log details in separate modal in admin view
+		}
+
+		private openGhostLoginModal() {
+				this.ghostLoginModalDisplay = 'block';
+		}
+
+		private closeGhostLoginModal() {
+				this.ghostLoginModalDisplay = 'none';
+		}
 }

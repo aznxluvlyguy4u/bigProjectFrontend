@@ -54,4 +54,13 @@ export class UtilsService {
 				default: return user.type;
 			}
     }
+
+
+    static getBoolValAsString(boolval: boolean) {
+        if (typeof boolval === 'boolean') {
+            return boolval ? 'true' : 'false';
+        }
+
+        return boolval;
+    }
 }

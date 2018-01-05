@@ -177,6 +177,7 @@
                 <td title="{{ 'ERROR MESSAGE IS HIDDEN FOR ADMINS' | translate }}">{{'HIDDEN' | translate | lowercase}}<i class="fa fa-info-circle" aria-hidden="true" title="{{ 'ERROR MESSAGE IS HIDDEN FOR ADMINS' | translate }}"></i>
                 </td>
                 <td>{{ 'HIDE' | translate }}</td>
+                <td>{{ 'LOGIN' |  translate}}</td>
             </tr>
             </thead>
             <tbody>
@@ -227,6 +228,23 @@
                                 (click)="hideSingleErrorForAdminStatus(error)"
                         ></app-hide-button>
                     </td>
+                    <td>
+                        <span class="pull-right" *ngIf="error.has_ghost_login">
+                            <button
+                                 type="button"
+                                 (click)="loginAsGhost(error.ubn)"
+                                 class="small primary button"
+                            ><i class="fa fa-sign-in fa-fw" aria-hidden="true"></i>
+                            </button>
+                        </span>
+                        <span class="pull-right" *ngIf="!error.has_ghost_login">                                <button
+                                type="button"
+                                [disabled]="true"
+                                class="small disabled secondary button"
+                                 ><i class="fa fa-sign-in fa-fw" aria-hidden="true"></i>
+                            </button>
+                        </span>
+                    </td>
                 </tr>
             </ng-container>
             </tbody>
@@ -276,3 +294,9 @@
 
     </div>
 </div>
+
+<app-ghostlogin-modal
+        [userModalDisplay]="ghostLoginModalDisplay"
+        [ghostLoginDetails]="selectedGhostLoginDetails"
+        (click)="afterGhostLogin()"
+></app-ghostlogin-modal>
