@@ -426,5 +426,11 @@
   "SELECTED ERROR MESSAGES COUNT": "Aantal geselecteerde foutberichten",
   "HIDE": "Verberg",
   "DISPLAY": "Toon",
-  "NO GHOST LOGIN POSSIBLE FOR THIS UBN": "Inloggen op dit UBN is niet mogelijk"
+  "NO GHOST LOGIN POSSIBLE FOR THIS UBN": "Inloggen op dit UBN is niet mogelijk",
+  "INFO": "Info",
+  "ERROR CODE": "foutcode",
+  "ERROR MESSAGE": "foutmelding",
+  "ERROR KIND INDICATOR": "soortFoutIndicator",
+  "SUCCESS INDICATOR": "succesIndicator",
+  "RVO RESPONSE RESULTS": "RVO Verwerkingsresultaten"
 }
