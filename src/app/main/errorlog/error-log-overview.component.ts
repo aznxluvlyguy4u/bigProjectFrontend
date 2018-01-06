@@ -55,6 +55,7 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 		private filterAmount: number = 10;
 		private filterAmountOptions = [10, 25, 50];
 		private filterIsHiddenForAdminOptions = [undefined, true, false];
+		private filterIsHiddenForUserOptions = [undefined, true, false];
 
 		private filterLogDateStart: string;
 		private filterLogDateEnd: string;
@@ -62,6 +63,7 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 		private filterEventDateEnd: string;
 		private filterSearch: string; // Search in action_by and declare_info
 		private filterIsHiddenForAdmin: boolean;
+		private filterIsHiddenForUser: boolean;
 		private filterUbn: string; // filter in ubn and related_ubn
 		private filterRelatedUbn: string; // filter in ubn and related_ubn
 		private filterType: string;
@@ -384,6 +386,7 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 				this.filterRelatedUbn = '';
 				this.filterType = 'ALL';
 				this.filterActionByType = 'ALL';
+				this.filterIsHiddenForUser = undefined;
 		}
 
 
@@ -399,6 +402,7 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 				this.filterRelatedUbn,
 				this.filterType,
 				this.filterActionByType,
+				this.filterIsHiddenForUser,
 			];
 		}
 

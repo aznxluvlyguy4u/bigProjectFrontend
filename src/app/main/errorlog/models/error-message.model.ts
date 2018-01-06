@@ -13,4 +13,5 @@ export class ErrorMessage {
 		public non_ir_request_id: string;
 		public hide_for_admin: boolean;
 		public has_ghost_login: boolean;
+		public hide_failed_message: boolean;
 }

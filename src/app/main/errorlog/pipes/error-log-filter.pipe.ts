@@ -19,6 +19,7 @@ export class ErrorLogFilterPipe implements PipeTransform {
         let relatedUbn: string = args[7];
         let dutchDeclareType: string = args[8];
         let userActionType: string = args[9];
+        let isHiddenForUser: boolean = this.getBoolVal(args[10]);
 
         let filtered = list;
 
@@ -100,6 +101,13 @@ export class ErrorLogFilterPipe implements PipeTransform {
 				if (typeof isHiddenForAdmin === 'boolean') {
 						filtered = filtered.filter(errorMessage => {
 								return errorMessage.hide_for_admin === isHiddenForAdmin;
+						});
+				}
+
+				// FILTER IS HIDDEN FOR USER
+				if (typeof isHiddenForUser === 'boolean') {
+						filtered = filtered.filter(errorMessage => {
+								return errorMessage.hide_failed_message === isHiddenForUser;
 						});
 				}
 

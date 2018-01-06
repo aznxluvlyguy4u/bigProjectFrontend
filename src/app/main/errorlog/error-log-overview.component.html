@@ -9,12 +9,14 @@
 
     <ng-template *ngIf="isDataLoaded()">
 
-        <!-- DATE FILTER -->
-        <div class="row table-options-container">
-
-            <div class="large-2 medium-12 columns">
+        <div class="row">
+            <div class="large-1 medium-12 columns">
                 <h5>{{ 'FILTERS' | translate }}</h5>
             </div>
+        </div>
+
+        <!-- DATE FILTER -->
+        <div class="row table-options-container">
 
             <div class="large-2 medium-3 columns">
                 <label>{{ 'LOG DATE' | translate }} {{ 'START' | translate }}
@@ -64,11 +66,22 @@
                 </label>
             </div>
 
-            <div class="large-2 columns end">
+            <div class="large-2 columns">
                 <label>
-                    {{'DISPLAY' | translate }} {{'HIDDEN' | translate | lowercase}} <i class="fa fa-info-circle" aria-hidden="true" title="{{ 'ERROR MESSAGE IS HIDDEN FOR ADMINS' | translate }}"></i>
+                    {{'DISPLAY' | translate }} {{'HIDDEN FOR ADMINS' | translate | lowercase}} <i class="fa fa-info-circle" aria-hidden="true" title="{{ 'ERROR MESSAGE IS HIDDEN FOR ADMINS' | translate }}"></i>
                     <select [(ngModel)]="filterIsHiddenForAdmin" (change)="page = 1">
                         <option *ngFor="let option of filterIsHiddenForAdminOptions" [value]="option">
+                            {{getBoolDrowDownText(option) | translate}}
+                        </option>
+                    </select>
+                </label>
+            </div>
+
+            <div class="large-2 columns end">
+                <label>
+                    {{'DISPLAY' | translate }} {{'HIDDEN FOR USERS' | translate | lowercase}}
+                    <select [(ngModel)]="filterIsHiddenForUser" (change)="page = 1">
+                        <option *ngFor="let option of filterIsHiddenForUserOptions" [value]="option">
                             {{getBoolDrowDownText(option) | translate}}
                         </option>
                     </select>
@@ -176,9 +189,9 @@
                     <td>{{ 'ACTION BY' | translate }}</td>
                     <td>{{ 'ACTION BY TYPE' | translate }}</td>
                     <td>{{ 'DESCRIPTION' | translate }}</td>
-                    <td title="{{ 'ERROR MESSAGE IS HIDDEN FOR ADMINS' | translate }}">{{'HIDDEN' | translate | lowercase}}<i class="fa fa-info-circle" aria-hidden="true" title="{{ 'ERROR MESSAGE IS HIDDEN FOR ADMINS' | translate }}"></i>
-                    </td>
-                    <td>{{ 'HIDE' | translate }}</td>
+                    <td>{{ 'HIDDEN FOR ADMINS' | translate | lowercase}}</td>
+                    <td>{{ 'HIDDEN FOR USERS' | translate | lowercase}}</td>
+                    <td>{{ 'HIDE FOR ADMINS' | translate }}</td>
                     <td>{{ 'LOGIN' |  translate}}</td>
                     <td>{{ 'INFO' |  translate}}</td>
                 </tr>
@@ -224,10 +237,13 @@
                             <app-check-mark [boolVal]="error.hide_for_admin"></app-check-mark>
                         </td>
                         <td>
+                            <app-check-mark [boolVal]="error.hide_failed_message"></app-check-mark>
+                        </td>
+                        <td>
                             <app-hide-button
                                     [isActive]="!isUpdatingHiddenStatus && updatedSingleHiddenStatusMessageId !== error.request_id && !error.hide_for_admin"
                                     [includeDelayedSpinnerAnimation]="true"
-                                    [isTiny]="true"
+                                    [isTiny]="false"
                                     (click)="hideSingleErrorForAdminStatus(error)"
                             ></app-hide-button>
                         </td>
@@ -338,18 +354,22 @@
                 <div class="row">
                     <div class="small-6 column pull-right">{{ 'DESCRIPTION' | translate }}</div><div class="small-6 column">{{ selectedError.declare_info }}</div>
                 </div>
+                <div class="row">
+                    <div class="small-6 column pull-right">{{ 'HIDDEN FOR USERS' | translate }}</div><div class="small-1 column end"><app-check-mark [boolVal]="selectedError.hide_failed_message"></app-check-mark></div>
+                </div>
 
                 <hr>
 
                 <div class="row" *ngIf="selectedError.hide_for_admin">
-                    <div class="small-12 column text-center">{{ 'HIDDEN' | translate | lowercase}}</div>
+                    <div class="small-12 column text-center">{{ 'HIDDEN FOR ADMINS' | translate | lowercase}}</div>
                 </div>
                 <div class="row" *ngIf="!selectedError.hide_for_admin">
                     <div class="small-12 column text-center">
                         <app-hide-button
                                 [isActive]="!isUpdatingHiddenStatus && updatedSingleHiddenStatusMessageId !== selectedError.request_id && !selectedError.hide_for_admin"
                                 [includeDelayedSpinnerAnimation]="true"
-                                [isTiny]="true"
+                                [labelText]="'HIDE FOR ADMINS'"
+                                [isTiny]="false"
                                 (click)="hideSingleErrorForAdminStatus(selectedError)"
                         ></app-hide-button>
                     </div>
@@ -409,7 +429,7 @@
                         </span>
                     </div>
                     <div class="small-6 column">
-                        <button class="tiny alert button pull-right" (click)="closeInfoModal()">{{ 'CLOSE' | translate}}</button>
+                        <button class="small alert button pull-right" (click)="closeInfoModal()">{{ 'CLOSE' | translate}}</button>
                     </div>
                 </div>
             </div>
