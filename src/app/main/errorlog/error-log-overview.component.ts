@@ -421,7 +421,7 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 
 
 		initializeDateSortValues() {
-				this.isLogDateSortAscending = true;
+				this.isLogDateSortAscending = false;
 				this.isLogDateSortNeutral = false;
 				this.isEventDateSortAscending = true;
 				this.isEventDateSortNeutral = true;
