@@ -32,10 +32,8 @@ export class HideButtonComponent {
 	onClickyClick() {
 
 			if (!this.active()) {
-					console.log('IS NOT ACTIVE');
 					return;
 			}
-		console.log('IS ACTIVE');
 
 			if (!this.includeDelayedSpinnerAnimation) {
 					this.click.emit(true);

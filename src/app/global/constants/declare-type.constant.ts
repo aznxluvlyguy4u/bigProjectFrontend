@@ -1,0 +1,1 @@
+export const DECLARE_BIRTH = 'DeclareBirth';

@@ -434,9 +434,286 @@
                 </div>
             </div>
 
-            <ng-template>
+        </div>
+    </div>
+
+    <!--BIRTH INFO MODAL-->
+    <div class="reveal-overlay" [ngStyle]="{'display': birthInfoModalDisplay}">
+        <div class="large reveal" [ngStyle]="{'display': birthInfoModalDisplay}" *ngIf="selectedBirthError && selectedLitterDetails">
+            <hr class="row show-for-small-only">
+            <div class="modal-header">
+
+                <div class="row">
+                    <div class="large-12 columns">
+                        <label class="modal-subheader2 middle"> {{ 'LITTER OVERVIEW' | translate }}</label>
+                    </div>
+                </div>
+
+                <div class="">
+                    <div class="column large-4 pull-left">
+                        {{ 'DECLARE TYPE' | translate }}: {{ selectedBirthError.dutch_type }}
+                    </div>
+                    <div class="column large-6">
+                        {{ 'UBN' | translate }}: {{ selectedBirthError.ubn }}
+                    </div>
+                    <div class="column large-1">
+                        <span class="pull-left" *ngIf="selectedBirthError.has_ghost_login">
+                                <button
+                                        type="button"
+                                        (click)="loginAsGhost(selectedBirthError.ubn)"
+                                        class="small primary button"
+                                ><i class="fa fa-sign-in fa-fw" aria-hidden="true"></i>
+                                </button>
+                            </span>
+                        <span class="pull-left" *ngIf="!selectedBirthError.has_ghost_login">
+                                <button
+                                        type="button"
+                                        [disabled]="true"
+                                        class="small disabled secondary button"
+                                ><i class="fa fa-sign-in fa-fw" aria-hidden="true"></i>
+                                </button>
+                        </span>
+                    </div>
+                    <div class="column large-1">
+                        <button class="small alert button pull-right" (click)="closeInfoModal()">{{ 'CLOSE' | translate}}</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <hr>
+
+                <table>
+                    <thead>
+                    <tr>
+                        <td>{{ 'LITTER STATUS' | translate }}</td>
+                        <td>{{ 'LOG DATE' | translate }}</td>
+                        <td>{{ 'ACTION BY' | translate }}</td>
+                        <td>{{ 'RELATION NUMBER KEEPER' | translate }}</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{{ selectedLitterDetails.status | translate }}</td>
+                        <td>{{ selectedLitterDetails.log_date | date: 'dd-MM-yyyy @HH:mm:ss' }}</td>
+                        <td>{{ selectedBirthError.action_by }} ({{ selectedBirthError.action_by_type | translate }})</td>
+                        <td>{{ selectedLitterDetails.relation_number_keeper }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <hr>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <td>{{ 'DATE OF BIRTH' | translate }}</td>
+                            <td>{{ 'LITTER SIZE' | translate }}</td>
+                            <td>{{ 'BORN ALIVE COUNT' | translate }}</td>
+                            <td>{{ 'ABORTED' | translate }}</td>
+                            <td>{{ 'PSEUDO PREGNANCY' | translate }}</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ selectedLitterDetails.litter_date | date: 'dd-MM-yyyy @HH:mm:ss' }}</td>
+                            <td>{{ selectedLitterDetails.born_alive_count + selectedLitterDetails.stillborn_count }}</td>
+                            <td>{{ selectedLitterDetails.born_alive_count }}</td>
+                            <td class="text-center"><app-check-mark [boolVal]="selectedLitterDetails.is_abortion"></app-check-mark></td>
+                            <td class="text-center"><app-check-mark [boolVal]="selectedLitterDetails.is_pseudo_pregnancy"></app-check-mark></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table>
+                    <thead>
+                        <tr class="tr">
+                            <td class="td">{{ 'PARENTS' | translate }}</td>
+                            <td class="td">{{ 'ULN' | translate}}</td>
+                            <td class="td">{{ 'STN'| translate }}</td>
+                            <td class="td">{{ 'DATE OF BIRTH' | translate }}</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="tr">
+                            <td>{{ 'MOTHER' | translate }}</td>
+                            <td class="td">{{ getMotherUln() }}</td>
+                            <td class="td">{{ getMotherStn() }}</td>
+                            <td class="td">{{ getMotherDateOfBirth() | date: 'dd-MM-yyyy @HH:mm:ss' }}</td>
+                        </tr>
+                        <tr class="tr">
+                            <td>{{ 'FATHER' | translate }}</td>
+                            <td class="td">{{ getFatherUln() }}</td>
+                            <td class="td">{{ getFatherStn() }}</td>
+                            <td class="td">{{ getFatherDateOfBirth() | date: 'dd-MM-yyyy @HH:mm:ss' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <hr>
+
+            <ng-template *ngIf="selectedLitterDetails.declare_births != null && selectedLitterDetails.declare_births.length > 0">
+
+                <div class="row">
+                    <div class="large-12 columns">
+                        <label class="modal-subheader2 middle"> {{ 'DECLARE BIRTHS' | translate }} </label>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div *ngFor="let declareBirth of selectedLitterDetails.declare_births; let i = index">
+
+                <div class="row">
+                    <div class="large-12 columns">
+                        <label class="modal-subheader middle"> {{ 'DECLARE BIRTH' | translate }} #{{i + 1}}
+                            <span *ngIf="declareBirth.message_id === selectedBirthError.request_id"> ({{ 'CURRENTLY SELECTED' | translate }})</span>
+                        </label>
+                    </div>
+                </div>
+
+                <table>
+                    <thead>
+                    <tr class="tr">
+                        <td class="td">{{ 'STATUS' | translate}}</td>
+                        <td class="td">{{ 'HIDDEN FOR ADMINS' | translate }}</td>
+                        <td class="td">{{ 'HIDDEN FOR USERS' | translate }}</td>
+                        <td class="td">{{ 'ULN' | translate }}</td>
+                        <td class="td">{{ 'BIRTH PROGRESS' |translate }}</td>
+                        <td class="td">{{ 'GENDER' | translate }}</td>
+                        <td class="td">{{ 'BIRTH WEIGHT SPLIT' | translate }}</td>
+                        <td class="td">{{ 'TAIL LENGTH SPLIT' |translate }}</td>
+                        <td class="td">{{'SURROGATE MOTHER' | translate}} ({{'ULN'|translate}}) / {{ 'LAMBAR' | translate }}</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="tr">
+                        <td class="td">{{ declareBirth.request_state | translate }}</td>
+                        <td class="td" *ngIf="!declareBirth.hide_for_admin && declareBirth.request_state === 'FAILED'">
+                            <app-hide-button
+                                    [isActive]="!isUpdatingHiddenStatus && updatedSingleHiddenStatusMessageId !== declareBirth.message_id && !declareBirth.hide_for_admin"
+                                    [includeDelayedSpinnerAnimation]="true"
+                                    [labelText]="'HIDE FOR ADMINS'"
+                                    [isTiny]="false"
+                                    (click)="hideBirthForAdmin(declareBirth)"
+                            ></app-hide-button>
+                        </td>
+                        <td class="td" *ngIf="declareBirth.hide_for_admin || declareBirth.request_state !== 'FAILED'">
+                            <app-check-mark [boolVal]="declareBirth.hide_for_admin"></app-check-mark>
+                        </td>
+                        <td class="td"><app-check-mark [boolVal]="declareBirth.is_hidden"></app-check-mark></td>
+                        <td class="td">{{ declareBirth.uln_country_code }} {{ declareBirth.uln_number }}</td>
+                        <td class="td">{{ declareBirth.animal ? declareBirth.animal.birth_progress : null }}</td>
+                        <td class="td">{{ declareBirth.gender | translate }}</td>
+                        <td class="td">{{ declareBirth.birth_weight }}</td>
+                        <td class="td">{{ declareBirth.birth_tail_length }}</td>
+                        <td class="td" *ngIf="declareBirth.uln_country_code_surrogate && declareBirth.uln_surrogate">{{declareBirth.uln_country_code_surrogate + ' ' +  declareBirth.uln_surrogate}}</td>
+                        <td class="td" *ngIf="!declareBirth.uln_country_code_surrogate || !declareBirth.uln_surrogate"><app-check-mark [boolVal]="declareBirth.has_lambar"></app-check-mark></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <ng-template *ngIf="declareBirth.responses != null && declareBirth.responses.length > 0">
+
+                    <div class="text-center">
+                        <h5>{{ 'RVO RESPONSE RESULTS' | translate }}</h5>
+                    </div>
+
+                    <table>
+                        <thead>
+                        <tr class="tr">
+                            <td class="td">{{ 'LOG DATE' | translate}}</td>
+                            <td class="td">{{ 'ERROR CODE' | translate }}</td>
+                            <td class="td">{{ 'ERROR MESSAGE' | translate }}</td>
+                            <td class="td">{{ 'ERROR KIND INDICATOR' | translate }}</td>
+                            <td class="td">{{ 'SUCCESS INDICATOR' |translate }}</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="tr" *ngFor="let response of declareBirth.responses">
+                                <td class="td">{{ response.log_date | date: 'dd-MM-yyyy @HH:mm:ss' }}</td>
+                                <td class="td">{{ response.error_code }}</td>
+                                <td class="td">{{ response.error_message }}</td>
+                                <td class="td">{{ response.error_kind_indicator }}</td>
+                                <td class="td">{{ response.success_indicator }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <hr>
+
+                </ng-template>
+            </div>
 
             </ng-template>
+
+            <ng-template *ngIf="selectedLitterDetails.stillborns != null && selectedLitterDetails.stillborns.length > 0">
+
+                <div class="row">
+                    <div class="large-12 columns">
+                        <label class="modal-subheader2 middle"> {{ 'STILLBORNS' | translate }} </label>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div *ngFor="let stillborn of selectedLitterDetails.stillborns; let j = index">
+                    <div class="row">
+                        <div class="large-12 columns">
+                            <label class="modal-subheader middle"> {{ 'STILLBORN' | translate }} #{{j + 1}}</label>
+                        </div>
+                    </div>
+
+                    <table>
+                        <thead>
+                        <tr class="tr">
+                            <td class="td">{{ 'BIRTH PROGRESS' |translate }}</td>
+                            <td class="td">{{ 'GENDER' | translate }}</td>
+                            <td class="td">{{ 'BIRTH WEIGHT' | translate }}</td>
+                            <td class="td">{{ 'TAIL LENGTH' |translate }}</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="tr">
+                            <td class="td">{{ stillborn.birth_progress ? stillborn.birth_progress : null }}</td>
+                            <td class="td">{{ stillborn.gender | translate }}</td>
+                            <td class="td">{{ stillborn.weight }}</td>
+                            <td class="td">{{ stillborn.tail_length }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <hr>
+                </div>
+
+            </ng-template>
+
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="small-6 column">
+                        <span class="pull-left" *ngIf="selectedBirthError.has_ghost_login">
+                                <button
+                                        type="button"
+                                        (click)="loginAsGhost(selectedBirthError.ubn)"
+                                        class="small primary button"
+                                ><i class="fa fa-sign-in fa-fw" aria-hidden="true"></i>
+                                </button>
+                            </span>
+                        <span class="pull-left" *ngIf="!selectedBirthError.has_ghost_login">
+                                <button
+                                        type="button"
+                                        [disabled]="true"
+                                        class="small disabled secondary button"
+                                ><i class="fa fa-sign-in fa-fw" aria-hidden="true"></i>
+                                </button>
+                        </span>
+                    </div>
+                    <div class="small-6 column">
+                        <button class="small alert button pull-right" (click)="closeInfoModal()">{{ 'CLOSE' | translate}}</button>
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>

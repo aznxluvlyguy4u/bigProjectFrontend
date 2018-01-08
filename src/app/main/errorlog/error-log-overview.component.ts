@@ -29,6 +29,9 @@ import { GhostLoginModalComponent } from '../../global/components/ghostloginmoda
 import { InfoButtonComponent } from '../../global/components/infobutton/info-button.component';
 import { DeclareResponseModel } from './models/declare-response.model';
 import { DeclareDetailsModel } from './models/declare-details.model';
+import { DECLARE_BIRTH } from '../../global/constants/declare-type.constant';
+import { Litter } from '../../global/models/litter.model';
+import { DeclareBirth } from '../../global/models/declare-birth.model';
 
 @Component({
 		providers: [PaginationService, SortService, DateTimeService, FormUtilService, ErrorLogFilterPipe],
@@ -75,7 +78,10 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 		selectedGhostLoginDetails: GhostLoginDetailsWithUbn;
 		selectedError: ErrorMessage;
 		selectedMessage: DeclareDetailsModel;
+		selectedBirthError: ErrorMessage;
+		selectedLitterDetails: Litter;
 		private infoModalDisplay: string = 'none';
+		private birthInfoModalDisplay: string = 'none';
 
 		isLogDateSortAscending: boolean;
 		isLogDateSortNeutral: boolean;
@@ -143,6 +149,19 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 					.subscribe(
 						res => {
 							this.selectedMessage = res.result;
+						},
+						error => {
+							alert(this.nsfo.getErrorMessage(error));
+						}
+					);
+		}
+
+
+		private getLitterDetails(nonIrRequestId: string) {
+				this.nsfo.doGetRequest(this.nsfo.URI_ERRORS_NON_IR + '/' + nonIrRequestId)
+					.subscribe(
+						res => {
+							this.selectedLitterDetails = res.result;
 						},
 						error => {
 							alert(this.nsfo.getErrorMessage(error));
@@ -270,6 +289,15 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 		}
 
 
+		hideBirthForAdmin(birth: DeclareBirth) {
+				let errorMessage = new ErrorMessage();
+				errorMessage.request_id = birth.message_id ? birth.message_id : birth.request_id;
+				errorMessage.hide_for_admin = birth.hide_for_admin;
+				errorMessage.hide_failed_message = birth.hide_failed_message;
+				this.toggleErrorsHideForAdminStatus([errorMessage], true);
+		}
+
+
 		hideSingleErrorForAdminStatus(errorMessage: ErrorMessage) {
 				this.toggleErrorsHideForAdminStatus([errorMessage], true);
 		}
@@ -361,6 +389,17 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 								currentErrorMessage.hide_for_admin = successfulEdit.hide_for_admin;
 								this.errors.splice(index, 1, currentErrorMessage);
 						}
+
+						if (this.selectedLitterDetails != null && this.selectedLitterDetails.declare_births != null && this.selectedLitterDetails.declare_births.length > 0) {
+								let currentBirth = _.find(this.selectedLitterDetails.declare_births, {message_id: successfulEdit.message_id});
+
+										if (currentBirth && currentBirth.hide_for_admin !== successfulEdit.hide_for_admin) {
+											const index = _.findIndex(this.selectedLitterDetails.declare_births, {message_id: successfulEdit.message_id});
+											currentBirth.hide_for_admin = successfulEdit.hide_for_admin;
+											this.selectedLitterDetails.declare_births.splice(index, 1, currentBirth);
+								}
+						}
+
 				}
 		}
 
@@ -486,14 +525,73 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 		}
 
 		openInfoModal(error: ErrorMessage) {
+				switch (error.type) {
+					case DECLARE_BIRTH: this.openBirthInfoModal(error); break;
+					default: this.openDefaultInfoModal(error); break;
+				}
+		}
+
+		openBirthInfoModal(error: ErrorMessage) {
+				this.getLitterDetails(error.non_ir_request_id);
+				this.selectedBirthError = error;
+				this.birthInfoModalDisplay = 'block';
+		}
+
+		openDefaultInfoModal(error: ErrorMessage) {
 				this.getMessageDetails(error.request_id);
 				this.selectedError = error;
 				this.infoModalDisplay = 'block';
 		}
 
 		closeInfoModal() {
+				this.birthInfoModalDisplay = 'none';
+				this.selectedLitterDetails = null;
+				this.selectedBirthError = null;
+
 				this.infoModalDisplay = 'none';
 				this.selectedError = null;
 				this.selectedMessage = null;
 		}
+
+
+		getMotherUln() {
+				if (this.selectedLitterDetails.animal_mother) {
+					 	return this.selectedLitterDetails.animal_mother.uln_country_code && this.selectedLitterDetails.animal_mother.uln_number ?
+							this.selectedLitterDetails.animal_mother.uln_country_code + ' ' + this.selectedLitterDetails.animal_mother.uln_number : '';
+				}
+				return '';
+		}
+
+		getFatherUln() {
+				if (this.selectedLitterDetails.animal_father) {
+						return this.selectedLitterDetails.animal_father.uln_country_code && this.selectedLitterDetails.animal_father.uln_number ?
+							this.selectedLitterDetails.animal_father.uln_country_code + ' ' + this.selectedLitterDetails.animal_father.uln_number : '';
+				}
+				return '';
+		}
+
+		getMotherStn() {
+				if (this.selectedLitterDetails.animal_father) {
+						return this.selectedLitterDetails.animal_father.pedigree_country_code && this.selectedLitterDetails.animal_father.pedigree_number ?
+							this.selectedLitterDetails.animal_father.pedigree_country_code + ' ' + this.selectedLitterDetails.animal_father.pedigree_number : '';
+				}
+				return '';
+		}
+
+		getFatherStn() {
+				if (this.selectedLitterDetails.animal_mother) {
+						return this.selectedLitterDetails.animal_mother.pedigree_country_code && this.selectedLitterDetails.animal_mother.pedigree_number ?
+							this.selectedLitterDetails.animal_mother.pedigree_country_code + ' ' + this.selectedLitterDetails.animal_mother.pedigree_number : '';
+				}
+				return '';
+		}
+
+		getFatherDateOfBirth() {
+				return this.selectedLitterDetails.animal_father ? this.selectedLitterDetails.animal_father.date_of_birth : null;
+		}
+
+		getMotherDateOfBirth() {
+				return this.selectedLitterDetails.animal_mother ? this.selectedLitterDetails.animal_mother.date_of_birth : null;
+		}
+
 }
