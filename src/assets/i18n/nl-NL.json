@@ -395,7 +395,7 @@
   "EVENT DATE": "Gebeurtenis datum",
   "START": "Begin",
   "END": "Einde",
-  "ERROR LOG": "Error Log",
+  "ERROR LOG": "Foutmeldingen",
   "MAEDI VISNA STATUS CANNOT BE EMPTY": "De zwoegerziekte status mag niet leeg zijn",
   "MAEDI VISNA STATUS WAS NOT FOUND IN THE ACCEPTED STATUS LIST": "De zwoegerziekte status is niet een geldige status",
   "SCRAPIE STATUS CANNOT BE EMPTY": "De scrapie status mag niet leeg zijn",
