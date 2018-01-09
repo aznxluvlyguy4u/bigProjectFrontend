@@ -437,6 +437,134 @@
         </div>
     </div>
 
+    <!--TAG TRANSFER INFO MODAL-->
+    <div class="reveal-overlay" [ngStyle]="{'display': tagTransferInfoModalDisplay}">
+        <div class="large reveal" [ngStyle]="{'display': tagTransferInfoModalDisplay}" *ngIf="selectedTagTransferError && selectedTagTransfer">
+            <div class="modal-header">
+                {{ 'DECLARE TYPE' | translate }}: {{ selectedTagTransferError.dutch_type }}
+                <button type="button" class="pull-right" aria-label="Close modal" (click)="closeInfoModal()">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <hr>
+                <div class="row">
+                    <div class="small-6 column pull-right">{{ 'LOG DATE' | translate }}</div><div class="small-6 column">{{ selectedTagTransferError.log_date | date: 'dd-MM-yyyy @HH:mm:ss' }}</div>
+                </div>
+                <div class="row">
+                    <div class="small-6 column pull-right">{{ 'EVENT DATE' | translate }}</div><div class="small-6 column">{{ selectedTagTransferError.event_date | date: 'dd-MM-yyyy @HH:mm:ss' }}</div>
+                </div>
+                <div class="row">
+                    <div class="small-6 column pull-right">{{ 'UBN' | translate }}</div><div class="small-6 column">{{ selectedTagTransferError.ubn }}</div>
+                </div>
+                <div class="row">
+                    <div class="small-6 column pull-right">{{ 'RELATED' | translate }} {{ 'UBN' | translate }}</div><div class="small-6 column">{{ selectedTagTransferError.related_ubn }}</div>
+                </div>
+                <div class="row">
+                    <div class="small-6 column pull-right">{{ 'ACTION BY' | translate }}</div><div class="small-6 column">{{ selectedTagTransferError.action_by }}</div>
+                </div>
+                <div class="row">
+                    <div class="small-6 column pull-right">{{ 'ACTION BY TYPE' | translate }}</div><div class="small-6 column">{{ selectedTagTransferError.action_by_type | translate }}</div>
+                </div>
+                <div class="row">
+                    <div class="small-6 column pull-right">{{ 'DESCRIPTION' | translate }}</div><div class="small-6 column">{{ selectedTagTransferError.declare_info }}</div>
+                </div>
+                <div class="row">
+                    <div class="small-6 column pull-right">{{ 'HIDDEN FOR USERS' | translate }}</div><div class="small-1 column end"><app-check-mark [boolVal]="selectedTagTransferError.hide_failed_message"></app-check-mark></div>
+                </div>
+
+                <hr>
+
+                <div class="row" *ngIf="selectedTagTransferError.hide_for_admin">
+                    <div class="small-12 column text-center">{{ 'HIDDEN FOR ADMINS' | translate | lowercase}}</div>
+                </div>
+                <div class="row" *ngIf="!selectedTagTransferError.hide_for_admin">
+                    <div class="small-12 column text-center">
+                        <app-hide-button
+                                [isActive]="!isUpdatingHiddenStatus && updatedSingleHiddenStatusMessageId !== selectedTagTransferError.request_id && !selectedTagTransferError.hide_for_admin"
+                                [includeDelayedSpinnerAnimation]="true"
+                                [labelText]="'HIDE FOR ADMINS'"
+                                [isTiny]="false"
+                                (click)="hideSingleErrorForAdminStatus(selectedTagTransferError)"
+                        ></app-hide-button>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <!--TABLE SEARCH-->
+            <div class="large-12 table-search">
+                <div class="large-2 large-push-10">
+                    <input type="text" [(ngModel)]="tagTransferUlnSearchValue" maxlength="20" placeholder="{{ 'SEARCH' | translate }}">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="large-12 columns">
+                    <label class="modal-subheader middle"> {{ 'RVO RESPONSE RESULTS' | translate }} </label>
+                </div>
+            </div>
+
+
+            <table>
+                <thead>
+                    <tr class="tr">
+                        <td class="td">{{ 'ULN' | translate }}</td>
+                        <td class="td">{{ 'STATUS' | translate }}</td>
+                        <td class="td">{{ 'LOG DATE' | translate }}</td>
+                        <td class="td">{{ 'ERROR CODE' | translate }}</td>
+                        <td class="td">{{ 'ERROR MESSAGE' | translate }}</td>
+                        <td class="td">{{ 'ERROR KIND INDICATOR' | translate }}</td>
+                        <td class="td">{{ 'SUCCESS INDICATOR' | translate }}</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let tagTransferItemRequest of selectedTagTransfer.tag_transfer_requests | declareTagTransferFilter:[tagTransferUlnSearchValue]">
+                        <td class="td"><span style="white-space:nowrap;">{{ tagTransferItemRequest.uln_country_code && tagTransferItemRequest.uln_number ?
+                            tagTransferItemRequest.uln_country_code + ' ' + tagTransferItemRequest.uln_number : null }}</span></td>
+                        <td class="td">{{ tagTransferItemRequest.request_state }}</td>
+
+                        <td class="td">{{ getLastTagTransferResponse(tagTransferItemRequest.responses) ? (getLastTagTransferResponse(tagTransferItemRequest.responses).log_date | date: 'dd-MM-yyyy @HH:mm:ss') : '-' }}</td>
+                        <td class="td">{{ getLastTagTransferResponse(tagTransferItemRequest.responses) ? getLastTagTransferResponse(tagTransferItemRequest.responses).error_code : '-' }}</td>
+                        <td class="td">{{ getLastTagTransferResponse(tagTransferItemRequest.responses) ? getLastTagTransferResponse(tagTransferItemRequest.responses).error_message : '-' }}</td>
+                        <td class="td">{{ getLastTagTransferResponse(tagTransferItemRequest.responses) ? getLastTagTransferResponse(tagTransferItemRequest.responses).error_kind_indicator : '-' }}</td>
+                        <td class="td">{{ getLastTagTransferResponse(tagTransferItemRequest.responses) ? getLastTagTransferResponse(tagTransferItemRequest.responses).success_indicator : '-' }}</td>
+
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="small-6 column">
+                        <span class="pull-left" *ngIf="selectedTagTransferError.has_ghost_login">
+                                <button
+                                        type="button"
+                                        (click)="loginAsGhost(selectedTagTransferError.ubn)"
+                                        class="small primary button"
+                                ><i class="fa fa-sign-in fa-fw" aria-hidden="true"></i>
+                                </button>
+                            </span>
+                        <span class="pull-left" *ngIf="!selectedTagTransferError.has_ghost_login">
+                                <button
+                                        type="button"
+                                        [disabled]="true"
+                                        class="small disabled secondary button"
+                                ><i class="fa fa-sign-in fa-fw" aria-hidden="true"></i>
+                                </button>
+                        </span>
+                    </div>
+                    <div class="small-6 column">
+                        <button class="small alert button pull-right" (click)="closeInfoModal()">{{ 'CLOSE' | translate}}</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
     <!--BIRTH INFO MODAL-->
     <div class="reveal-overlay" [ngStyle]="{'display': birthInfoModalDisplay}">
         <div class="large reveal" [ngStyle]="{'display': birthInfoModalDisplay}" *ngIf="selectedBirthError && selectedLitterDetails">
@@ -529,16 +657,16 @@
                     <thead>
                         <tr class="tr">
                             <td class="td">{{ 'PARENTS' | translate }}</td>
-                            <td class="td">{{ 'ULN' | translate}}</td>
-                            <td class="td">{{ 'STN'| translate }}</td>
+                            <td class="td" style="white-space:nowrap;">{{ 'ULN' | translate}}</td>
+                            <td class="td" style="white-space:nowrap;">{{ 'STN'| translate }}</td>
                             <td class="td">{{ 'DATE OF BIRTH' | translate }}</td>
                         </tr>
                     </thead>
                     <tbody>
                         <tr class="tr">
                             <td>{{ 'MOTHER' | translate }}</td>
-                            <td class="td">{{ getMotherUln() }}</td>
-                            <td class="td">{{ getMotherStn() }}</td>
+                            <td class="td" style="white-space:nowrap;">{{ getMotherUln() }}</td>
+                            <td class="td" style="white-space:nowrap;">{{ getMotherStn() }}</td>
                             <td class="td">{{ getMotherDateOfBirth() | date: 'dd-MM-yyyy @HH:mm:ss' }}</td>
                         </tr>
                         <tr class="tr">
@@ -604,12 +732,12 @@
                             <app-check-mark [boolVal]="declareBirth.hide_for_admin"></app-check-mark>
                         </td>
                         <td class="td"><app-check-mark [boolVal]="declareBirth.is_hidden"></app-check-mark></td>
-                        <td class="td">{{ declareBirth.uln_country_code }} {{ declareBirth.uln_number }}</td>
+                        <td class="td" style="white-space:nowrap;">{{ declareBirth.uln_country_code }} {{ declareBirth.uln_number }}</td>
                         <td class="td">{{ declareBirth.animal ? declareBirth.animal.birth_progress : null }}</td>
                         <td class="td">{{ declareBirth.gender | translate }}</td>
                         <td class="td">{{ declareBirth.birth_weight }}</td>
                         <td class="td">{{ declareBirth.birth_tail_length }}</td>
-                        <td class="td" *ngIf="declareBirth.uln_country_code_surrogate && declareBirth.uln_surrogate">{{declareBirth.uln_country_code_surrogate + ' ' +  declareBirth.uln_surrogate}}</td>
+                        <td class="td" style="white-space:nowrap;" *ngIf="declareBirth.uln_country_code_surrogate && declareBirth.uln_surrogate">{{declareBirth.uln_country_code_surrogate + ' ' +  declareBirth.uln_surrogate}}</td>
                         <td class="td" *ngIf="!declareBirth.uln_country_code_surrogate || !declareBirth.uln_surrogate"><app-check-mark [boolVal]="declareBirth.has_lambar"></app-check-mark></td>
                     </tr>
                     </tbody>

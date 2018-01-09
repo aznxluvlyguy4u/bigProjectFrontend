@@ -29,16 +29,19 @@ import { GhostLoginModalComponent } from '../../global/components/ghostloginmoda
 import { InfoButtonComponent } from '../../global/components/infobutton/info-button.component';
 import { DeclareResponseModel } from './models/declare-response.model';
 import { DeclareDetailsModel } from './models/declare-details.model';
-import { DECLARE_BIRTH } from '../../global/constants/declare-type.constant';
+import { DECLARE_BIRTH, DECLARE_TAG_TRANSFER } from '../../global/constants/declare-type.constant';
 import { Litter } from '../../global/models/litter.model';
 import { DeclareBirth } from '../../global/models/declare-birth.model';
+import { DeclareTagTransfer } from '../../global/models/declare-tag-transfer.model';
+import { TagTransferItemResponse } from '../../global/models/tag-transfer-item-response.model';
+import { DeclareTagTransferFilterPipe } from './pipes/declare-tag-transfer-filter.pipe';
 
 @Component({
 		providers: [PaginationService, SortService, DateTimeService, FormUtilService, ErrorLogFilterPipe],
 		directives: [REACTIVE_FORM_DIRECTIVES, ROUTER_DIRECTIVES, PaginationComponent, SearchComponent, Datepicker,
 			CheckMarkComponent, SortSwitchComponent, HideButtonComponent, GhostLoginModalComponent, InfoButtonComponent],
 		template: require('./error-log-overview.component.html'),
-		pipes: [TranslatePipe, ErrorLogFilterPipe, PaginatePipe, UserSearchPipe]
+		pipes: [TranslatePipe, ErrorLogFilterPipe, PaginatePipe, UserSearchPipe, DeclareTagTransferFilterPipe]
 })
 export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 
@@ -79,9 +82,14 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 		selectedError: ErrorMessage;
 		selectedMessage: DeclareDetailsModel;
 		selectedBirthError: ErrorMessage;
+		selectedTagTransferError: ErrorMessage;
+		selectedTagTransfer: DeclareTagTransfer;
 		selectedLitterDetails: Litter;
 		private infoModalDisplay: string = 'none';
 		private birthInfoModalDisplay: string = 'none';
+		private tagTransferInfoModalDisplay: string = 'none';
+
+		tagTransferUlnSearchValue: string;
 
 		isLogDateSortAscending: boolean;
 		isLogDateSortNeutral: boolean;
@@ -107,6 +115,7 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 				this.isInformalNamesLoaded = false;
 				this.isUpdatingHiddenStatus = false;
 				this.updatedSingleHiddenStatusMessageId = null;
+				this.tagTransferUlnSearchValue = null;
 		}
 
 		public ngOnInit() {
@@ -148,7 +157,10 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 				this.nsfo.doGetRequest(this.nsfo.URI_ERRORS + '/' + requestId)
 					.subscribe(
 						res => {
-							this.selectedMessage = res.result;
+							switch (res.result.type) {
+								case DECLARE_TAG_TRANSFER: this.selectedTagTransfer = res.result; break;
+								default: this.selectedMessage = res.result; break;
+							}
 						},
 						error => {
 							alert(this.nsfo.getErrorMessage(error));
@@ -527,6 +539,7 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 		openInfoModal(error: ErrorMessage) {
 				switch (error.type) {
 					case DECLARE_BIRTH: this.openBirthInfoModal(error); break;
+					case DECLARE_TAG_TRANSFER: this.openTagTransferInfoModal(error); break;
 					default: this.openDefaultInfoModal(error); break;
 				}
 		}
@@ -543,10 +556,20 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 				this.infoModalDisplay = 'block';
 		}
 
+		openTagTransferInfoModal(error: ErrorMessage) {
+				this.getMessageDetails(error.request_id);
+				this.selectedTagTransferError = error;
+				this.tagTransferInfoModalDisplay = 'block';
+		}
+
 		closeInfoModal() {
 				this.birthInfoModalDisplay = 'none';
 				this.selectedLitterDetails = null;
 				this.selectedBirthError = null;
+
+				this.tagTransferInfoModalDisplay = 'none';
+				this.selectedTagTransfer = null;
+				this.selectedTagTransferError = null;
 
 				this.infoModalDisplay = 'none';
 				this.selectedError = null;
@@ -594,4 +617,12 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 				return this.selectedLitterDetails.animal_mother ? this.selectedLitterDetails.animal_mother.date_of_birth : null;
 		}
 
+
+		getLastTagTransferResponse(responses: TagTransferItemResponse[]): TagTransferItemResponse {
+				if (responses == null || responses.length === 0) {
+					 return null;
+				}
+
+				return _.maxBy(responses, function(o) { return o.log_date });
+		}
 }
