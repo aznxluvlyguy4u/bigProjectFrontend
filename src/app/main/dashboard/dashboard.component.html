@@ -73,6 +73,22 @@
             <!--</div>-->
         <!--</div>-->
 
+        <!--ERROR LOG CARD-->
+        <div class="large-4 columns">
+            <div class="card callout">
+                <div class="card-header">{{ 'ERROR LOG' | translate }}</div>
+                <div class="card-body">
+                    <div class="value">
+                        <span> {{ dashboard.open_error_messages}} </span>
+                    </div>
+                    <label>{{ 'UNPROCESSED ERRORS' | translate }}</label>
+                </div>
+                <div class="card-footer text-center">
+                    <button (click)="navigateTo('/error-log')" class="tiny button">{{ 'VIEW ERROR LOG' | translate }}</button>
+                </div>
+            </div>
+        </div>
+
         <!--CONFIGURATION CARD-->
         <div class="large-4 columns end">
             <div class="card callout">
