@@ -122,8 +122,9 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 				this.filterType = null;
 				this.filterIsHiddenForAdmin = undefined; // show all
 				this.getErrors();
-				this.doGetDeclareTypesRequest(true, true);
-				this.doGetDeclareTypesRequest(false, true);
+				this.doGetDeclareTypesRequest(true);
+				this.doGetDeclareTypesRequest(false);
+				this.doGetUbnsWithGhostLoginDataRequest();
 		}
 
 		ngOnDestroy() {
@@ -147,6 +148,9 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 						},
 						error => {
 								alert(this.nsfo.getErrorMessage(error));
+						},
+							() => {
+								this.updateGhostLoginValuesInErrorMessages();
 						}
 				);
 		}
@@ -192,7 +196,7 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 		}
 
 
-		private doGetDeclareTypesRequest(useFormalDeclareNames: boolean, retrieveGhostLoginDataIfMissing: boolean = true) {
+		private doGetDeclareTypesRequest(useFormalDeclareNames: boolean) {
 			const queryParam = '?'+FORMAL+'=' + (useFormalDeclareNames ? 'true' : 'false');
 
 			this.nsfo.doGetRequest(this.nsfo.URI_ERRORS_DECLARE_TYPES + queryParam)
@@ -233,11 +237,6 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 						}
 
 						this.initializeDateSortValues();
-
-						if (retrieveGhostLoginDataIfMissing && this.ghostLoginData.length === 0) {
-								this.doGetUbnsWithGhostLoginDataRequest();
-						}
-						this.updateGhostLoginValuesInErrorMessages();
 					},
 					error => {
 						alert(this.nsfo.getErrorMessage(error));
