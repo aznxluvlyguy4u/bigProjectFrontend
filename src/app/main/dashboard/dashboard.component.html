@@ -19,7 +19,8 @@
                 <div class="card-header">{{ 'CLIENT MANAGEMENT' | translate }}</div>
                 <div class="card-body">
                     <div class="value">
-                        <span> {{ dashboard.clients}} </span>
+                        <span *ngIf="!loadingInfo"> {{ dashboard.clients}} </span>
+                        <span *ngIf="loadingInfo"><app-spinner></app-spinner></span>
                     </div>
                     <label>{{ 'REGISTERED CLIENTS' | translate }}</label>
                 </div>
@@ -79,7 +80,8 @@
                 <div class="card-header">{{ 'ERROR LOG' | translate }}</div>
                 <div class="card-body">
                     <div class="value">
-                        <span> {{ dashboard.open_error_messages}} </span>
+                        <span *ngIf="!loadingInfo"> {{ dashboard.open_error_messages}} </span>
+                        <span *ngIf="loadingInfo"><app-spinner></app-spinner></span>
                     </div>
                     <label>{{ 'UNPROCESSED ERRORS' | translate }}</label>
                 </div>
