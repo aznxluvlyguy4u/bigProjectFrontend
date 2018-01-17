@@ -1,0 +1,7 @@
+<span id="" class="uid-input-group">
+                            <select class="country-code" [(ngModel)]="animal.uln_country_code" title="pedigree_country_code" [disabled]="isSaving">
+                                <option *ngFor="let countryCode of countryCodeList" value="{{ countryCode.code }}">{{
+                                    countryCode.code }}</option>
+                            </select>
+                            <input class="uln-number" type="number" [(ngModel)]="animal.uln_number" title="pedigree_number" [disabled]="isSaving">
+</span>

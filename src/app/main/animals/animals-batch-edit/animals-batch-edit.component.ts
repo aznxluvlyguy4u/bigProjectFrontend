@@ -30,6 +30,8 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 		showNote: boolean;
 		showDates: boolean;
 
+		allowUlnEdit: boolean;
+
 		constructor(private nsfo: NSFOService) {}
 
 		private initializeValues() {
@@ -46,6 +48,8 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 				this.showLocationData = true;
 				this.showNote = true;
 				this.showDates = true;
+
+				this.allowUlnEdit = false;
 		}
 
 		ngOnInit() {

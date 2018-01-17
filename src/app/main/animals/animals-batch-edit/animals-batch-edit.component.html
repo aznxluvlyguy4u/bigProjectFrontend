@@ -59,20 +59,34 @@
                     <td *ngIf="showIds"><input title="collar" class="table-input" type="text" [(ngModel)]="animal.collar_color" [disabled]="isSaving"></td>
                     <td>
                         <span class="uid-input-group">
-                            <select class="country-code" [(ngModel)]="animal.uln_country_code" title="pedigree_country_code" [disabled]="isSaving">
+                            <select class="uln-country-code" [(ngModel)]="animal.uln_country_code" title="ulnCountryCode" [disabled]="isSaving || !allowUlnEdit">
                                 <option *ngFor="let countryCode of countryCodeList" value="{{ countryCode.code }}">{{
                                     countryCode.code }}</option>
                             </select>
-                            <input class="uln-number" type="number" [(ngModel)]="animal.uln_number" title="pedigree_number" [disabled]="isSaving">
+                            <input class="uln-number"
+                                   type="text"
+                                   title="{{ 'ULN NUMBER FORMAT DESCRIPTION' | translate }}"
+                                   [(ngModel)]="animal.uln_number"
+                                   [disabled]="isSaving || !allowUlnEdit"
+                                   pattern="[0-9]{8,12}"
+                                   maxlength="12"
+                            >
                         </span>
                     </td>
                     <td>
                         <span class="uid-input-group">
-                            <select class="country-code" [(ngModel)]="animal.pedigree_country_code" title="pedigree_country_code" [disabled]="isSaving">
+                            <select class="pedigree-country-code" [(ngModel)]="animal.pedigree_country_code" title="pedigreeCountryCode" [disabled]="isSaving">
                                 <option *ngFor="let countryCode of countryCodeList" value="{{ countryCode.code }}">{{
                                     countryCode.code }}</option>
                             </select>
-                            <input class="pedigree-number" type="text" [(ngModel)]="animal.pedigree_number" title="pedigree_number" [disabled]="isSaving">
+                            <input class="pedigree-number"
+                                   type="text"
+                                   [(ngModel)]="animal.pedigree_number"
+                                   title="{{ 'PEDIGREE NUMBER FORMAT DESCRIPTION' | translate }}"
+                                   [disabled]="isSaving"
+                                   maxlength="11"
+                                   pattern="[A-Z0-9]{5}[-][a-zA-Z0-9]{5}"
+                            >
                         </span>
                     </td>
                     <td>{{animal.type | translate}}</td>

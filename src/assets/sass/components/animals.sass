@@ -20,6 +20,12 @@
         &:hover
           color: #a3422d
 
+  .ng-dirty
+    background-color: $dirty-input-color
+
+  .ng-invalid
+    background-color: $invalid-input-color
+
   .reveal
     font-size: 0.7rem
 
@@ -70,19 +76,18 @@
         overflow: hidden
         white-space: nowrap
         display: inline-flex
-        .country-code
+        .uln-country-code, .pedigree-country-code
             width: 3rem
             font-size: 0.7rem
             height: 1.95rem
         .pedigree-number
             width: 6rem
+            height: 1.95rem
         .uln-number
             width: 7rem
+            height: 1.95rem
 
   input
     width: fit-content
     height: fit-content
     font-size: 0.7rem
-
-    [type=text]:focus
-      background-color: lightblue

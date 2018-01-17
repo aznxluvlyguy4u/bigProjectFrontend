@@ -500,5 +500,7 @@
   "Neuter": "Onbekend",
   "PEDIGREE REGISTER": "Stamboek",
   "N-LING": "n-ling",
-  "NOTE": "Notitie"
+  "NOTE": "Notitie",
+  "PEDIGREE NUMBER FORMAT DESCRIPTION": "Format: [5 hoofdletters en/of nummers]-[5letters en/of nummers]",
+  "ULN NUMBER FORMAT DESCRIPTION": "Format: [8 to 12 nummers]"
 }
