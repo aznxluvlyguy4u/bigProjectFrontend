@@ -62,6 +62,12 @@
                 {{ 'ERROR LOG' | translate }}
             </a>
         </li>
+        <li *ngIf="isDeveloper()">
+            <a routerLink="/animals" routerLinkActive="active">
+                <i class="fa fa-table fa-fw" aria-hidden="true"></i>
+                {{ 'ANIMAL DATA' | translate }}
+            </a>
+        </li>
         <li>
             <a routerLink="/profile" routerLinkActive="active">
                 <i class="fa fa-user fa-fw" aria-hidden="true"></i>

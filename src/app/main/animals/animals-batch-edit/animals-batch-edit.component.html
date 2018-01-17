@@ -1,0 +1,227 @@
+<div id="animals-batch-edit">
+    <div class="row">
+
+    </div>
+
+    <div class="row">
+        <div class="large-12 columns">
+            <table class="stacked">
+                <thead>
+                <tr>
+                    <td *ngIf="showIds || showDates">{{ 'CREATION DATE' | translate}}</td>
+                    <td *ngIf="showIds">{{ 'ID' | translate}}</td>
+                    <td *ngIf="showIds">{{ 'AIIND' | translate}}</td>
+                    <td *ngIf="showIds">{{ 'NAME' | translate}}</td>
+                    <td *ngIf="showIds">{{ 'COLLAR NUMBER' | translate}}</td>
+                    <td>{{ 'ULN' | translate}}</td>
+                    <td>{{ 'STN' | translate}}</td>
+                    <td>{{ 'GENDER' | translate}}</td>
+                    <td>{{ 'CURRENT UBN' | translate}}</td>
+                    <td>{{ 'ALIVE' | translate}}</td>
+
+                    <td *ngIf="showNote">{{ 'NOTE' | translate}}</td>
+
+                    <td *ngIf="showPedigreeData || showDates">{{ 'DATE OF BIRTH' | translate}}</td>
+                    <td *ngIf="showDates">{{ 'DATE OF DEATH' | translate}}</td>
+
+                    <td *ngIf="showPedigreeData">{{ 'FATHER' | translate}}</td>
+                    <td *ngIf="showPedigreeData">{{ 'MOTHER' | translate}}</td>
+                    <td *ngIf="showBreedData || showPedigreeData">{{ 'N-LING' | translate}}</td>
+                    <td *ngIf="showPedigreeData">{{ 'SURROGATE MOTHER' | translate}}</td>
+                    <td *ngIf="showPedigreeData">{{ 'LAMBAR' | translate}}</td>
+                    <td *ngIf="showPedigreeData">{{ 'BIRTH PROGRESS' | translate}}</td>
+                    <td *ngIf="showPedigreeData">{{ 'BREEDER UBN' | translate}}</td>
+                    <td *ngIf="showPedigreeData">{{ 'BREEDER UBN' | translate}}({{ 'LOCATION' | translate}})</td>
+
+                    <td *ngIf="showBreedData">{{ 'BREED TYPE' | translate}}</td>
+                    <td *ngIf="showBreedData">{{ 'BREED CODE' | translate}}</td>
+                    <td *ngIf="showBreedData">{{ 'PREDICATE' | translate}}</td>
+                    <td *ngIf="showBreedData">{{ 'PREDICATE SCORE' | translate}}</td>
+                    <td *ngIf="showBreedData">{{ 'PEDIGREE REGISTER' | translate}}</td>
+                    <td *ngIf="showBreedData">{{ 'SCRAPIE GENOTYPE' | translate}}</td>
+                    <td *ngIf="showBreedData">{{ 'BLINDNESS FACTOR' | translate}}</td>
+                    <td *ngIf="showBreedData">{{ 'MYOMAX' | translate}}</td>
+                    <!--<td>-->
+                    <!--<button type="button" (click)="openModal(false)" class="small primary button pull-right">-->
+                    <!--<i class="fa fa-user-plus fa-fw" aria-hidden="true"></i>-->
+                    <!--{{ 'ADD ADMIN' | translate }}-->
+                    <!--</button>-->
+                    <!--</td>-->
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let animal of editedAnimals">
+                    <td *ngIf="showIds || showDates">{{ animal.creation_date  | date: 'dd-MM-yyyy @HH:mm:ss' }}</td>
+                    <td *ngIf="showIds">{{ animal.id }}</td>
+                    <td *ngIf="showIds"><input title="aiind" class="table-input" type="text" [(ngModel)]="animal.name" [disabled]="isSaving"></td>
+                    <td *ngIf="showIds"><input title="nickname" class="table-input" type="text" [(ngModel)]="animal.nickname" [disabled]="isSaving"></td>
+                    <td *ngIf="showIds"><input title="collar" class="table-input" type="text" [(ngModel)]="animal.collar_color" [disabled]="isSaving"></td>
+                    <td>
+                        <span class="uid-input-group">
+                            <select class="country-code" [(ngModel)]="animal.uln_country_code" title="pedigree_country_code" [disabled]="isSaving">
+                                <option *ngFor="let countryCode of countryCodeList" value="{{ countryCode.code }}">{{
+                                    countryCode.code }}</option>
+                            </select>
+                            <input class="uln-number" type="number" [(ngModel)]="animal.uln_number" title="pedigree_number" [disabled]="isSaving">
+                        </span>
+                    </td>
+                    <td>
+                        <span class="uid-input-group">
+                            <select class="country-code" [(ngModel)]="animal.pedigree_country_code" title="pedigree_country_code" [disabled]="isSaving">
+                                <option *ngFor="let countryCode of countryCodeList" value="{{ countryCode.code }}">{{
+                                    countryCode.code }}</option>
+                            </select>
+                            <input class="pedigree-number" type="text" [(ngModel)]="animal.pedigree_number" title="pedigree_number" [disabled]="isSaving">
+                        </span>
+                    </td>
+                    <td>{{animal.type | translate}}</td>
+                    <td>{{ animal.location ? animal.location.ubn : '-' }}</td>
+                    <td>{{ animal.is_alive }}</td>
+                    <td><input title="note" class="table-input" type="text" [(ngModel)]="animal.note" [disabled]="isSaving"></td>
+                    <td *ngIf="showPedigreeData || showDates">{{ animal.date_of_birth  | date: 'dd-MM-yyyy @HH:mm:ss' }}</td>
+                    <td *ngIf="showDates">{{ animal.date_of_death  | date: 'dd-MM-yyyy @HH:mm:ss' }}</td>
+                    <td *ngIf="showPedigreeData">{{ animal.parent_father ?
+                        animal.parent_father.uln_country_code + animal.parent_father.uln_number : '-'}}</td>
+                    <td *ngIf="showPedigreeData">{{ animal.parent_mother ?
+                        animal.parent_mother.uln_country_code + animal.parent_mother.uln_number : '-'}}</td>
+                    <td *ngIf="showPedigreeData || showBreedData">{{ animal.litter ? animal.litter.born_alive_count + animal.litter.stillborn_count : '-' }}</td>
+                    <td *ngIf="showPedigreeData">{{ animal.surrogate ?
+                        animal.surrogate.uln_country_code + animal.surrogate.uln_number : '-'}}</td>
+                    <td *ngIf="showPedigreeData">{{ animal.lambar }}</td>
+                    <td><input title="birthProgress" class="table-input" type="text" [(ngModel)]="animal.birth_progress" [disabled]="isSaving"></td>
+                    <td><input title="ubnOfBirth" class="table-input" type="text" [(ngModel)]="animal.ubn_of_birth" [disabled]="isSaving"></td>
+                    <td *ngIf="showPedigreeData">{{ animal.location_of_birth ? animal.location_of_birth.ubn : '-' }}</td>
+
+                    <td *ngIf="showBreedData"><input title="breedType" class="table-input" type="text" [(ngModel)]="animal.breed_type" [disabled]="isSaving"></td>
+                    <td *ngIf="showBreedData"><input title="breedCode" class="table-input" type="text" [(ngModel)]="animal.breed_code" [disabled]="isSaving"></td>
+                    <td *ngIf="showBreedData"><input title="predicate" class="table-input" type="text" [(ngModel)]="animal.predicate" [disabled]="isSaving"></td>
+                    <td *ngIf="showBreedData"><input title="predicateScore" class="table-input" type="number" [(ngModel)]="animal.predicate_score" [disabled]="isSaving"></td>
+                    <td *ngIf="showBreedData">{{ animal.pedigree_register ? animal.pedigree_register.abbreviation : '-' }}</td>
+                    <td *ngIf="showBreedData"><input title="scrapieGenotype" class="table-input" type="text" [(ngModel)]="animal.scrapie_genotype" [disabled]="isSaving"></td>
+                    <td *ngIf="showBreedData"><input title="blindnessFactor" class="table-input" type="text" [(ngModel)]="animal.blindness_factor" [disabled]="isSaving"></td>
+                    <td *ngIf="showBreedData"><input title="myoMax" class="table-input" type="text" [(ngModel)]="animal.myo_max" [disabled]="isSaving"></td>
+
+                    <!--<td>-->
+                            <!--<span *ngIf="admin.email_address != superAdminDetails?.email" class="pull-right overview-controls">-->
+                                <!--<a (click)="openModal(true, admin)"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>-->
+                                <!--<a (click)="openRemoveModal(admin)" class="remove-button"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>-->
+                            <!--</span>-->
+                    <!--</td>-->
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!--&lt;!&ndash;ADD REASON MODAL&ndash;&gt;-->
+<!--<div class="reveal-overlay" [ngStyle]="{'display': displayModal}">-->
+    <!--<div class="tiny reveal" [ngStyle]="{'display': displayModal}">-->
+        <!--<div class="modal-header">-->
+            <!--<span *ngIf="!isModalEditMode">{{ 'NEW ADMIN' | translate }}</span>-->
+            <!--<span *ngIf="isModalEditMode">{{ 'EDIT ADMIN' | translate }}</span>-->
+            <!--<button type="button" class="pull-right" aria-label="Close modal" (click)="closeModal()">-->
+                <!--<i class="fa fa-times" aria-hidden="true"></i>-->
+            <!--</button>-->
+        <!--</div>-->
+        <!--<div [formGroup]="form" class="modal-body">-->
+            <!--<div class="row">-->
+                <!--<div class="large-4 columns">-->
+                    <!--<label class="middle"> {{ 'E-MAIL ADDRESS' | translate }} * </label>-->
+                <!--</div>-->
+                <!--<div class="large-8 columns">-->
+                    <!--<input type="text" [(ngModel)]="admin.email_address" formControlName="email_address" maxlength="50" (keydown)="resetValidation()">-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="row">-->
+                <!--<div class="large-4 columns">-->
+                    <!--<label class="middle"> {{ 'FIRST NAME' | translate }} * </label>-->
+                <!--</div>-->
+                <!--<div class="large-8 columns">-->
+                    <!--<input type="text" [(ngModel)]="admin.first_name" formControlName="first_name" maxlength="50" (keydown)="resetValidation()">-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="row">-->
+                <!--<div class="large-4 columns">-->
+                    <!--<label class="middle"> {{ 'LAST NAME' | translate }} * </label>-->
+                <!--</div>-->
+                <!--<div class="large-8 columns">-->
+                    <!--<input type="text" [(ngModel)]="admin.last_name" formControlName="last_name" maxlength="50" (keydown)="resetValidation()">-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="row">-->
+                <!--<div class="large-4 columns">-->
+                    <!--<label class="middle"> {{ 'ACCESS LEVEL' | translate }} * </label>-->
+                <!--</div>-->
+                <!--<div class="large-8 columns">-->
+                    <!--<select [(ngModel)]="admin.access_level" formControlName="type" (change)="resetValidation()">-->
+                        <!--<option value="">&#45;&#45;</option>-->
+                        <!--<option value="ADMIN">{{ 'ADMIN' | translate}}</option>-->
+                        <!--<option value="SUPER_ADMIN">{{ 'SUPER_ADMIN' | translate}}</option>-->
+                    <!--</select>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="modal-footer">-->
+            <!--<div class="row">-->
+                <!--<div class="large-12 columns">-->
+                    <!--<span class="pull-right required-description"> * {{ 'IS A REQUIRED FIELD' | translate }} </span>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<span class="pull-left">-->
+                <!--<label *ngIf="!hasUniqueEmails" class="input-error-msg">{{ 'E-MAIL ADDRESS IS NOT UNIQUE' | translate }}</label>-->
+                <!--<label *ngIf="!isValidForm" class="input-error-msg">{{ 'FILL IN ALL THE REQUIRED FIELDS' | translate }}</label>-->
+                <!--<label *ngIf="errorMessage" class="input-error-msg">{{ errorMessage | translate }}</label>-->
+            <!--</span>-->
+            <!--<span class="pull-right">-->
+                <!--<button *ngIf="!isModalEditMode" [disabled]="isSaving" (click)="addAdmin()" class="tiny primary button">-->
+                    <!--<span *ngIf="!isSaving">-->
+                        <!--{{ 'ADD' | translate}}-->
+                    <!--</span>-->
+                    <!--<span *ngIf="isSaving">-->
+                        <!--<i class="fa fa-gear fa-spin fa-fw"></i>-->
+                    <!--</span>-->
+                <!--</button>-->
+                <!--<button *ngIf="isModalEditMode" [disabled]="isSaving" (click)="editAdmin()" class="tiny primary button">-->
+                    <!--<span *ngIf="!isSaving">-->
+                        <!--{{ 'EDIT' | translate}}-->
+                    <!--</span>-->
+                    <!--<span *ngIf="isSaving">-->
+                        <!--<i class="fa fa-gear fa-spin fa-fw"></i>-->
+                    <!--</span>-->
+                <!--</button>-->
+                <!--<button (click)="closeModal()" [disabled]="isSaving" class="tiny alert button">{{ 'CANCEL' | translate}}</button>-->
+            <!--</span>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+
+<!--&lt;!&ndash;REMOVE MODAL&ndash;&gt;-->
+<!--<div class="reveal-overlay" [ngStyle]="{'display': displayRemoveModal}">-->
+    <!--<div class="tiny reveal" [ngStyle]="{'display': displayRemoveModal}">-->
+        <!--<div class="modal-header">-->
+            <!--{{ 'REMOVE ADMIN' | translate }}-->
+            <!--<button type="button" (click)="closeRemoveModal()" class="pull-right" aria-label="Close modal">-->
+                <!--<i class="fa fa-times" aria-hidden="true"></i>-->
+            <!--</button>-->
+        <!--</div>-->
+        <!--<div class="modal-body"> {{ 'ARE YOU SURE YOU WANT TO REMOVE THIS ADMIN' | translate }} </div>-->
+        <!--<div class="modal-footer">-->
+            <!--<span class="pull-left">-->
+                <!--<label *ngIf="errorMessage" class="input-error-msg">{{ errorMessage | translate }}</label>-->
+            <!--</span>-->
+            <!--<span class="pull-right">-->
+            <!--<button class="tiny alert button" [disabled]="isSaving" (click)="removeAdmin()">-->
+                <!--<span *ngIf="!isSaving">-->
+                    <!--{{ 'REMOVE' | translate}}-->
+                <!--</span>-->
+                <!--<span *ngIf="isSaving">-->
+                    <!--<i class="fa fa-gear fa-spin fa-fw"></i>-->
+                <!--</span>-->
+            <!--</button>-->
+            <!--<button class="tiny primary button" [disabled]="isSaving" (click)="closeRemoveModal()">{{ 'CANCEL' | translate}}</button>-->
+            <!--</span>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->

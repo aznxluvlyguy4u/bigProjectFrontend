@@ -9,6 +9,7 @@ export class Litter extends DeclareNsfoBase {
 		litter_ordinal: number;
 		children: Animal[] = [];
 		 */
+		id: number;
 		litter_date: string;
 		animal_father: Animal;
 		animal_mother: Animal;
@@ -19,4 +20,5 @@ export class Litter extends DeclareNsfoBase {
 		declare_births: DeclareBirth[] = [];
 		status: string;
 		stillborns: Stillborn[] = [];
+		type: string;
 }

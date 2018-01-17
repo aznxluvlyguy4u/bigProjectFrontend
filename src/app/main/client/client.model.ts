@@ -28,6 +28,7 @@ export class Location {
     public ubn: string;
     public address ?: Address = new Address();
     public is_active ?: boolean;
+    public company ?: Company;
 }
 
 export class User {

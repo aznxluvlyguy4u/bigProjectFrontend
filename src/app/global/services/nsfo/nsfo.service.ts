@@ -1,4 +1,4 @@
-import {Injectable} from "@angular/core";
+import { Injectable } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
 import { QueryParam } from '../../../main/client/client.model';
 
@@ -10,7 +10,9 @@ export class NSFOService {
     public URI_RESET_PASSWORD = '/v1/admins/auth/password-reset';
     public URI_VALIDATE_TOKEN = '/v1/auth/validate-token';
     public URI_PROVINCES = '/v1/countries/nl/provinces';
-    
+
+    public URI_ANIMALS = '/v1/animals';
+
     public URI_GHOST_LOGIN: string = '/v1/admins/ghost';
     public URI_ADMIN: string = '/v1/admins';
     public URI_ADMIN_DEACTIVATE: string = '/v1/admins-deactivate';
@@ -21,6 +23,7 @@ export class NSFOService {
     public URI_INVOICE_RULE_TEMPLATE = '/v1/invoice-rule-templates';
     public URI_INVOICE_SENDER_DETAILS = '/v1/invoice-sender-details';
 
+	  public URI_GET_COUNTRY_CODES = '/v1/countries?continent=europe';
     public URI_CMS: string = '/v1/cms';
     public URI_DASHBOARD: string = '/v1/admin/dashboard';
     public URI_MENUBAR: string = '/v1/components/admin-menu-bar';

@@ -8,6 +8,7 @@ import {NSFOService} from "./global/services/nsfo/nsfo.service";
 import {provideForms} from "@angular/forms";
 import {UtilsService} from "./global/services/utils/utils.service";
 import {AuthenticatedGuard} from "./global/guards/authenticated.guard";
+import { DeveloperGuard } from './global/guards/developer.guard';
 
 require('font-awesome-loader');
 
@@ -21,6 +22,7 @@ bootstrap(IndexComponent, [
     },
     provideForms(),
     AuthenticatedGuard,
+    DeveloperGuard,
     NSFOService,
     TranslateService,
     SettingsService,

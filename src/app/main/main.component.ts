@@ -17,7 +17,6 @@ export class MainComponent {
     private isActiveUserMenu: boolean = false;
     private admin: Admin = new Admin();
     private adminDetails$: Observable;
-    private isDeveloper = false;
 
     constructor(private nsfo: NSFOService, private router: Router, private utils: UtilsService) {
         this.getAdminDetails();
@@ -44,13 +43,11 @@ export class MainComponent {
                     this.admin.last_name = res.last_name;
                     this.admin.email = res.email_address;
                     this.admin.access_level = res.access_level;
-
-                    this.updateIsDeveloper();
                 });
     }
 
-    private updateIsDeveloper() {
-        this.isDeveloper = this.admin.access_level === 'DEVELOPER';
+    isDeveloper() {
+        return this.utils.isDeveloper;
     }
 
     private toggleSideMenu() {
