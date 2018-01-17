@@ -44,4 +44,8 @@ export class UlnInputComponent implements OnInit{
 			this.isCountryCodeDirty = false;
 			this.isNumberDirty = false;
 	}
+
+	hasOriginalValues() {
+		return this.ulnCountryCode === this.initialCountryCode && this.ulnNumber === this.initialNumber;
+	}
 }

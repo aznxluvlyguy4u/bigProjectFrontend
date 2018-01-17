@@ -68,20 +68,14 @@
                         ></app-uln-input>
                     </td>
                     <td>
-                        <span class="uid-input-group">
-                            <select class="pedigree-country-code" [(ngModel)]="animal.pedigree_country_code" title="pedigreeCountryCode" [disabled]="isSaving">
-                                <option *ngFor="let countryCode of countryCodeList" value="{{ countryCode.code }}">{{
-                                    countryCode.code }}</option>
-                            </select>
-                            <input class="pedigree-number"
-                                   type="text"
-                                   [(ngModel)]="animal.pedigree_number"
-                                   title="{{ 'PEDIGREE NUMBER FORMAT DESCRIPTION' | translate }}"
-                                   [disabled]="isSaving"
-                                   maxlength="11"
-                                   pattern="[A-Z0-9]{5}[-][a-zA-Z0-9]{5}"
-                            >
-                        </span>
+                        <app-stn-input
+                                [countryCodeList]="countryCodeList"
+                                [pedigreeCountryCode]="animal.pedigree_country_code"
+                                (pedigreeCountryCodeChange)="animal.pedigree_country_code=$event"
+                                [pedigreeNumber]="animal.pedigree_number"
+                                (pedigreeNumberChange)="animal.pedigree_number=$event"
+                                [disabled]="isSaving"
+                        ></app-stn-input>
                     </td>
                     <td>{{animal.type | translate}}</td>
                     <td>{{ animal.location ? animal.location.ubn : '-' }}</td>

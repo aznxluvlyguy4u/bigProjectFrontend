@@ -9,9 +9,10 @@ import { Animal } from '../../../global/components/livestock/livestock.model';
 
 import _ = require("lodash");
 import { UlnInputComponent } from '../../../global/components/ulninput/uln-input.component';
+import { StnInputComponent } from '../../../global/components/stninput/stn-input.component';
 
 @Component({
-		directives: [REACTIVE_FORM_DIRECTIVES, UlnInputComponent],
+		directives: [REACTIVE_FORM_DIRECTIVES, UlnInputComponent, StnInputComponent],
 		template: require('./animals-batch-edit.component.html'),
 		pipes: [TranslatePipe]
 })

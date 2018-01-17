@@ -1,9 +1,9 @@
-<span id="component-uln-input" class="uid-input-group">
+<span id="component-stn-input" class="uid-input-group">
     <select
-            id="component-uln-input-country-code"
-            class="uln-country-code"
-            [(ngModel)]="ulnCountryCode"
-            title="ulnCountryCode" [disabled]="disabled"
+            id="component-stn-input-country-code"
+            class="pedigree-country-code"
+            [(ngModel)]="pedigreeCountryCode"
+            title="pedigreeCountryCode" [disabled]="disabled"
             (change)="changeCountryCode()"
             [ngClass]="{'ng-dirty': isCountryCodeDirty}"
     >
@@ -12,14 +12,14 @@
                 value="{{ countryCode.code }}"
         >{{ countryCode.code }}</option>
     </select>
-    <input id="component-uln-input-number"
-           class="uln-number"
+    <input id="component-stn-input-number"
+           class="pedigree-number"
            type="text"
-           title="{{ 'ULN NUMBER FORMAT DESCRIPTION' | translate }}"
-           [(ngModel)]="ulnNumber"
+           title="{{ 'PEDIGREE NUMBER FORMAT DESCRIPTION' | translate }}"
+           [(ngModel)]="pedigreeNumber"
            [disabled]="disabled"
-           pattern="[0-9]{8,12}"
-           maxlength="12"
+           maxlength="11"
+           pattern="[A-Z0-9]{5}[-][a-zA-Z0-9]{5}"
            (change)="changeNumber()"
            [ngClass]="{'ng-dirty': isNumberDirty}"
     >
