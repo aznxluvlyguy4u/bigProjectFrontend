@@ -59,7 +59,6 @@
                     <td *ngIf="showIds"><input title="collar" class="table-input" type="text" [(ngModel)]="animal.collar_color" [disabled]="isSaving"></td>
                     <td>
                         <app-uln-input
-                                [countryCodeList]="countryCodeList"
                                 [ulnCountryCode]="animal.uln_country_code"
                                 (ulnCountryCodeChange)="animal.uln_country_code=$event"
                                 [ulnNumber]="animal.uln_number"
@@ -69,7 +68,6 @@
                     </td>
                     <td>
                         <app-stn-input
-                                [countryCodeList]="countryCodeList"
                                 [pedigreeCountryCode]="animal.pedigree_country_code"
                                 (pedigreeCountryCodeChange)="animal.pedigree_country_code=$event"
                                 [pedigreeNumber]="animal.pedigree_number"

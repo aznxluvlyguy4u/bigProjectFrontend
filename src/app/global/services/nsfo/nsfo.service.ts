@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
 import { QueryParam } from '../../../main/client/client.model';
 
+import _ = require("lodash");
+
 @Injectable()
 export class NSFOService {
     private API_SERVER_URL: string = NSFO_API_SERVER_URL;
@@ -60,8 +62,24 @@ export class NSFOService {
     public access_token: string = "AccessToken";
     
     private ACCESS_TOKEN_NAMESPACE: string = 'access_token';
-    
-    constructor(private http:Http) {}
+
+		countryCodeList = [];
+
+    constructor(private http:Http) {
+				this.doGetCountryCodeList(); // if in OnInit it is loaded too late
+		}
+
+		private doGetCountryCodeList() {
+			this.doGetRequest(this.URI_GET_COUNTRY_CODES)
+				.subscribe(
+					res => {
+						this.countryCodeList = _.sortBy(res.result, ['code']);
+					},
+					error => {
+						alert(this.getErrorMessage(error));
+					}
+				);
+		}
 
     public doLoginRequest(username:string, password:string) {
         let headers = new Headers();

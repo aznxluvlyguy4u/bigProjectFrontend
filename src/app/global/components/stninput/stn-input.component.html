@@ -8,7 +8,7 @@
             [ngClass]="{'ng-dirty': isCountryCodeDirty}"
     >
         <option
-                *ngFor="let countryCode of countryCodeList"
+                *ngFor="let countryCode of getCountryCodeList()"
                 value="{{ countryCode.code }}"
         >{{ countryCode.code }}</option>
     </select>

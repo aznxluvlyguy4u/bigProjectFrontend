@@ -23,7 +23,6 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 		private animalsResult: AnimalsResult;
 		private isAnimalsLoaded: boolean;
 		isSaving: boolean;
-		countryCodeList = [];
 
 		showIds: boolean;
 		showBreedData: boolean;
@@ -56,7 +55,6 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 
 		ngOnInit() {
 				this.initializeValues();
-				this.doGetCountryCodeList();
 
 				//TODO remove later
 				this.getAnimalsBody.plain_text_input = ' NL 00189-75741   , NL 100126232800   , NL 109992775741 , NL 109993894618, UK 9JK3843, NL DDD33-25466DD , NL 100020389194, NL 03215-07224 ,    NL 00189-4FDSF';
@@ -89,15 +87,4 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 					);
 		}
 
-		private doGetCountryCodeList() {
-				this.nsfo.doGetRequest(this.nsfo.URI_GET_COUNTRY_CODES)
-					.subscribe(
-						res => {
-							this.countryCodeList = _.sortBy(res.result, ['code']);
-						},
-						error => {
-							alert(this.nsfo.getErrorMessage(error));
-						}
-					);
-		}
 }

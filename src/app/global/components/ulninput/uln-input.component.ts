@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TranslatePipe } from 'ng2-translate';
+import { NSFOService } from '../../services/nsfo/nsfo.service';
 
 @Component({
 	selector: 'app-uln-input',
@@ -7,7 +8,6 @@ import { TranslatePipe } from 'ng2-translate';
 	pipes: [TranslatePipe]
 })
 export class UlnInputComponent implements OnInit{
-	@Input() countryCodeList = [];
 	@Input() disabled = false;
 
 	@Input() ulnCountryCode: string;
@@ -21,11 +21,17 @@ export class UlnInputComponent implements OnInit{
 	isCountryCodeDirty: boolean;
 	isNumberDirty: boolean;
 
+	constructor(private nsfo: NSFOService) {}
+
 	ngOnInit() {
 			this.initialCountryCode = this.ulnCountryCode;
 			this.initialNumber = this.ulnNumber;
 			this.isCountryCodeDirty = false;
 			this.isNumberDirty = false;
+	}
+
+	getCountryCodeList() {
+			return this.nsfo.countryCodeList;
 	}
 
 	changeCountryCode() {
