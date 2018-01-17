@@ -58,20 +58,14 @@
                     <td *ngIf="showIds"><input title="nickname" class="table-input" type="text" [(ngModel)]="animal.nickname" [disabled]="isSaving"></td>
                     <td *ngIf="showIds"><input title="collar" class="table-input" type="text" [(ngModel)]="animal.collar_color" [disabled]="isSaving"></td>
                     <td>
-                        <span class="uid-input-group">
-                            <select class="uln-country-code" [(ngModel)]="animal.uln_country_code" title="ulnCountryCode" [disabled]="isSaving || !allowUlnEdit">
-                                <option *ngFor="let countryCode of countryCodeList" value="{{ countryCode.code }}">{{
-                                    countryCode.code }}</option>
-                            </select>
-                            <input class="uln-number"
-                                   type="text"
-                                   title="{{ 'ULN NUMBER FORMAT DESCRIPTION' | translate }}"
-                                   [(ngModel)]="animal.uln_number"
-                                   [disabled]="isSaving || !allowUlnEdit"
-                                   pattern="[0-9]{8,12}"
-                                   maxlength="12"
-                            >
-                        </span>
+                        <app-uln-input
+                                [countryCodeList]="countryCodeList"
+                                [ulnCountryCode]="animal.uln_country_code"
+                                (ulnCountryCodeChange)="animal.uln_country_code=$event"
+                                [ulnNumber]="animal.uln_number"
+                                (ulnNumberChange)="animal.uln_number=$event"
+                                [disabled]="isSaving || !allowUlnEdit"
+                        ></app-uln-input>
                     </td>
                     <td>
                         <span class="uid-input-group">

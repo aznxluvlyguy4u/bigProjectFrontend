@@ -502,5 +502,6 @@
   "N-LING": "n-ling",
   "NOTE": "Notitie",
   "PEDIGREE NUMBER FORMAT DESCRIPTION": "Format: [5 hoofdletters en/of nummers]-[5letters en/of nummers]",
-  "ULN NUMBER FORMAT DESCRIPTION": "Format: [8 to 12 nummers]"
+  "ULN NUMBER FORMAT DESCRIPTION": "Format: [8 to 12 nummers]",
+  "RESET TO ORIGINAL VALUE": "Zet originele waarde terug"
 }

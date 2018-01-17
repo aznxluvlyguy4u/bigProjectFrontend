@@ -1,7 +1,33 @@
-<span id="" class="uid-input-group">
-                            <select class="country-code" [(ngModel)]="animal.uln_country_code" title="pedigree_country_code" [disabled]="isSaving">
-                                <option *ngFor="let countryCode of countryCodeList" value="{{ countryCode.code }}">{{
-                                    countryCode.code }}</option>
-                            </select>
-                            <input class="uln-number" type="number" [(ngModel)]="animal.uln_number" title="pedigree_number" [disabled]="isSaving">
+<span id="component-uln-input" class="uid-input-group">
+    <select
+            id="component-uln-input-country-code"
+            class="uln-country-code"
+            [(ngModel)]="ulnCountryCode"
+            title="ulnCountryCode" [disabled]="disabled"
+            (change)="changeCountryCode()"
+            [ngClass]="{'ng-dirty': isCountryCodeDirty}"
+    >
+        <option
+                *ngFor="let countryCode of countryCodeList"
+                value="{{ countryCode.code }}"
+        >{{ countryCode.code }}</option>
+    </select>
+    <input id="component-uln-input-number"
+           class="uln-number"
+           type="text"
+           title="{{ 'ULN NUMBER FORMAT DESCRIPTION' | translate }}"
+           [(ngModel)]="ulnNumber"
+           [disabled]="disabled"
+           pattern="[0-9]{8,12}"
+           maxlength="12"
+           (change)="changeNumber()"
+           [ngClass]="{'ng-dirty': isNumberDirty}"
+    >
+    <button *ngIf="!disabled"
+            type="submit"
+            (click)="reset()"
+            class="button secondary"
+            [disabled]="disabled"
+            title="{{'RESET TO ORIGINAL VALUE' | translate}}"
+    ><i class="fa fa-fast-backward" aria-hidden="true"></i></button>
 </span>

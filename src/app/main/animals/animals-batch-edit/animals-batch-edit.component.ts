@@ -8,9 +8,10 @@ import { GetAnimalsBody } from './get-animals-body.model';
 import { Animal } from '../../../global/components/livestock/livestock.model';
 
 import _ = require("lodash");
+import { UlnInputComponent } from '../../../global/components/ulninput/uln-input.component';
 
 @Component({
-		directives: [REACTIVE_FORM_DIRECTIVES],
+		directives: [REACTIVE_FORM_DIRECTIVES, UlnInputComponent],
 		template: require('./animals-batch-edit.component.html'),
 		pipes: [TranslatePipe]
 })
