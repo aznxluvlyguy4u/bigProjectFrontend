@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { TranslatePipe } from 'ng2-translate';
 import { NSFOService } from '../../services/nsfo/nsfo.service';
 
@@ -22,6 +22,12 @@ export class UlnInputComponent implements OnInit, OnChanges {
 	isNumberDirty: boolean;
 
 	constructor(private nsfo: NSFOService) {}
+
+	@Input()
+	updateInitialValues() {
+			this.initialCountryCode = this.ulnCountryCode;
+			this.initialNumber = this.ulnNumber;
+	}
 
 	ngOnInit() {
 			this.initialCountryCode = this.ulnCountryCode;

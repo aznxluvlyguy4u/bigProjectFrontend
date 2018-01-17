@@ -1,6 +1,6 @@
 import { REACTIVE_FORM_DIRECTIVES } from '@angular/forms';
 import { TranslatePipe } from 'ng2-translate';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { NSFOService } from '../../../global/services/nsfo/nsfo.service';
 import { AnimalDetailsResult } from './get-animal.model';
 import { AnimalsResult } from './animals-result.model';
@@ -35,6 +35,8 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 		allowUlnEdit: boolean;
 
 		openOptions: boolean;
+
+		initialValuesChanged = new EventEmitter<boolean>();
 
 		constructor(private nsfo: NSFOService) {}
 
@@ -86,10 +88,17 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 									this.animalsResult.invalid = res.result.invalid;
 									this.animalsResult.stns_without_found_animals = res.result.stns_without_found_animals;
 									this.animalsResult.ulns_without_found_animals = res.result.ulns_without_found_animals;
+
+									this.animalsListWasUpdated();
 							}, error => {
 									alert(this.nsfo.getErrorMessage(error));
 							}
 					);
+		}
+
+
+		private animalsListWasUpdated() {
+				this.initialValuesChanged.emit(true);
 		}
 
 }

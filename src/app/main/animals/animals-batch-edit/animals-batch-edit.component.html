@@ -135,6 +135,7 @@
                                 [ulnNumber]="animal.uln_number"
                                 (ulnNumberChange)="animal.uln_number=$event"
                                 [disabled]="isSaving || !allowUlnEdit"
+                                [updateInitialValues]="(initialValuesChanged)"
                         ></app-uln-input>
                     </td>
                     <td>
@@ -144,6 +145,7 @@
                                 [pedigreeNumber]="animal.pedigree_number"
                                 (pedigreeNumberChange)="animal.pedigree_number=$event"
                                 [disabled]="isSaving"
+                                [updateInitialValues]="(initialValuesChanged)"
                         ></app-stn-input>
                     </td>
                     <td>{{ animal.type | translate}}</td>
@@ -184,6 +186,7 @@
                                 [ulnNumber]="animal.uln_number"
                                 (ulnNumberChange)="animal.uln_number=$event"
                                 [disabled]="isSaving || !allowUlnEdit"
+                                [updateInitialValues]="(initialValuesChanged)"
                         ></app-uln-input>
                     </td>
                     <!--<td>-->

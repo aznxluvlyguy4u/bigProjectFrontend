@@ -23,6 +23,12 @@ export class StnInputComponent implements OnInit, OnChanges {
 
 	constructor(private nsfo: NSFOService) {}
 
+	@Input()
+	updateInitialValues() {
+		this.initialCountryCode = this.pedigreeCountryCode;
+		this.initialNumber = this.pedigreeNumber;
+	}
+
 	ngOnInit() {
 			this.initialCountryCode = this.pedigreeCountryCode;
 			this.initialNumber = this.pedigreeNumber;
