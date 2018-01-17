@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { TranslatePipe } from 'ng2-translate';
 import { NSFOService } from '../../services/nsfo/nsfo.service';
 
@@ -7,7 +7,7 @@ import { NSFOService } from '../../services/nsfo/nsfo.service';
 	template: require('./stn-input.component.html'),
 	pipes: [TranslatePipe]
 })
-export class StnInputComponent implements OnInit{
+export class StnInputComponent implements OnInit, OnChanges {
 	@Input() disabled = false;
 
 	@Input() pedigreeCountryCode: string;
@@ -30,6 +30,11 @@ export class StnInputComponent implements OnInit{
 			this.isNumberDirty = false;
 	}
 
+	ngOnChanges() {
+		this.isCountryCodeDirty = this.initialCountryCode != this.pedigreeCountryCode;
+		this.isNumberDirty = this.initialNumber != this.pedigreeNumber;
+	}
+
 	getCountryCodeList() {
 		return this.nsfo.countryCodeList;
 	}
@@ -49,6 +54,9 @@ export class StnInputComponent implements OnInit{
 			this.pedigreeNumber = this.initialNumber;
 			this.isCountryCodeDirty = false;
 			this.isNumberDirty = false;
+
+			this.pedigreeCountryCodeChange.emit(this.pedigreeCountryCode);
+			this.pedigreeNumberChange.emit(this.pedigreeNumber);
 	}
 
 	hasOriginalValues() {

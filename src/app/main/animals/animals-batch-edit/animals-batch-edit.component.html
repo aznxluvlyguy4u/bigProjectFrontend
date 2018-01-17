@@ -1,7 +1,77 @@
 <div id="animals-batch-edit">
     <div class="row">
-
+        <div class="column">
+            <!--ACCORDION BUTTON-->
+            <button class="accordion-button expanded" [ngClass]="{'toggled': openOptions}" (click)="openOptions = !openOptions">
+                <i *ngIf="!openOptions" class="fa fa-caret-right fa-fw" aria-hidden="true"></i>
+                <i *ngIf="openOptions" class="fa fa-caret-down fa-fw" aria-hidden="true"></i>
+                {{ '' | translate }} -
+                <span> {{ 'OPTIONS' | translate }} </span>
+            </button>
+        </div>
     </div>
+
+    <div class="row">
+        <div class="column large-3">
+            <div class="accordion-container" [hidden]="!openOptions">
+                <div class="filler-block">{{ 'SHOW DATA OPTIONS' | translate }}</div>
+
+                <label>{{ 'IDENTITY' | translate }}<input   [(ngModel)]="showIds" type="checkbox"></label>
+                <label>{{ 'BREED' | translate }}<input      [(ngModel)]="showBreedData" type="checkbox"></label>
+                <label>{{ 'BLOODLINE' | translate }}<input  [(ngModel)]="showPedigreeData" type="checkbox"></label>
+                <label>{{ 'NOTE' | translate }}<input       [(ngModel)]="showNote" type="checkbox"></label>
+                <label>{{ 'DATES' | translate }}<input      [(ngModel)]="showDates" type="checkbox"></label>
+                <label>{{ 'EXAMINATION' | translate }}<input [(ngModel)]="showExaminationData" type="checkbox"></label>
+                <label>{{ 'HEALTH' | translate }}<input     [(ngModel)]="showHealthData" type="checkbox"></label>
+
+            </div>
+        </div>
+        <div class="column large-3">
+            <div class="accordion-container" [hidden]="!openOptions">
+                <div class="filler-block">{{ 'EDIT OPTIONS' | translate }}</div>
+
+                <label>{{ 'EDIT ULNS' | translate }}<input   [(ngModel)]="allowUlnEdit" type="checkbox"></label>
+        </div>
+    </div>
+        
+        <!--&lt;!&ndash;ACCORDION BUTTON&ndash;&gt;-->
+        <!--<button class="accordion-button expanded" [ngClass]="{'toggled': filter_toggled}" (click)="filter_toggled = !filter_toggled">-->
+            <!--<i *ngIf="!filter_toggled" class="fa fa-caret-right fa-fw" aria-hidden="true"></i>-->
+            <!--<i *ngIf="filter_toggled" class="fa fa-caret-down fa-fw" aria-hidden="true"></i>-->
+            <!--{{ '' | translate }} - -->
+            <!--<span> {{ 'REFINE RESULTS' | translate }} </span>-->
+        <!--</button>-->
+
+        <!--&lt;!&ndash;FILTERS&ndash;&gt;-->
+        <!--<div class="accordion-container" [hidden]="!filter_toggled">-->
+            <!--<div class="filler-block">-->
+                <!--{{ 'FILTERS' | translate }}-->
+            <!--</div>-->
+
+            <!--&lt;!&ndash;FILTER BIRTH OF DATE&ndash;&gt;-->
+            <!--<label>{{ 'DATE OF BIRTH' | translate }}-->
+                <!--<input [(ngModel)]="startDateFieldFilter" type="text" #startDateField (keyup)="0" id="filter_begindate" placeholder="{{ 'VIEW_DATE_FORMAT' | translate }}">-->
+            <!--</label>-->
+            <!--<label> {{'TILL' | translate }}-->
+                <!--<input [(ngModel)]="endDateFieldFilter" type="text" #endDateField (keyup)="0" id="filter_enddate" placeholder="{{ 'VIEW_DATE_FORMAT' | translate }}">-->
+            <!--</label>-->
+
+            <!--&lt;!&ndash;FILTER GENDER&ndash;&gt;-->
+            <!--<label>{{ 'GENDER' | translate }}-->
+                <!--<select #filters_gender [(ngModel)]="genderFilterValue" [disabled]="onlyFemales">-->
+                    <!--<option *ngFor="let gender of gender_filter_options" value="{{ gender }}">{{ gender | translate }}</option>-->
+                <!--</select>-->
+            <!--</label>-->
+
+            <!--&lt;!&ndash;FILTER HISTORIC ANIMALS&ndash;&gt;-->
+            <!--<label *ngIf="activateHistoricAnimalsFilter()">{{ 'SHOW HISTORIC ANIMALS' | translate }}-->
+                <!--<select #filter_historic (change)="showHistoricAnimals(filter_historic.value)">-->
+                    <!--<option value="NO" selected>{{ 'NO' | translate}}</option>-->
+                    <!--<option value="YES">{{ 'YES' | translate}}</option>-->
+                <!--</select>-->
+            <!--</label>-->
+        <!--</div>-->
+    <!--</div>-->
 
     <div class="row">
         <div class="large-12 columns">
@@ -24,23 +94,24 @@
                     <td *ngIf="showPedigreeData || showDates">{{ 'DATE OF BIRTH' | translate}}</td>
                     <td *ngIf="showDates">{{ 'DATE OF DEATH' | translate}}</td>
 
+                    <td *ngIf="showPedigreeData">{{ 'PEDIGREE REGISTER' | translate}}</td>
                     <td *ngIf="showPedigreeData">{{ 'FATHER' | translate}}</td>
                     <td *ngIf="showPedigreeData">{{ 'MOTHER' | translate}}</td>
                     <td *ngIf="showBreedData || showPedigreeData">{{ 'N-LING' | translate}}</td>
+                    <td *ngIf="showPedigreeData">{{ 'BREEDER UBN' | translate}}</td>
+                    <td *ngIf="showPedigreeData">{{ 'BREEDER UBN' | translate}}({{ 'LOCATION' | translate}})</td>
                     <td *ngIf="showPedigreeData">{{ 'SURROGATE MOTHER' | translate}}</td>
                     <td *ngIf="showPedigreeData">{{ 'LAMBAR' | translate}}</td>
                     <td *ngIf="showPedigreeData">{{ 'BIRTH PROGRESS' | translate}}</td>
-                    <td *ngIf="showPedigreeData">{{ 'BREEDER UBN' | translate}}</td>
-                    <td *ngIf="showPedigreeData">{{ 'BREEDER UBN' | translate}}({{ 'LOCATION' | translate}})</td>
 
                     <td *ngIf="showBreedData">{{ 'BREED TYPE' | translate}}</td>
                     <td *ngIf="showBreedData">{{ 'BREED CODE' | translate}}</td>
-                    <td *ngIf="showBreedData">{{ 'PREDICATE' | translate}}</td>
-                    <td *ngIf="showBreedData">{{ 'PREDICATE SCORE' | translate}}</td>
-                    <td *ngIf="showBreedData">{{ 'PEDIGREE REGISTER' | translate}}</td>
-                    <td *ngIf="showBreedData">{{ 'SCRAPIE GENOTYPE' | translate}}</td>
-                    <td *ngIf="showBreedData">{{ 'BLINDNESS FACTOR' | translate}}</td>
-                    <td *ngIf="showBreedData">{{ 'MYOMAX' | translate}}</td>
+                    <td *ngIf="showExaminationData">{{ 'PREDICATE' | translate}}</td>
+                    <td *ngIf="showExaminationData">{{ 'PREDICATE SCORE' | translate}}</td>
+                    <td *ngIf="showHealthData">{{ 'SCRAPIE GENOTYPE' | translate}}</td>
+                    <td *ngIf="showHealthData">{{ 'BLINDNESS FACTOR' | translate}}</td>
+                    <td *ngIf="showHealthData">{{ 'MYOMAX' | translate}}</td>
+                    <td>{{ 'ULN' | translate}}</td>
                     <!--<td>-->
                     <!--<button type="button" (click)="openModal(false)" class="small primary button pull-right">-->
                     <!--<i class="fa fa-user-plus fa-fw" aria-hidden="true"></i>-->
@@ -75,37 +146,46 @@
                                 [disabled]="isSaving"
                         ></app-stn-input>
                     </td>
-                    <td>{{animal.type | translate}}</td>
+                    <td>{{ animal.type | translate}}</td>
                     <td>{{ animal.location ? animal.location.ubn : '-' }}</td>
                     <td>{{ animal.is_alive }}</td>
-                    <td><input title="note" class="table-input" type="text" [(ngModel)]="animal.note" [disabled]="isSaving"></td>
+                    <td *ngIf="showNote"><input title="note" class="table-input" type="text" [(ngModel)]="animal.note" [disabled]="isSaving"></td>
 
                     <td *ngIf="showPedigreeData || showDates" title="{{ animal.date_of_birth  | date: 'dd-MM-yyyy @HH:mm:ss' }}"
                     >{{ animal.date_of_birth  | date: 'dd-MM-yyyy' }}</td>
                     <td *ngIf="showDates" title="{{ animal.date_of_death  | date: 'dd-MM-yyyy @HH:mm:ss' }}"
                     >{{ animal.date_of_death  | date: 'dd-MM-yyyy' }}</td>
 
+                    <td *ngIf="showPedigreeData">{{ animal.pedigree_register ? animal.pedigree_register.abbreviation : '-' }}</td>
                     <td *ngIf="showPedigreeData">{{ animal.parent_father ?
                         animal.parent_father.uln_country_code + animal.parent_father.uln_number : '-'}}</td>
                     <td *ngIf="showPedigreeData">{{ animal.parent_mother ?
                         animal.parent_mother.uln_country_code + animal.parent_mother.uln_number : '-'}}</td>
                     <td *ngIf="showPedigreeData || showBreedData">{{ animal.litter ? animal.litter.born_alive_count + animal.litter.stillborn_count : '-' }}</td>
+                    <td *ngIf="showPedigreeData"><input title="ubnOfBirth" class="table-input" type="text" [(ngModel)]="animal.ubn_of_birth" [disabled]="isSaving"></td>
+                    <td *ngIf="showPedigreeData">{{ animal.location_of_birth ? animal.location_of_birth.ubn : '-' }}</td>
                     <td *ngIf="showPedigreeData">{{ animal.surrogate ?
                         animal.surrogate.uln_country_code + animal.surrogate.uln_number : '-'}}</td>
                     <td *ngIf="showPedigreeData">{{ animal.lambar }}</td>
-                    <td><input title="birthProgress" class="table-input" type="text" [(ngModel)]="animal.birth_progress" [disabled]="isSaving"></td>
-                    <td><input title="ubnOfBirth" class="table-input" type="text" [(ngModel)]="animal.ubn_of_birth" [disabled]="isSaving"></td>
-                    <td *ngIf="showPedigreeData">{{ animal.location_of_birth ? animal.location_of_birth.ubn : '-' }}</td>
+                    <td *ngIf="showPedigreeData"><input title="birthProgress" class="table-input" type="text" [(ngModel)]="animal.birth_progress" [disabled]="isSaving"></td>
 
                     <td *ngIf="showBreedData"><input title="breedType" class="table-input" type="text" [(ngModel)]="animal.breed_type" [disabled]="isSaving"></td>
                     <td *ngIf="showBreedData"><input title="breedCode" class="table-input" type="text" [(ngModel)]="animal.breed_code" [disabled]="isSaving"></td>
-                    <td *ngIf="showBreedData"><input title="predicate" class="table-input" type="text" [(ngModel)]="animal.predicate" [disabled]="isSaving"></td>
-                    <td *ngIf="showBreedData"><input title="predicateScore" class="table-input" type="number" [(ngModel)]="animal.predicate_score" [disabled]="isSaving"></td>
-                    <td *ngIf="showBreedData">{{ animal.pedigree_register ? animal.pedigree_register.abbreviation : '-' }}</td>
-                    <td *ngIf="showBreedData"><input title="scrapieGenotype" class="table-input" type="text" [(ngModel)]="animal.scrapie_genotype" [disabled]="isSaving"></td>
-                    <td *ngIf="showBreedData"><input title="blindnessFactor" class="table-input" type="text" [(ngModel)]="animal.blindness_factor" [disabled]="isSaving"></td>
-                    <td *ngIf="showBreedData"><input title="myoMax" class="table-input" type="text" [(ngModel)]="animal.myo_max" [disabled]="isSaving"></td>
+                    <td *ngIf="showExaminationData"><input title="predicate" class="table-input" type="text" [(ngModel)]="animal.predicate" [disabled]="isSaving"></td>
+                    <td *ngIf="showExaminationData"><input title="predicateScore" class="table-input" type="number" [(ngModel)]="animal.predicate_score" [disabled]="isSaving"></td>
+                    <td *ngIf="showHealthData"><input title="scrapieGenotype" class="table-input" type="text" [(ngModel)]="animal.scrapie_genotype" [disabled]="isSaving"></td>
+                    <td *ngIf="showHealthData"><input title="blindnessFactor" class="table-input" type="text" [(ngModel)]="animal.blindness_factor" [disabled]="isSaving"></td>
+                    <td *ngIf="showHealthData"><input title="myoMax" class="table-input" type="text" [(ngModel)]="animal.myo_max" [disabled]="isSaving"></td>
 
+                    <td>
+                        <app-uln-input
+                                [ulnCountryCode]="animal.uln_country_code"
+                                (ulnCountryCodeChange)="animal.uln_country_code=$event"
+                                [ulnNumber]="animal.uln_number"
+                                (ulnNumberChange)="animal.uln_number=$event"
+                                [disabled]="isSaving || !allowUlnEdit"
+                        ></app-uln-input>
+                    </td>
                     <!--<td>-->
                             <!--<span *ngIf="admin.email_address != superAdminDetails?.email" class="pull-right overview-controls">-->
                                 <!--<a (click)="openModal(true, admin)"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>-->

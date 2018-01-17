@@ -27,11 +27,14 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 		showIds: boolean;
 		showBreedData: boolean;
 		showPedigreeData: boolean;
-		showLocationData: boolean;
 		showNote: boolean;
 		showDates: boolean;
+		showExaminationData: boolean;
+		showHealthData: boolean;
 
 		allowUlnEdit: boolean;
+
+		openOptions: boolean;
 
 		constructor(private nsfo: NSFOService) {}
 
@@ -46,11 +49,13 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 				this.showIds = true;
 				this.showBreedData = true;
 				this.showPedigreeData = true;
-				this.showLocationData = true;
 				this.showNote = true;
 				this.showDates = true;
+				this.showExaminationData = true;
+				this.showHealthData = true;
 
 				this.allowUlnEdit = false;
+				this.openOptions = true;
 		}
 
 		ngOnInit() {

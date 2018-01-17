@@ -503,5 +503,14 @@
   "NOTE": "Notitie",
   "PEDIGREE NUMBER FORMAT DESCRIPTION": "Format: [5 hoofdletters en/of nummers]-[5letters en/of nummers]",
   "ULN NUMBER FORMAT DESCRIPTION": "Format: [8 to 12 nummers]",
-  "RESET TO ORIGINAL VALUE": "Zet originele waarde terug"
+  "RESET TO ORIGINAL VALUE": "Zet originele waarde terug",
+  "IDENTITY": "Identiteit",
+  "BREED": "Ras",
+  "DATES": "Datums",
+  "SHOW DATA OPTIONS": "Toon gegevens opties",
+  "BLOODLINE": "Afstamming",
+  "HEALTH": "Gezondheid",
+  "EXAMINATION": "Keuring",
+  "EDIT OPTIONS": "Edit opties",
+  "EDIT ULNS": "Pas ULNs aan"
 }

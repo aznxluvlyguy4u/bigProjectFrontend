@@ -4,7 +4,7 @@
             class="uln-country-code"
             [(ngModel)]="ulnCountryCode"
             title="ulnCountryCode" [disabled]="disabled"
-            (change)="changeCountryCode()"
+            (click)="changeCountryCode()"
             [ngClass]="{'ng-dirty': isCountryCodeDirty}"
     >
         <option
@@ -20,7 +20,7 @@
            [disabled]="disabled"
            pattern="[0-9]{8,12}"
            maxlength="12"
-           (change)="changeNumber()"
+           (keydown)="changeNumber()"
            [ngClass]="{'ng-dirty': isNumberDirty}"
     >
     <button *ngIf="!disabled"

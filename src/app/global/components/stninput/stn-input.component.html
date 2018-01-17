@@ -4,7 +4,7 @@
             class="pedigree-country-code"
             [(ngModel)]="pedigreeCountryCode"
             title="pedigreeCountryCode" [disabled]="disabled"
-            (change)="changeCountryCode()"
+            (click)="changeCountryCode()"
             [ngClass]="{'ng-dirty': isCountryCodeDirty}"
     >
         <option
@@ -20,7 +20,7 @@
            [disabled]="disabled"
            maxlength="11"
            pattern="[A-Z0-9]{5}[-][a-zA-Z0-9]{5}"
-           (change)="changeNumber()"
+           (keydown)="changeNumber()"
            [ngClass]="{'ng-dirty': isNumberDirty}"
     >
     <button *ngIf="!disabled"
