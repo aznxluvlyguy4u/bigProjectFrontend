@@ -52,7 +52,7 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let animal of editedAnimals">
-                    <td *ngIf="showIds || showDates">{{ animal.creation_date  | date: 'dd-MM-yyyy @HH:mm:ss' }}</td>
+                    <td *ngIf="showIds || showDates" title="{{ animal.creation_date  | date: 'dd-MM-yyyy @HH:mm:ss' }}">{{ animal.creation_date  | date: 'dd-MM-yyyy' }}</td>
                     <td *ngIf="showIds">{{ animal.id }}</td>
                     <td *ngIf="showIds"><input title="aiind" class="table-input" type="text" [(ngModel)]="animal.name" [disabled]="isSaving"></td>
                     <td *ngIf="showIds"><input title="nickname" class="table-input" type="text" [(ngModel)]="animal.nickname" [disabled]="isSaving"></td>
@@ -79,8 +79,12 @@
                     <td>{{ animal.location ? animal.location.ubn : '-' }}</td>
                     <td>{{ animal.is_alive }}</td>
                     <td><input title="note" class="table-input" type="text" [(ngModel)]="animal.note" [disabled]="isSaving"></td>
-                    <td *ngIf="showPedigreeData || showDates">{{ animal.date_of_birth  | date: 'dd-MM-yyyy @HH:mm:ss' }}</td>
-                    <td *ngIf="showDates">{{ animal.date_of_death  | date: 'dd-MM-yyyy @HH:mm:ss' }}</td>
+
+                    <td *ngIf="showPedigreeData || showDates" title="{{ animal.date_of_birth  | date: 'dd-MM-yyyy @HH:mm:ss' }}"
+                    >{{ animal.date_of_birth  | date: 'dd-MM-yyyy' }}</td>
+                    <td *ngIf="showDates" title="{{ animal.date_of_death  | date: 'dd-MM-yyyy @HH:mm:ss' }}"
+                    >{{ animal.date_of_death  | date: 'dd-MM-yyyy' }}</td>
+
                     <td *ngIf="showPedigreeData">{{ animal.parent_father ?
                         animal.parent_father.uln_country_code + animal.parent_father.uln_number : '-'}}</td>
                     <td *ngIf="showPedigreeData">{{ animal.parent_mother ?
