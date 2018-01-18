@@ -20,7 +20,8 @@
            [disabled]="disabled"
            pattern="[0-9]{8,12}"
            maxlength="12"
-           (keydown)="changeNumber()"
+           (keyup)="changeNumber()"
+           (mouseleave)="changeNumber()"
            [ngClass]="{'ng-dirty': isNumberDirty}"
     >
     <button *ngIf="!disabled"

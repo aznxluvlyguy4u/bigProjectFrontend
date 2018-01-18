@@ -47,12 +47,10 @@ export class StnInputComponent implements OnInit, OnChanges {
 
 	changeCountryCode() {
 			this.pedigreeCountryCodeChange.emit(this.pedigreeCountryCode);
-			this.isCountryCodeDirty = true;
 	}
 
 	changeNumber() {
 			this.pedigreeNumberChange.emit(this.pedigreeNumber);
-			this.isNumberDirty = true;
 	}
 
 	reset() {

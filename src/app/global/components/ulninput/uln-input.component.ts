@@ -47,12 +47,10 @@ export class UlnInputComponent implements OnInit, OnChanges {
 
 	changeCountryCode() {
 			this.ulnCountryCodeChange.emit(this.ulnCountryCode);
-			this.isCountryCodeDirty = true;
 	}
 
 	changeNumber() {
 			this.ulnNumberChange.emit(this.ulnNumber);
-			this.isNumberDirty = true;
 	}
 
 	reset() {
