@@ -517,5 +517,9 @@
   "UPDATE ALL FILTERED ANIMALS": "Update alle gefilterde dieren",
   "EDIT ULNS WARNING": "Pas op! Dit is geen omnummering maar alleen een aanpassing van de ULN direct in de database!",
   "SENT ANIMALS UPDATED": "Verstuurde dieren geupdatet",
-  "SENT ANIMALS NOT UPDATED": "Verstuurde dieren niet geupdated"
+  "SENT ANIMALS NOT UPDATED": "Verstuurde dieren niet geupdated",
+  "RETRIEVE ANIMALS": "Haal dieren op",
+  "SEPARATOR SYMBOL": "Scheidingssymbool",
+  "PLAIN TEXT INPUT": "Platte text invoer",
+  "LIST OF ULNS AND PEDIGREE NUMBERS SEPARATED BY THE SEPARATOR SYMBOL": "Lijst van ULNs en STNs gescheiden door het scheidingssymbool"
 }

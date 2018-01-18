@@ -9,6 +9,7 @@ import {provideForms} from "@angular/forms";
 import {UtilsService} from "./global/services/utils/utils.service";
 import {AuthenticatedGuard} from "./global/guards/authenticated.guard";
 import { DeveloperGuard } from './global/guards/developer.guard';
+import { LocationStorage } from './global/services/storage/LocationStorage';
 
 require('font-awesome-loader');
 
@@ -23,6 +24,7 @@ bootstrap(IndexComponent, [
     provideForms(),
     AuthenticatedGuard,
     DeveloperGuard,
+    LocationStorage,
     NSFOService,
     TranslateService,
     SettingsService,

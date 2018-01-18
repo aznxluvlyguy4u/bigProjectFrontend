@@ -11,22 +11,28 @@ import _ = require("lodash");
 import { UlnInputComponent } from '../../../global/components/ulninput/uln-input.component';
 import { StnInputComponent } from '../../../global/components/stninput/stn-input.component';
 import { HttpCallButtonComponent } from '../../../global/components/httpcallbutton/http-call-button.component';
+import { StartInputModalComponent } from './start-input-modal/start-input-modal.component';
+import { TableSpinnerComponent } from '../../../global/components/tablespinner/table-spinner.component';
+import { Location } from '../../client/client.model';
+import { LocationStorage } from '../../../global/services/storage/LocationStorage';
 
 @Component({
 		directives: [REACTIVE_FORM_DIRECTIVES, UlnInputComponent, StnInputComponent,
-			HttpCallButtonComponent],
+			HttpCallButtonComponent, StartInputModalComponent, TableSpinnerComponent],
 		template: require('./animals-batch-edit.component.html'),
 		pipes: [TranslatePipe]
 })
 export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
-		getAnimalsBody: GetAnimalsBody;
 		retrievedAnimals: Animal[];
 		editedAnimals: Animal[];
 		filteredAnimals: Animal[];
+		locations: Location[];
 		private animalsResult: AnimalsResult;
 
-		private isAnimalsLoaded: boolean;
+		isAnimalsLoaded: boolean;
 		isSaving: boolean;
+		loadingLocations: boolean;
+		retrievingAnimals: boolean;
 
 		showIds: boolean;
 		showBreedData: boolean;
@@ -41,20 +47,25 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 		openOptions: boolean;
 		openFilters: boolean;
 
+		displayStartInputModal: string;
+
 		initialValuesChanged = new EventEmitter<boolean>();
 
-		constructor(private nsfo: NSFOService, private translate: TranslateService) {}
+		constructor(private nsfo: NSFOService,
+								private translate: TranslateService,
+								private locationStorage: LocationStorage) {}
 
 		private initializeValues() {
 				this.retrievedAnimals = [];
 				this.editedAnimals = [];
 				this.filteredAnimals = [];
+				this.locations = [];
 
 				this.isAnimalsLoaded = false;
-				this.getAnimalsBody = new GetAnimalsBody();
-				this.getAnimalsBody.separator = ',';
 				this.animalsResult = new AnimalsResult();
 				this.isSaving = false;
+				this.retrievingAnimals = false;
+				this.loadingLocations = false;
 
 				// TODO edit later
 				this.showIds = true;
@@ -68,15 +79,13 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 				this.allowUlnEdit = false;
 				this.openOptions = true;
 				this.openFilters = false;
+
+				this.displayStartInputModal = 'block';
 		}
 
 		ngOnInit() {
 				this.initializeValues();
-
-				//TODO remove later
-				this.getAnimalsBody.plain_text_input = ' NL 00189-75741   , NL 100126232800   , NL 109992775741 , NL 109993894618, UK 9JK3843, NL DDD33-25466DD , NL 100020389194, NL 03215-07224 ,    NL 00189-4FDSF';
-
-				this.getAnimals();
+				this.getGeneralData();
 		}
 
 		ngOnDestroy() {
@@ -88,10 +97,24 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 					&& this.filteredAnimals.length > 0;
 		}
 
-		private getAnimals() {
+		getGeneralData() {
+				this.locationStorage.refreshLocations();
+		}
+
+		getLocations(): Location[] {
+				return this.locationStorage.locationsActiveOnly;
+		}
+
+		isLocationsLoading(): boolean {
+				return this.locationStorage.loadingLocations;
+		}
+
+		getAnimals(getAnimalsBody: GetAnimalsBody) {
+				this.displayStartInputModal = 'none';
+				this.retrievingAnimals = true;
 				const queryParam = '?plain_text_input=true';
 
-				this.nsfo.doPostRequest(this.nsfo.URI_ANIMALS + queryParam, this.getAnimalsBody)
+				this.nsfo.doPostRequest(this.nsfo.URI_ANIMALS + queryParam, getAnimalsBody)
 					.subscribe(
 					res => {
 									this.retrievedAnimals = res.result.animals;
@@ -105,9 +128,11 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 									//TODO remove after we have actual filtered animals
 									// this.filteredAnimals = this.editedAnimals;
 									this.filteredAnimals = res.result.animals;
+									this.retrievingAnimals = false;
 
 									}, error => {
 									alert(this.nsfo.getErrorMessage(error));
+									this.retrievingAnimals = false;
 							}
 					);
 		}
@@ -182,4 +207,8 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 				this.initialValuesChanged.emit(true);
 		}
 
+
+		resetFilterOptions() {
+			 //TODO
+		}
 }

@@ -17,6 +17,23 @@
             </button>
         </div>
         <div class="column large-3">
+            <!--OPEN GET ANIMALS MODAL BUTTON-->
+            <ng-template *ngIf="!retrievingAnimals">
+                <button
+                        type="button"
+                        class="button success"
+                        (click)="displayStartInputModal = 'block'"
+                >{{'RETRIEVE ANIMALS'|translate}}</button>
+            </ng-template>
+            <ng-template *ngIf="retrievingAnimals">
+                <button
+                        type="button"
+                        class="button secondary"
+                        [disabled]="true"
+                >{{'RETRIEVE ANIMALS'|translate}}</button>
+            </ng-template>
+        </div>
+        <div class="column large-3">
             <!--UPDATE ANIMALS BUTTON-->
             <app-http-call-button
                     [labelText]="'UPDATE ALL FILTERED ANIMALS'"
@@ -91,7 +108,7 @@
 
             <!--&lt;!&ndash;FILTER GENDER&ndash;&gt;-->
             <!--<label>{{ 'GENDER' | translate }}-->
-                <!--<select #filters_gender [(ngModel)]="genderFilterValue" [disabled]="onlyFemales">-->
+                <!--<select #filters_gender [(ngModel)]="genderFilterValue" [isActive]="onlyFemales">-->
                     <!--<option *ngFor="let gender of gender_filter_options" value="{{ gender }}">{{ gender | translate }}</option>-->
                 <!--</select>-->
             <!--</label>-->
@@ -106,7 +123,13 @@
         <!--</div>-->
     <!--</div>-->
 
-    <div class="row">
+    <app-table-spinner
+            [isActive]="retrievingAnimals"
+            [showLoadingText]="true"
+    ></app-table-spinner>
+
+    <ng-template *ngIf="!retrievingAnimals">
+        <div class="row">
         <div class="large-12 columns">
             <table class="stacked">
                 <thead>
@@ -233,7 +256,13 @@
             </table>
         </div>
     </div>
+    </ng-template>
 
+<app-start-input-modal
+        [displayModal]="displayStartInputModal"
+        (inputDataRequested)="getAnimals($event)"
+        (closedModal)="displayStartInputModal = 'none'"
+></app-start-input-modal>
 <!--&lt;!&ndash;ADD REASON MODAL&ndash;&gt;-->
 <!--<div class="reveal-overlay" [ngStyle]="{'display': displayModal}">-->
     <!--<div class="tiny reveal" [ngStyle]="{'display': displayModal}">-->
@@ -294,31 +323,31 @@
                 <!--<label *ngIf="errorMessage" class="input-error-msg">{{ errorMessage | translate }}</label>-->
             <!--</span>-->
             <!--<span class="pull-right">-->
-                <!--<button *ngIf="!isModalEditMode" [disabled]="isSaving" (click)="addAdmin()" class="tiny primary button">-->
-                    <!--<span *ngIf="!isSaving">-->
+                <!--<button *ngIf="!isModalEditMode" [isActive]="isProcessing" (click)="addAdmin()" class="tiny primary button">-->
+                    <!--<span *ngIf="!isProcessing">-->
                         <!--{{ 'ADD' | translate}}-->
                     <!--</span>-->
-                    <!--<span *ngIf="isSaving">-->
+                    <!--<span *ngIf="isProcessing">-->
                         <!--<i class="fa fa-gear fa-spin fa-fw"></i>-->
                     <!--</span>-->
                 <!--</button>-->
-                <!--<button *ngIf="isModalEditMode" [disabled]="isSaving" (click)="editAdmin()" class="tiny primary button">-->
-                    <!--<span *ngIf="!isSaving">-->
+                <!--<button *ngIf="isModalEditMode" [isActive]="isProcessing" (click)="editAdmin()" class="tiny primary button">-->
+                    <!--<span *ngIf="!isProcessing">-->
                         <!--{{ 'EDIT' | translate}}-->
                     <!--</span>-->
-                    <!--<span *ngIf="isSaving">-->
+                    <!--<span *ngIf="isProcessing">-->
                         <!--<i class="fa fa-gear fa-spin fa-fw"></i>-->
                     <!--</span>-->
                 <!--</button>-->
-                <!--<button (click)="closeModal()" [disabled]="isSaving" class="tiny alert button">{{ 'CANCEL' | translate}}</button>-->
+                <!--<button (click)="closeModal()" [isActive]="isProcessing" class="tiny alert button">{{ 'CANCEL' | translate}}</button>-->
             <!--</span>-->
         <!--</div>-->
     <!--</div>-->
 <!--</div>-->
 
 <!--&lt;!&ndash;REMOVE MODAL&ndash;&gt;-->
-<!--<div class="reveal-overlay" [ngStyle]="{'display': displayRemoveModal}">-->
-    <!--<div class="tiny reveal" [ngStyle]="{'display': displayRemoveModal}">-->
+<!--<div class="reveal-overlay" [ngStyle]="{'display': displayModal}">-->
+    <!--<div class="tiny reveal" [ngStyle]="{'display': displayModal}">-->
         <!--<div class="modal-header">-->
             <!--{{ 'REMOVE ADMIN' | translate }}-->
             <!--<button type="button" (click)="closeRemoveModal()" class="pull-right" aria-label="Close modal">-->
@@ -331,15 +360,15 @@
                 <!--<label *ngIf="errorMessage" class="input-error-msg">{{ errorMessage | translate }}</label>-->
             <!--</span>-->
             <!--<span class="pull-right">-->
-            <!--<button class="tiny alert button" [disabled]="isSaving" (click)="removeAdmin()">-->
-                <!--<span *ngIf="!isSaving">-->
+            <!--<button class="tiny alert button" [isActive]="isProcessing" (click)="removeAdmin()">-->
+                <!--<span *ngIf="!isProcessing">-->
                     <!--{{ 'REMOVE' | translate}}-->
                 <!--</span>-->
-                <!--<span *ngIf="isSaving">-->
+                <!--<span *ngIf="isProcessing">-->
                     <!--<i class="fa fa-gear fa-spin fa-fw"></i>-->
                 <!--</span>-->
             <!--</button>-->
-            <!--<button class="tiny primary button" [disabled]="isSaving" (click)="closeRemoveModal()">{{ 'CANCEL' | translate}}</button>-->
+            <!--<button class="tiny primary button" [isActive]="isProcessing" (click)="closeRemoveModal()">{{ 'CANCEL' | translate}}</button>-->
             <!--</span>-->
         <!--</div>-->
     <!--</div>-->
