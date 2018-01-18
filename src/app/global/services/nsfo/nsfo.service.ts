@@ -14,6 +14,7 @@ export class NSFOService {
     public URI_PROVINCES = '/v1/countries/nl/provinces';
 
     public URI_ANIMALS = '/v1/animals';
+    public URI_ANIMALS_DETAILS = '/v1/animals-details';
 
     public URI_GHOST_LOGIN: string = '/v1/admins/ghost';
     public URI_ADMIN: string = '/v1/admins';
