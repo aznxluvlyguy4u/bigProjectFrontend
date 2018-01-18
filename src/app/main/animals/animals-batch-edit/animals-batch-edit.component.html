@@ -5,7 +5,6 @@
             <button class="accordion-button expanded" [ngClass]="{'toggled': openOptions}" (click)="openOptions = !openOptions">
                 <i *ngIf="!openOptions" class="fa fa-caret-right fa-fw" aria-hidden="true"></i>
                 <i *ngIf="openOptions" class="fa fa-caret-down fa-fw" aria-hidden="true"></i>
-                {{ '' | translate }} -
                 <span> {{ 'OPTIONS' | translate }} </span>
             </button>
         </div>
@@ -14,7 +13,6 @@
             <button class="accordion-button expanded" [ngClass]="{'toggled': openFilters}" (click)="openFilters = !openFilters">
                 <i *ngIf="!openFilters" class="fa fa-caret-right fa-fw" aria-hidden="true"></i>
                 <i *ngIf="openFilters" class="fa fa-caret-down fa-fw" aria-hidden="true"></i>
-                {{ '' | translate }} -
                 <span> {{ 'FILTERS' | translate }} </span>
             </button>
         </div>
@@ -28,6 +26,8 @@
             ></app-http-call-button>
         </div>
     </div>
+
+    <hr *ngIf="openOptions">
 
     <div class="row">
         <div class="column large-3">
@@ -54,7 +54,18 @@
         </div>
     </div>
 
+    <hr *ngIf="openFilters">
 
+    <div class="row">
+        <div class="column large-6 end">
+            <div class="accordion-container" [hidden]="!openFilters">
+                <div class="filler-block">{{ 'FILTERS' | translate }}</div>
+
+                <label>ADD FILTERS HERE</label>
+
+            </div>
+        </div>
+    </div>
         
         <!--&lt;!&ndash;ACCORDION BUTTON&ndash;&gt;-->
         <!--<button class="accordion-button expanded" [ngClass]="{'toggled': filter_toggled}" (click)="filter_toggled = !filter_toggled">-->

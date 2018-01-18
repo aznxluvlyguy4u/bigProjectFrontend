@@ -67,6 +67,7 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 
 				this.allowUlnEdit = false;
 				this.openOptions = true;
+				this.openFilters = false;
 		}
 
 		ngOnInit() {
