@@ -10,6 +10,7 @@ import {UtilsService} from "./global/services/utils/utils.service";
 import {AuthenticatedGuard} from "./global/guards/authenticated.guard";
 import { DeveloperGuard } from './global/guards/developer.guard';
 import { LocationStorage } from './global/services/storage/LocationStorage';
+import { CollarStorage } from './global/services/storage/collar.storage';
 
 require('font-awesome-loader');
 
@@ -25,6 +26,7 @@ bootstrap(IndexComponent, [
     AuthenticatedGuard,
     DeveloperGuard,
     LocationStorage,
+    CollarStorage,
     NSFOService,
     TranslateService,
     SettingsService,

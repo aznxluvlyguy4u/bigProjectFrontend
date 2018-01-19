@@ -5,7 +5,7 @@
             [(ngModel)]="pedigreeCountryCode"
             title="pedigreeCountryCode" [disabled]="disabled"
             (click)="changeCountryCode()"
-            [ngClass]="{'ng-dirty': isCountryCodeDirty}"
+            [ngClass]="{'ng-dirty': isColorDirty}"
     >
         <option
                 *ngFor="let countryCode of getCountryCodeList()"

@@ -181,9 +181,20 @@
                 <tr *ngFor="let animal of editedAnimals">
                     <td *ngIf="showIds || showDates" title="{{ animal.creation_date  | date: 'dd-MM-yyyy @HH:mm:ss' }}">{{ animal.creation_date  | date: 'dd-MM-yyyy' }}</td>
                     <td *ngIf="showIds">{{ animal.id }}</td>
-                    <td *ngIf="showIds"><input title="aiind" class="table-input" type="text" [(ngModel)]="animal.name" [disabled]="isSaving"></td>
+                    <td *ngIf="showIds"><input title="aiind" class="table-input" type="number" [(ngModel)]="animal.name" [disabled]="isSaving"></td>
                     <td *ngIf="showIds"><input title="nickname" class="table-input" type="text" [(ngModel)]="animal.nickname" [disabled]="isSaving"></td>
-                    <td *ngIf="showIds"><input title="collar" class="table-input" type="text" [(ngModel)]="animal.collar_color" [disabled]="isSaving"></td>
+
+                    <td>
+                        <app-collar-input
+                                [collarColor]="animal.collar_color"
+                                (collarColorChange)="animal.collar_color=$event"
+                                [collarNumber]="animal.collar_number"
+                                (collarNumberChange)="animal.collar_number=$event"
+                                [disabled]="isSaving"
+                                [updateInitialValues]="(initialValuesChanged)"
+                        ></app-collar-input>
+                    </td>
+
                     <td>
                         <app-uln-input
                                 [ulnCountryCode]="animal.uln_country_code"
@@ -194,6 +205,7 @@
                                 [updateInitialValues]="(initialValuesChanged)"
                         ></app-uln-input>
                     </td>
+
                     <td>
                         <app-stn-input
                                 [pedigreeCountryCode]="animal.pedigree_country_code"
@@ -204,6 +216,7 @@
                                 [updateInitialValues]="(initialValuesChanged)"
                         ></app-stn-input>
                     </td>
+
                     <td>{{ animal.type | translate}}</td>
                     <td>{{ animal.location ? animal.location.ubn : '-' }}</td>
                     <td>{{ animal.is_alive }}</td>
@@ -220,7 +233,7 @@
                     <td *ngIf="showPedigreeData">{{ animal.parent_mother ?
                         animal.parent_mother.uln_country_code + animal.parent_mother.uln_number : '-'}}</td>
                     <td *ngIf="showPedigreeData || showBreedData">{{ animal.litter ? animal.litter.born_alive_count + animal.litter.stillborn_count : '-' }}</td>
-                    <td *ngIf="showPedigreeData"><input title="ubnOfBirth" class="table-input" type="text" [(ngModel)]="animal.ubn_of_birth" [disabled]="isSaving"></td>
+                    <td *ngIf="showPedigreeData"><input title="ubnOfBirth" class="table-input" type="number" [(ngModel)]="animal.ubn_of_birth" [disabled]="isSaving"></td>
                     <td *ngIf="showPedigreeData">{{ animal.location_of_birth ? animal.location_of_birth.ubn : '-' }}</td>
                     <td *ngIf="showPedigreeData">{{ animal.surrogate ?
                         animal.surrogate.uln_country_code + animal.surrogate.uln_number : '-'}}</td>

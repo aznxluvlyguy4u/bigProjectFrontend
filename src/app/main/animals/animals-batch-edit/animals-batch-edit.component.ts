@@ -17,10 +17,11 @@ import { Location } from '../../client/client.model';
 import { LocationStorage } from '../../../global/services/storage/LocationStorage';
 import { BIRTH_PROGRESS_TYPES } from '../../../global/constants/birth-progress-types.constant';
 import { BREED_TYPES } from '../../../global/constants/breed-type.constant';
+import { CollarInputComponent } from '../../../global/components/collarinput/collar-input.component';
 
 @Component({
 		directives: [REACTIVE_FORM_DIRECTIVES, UlnInputComponent, StnInputComponent,
-			HttpCallButtonComponent, StartInputModalComponent, TableSpinnerComponent],
+			HttpCallButtonComponent, StartInputModalComponent, TableSpinnerComponent, CollarInputComponent],
 		template: require('./animals-batch-edit.component.html'),
 		pipes: [TranslatePipe]
 })
