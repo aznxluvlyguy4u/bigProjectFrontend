@@ -6,6 +6,7 @@
             (click)="changeColor()"
             [ngClass]="{'ng-dirty': isColorDirty}"
     >
+        <option [value]=""> </option>
         <option
                 *ngFor="let collarColor of getCollars()"
                 value="{{ collarColor }}"
