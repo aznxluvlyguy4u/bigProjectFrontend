@@ -15,6 +15,7 @@ import { StartInputModalComponent } from './start-input-modal/start-input-modal.
 import { TableSpinnerComponent } from '../../../global/components/tablespinner/table-spinner.component';
 import { Location } from '../../client/client.model';
 import { LocationStorage } from '../../../global/services/storage/LocationStorage';
+import { BIRTH_PROGRESS_TYPES } from '../../../global/constants/birth-progress-types.constant';
 
 @Component({
 		directives: [REACTIVE_FORM_DIRECTIVES, UlnInputComponent, StnInputComponent,
@@ -33,6 +34,8 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 		isSaving: boolean;
 		loadingLocations: boolean;
 		retrievingAnimals: boolean;
+
+		birthProgressTypes = BIRTH_PROGRESS_TYPES;
 
 		showIds: boolean;
 		showBreedData: boolean;

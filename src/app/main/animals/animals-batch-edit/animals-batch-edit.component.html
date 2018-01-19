@@ -225,7 +225,17 @@
                     <td *ngIf="showPedigreeData">{{ animal.surrogate ?
                         animal.surrogate.uln_country_code + animal.surrogate.uln_number : '-'}}</td>
                     <td *ngIf="showPedigreeData">{{ animal.lambar }}</td>
-                    <td *ngIf="showPedigreeData"><input title="birthProgress" class="table-input" type="text" [(ngModel)]="animal.birth_progress" [disabled]="isSaving"></td>
+
+                    <td *ngIf="showPedigreeData">
+                        <select
+                                class="table-input birth-progress-input"
+                                [(ngModel)]="animal.birth_progress"
+                                [disabled]="isSaving">
+                            <option [value]=""> </option>
+                            <option *ngFor="let birthProgressType of birthProgressTypes" value="{{ birthProgressType }}"
+                            >{{ birthProgressType | translate }}</option>
+                        </select>
+                    </td>
 
                     <td *ngIf="showBreedData"><input title="breedType" class="table-input" type="text" [(ngModel)]="animal.breed_type" [disabled]="isSaving"></td>
                     <td *ngIf="showBreedData"><input title="breedCode" class="table-input" type="text" [(ngModel)]="animal.breed_code" [disabled]="isSaving"></td>

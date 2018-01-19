@@ -521,5 +521,11 @@
   "RETRIEVE ANIMALS": "Haal dieren op",
   "SEPARATOR SYMBOL": "Scheidingssymbool",
   "PLAIN TEXT INPUT": "Platte text invoer",
-  "LIST OF ULNS AND PEDIGREE NUMBERS SEPARATED BY THE SEPARATOR SYMBOL": "Lijst van ULNs en STNs gescheiden door het scheidingssymbool"
+  "LIST OF ULNS AND PEDIGREE NUMBERS SEPARATED BY THE SEPARATOR SYMBOL": "Lijst van ULNs en STNs gescheiden door het scheidingssymbool",
+  "NO HELP": "Zonder Hulp",
+  "LIGHT WITH HELP": "Licht met hulp",
+  "NORMAL WITH HELP": "Normaal met hulp",
+  "HEAVY WITH HELP": "Zwaar met hulp",
+  "CAESARIAN (LAMB TOO BIG)": "Keizersnede (lam te groot)",
+  "CAESARIAN (INSUFFICIENT ACCESS)": "Keizersnede (onvoldoende ontsluiting)"
 }
