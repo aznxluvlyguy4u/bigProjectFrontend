@@ -143,7 +143,9 @@
                     <td>{{ 'STN' | translate}}</td>
                     <td>{{ 'GENDER' | translate}}</td>
                     <td>{{ 'CURRENT UBN' | translate}}</td>
-                    <td>{{ 'ALIVE' | translate}}</td>
+                    <td>{{ 'ALIVE' | translate}}
+                        <i class="fa fa-info-circle" aria-hidden="true" title="{{'CLICK ON BOOLEAN TO TOGGLE VALUE' | translate}}"></i>
+                    </td>
 
                     <td *ngIf="showNote">{{ 'NOTE' | translate}}</td>
 
@@ -157,7 +159,8 @@
                     <td *ngIf="showPedigreeData">{{ 'BREEDER UBN' | translate}}</td>
                     <td *ngIf="showPedigreeData">{{ 'BREEDER UBN' | translate}}({{ 'LOCATION' | translate}})</td>
                     <td *ngIf="showPedigreeData">{{ 'SURROGATE MOTHER' | translate}}</td>
-                    <td *ngIf="showPedigreeData">{{ 'LAMBAR' | translate}}</td>
+                    <td *ngIf="showPedigreeData">{{ 'LAMBAR' | translate}}
+                        <i class="fa fa-info-circle" aria-hidden="true" title="{{'CLICK ON BOOLEAN TO TOGGLE VALUE' | translate}}"></i>                    </td>
                     <td *ngIf="showPedigreeData">{{ 'BIRTH PROGRESS' | translate}}</td>
 
                     <td *ngIf="showBreedData">{{ 'BREED TYPE' | translate}}</td>
@@ -219,7 +222,13 @@
 
                     <td>{{ animal.type | translate}}</td>
                     <td>{{ animal.location ? animal.location.ubn : '-' }}</td>
-                    <td>{{ animal.is_alive }}</td>
+                    <td>
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="animal.is_alive"
+                                (boolValChanged)="animal.is_alive = $event"
+                        ></app-boolean-input>
+                    </td>
                     <td *ngIf="showNote"><input title="note" class="table-input" type="text" [(ngModel)]="animal.note" [disabled]="isSaving"></td>
 
                     <td *ngIf="showPedigreeData || showDates" title="{{ animal.date_of_birth  | date: 'dd-MM-yyyy @HH:mm:ss' }}"
@@ -237,7 +246,14 @@
                     <td *ngIf="showPedigreeData">{{ animal.location_of_birth ? animal.location_of_birth.ubn : '-' }}</td>
                     <td *ngIf="showPedigreeData">{{ animal.surrogate ?
                         animal.surrogate.uln_country_code + animal.surrogate.uln_number : '-'}}</td>
-                    <td *ngIf="showPedigreeData">{{ animal.lambar }}</td>
+
+                    <td *ngIf="showPedigreeData">
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="animal.lambar"
+                                (boolValChanged)="animal.lambar = $event"
+                        ></app-boolean-input>
+                    </td>
 
                     <td *ngIf="showPedigreeData">
                         <select

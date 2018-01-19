@@ -18,10 +18,12 @@ import { LocationStorage } from '../../../global/services/storage/LocationStorag
 import { BIRTH_PROGRESS_TYPES } from '../../../global/constants/birth-progress-types.constant';
 import { BREED_TYPES } from '../../../global/constants/breed-type.constant';
 import { CollarInputComponent } from '../../../global/components/collarinput/collar-input.component';
+import { BooleanInputComponent } from '../../../global/components/booleaninput/boolean-input.component';
 
 @Component({
 		directives: [REACTIVE_FORM_DIRECTIVES, UlnInputComponent, StnInputComponent,
-			HttpCallButtonComponent, StartInputModalComponent, TableSpinnerComponent, CollarInputComponent],
+			HttpCallButtonComponent, StartInputModalComponent, TableSpinnerComponent, CollarInputComponent,
+			BooleanInputComponent],
 		template: require('./animals-batch-edit.component.html'),
 		pipes: [TranslatePipe]
 })
