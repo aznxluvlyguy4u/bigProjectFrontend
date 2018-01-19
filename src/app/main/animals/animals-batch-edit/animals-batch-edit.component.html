@@ -228,6 +228,7 @@
 
                     <td *ngIf="showPedigreeData">
                         <select
+                                title="birthProgress"
                                 class="table-input birth-progress-input"
                                 [(ngModel)]="animal.birth_progress"
                                 [disabled]="isSaving">
@@ -237,7 +238,18 @@
                         </select>
                     </td>
 
-                    <td *ngIf="showBreedData"><input title="breedType" class="table-input" type="text" [(ngModel)]="animal.breed_type" [disabled]="isSaving"></td>
+                    <td *ngIf="showBreedData">
+                        <select
+                                type="breedType"
+                                class="table-input breed-type-input"
+                                [(ngModel)]="animal.breed_type"
+                                [disabled]="isSaving">
+                            <option [value]=""> </option>
+                            <option *ngFor="let breedType of breedTypes" value="{{ breedType }}"
+                            >{{ breedType | translate }}</option>
+                        </select>
+                    </td>
+
                     <td *ngIf="showBreedData"><input title="breedCode" class="table-input" type="text" [(ngModel)]="animal.breed_code" [disabled]="isSaving"></td>
                     <td *ngIf="showExaminationData"><input title="predicate" class="table-input" type="text" [(ngModel)]="animal.predicate" [disabled]="isSaving"></td>
                     <td *ngIf="showExaminationData"><input title="predicateScore" class="table-input" type="number" [(ngModel)]="animal.predicate_score" [disabled]="isSaving"></td>

@@ -16,6 +16,7 @@ import { TableSpinnerComponent } from '../../../global/components/tablespinner/t
 import { Location } from '../../client/client.model';
 import { LocationStorage } from '../../../global/services/storage/LocationStorage';
 import { BIRTH_PROGRESS_TYPES } from '../../../global/constants/birth-progress-types.constant';
+import { BREED_TYPES } from '../../../global/constants/breed-type.constant';
 
 @Component({
 		directives: [REACTIVE_FORM_DIRECTIVES, UlnInputComponent, StnInputComponent,
@@ -36,6 +37,7 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 		retrievingAnimals: boolean;
 
 		birthProgressTypes = BIRTH_PROGRESS_TYPES;
+		breedTypes = BREED_TYPES;
 
 		showIds: boolean;
 		showBreedData: boolean;
