@@ -1,6 +1,6 @@
 <div id="animals-batch-edit">
     <div class="row">
-        <div class="column large-3">
+        <div class="column large-2">
             <!--OPEN OPTIONS ACCORDION BUTTON-->
             <button class="accordion-button expanded" [ngClass]="{'toggled': openOptions}" (click)="openOptions = !openOptions">
                 <i *ngIf="!openOptions" class="fa fa-caret-right fa-fw" aria-hidden="true"></i>
@@ -8,7 +8,7 @@
                 <span> {{ 'OPTIONS' | translate }} </span>
             </button>
         </div>
-        <div class="column large-3">
+        <div class="column large-2">
             <!--OPEN FILTER ACCORION BUTTON-->
             <button class="accordion-button expanded" [ngClass]="{'toggled': openFilters}" (click)="openFilters = !openFilters">
                 <i *ngIf="!openFilters" class="fa fa-caret-right fa-fw" aria-hidden="true"></i>
@@ -16,7 +16,7 @@
                 <span> {{ 'FILTERS' | translate }} </span>
             </button>
         </div>
-        <div class="column large-3">
+        <div class="column large-2">
             <!--OPEN GET ANIMALS MODAL BUTTON-->
             <ng-template *ngIf="!retrievingAnimals">
                 <button
@@ -31,6 +31,25 @@
                         class="button secondary"
                         [disabled]="true"
                 >{{'RETRIEVE ANIMALS'|translate}}</button>
+            </ng-template>
+        </div>
+        <div class="column large-2">
+            <!--RESET ANIMALS MODAL BUTTON-->
+            <ng-template *ngIf="!retrievingAnimals">
+                <button
+                        type="button"
+                        class="button alert"
+                        (click)="resetAnimals()"
+                        title="{{'CANCEL ALL UNSAVED EDITS'|translate}}"
+                >{{'ALL'|translate}} <i class="fa fa-fast-backward" aria-hidden="true"></i></button>
+            </ng-template>
+            <ng-template *ngIf="retrievingAnimals">
+                <button
+                        type="button"
+                        class="button secondary"
+                        [disabled]="true"
+                        title="{{'CANCEL ALL UNSAVED EDITS'|translate}}"
+                >{{'ALL'|translate}} <i class="fa fa-fast-backward" aria-hidden="true"></i></button>
             </ng-template>
         </div>
         <div class="column large-3">

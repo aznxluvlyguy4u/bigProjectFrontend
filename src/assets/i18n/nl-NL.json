@@ -528,5 +528,6 @@
   "HEAVY WITH HELP": "Zwaar met hulp",
   "CAESARIAN (LAMB TOO BIG)": "Keizersnede (lam te groot)",
   "CAESARIAN (INSUFFICIENT ACCESS)": "Keizersnede (onvoldoende ontsluiting)",
-  "CLICK ON BOOLEAN TO TOGGLE VALUE": "Klik op de boolean om de waarde te schakelen"
+  "CLICK ON BOOLEAN TO TOGGLE VALUE": "Klik op de boolean om de waarde te schakelen",
+  "CANCEL ALL UNSAVED EDITS": "Annuleer alle niet opgeslagen edits"
 }

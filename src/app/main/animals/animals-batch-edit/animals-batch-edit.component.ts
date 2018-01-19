@@ -126,7 +126,7 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 					.subscribe(
 					res => {
 									this.retrievedAnimals = res.result.animals;
-									this.editedAnimals = res.result.animals;
+									this.editedAnimals = _.cloneDeep(this.retrievedAnimals);
 									this.animalsResult.invalid = res.result.invalid;
 									this.animalsResult.stns_without_found_animals = res.result.stns_without_found_animals;
 									this.animalsResult.ulns_without_found_animals = res.result.ulns_without_found_animals;
@@ -215,6 +215,10 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 				this.initialValuesChanged.emit(true);
 		}
 
+		resetAnimals() {
+			this.editedAnimals = _.cloneDeep(this.retrievedAnimals);
+			this.animalsListWasUpdated();
+		}
 
 		resetFilterOptions() {
 			 //TODO
