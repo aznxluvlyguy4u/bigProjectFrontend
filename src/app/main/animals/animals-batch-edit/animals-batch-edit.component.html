@@ -316,7 +316,19 @@
                     <td *ngIf="showBreedData"><input title="breedCode" class="table-input" type="text" [(ngModel)]="animal.breed_code" [disabled]="isSaving"></td>
                     <td *ngIf="showExaminationData"><input title="predicate" class="table-input" type="text" [(ngModel)]="animal.predicate" [disabled]="isSaving"></td>
                     <td *ngIf="showExaminationData"><input title="predicateScore" class="table-input" type="number" [(ngModel)]="animal.predicate_score" [disabled]="isSaving"></td>
-                    <td *ngIf="showHealthData"><input title="scrapieGenotype" class="table-input" type="text" [(ngModel)]="animal.scrapie_genotype" [disabled]="isSaving"></td>
+
+                    <td *ngIf="showHealthData">
+                        <select
+                                title="scrapieGenotype"
+                                type="scrapieGenotype"
+                                class="table-input scrapiegenotype-input"
+                                [(ngModel)]="animal.scrapie_genotype"
+                                [disabled]="isSaving">
+                            <option [value]=""> </option>
+                            <option *ngFor="let scrapieGenotype of scrapieGenotypes" value="{{ scrapieGenotype }}"
+                            >{{ scrapieGenotype }}</option>
+                        </select>
+                    </td>
 
                     <td *ngIf="showHealthData">
                         <select

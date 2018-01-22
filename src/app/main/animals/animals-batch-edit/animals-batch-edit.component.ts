@@ -23,6 +23,7 @@ import { DatepickerV2Component } from '../../../global/components/datepickerV2/d
 import { SettingsService } from '../../../global/services/settings/settings.service';
 import { BLINDNESS_FACTOR_TYPES } from '../../../global/constants/blindness-factor-type.constant';
 import { MYO_MAX_TYPES } from '../../../global/constants/myo-max-type.constant';
+import { SCRAPIE_GENOTYPES } from '../../../global/constants/scrapiegenotype.constant';
 
 @Component({
 		directives: [REACTIVE_FORM_DIRECTIVES, UlnInputComponent, StnInputComponent,
@@ -47,6 +48,7 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 		breedTypes: string[];
 		blindnessFactorTypes: string[];
 		myoMaxTypes: string[];
+		scrapieGenotypes: string[];
 
 		showIds: boolean;
 		showBreedData: boolean;
@@ -101,6 +103,7 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 				this.birthProgressTypes = BIRTH_PROGRESS_TYPES;
 				this.blindnessFactorTypes = AnimalsBatchEditComponent.getBirthProgressTypes();
 				this.myoMaxTypes = AnimalsBatchEditComponent.getMyoMaxTypes();
+				this.scrapieGenotypes = AnimalsBatchEditComponent.getScrapiegenotypes();
 		}
 
 		ngOnInit() {
@@ -114,6 +117,10 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 
 		static getMyoMaxTypes(): string[] {
 			return MYO_MAX_TYPES;
+		}
+
+		static getScrapiegenotypes(): string[] {
+			return SCRAPIE_GENOTYPES;
 		}
 
 		ngOnDestroy() {
