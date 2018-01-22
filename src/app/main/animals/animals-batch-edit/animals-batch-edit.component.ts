@@ -25,11 +25,12 @@ import { BLINDNESS_FACTOR_TYPES } from '../../../global/constants/blindness-fact
 import { MYO_MAX_TYPES } from '../../../global/constants/myo-max-type.constant';
 import { SCRAPIE_GENOTYPES } from '../../../global/constants/scrapiegenotype.constant';
 import { PREDICATE_TYPE } from '../../../global/constants/predicate-type.constant';
+import { UbnDropdownComponent } from '../../../global/components/ubndropdown/ubn-dropdown.component';
 
 @Component({
 		directives: [REACTIVE_FORM_DIRECTIVES, UlnInputComponent, StnInputComponent,
 			HttpCallButtonComponent, StartInputModalComponent, TableSpinnerComponent, CollarInputComponent,
-			BooleanInputComponent, DatepickerV2Component],
+			BooleanInputComponent, DatepickerV2Component, UbnDropdownComponent],
 		template: require('./animals-batch-edit.component.html'),
 		pipes: [TranslatePipe]
 })
@@ -68,6 +69,9 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 		openFilters: boolean;
 
 		displayStartInputModal: string;
+		displayBatchLocationEditModal: string;
+		displayBatchLocationOfBirthEditModal: string;
+		displayBatchPedigreeRegisterEditModal: string;
 
 		initialValuesChanged = new EventEmitter<boolean>();
 
@@ -121,6 +125,9 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 				this.openFilters = false;
 
 				this.displayStartInputModal = 'block';
+				this.displayBatchLocationEditModal = 'none';
+				this.displayBatchLocationOfBirthEditModal = 'none';
+				this.displayBatchPedigreeRegisterEditModal = 'none';
 
 				this.batchCurrentLocationIsActive = false;
 				this.batchIsAliveIsActive = false;
@@ -276,6 +283,32 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 		resetBatchEditOptions() {
 				this.batchAnimal = new Animal();
 		}
+
+
+		openBatchCurrentLocationModal() {
+			this.displayBatchLocationEditModal = 'block';
+		}
+
+		closeBatchCurrentLocationModal() {
+			this.displayBatchLocationEditModal = 'none';
+		}
+
+		openBatchLocationOfBirthModal() {
+			this.displayBatchLocationOfBirthEditModal = 'block';
+		}
+
+		closeBatchLocationOfBirthModal() {
+			this.displayBatchLocationOfBirthEditModal = 'none';
+		}
+
+		openBatchPedigreeRegisterModal() {
+			this.displayBatchPedigreeRegisterEditModal = 'block';
+		}
+
+		closeBatchPedigreeRegisterModal() {
+			this.displayBatchPedigreeRegisterEditModal = 'none';
+		}
+
 
 		batchSetIsAlive() {
 			for(let animal of this.editedAnimals) {

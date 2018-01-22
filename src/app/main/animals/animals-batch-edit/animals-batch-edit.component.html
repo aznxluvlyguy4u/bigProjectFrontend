@@ -375,10 +375,11 @@
                             <i class="fa fa-ban" aria-hidden="true"></i>
                         </ng-template>
                         <ng-template *ngIf="batchCurrentLocationIsActive">
-                            <app-ubn-dropdown
-                                    [labelText]="'CURRENT UBN'"
-                                    (selectedLocationChange)="batchAnimal.location = $event; batchSetCurrentLocation()"
-                            ></app-ubn-dropdown>
+                            <button
+                                    type="button"
+                                    class="button primary"
+                                    (click)="openBatchCurrentLocationModal()"
+                            >{{batchAnimal.location? batchAnimal.location.ubn : '-' }}</button>
                         </ng-template>
                     </td>
                     <td>
@@ -446,10 +447,11 @@
                             <i class="fa fa-ban" aria-hidden="true"></i>
                         </ng-template>
                         <ng-template *ngIf="batchLocationOfBirthIsActive">
-                            <app-ubn-dropdown
-                                    [labelText]="'CURRENT UBN'"
-                                    (selectedLocationChange)="batchAnimal.location_of_birth = $event; batchSetLocationOfBirth()"
-                            ></app-ubn-dropdown>
+                            <button
+                                    type="button"
+                                    class="button primary"
+                                    (click)="openBatchLocationOfBirthModal()"
+                            >{{batchAnimal.location_of_birth ? batchAnimal.location_of_birth.ubn : '-' }}</button>
                         </ng-template>
                     <td *ngIf="showPedigreeData"></td> <!-- surrogate mother column -->
 
@@ -821,6 +823,73 @@
         (inputDataRequested)="getAnimals($event)"
         (closedModal)="displayStartInputModal = 'none'"
 ></app-start-input-modal>
+
+
+    <!--BATCH CURRENT LOCATION MODAL-->
+    <div class="reveal-overlay" [ngStyle]="{'display': displayBatchLocationEditModal}">
+        <div class="tiny reveal" [ngStyle]="{'display': displayBatchLocationEditModal}">
+            <div class="modal-header">
+                {{ 'CURRENT UBN' | translate }}
+                <button type="button" (click)="closeBatchCurrentLocationModal()" class="pull-right" aria-label="Close modal">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <app-ubn-dropdown
+                        [labelText]="'CURRENT UBN'"
+                        (selectedLocationChange)="batchAnimal.location = $event;"
+                ></app-ubn-dropdown>
+                <div class="modal-footer">
+                   <span class="pull-left">
+                        <button
+                                class="tiny primary button"
+                                (click)="closeBatchCurrentLocationModal(); batchSetCurrentLocation()"
+                        >{{ 'OK' | translate}}</button>
+                    </span>
+
+                    <span class="pull-right">
+                        <button
+                                class="tiny alert button"
+                                (click)="closeBatchCurrentLocationModal();"
+                        >{{ 'CANCEL' | translate}}</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--BATCH LOCATION OF BIRTH MODAL-->
+    <div class="reveal-overlay" [ngStyle]="{'display': displayBatchLocationOfBirthEditModal}">
+        <div class="tiny reveal" [ngStyle]="{'display': displayBatchLocationOfBirthEditModal}">
+            <div class="modal-header">
+                {{ 'BREEDER UBN' | translate }}
+                <button type="button" (click)="closeBatchLocationOfBirthModal()" class="pull-right" aria-label="Close modal">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <app-ubn-dropdown
+                        [labelText]="'BREEDER UBN'"
+                        (selectedLocationChange)="batchAnimal.location_of_birth = $event;"
+                ></app-ubn-dropdown>
+                <div class="modal-footer">
+           <span class="pull-left">
+                <button
+                        class="tiny primary button"
+                        (click)="closeBatchLocationOfBirthModal(); batchSetLocationOfBirth()"
+                >{{ 'OK' | translate}}</button>
+            </span>
+
+                    <span class="pull-right">
+                <button
+                        class="tiny alert button"
+                        (click)="closeBatchLocationOfBirthModal();"
+                >{{ 'CANCEL' | translate}}</button>
+            </span>
+                </div>
+            </div>
+        </div>
+    </div>
 <!--&lt;!&ndash;ADD REASON MODAL&ndash;&gt;-->
 <!--<div class="reveal-overlay" [ngStyle]="{'display': displayModal}">-->
     <!--<div class="tiny reveal" [ngStyle]="{'display': displayModal}">-->
