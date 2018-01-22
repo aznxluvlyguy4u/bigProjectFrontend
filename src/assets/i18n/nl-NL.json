@@ -533,5 +533,20 @@
   "INVALID DATE STRING": "Ongeldig datum string format",
   "NO DATE": "Geen Datum",
   "BLINDNESS_FACTOR_FREE": "Blindfactor vrij",
-  "BLINDNESS_FACTOR_CARRIER": "Drager Blindfactor"
+  "BLINDNESS_FACTOR_CARRIER": "Drager Blindfactor",
+  "DEFINITIVE_PREMIUM_RAM": "DP",
+  "GRADE_RAM": "K",
+  "PREFERENT": "Pref",
+  "PREFERENT_1": "Pref1",
+  "PREFERENT_2": "Pref2",
+  "PREFERENT_A": "PrefA",
+  "PRIME_RAM": "P",
+  "MOTHER_OF_RAMS": "RM",
+  "STAR_EWE": "S",
+  "STAR_EWE_1": "S1",
+  "STAR_EWE_2": "S2",
+  "STAR_EWE_3": "S3",
+  "PROVISIONAL_PRIME_RAM": "VP",
+  "PROVISIONAL_MOTHER_OF_RAMS": "VRM",
+  "SET TO ZERO TO REMOVE VALUE": "Zet de waarde op nul om het te verwijderen"
 }

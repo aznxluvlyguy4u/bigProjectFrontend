@@ -24,6 +24,7 @@ import { SettingsService } from '../../../global/services/settings/settings.serv
 import { BLINDNESS_FACTOR_TYPES } from '../../../global/constants/blindness-factor-type.constant';
 import { MYO_MAX_TYPES } from '../../../global/constants/myo-max-type.constant';
 import { SCRAPIE_GENOTYPES } from '../../../global/constants/scrapiegenotype.constant';
+import { PREDICATE_TYPE } from '../../../global/constants/predicate-type.constant';
 
 @Component({
 		directives: [REACTIVE_FORM_DIRECTIVES, UlnInputComponent, StnInputComponent,
@@ -44,11 +45,12 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 		loadingLocations: boolean;
 		retrievingAnimals: boolean;
 
-		birthProgressTypes: string[];
-		breedTypes: string[];
-		blindnessFactorTypes: string[];
-		myoMaxTypes: string[];
-		scrapieGenotypes: string[];
+		birthProgressTypes: string[] = BIRTH_PROGRESS_TYPES;
+		breedTypes: string[] = BREED_TYPES;
+		blindnessFactorTypes: string[] = BLINDNESS_FACTOR_TYPES;
+		myoMaxTypes: string[] = MYO_MAX_TYPES;
+		scrapieGenotypes: string[] = SCRAPIE_GENOTYPES;
+		predicateTypes: string[] = PREDICATE_TYPE;
 
 		showIds: boolean;
 		showBreedData: boolean;
@@ -98,29 +100,11 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 				this.openFilters = false;
 
 				this.displayStartInputModal = 'block';
-
-				this.breedTypes = BREED_TYPES;
-				this.birthProgressTypes = BIRTH_PROGRESS_TYPES;
-				this.blindnessFactorTypes = AnimalsBatchEditComponent.getBirthProgressTypes();
-				this.myoMaxTypes = AnimalsBatchEditComponent.getMyoMaxTypes();
-				this.scrapieGenotypes = AnimalsBatchEditComponent.getScrapiegenotypes();
 		}
 
 		ngOnInit() {
 				this.initializeValues();
 				this.getGeneralData();
-		}
-
-		static getBirthProgressTypes(): string[] {
-			return BLINDNESS_FACTOR_TYPES;
-		}
-
-		static getMyoMaxTypes(): string[] {
-			return MYO_MAX_TYPES;
-		}
-
-		static getScrapiegenotypes(): string[] {
-			return SCRAPIE_GENOTYPES;
 		}
 
 		ngOnDestroy() {

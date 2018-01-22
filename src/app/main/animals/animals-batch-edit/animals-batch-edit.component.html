@@ -179,13 +179,16 @@
                     <td *ngIf="showPedigreeData">{{ 'BREEDER UBN' | translate}}({{ 'LOCATION' | translate}})</td>
                     <td *ngIf="showPedigreeData">{{ 'SURROGATE MOTHER' | translate}}</td>
                     <td *ngIf="showPedigreeData">{{ 'LAMBAR' | translate}}
-                        <i class="fa fa-info-circle" aria-hidden="true" title="{{'CLICK ON BOOLEAN TO TOGGLE VALUE' | translate}}"></i>                    </td>
+                        <i class="fa fa-info-circle" aria-hidden="true" title="{{'CLICK ON BOOLEAN TO TOGGLE VALUE' | translate}}"></i>
+                    </td>
                     <td *ngIf="showPedigreeData">{{ 'BIRTH PROGRESS' | translate}}</td>
 
                     <td *ngIf="showBreedData">{{ 'BREED TYPE' | translate}}</td>
                     <td *ngIf="showBreedData">{{ 'BREED CODE' | translate}}</td>
                     <td *ngIf="showExaminationData">{{ 'PREDICATE' | translate}}</td>
-                    <td *ngIf="showExaminationData">{{ 'PREDICATE SCORE' | translate}}</td>
+                    <td *ngIf="showExaminationData">{{ 'PREDICATE SCORE' | translate}}
+                        <i class="fa fa-info-circle" aria-hidden="true" title="{{'SET TO ZERO TO REMOVE VALUE' | translate}}"></i>
+                    </td>
                     <td *ngIf="showHealthData">{{ 'SCRAPIE GENOTYPE' | translate}}</td>
                     <td *ngIf="showHealthData">{{ 'BLINDNESS FACTOR' | translate}}</td>
                     <td *ngIf="showHealthData">{{ 'MYOMAX' | translate}}</td>
@@ -314,8 +317,24 @@
                     </td>
 
                     <td *ngIf="showBreedData"><input title="breedCode" class="table-input" type="text" [(ngModel)]="animal.breed_code" [disabled]="isSaving"></td>
-                    <td *ngIf="showExaminationData"><input title="predicate" class="table-input" type="text" [(ngModel)]="animal.predicate" [disabled]="isSaving"></td>
-                    <td *ngIf="showExaminationData"><input title="predicateScore" class="table-input" type="number" [(ngModel)]="animal.predicate_score" [disabled]="isSaving"></td>
+
+                    <td *ngIf="showExaminationData">
+                        <select
+                                title="predicate"
+                                type="predicate"
+                                class="table-input predicate-type-input"
+                                [(ngModel)]="animal.predicate"
+                                [disabled]="isSaving">
+                            <option [value]=""> </option>
+                            <option *ngFor="let predicateType of predicateTypes" value="{{ predicateType }}"
+                            >{{ predicateType | translate }}</option>
+                        </select>
+                    </td>
+                    <td *ngIf="showExaminationData">
+                        <input title="predicateScore" class="table-input predicate-score-input"
+                               type="number" min="0" max="1000"
+                               [(ngModel)]="animal.predicate_score" [disabled]="isSaving">
+                    </td>
 
                     <td *ngIf="showHealthData">
                         <select
