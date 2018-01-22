@@ -260,7 +260,7 @@
                         ></app-datepicker-v2>
                     </td>
 
-                    <td *ngIf="showDates">
+                    <td *ngIf="showDates" class="date-input">
                         <app-datepicker-v2
                                 [dateString]="animal.date_of_death"
                                 [modelFormat]="settings.getModelDateTimeFormat()"

@@ -22,18 +22,18 @@
            [ngClass]="{'ng-dirty': isDirty}"
            title="{{ dateString != null && dateString != '' ? (dateString | date: 'dd-MM-yyyy @HH:mm:ss'): 'INVALID DATE STRING' | translate }}"
     >
-    <button *ngIf="dateString != null"
+    <button *ngIf="dateString != null && !disabled"
             type="button"
             (click)="removeDate()"
-            class="button secondary null-toggle"
+            class="button secondary null-toggle-off"
             [disabled]="disabled"
             title="{{'REMOVE DATE' | translate}}"
     ><i class="fa fa-minus-circle" aria-hidden="true"></i></button>
 
-        <button *ngIf="dateString == null"
+        <button *ngIf="dateString == null && !disabled"
                 type="button"
                 (click)="setDate()"
-                class="button secondary null-toggle"
+                class="button secondary null-toggle-on"
                 [disabled]="disabled"
                 title="{{'SET DATE' | translate}}"
         ><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
