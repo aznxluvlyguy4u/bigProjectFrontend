@@ -18,7 +18,7 @@
            title="{{ 'NUMBER' | translate }}"
            [(ngModel)]="collarNumber"
            [disabled]="disabled"
-           maxlength="12"
+           maxlength="4"
            (keyup)="changeNumber()"
            (mouseleave)="changeNumber()"
            [ngClass]="{'ng-dirty': isNumberDirty}"
