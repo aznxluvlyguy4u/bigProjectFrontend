@@ -317,8 +317,32 @@
                     <td *ngIf="showExaminationData"><input title="predicate" class="table-input" type="text" [(ngModel)]="animal.predicate" [disabled]="isSaving"></td>
                     <td *ngIf="showExaminationData"><input title="predicateScore" class="table-input" type="number" [(ngModel)]="animal.predicate_score" [disabled]="isSaving"></td>
                     <td *ngIf="showHealthData"><input title="scrapieGenotype" class="table-input" type="text" [(ngModel)]="animal.scrapie_genotype" [disabled]="isSaving"></td>
-                    <td *ngIf="showHealthData"><input title="blindnessFactor" class="table-input" type="text" [(ngModel)]="animal.blindness_factor" [disabled]="isSaving"></td>
-                    <td *ngIf="showHealthData"><input title="myoMax" class="table-input" type="text" [(ngModel)]="animal.myo_max" [disabled]="isSaving"></td>
+
+                    <td *ngIf="showHealthData">
+                        <select
+                                title="blindnessFactor"
+                                type="blindnessFactor"
+                                class="table-input blindness-factor-type-input"
+                                [(ngModel)]="animal.blindness_factor"
+                                [disabled]="isSaving">
+                            <option [value]=""> </option>
+                            <option *ngFor="let blindnessFactorType of blindnessFactorTypes" value="{{ blindnessFactorType }}"
+                            >{{ blindnessFactorType | translate }}</option>
+                        </select>
+                    </td>
+
+                    <td *ngIf="showHealthData">
+                        <select
+                                title="myoMax"
+                                type="myoMax"
+                                class="table-input myo-max-type-input"
+                                [(ngModel)]="animal.myo_max"
+                                [disabled]="isSaving">
+                            <option [value]=""> </option>
+                            <option *ngFor="let myoMaxType of myoMaxTypes" value="{{ myoMaxType }}"
+                            >{{ myoMaxType }}</option>
+                        </select>
+                    </td>
 
                     <td>
                         <app-uln-input

@@ -531,5 +531,7 @@
   "CLICK ON BOOLEAN TO TOGGLE VALUE": "Klik op de boolean om de waarde te schakelen",
   "CANCEL ALL UNSAVED EDITS": "Annuleer alle niet opgeslagen edits",
   "INVALID DATE STRING": "Ongeldig datum string format",
-  "NO DATE": "Geen Datum"
+  "NO DATE": "Geen Datum",
+  "BLINDNESS_FACTOR_FREE": "Blindfactor vrij",
+  "BLINDNESS_FACTOR_CARRIER": "Drager Blindfactor"
 }

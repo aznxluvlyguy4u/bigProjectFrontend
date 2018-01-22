@@ -21,6 +21,8 @@ import { CollarInputComponent } from '../../../global/components/collarinput/col
 import { BooleanInputComponent } from '../../../global/components/booleaninput/boolean-input.component';
 import { DatepickerV2Component } from '../../../global/components/datepickerV2/datepicker-v2.component';
 import { SettingsService } from '../../../global/services/settings/settings.service';
+import { BLINDNESS_FACTOR_TYPES } from '../../../global/constants/blindness-factor-type.constant';
+import { MYO_MAX_TYPES } from '../../../global/constants/myo-max-type.constant';
 
 @Component({
 		directives: [REACTIVE_FORM_DIRECTIVES, UlnInputComponent, StnInputComponent,
@@ -41,8 +43,10 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 		loadingLocations: boolean;
 		retrievingAnimals: boolean;
 
-		birthProgressTypes = BIRTH_PROGRESS_TYPES;
-		breedTypes = BREED_TYPES;
+		birthProgressTypes: string[];
+		breedTypes: string[];
+		blindnessFactorTypes: string[];
+		myoMaxTypes: string[];
 
 		showIds: boolean;
 		showBreedData: boolean;
@@ -92,11 +96,24 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 				this.openFilters = false;
 
 				this.displayStartInputModal = 'block';
+
+				this.breedTypes = BREED_TYPES;
+				this.birthProgressTypes = BIRTH_PROGRESS_TYPES;
+				this.blindnessFactorTypes = AnimalsBatchEditComponent.getBirthProgressTypes();
+				this.myoMaxTypes = AnimalsBatchEditComponent.getMyoMaxTypes();
 		}
 
 		ngOnInit() {
 				this.initializeValues();
 				this.getGeneralData();
+		}
+
+		static getBirthProgressTypes(): string[] {
+			return BLINDNESS_FACTOR_TYPES;
+		}
+
+		static getMyoMaxTypes(): string[] {
+			return MYO_MAX_TYPES;
 		}
 
 		ngOnDestroy() {
