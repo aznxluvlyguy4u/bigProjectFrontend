@@ -1,4 +1,4 @@
-import { REACTIVE_FORM_DIRECTIVES } from '@angular/forms';
+import { REACTIVE_FORM_DIRECTIVES, Validators } from '@angular/forms';
 import { TranslatePipe, TranslateService } from 'ng2-translate';
 import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { NSFOService } from '../../../global/services/nsfo/nsfo.service';
@@ -19,11 +19,13 @@ import { BIRTH_PROGRESS_TYPES } from '../../../global/constants/birth-progress-t
 import { BREED_TYPES } from '../../../global/constants/breed-type.constant';
 import { CollarInputComponent } from '../../../global/components/collarinput/collar-input.component';
 import { BooleanInputComponent } from '../../../global/components/booleaninput/boolean-input.component';
+import { DatepickerV2Component } from '../../../global/components/datepickerV2/datepicker-v2.component';
+import { SettingsService } from '../../../global/services/settings/settings.service';
 
 @Component({
 		directives: [REACTIVE_FORM_DIRECTIVES, UlnInputComponent, StnInputComponent,
 			HttpCallButtonComponent, StartInputModalComponent, TableSpinnerComponent, CollarInputComponent,
-			BooleanInputComponent],
+			BooleanInputComponent, DatepickerV2Component],
 		template: require('./animals-batch-edit.component.html'),
 		pipes: [TranslatePipe]
 })
@@ -61,7 +63,8 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 
 		constructor(private nsfo: NSFOService,
 								private translate: TranslateService,
-								private locationStorage: LocationStorage) {}
+								private locationStorage: LocationStorage,
+								private settings: SettingsService) {}
 
 		private initializeValues() {
 				this.retrievedAnimals = [];

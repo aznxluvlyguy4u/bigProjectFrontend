@@ -206,7 +206,7 @@
                     <td *ngIf="showIds"><input title="aiind" class="table-input" type="number" [(ngModel)]="animal.name" [disabled]="isSaving"></td>
                     <td *ngIf="showIds"><input title="nickname" class="table-input" type="text" [(ngModel)]="animal.nickname" [disabled]="isSaving"></td>
 
-                    <td>
+                    <td *ngIf="showIds">
                         <app-collar-input
                                 [collarColor]="animal.collar_color"
                                 (collarColorChange)="animal.collar_color=$event"
@@ -250,10 +250,25 @@
                     </td>
                     <td *ngIf="showNote"><input title="note" class="table-input" type="text" [(ngModel)]="animal.note" [disabled]="isSaving"></td>
 
-                    <td *ngIf="showPedigreeData || showDates" title="{{ animal.date_of_birth  | date: 'dd-MM-yyyy @HH:mm:ss' }}"
-                    >{{ animal.date_of_birth  | date: 'dd-MM-yyyy' }}</td>
-                    <td *ngIf="showDates" title="{{ animal.date_of_death  | date: 'dd-MM-yyyy @HH:mm:ss' }}"
-                    >{{ animal.date_of_death  | date: 'dd-MM-yyyy' }}</td>
+                    <td *ngIf="showPedigreeData || showDates">
+                        <app-datepicker-v2
+                                [dateString]="animal.date_of_birth"
+                                [modelFormat]="settings.getModelDateTimeFormat()"
+                                [disabled]="isSaving"
+                                [updateInitialValues]="(initialValuesChanged)"
+                                (isDateStringChanged)="animal.date_of_birth = $event"
+                        ></app-datepicker-v2>
+                    </td>
+
+                    <td *ngIf="showDates">
+                        <app-datepicker-v2
+                                [dateString]="animal.date_of_death"
+                                [modelFormat]="settings.getModelDateTimeFormat()"
+                                [disabled]="isSaving"
+                                [updateInitialValues]="(initialValuesChanged)"
+                                (isDateStringChanged)="animal.date_of_death = $event"
+                        ></app-datepicker-v2>
+                    </td>
 
                     <td *ngIf="showPedigreeData">{{ animal.pedigree_register ? animal.pedigree_register.abbreviation : '-' }}</td>
                     <td *ngIf="showPedigreeData">{{ animal.parent_father ?

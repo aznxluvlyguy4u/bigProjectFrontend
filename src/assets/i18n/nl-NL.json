@@ -529,5 +529,7 @@
   "CAESARIAN (LAMB TOO BIG)": "Keizersnede (lam te groot)",
   "CAESARIAN (INSUFFICIENT ACCESS)": "Keizersnede (onvoldoende ontsluiting)",
   "CLICK ON BOOLEAN TO TOGGLE VALUE": "Klik op de boolean om de waarde te schakelen",
-  "CANCEL ALL UNSAVED EDITS": "Annuleer alle niet opgeslagen edits"
+  "CANCEL ALL UNSAVED EDITS": "Annuleer alle niet opgeslagen edits",
+  "INVALID DATE STRING": "Ongeldig datum string format",
+  "NO DATE": "Geen Datum"
 }
