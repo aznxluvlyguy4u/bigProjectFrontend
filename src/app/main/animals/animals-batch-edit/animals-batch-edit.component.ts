@@ -61,6 +61,8 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 		showHealthData: boolean;
 
 		allowUlnEdit: boolean;
+		isBatchEditActive: boolean;
+		batchAnimal: Animal;
 
 		openOptions: boolean;
 		openFilters: boolean;
@@ -68,6 +70,23 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 		displayStartInputModal: string;
 
 		initialValuesChanged = new EventEmitter<boolean>();
+
+
+		batchCurrentLocationIsActive: boolean;
+		batchIsAliveIsActive: boolean;
+		batchNoteIsActive: boolean;
+		batchPedigreeRegisterIsActive: boolean;
+		batchUbnOfBirthIsActive: boolean;
+		batchLocationOfBirthIsActive: boolean;
+		batchLambarIsActive: boolean;
+		batchBirthProgressIsActive: boolean;
+		batchBreedTypeIsActive: boolean;
+		batchBreedCodeIsActive: boolean;
+		batchPredicateIsActive: boolean;
+		batchPredicateScoreIsActive: boolean;
+		batchScrapieGenotypeIsActive: boolean;
+		batchBlindnessFactorIsActive: boolean;
+		batchMyoMaxIsActive: boolean;
 
 		constructor(private nsfo: NSFOService,
 								private translate: TranslateService,
@@ -79,6 +98,7 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 				this.editedAnimals = [];
 				this.filteredAnimals = [];
 				this.locations = [];
+				this.resetBatchEditOptions();
 
 				this.isAnimalsLoaded = false;
 				this.animalsResult = new AnimalsResult();
@@ -94,12 +114,29 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 				this.showDates = true;
 				this.showExaminationData = true;
 				this.showHealthData = true;
+				this.isBatchEditActive = true;
 
 				this.allowUlnEdit = false;
 				this.openOptions = true;
 				this.openFilters = false;
 
 				this.displayStartInputModal = 'block';
+
+				this.batchCurrentLocationIsActive = false;
+				this.batchIsAliveIsActive = false;
+				this.batchNoteIsActive = false;
+				this.batchPedigreeRegisterIsActive = false;
+				this.batchUbnOfBirthIsActive = false;
+				this.batchLocationOfBirthIsActive = false;
+				this.batchLambarIsActive = false;
+				this.batchBirthProgressIsActive = false;
+				this.batchBreedTypeIsActive = false;
+				this.batchBreedCodeIsActive = false;
+				this.batchPredicateIsActive = false;
+				this.batchPredicateScoreIsActive = false;
+				this.batchScrapieGenotypeIsActive = false;
+				this.batchBlindnessFactorIsActive = false;
+				this.batchMyoMaxIsActive = false;
 		}
 
 		ngOnInit() {
@@ -177,7 +214,7 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 							res => {
 
 								this.updateAnimals(res.result.animals.updated);
-								this.updateAnimals(res.result.animals.non_updated);
+								this.updateAnimals(res.result.animals.not_updated);
 
 								if(!res.result.successful_update_secondary_values) {
 										alert(this.translate.instant('UPDATE ANIMALS SECONDARY VALUES WARNING'));
@@ -229,9 +266,240 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 		resetAnimals() {
 			this.editedAnimals = _.cloneDeep(this.retrievedAnimals);
 			this.animalsListWasUpdated();
+			this.resetBatchEditOptions();
 		}
 
 		resetFilterOptions() {
 			 //TODO
 		}
+
+		resetBatchEditOptions() {
+				this.batchAnimal = new Animal();
+		}
+
+		batchSetIsAlive() {
+			for(let animal of this.editedAnimals) {
+				animal.is_alive = this.batchAnimal.is_alive;
+			}
+		}
+
+		batchSetNote() {
+			for(let animal of this.editedAnimals) {
+				animal.note = this.batchAnimal.note;
+			}
+		}
+
+		batchSetPedigreeRegister() {
+			for(let animal of this.editedAnimals) {
+				animal.pedigree_register = this.batchAnimal.pedigree_register;
+			}
+		}
+
+	batchSetUbnOfBirth() {
+		for(let animal of this.editedAnimals) {
+			animal.ubn_of_birth = this.batchAnimal.ubn_of_birth;
+		}
+	}
+
+	batchSetLocationOfBirth() {
+		for(let animal of this.editedAnimals) {
+			animal.location_of_birth = this.batchAnimal.location_of_birth;
+		}
+	}
+
+	batchSetCurrentLocation() {
+		for(let animal of this.editedAnimals) {
+			animal.location = this.batchAnimal.location;
+		}
+	}
+
+	batchSetLambar() {
+		for(let animal of this.editedAnimals) {
+			animal.lambar = this.batchAnimal.lambar;
+		}
+	}
+
+	batchSetBirthProgress() {
+		for(let animal of this.editedAnimals) {
+			animal.birth_progress = this.batchAnimal.birth_progress;
+		}
+	}
+
+	batchSetBreedType() {
+		for(let animal of this.editedAnimals) {
+			animal.breed_type = this.batchAnimal.breed_type;
+		}
+	}
+
+	batchSetBreedCode() {
+		for(let animal of this.editedAnimals) {
+			animal.breed_code = this.batchAnimal.breed_code;
+		}
+	}
+
+	batchSetPredicate() {
+		for(let animal of this.editedAnimals) {
+			animal.predicate = this.batchAnimal.predicate;
+		}
+	}
+
+	batchSetPredicateScore() {
+		for(let animal of this.editedAnimals) {
+			animal.predicate_score = this.batchAnimal.predicate_score;
+		}
+	}
+
+	batchSetScrapieGenotype() {
+		for(let animal of this.editedAnimals) {
+			animal.scrapie_genotype = this.batchAnimal.scrapie_genotype;
+		}
+	}
+
+	batchSetBlindnessFactor() {
+		for(let animal of this.editedAnimals) {
+			animal.blindness_factor = this.batchAnimal.blindness_factor;
+		}
+	}
+
+	batchSetMyoMax() {
+		for(let animal of this.editedAnimals) {
+			animal.myo_max = this.batchAnimal.myo_max;
+		}
+	}
+
+
+	batchResetIsAlive() {
+		for(let animal of this.editedAnimals) {
+			const retrievedAnimal = _.find(this.retrievedAnimals, {id: animal.id});
+			if (retrievedAnimal) {
+				animal.is_alive = retrievedAnimal.is_alive;
+			}
+		}
+	}
+
+	batchResetNote() {
+		for(let animal of this.editedAnimals) {
+			const retrievedAnimal = _.find(this.retrievedAnimals, {id: animal.id});
+			if (retrievedAnimal) {
+				animal.note = retrievedAnimal.note;
+			}
+		}
+	}
+
+	batchResetPedigreeRegister() {
+		for(let animal of this.editedAnimals) {
+			const retrievedAnimal = _.find(this.retrievedAnimals, {id: animal.id});
+			if (retrievedAnimal) {
+				animal.pedigree_register = retrievedAnimal.pedigree_register;
+			}
+		}
+	}
+
+	batchResetUbnOfBirth() {
+		for(let animal of this.editedAnimals) {
+			const retrievedAnimal = _.find(this.retrievedAnimals, {id: animal.id});
+			if (retrievedAnimal) {
+				animal.ubn_of_birth = retrievedAnimal.ubn_of_birth;
+			}
+		}
+	}
+
+	batchResetLocationOfBirth() {
+		for(let animal of this.editedAnimals) {
+			const retrievedAnimal = _.find(this.retrievedAnimals, {id: animal.id});
+			if (retrievedAnimal) {
+				animal.location_of_birth = retrievedAnimal.location_of_birth;
+			}
+		}
+	}
+
+	batchResetCurrentLocation() {
+		for(let animal of this.editedAnimals) {
+			const retrievedAnimal = _.find(this.retrievedAnimals, {id: animal.id});
+			if (retrievedAnimal) {
+				animal.location = retrievedAnimal.location;
+			}
+		}
+	}
+
+	batchResetLambar() {
+		for(let animal of this.editedAnimals) {
+			const retrievedAnimal = _.find(this.retrievedAnimals, {id: animal.id});
+			if (retrievedAnimal) {
+				animal.lambar = retrievedAnimal.lambar;
+			}
+		}
+	}
+
+	batchResetBirthProgress() {
+		for(let animal of this.editedAnimals) {
+			const retrievedAnimal = _.find(this.retrievedAnimals, {id: animal.id});
+			if (retrievedAnimal) {
+				animal.birth_progress = retrievedAnimal.birth_progress;
+			}
+		}
+	}
+
+	batchResetBreedType() {
+		for(let animal of this.editedAnimals) {
+			const retrievedAnimal = _.find(this.retrievedAnimals, {id: animal.id});
+			if (retrievedAnimal) {
+				animal.breed_type = retrievedAnimal.breed_type;
+			}
+		}
+	}
+
+	batchResetBreedCode() {
+		for(let animal of this.editedAnimals) {
+			const retrievedAnimal = _.find(this.retrievedAnimals, {id: animal.id});
+			if (retrievedAnimal) {
+				animal.breed_code = retrievedAnimal.breed_code;
+			}
+		}
+	}
+
+	batchResetPredicate() {
+		for(let animal of this.editedAnimals) {
+			const retrievedAnimal = _.find(this.retrievedAnimals, {id: animal.id});
+			if (retrievedAnimal) {
+				animal.predicate = retrievedAnimal.predicate;
+			}
+		}
+	}
+
+	batchResetPredicateScore() {
+		for(let animal of this.editedAnimals) {
+			const retrievedAnimal = _.find(this.retrievedAnimals, {id: animal.id});
+			if (retrievedAnimal) {
+				animal.predicate_score = retrievedAnimal.predicate_score;
+			}
+		}
+	}
+
+	batchResetScrapieGenotype() {
+		for(let animal of this.editedAnimals) {
+			const retrievedAnimal = _.find(this.retrievedAnimals, {id: animal.id});
+			if (retrievedAnimal) {
+				animal.scrapie_genotype = retrievedAnimal.scrapie_genotype;
+			}
+		}
+	}
+
+	batchResetBlindnessFactor() {
+		for(let animal of this.editedAnimals) {
+			const retrievedAnimal = _.find(this.retrievedAnimals, {id: animal.id});
+			if (retrievedAnimal) {
+				animal.blindness_factor = retrievedAnimal.blindness_factor;
+			}
+		}
+	}
+
+	batchResetMyoMax() {
+		for(let animal of this.editedAnimals) {
+			const retrievedAnimal = _.find(this.retrievedAnimals, {id: animal.id});
+			if (retrievedAnimal) {
+				animal.myo_max = retrievedAnimal.myo_max;
+			}
+		}
+	}
 }

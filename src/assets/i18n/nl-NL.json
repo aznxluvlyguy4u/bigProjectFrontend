@@ -548,5 +548,8 @@
   "STAR_EWE_3": "S3",
   "PROVISIONAL_PRIME_RAM": "VP",
   "PROVISIONAL_MOTHER_OF_RAMS": "VRM",
-  "SET TO ZERO TO REMOVE VALUE": "Zet de waarde op nul om het te verwijderen"
+  "SET TO ZERO TO REMOVE VALUE": "Zet de waarde op nul om het te verwijderen",
+  "ACTIVATE BATCH EDIT": "Activeer batch edit",
+  "ACTIVATE BATCH EDIT OPTIONS": "Activeer batch edit opties",
+  "RESET BATCH EDIT OPTIONS": "Reset batch edit opties"
 }

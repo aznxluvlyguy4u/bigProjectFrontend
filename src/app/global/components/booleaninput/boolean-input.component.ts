@@ -9,6 +9,7 @@ import { TranslatePipe } from 'ng2-translate';
 export class BooleanInputComponent {
 	@Input() allowNull = false;
 	@Input() boolVal: boolean;
+	@Input() disabled: boolean = false;
 	@Output() boolValChanged = new EventEmitter<boolean>();
 
 	isEmpty() {

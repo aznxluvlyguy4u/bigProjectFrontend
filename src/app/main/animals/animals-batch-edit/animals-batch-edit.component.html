@@ -86,6 +86,7 @@
 
                 <label>{{ 'EDIT ULNS' | translate }} <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                     {{'EDIT ULNS WARNING' | translate}} <input   [(ngModel)]="allowUlnEdit" type="checkbox"></label>
+                <label>{{ 'ACTIVATE BATCH EDIT' | translate }} <input [(ngModel)]="isBatchEditActive" type="checkbox"></label>
             </div>
         </div>
     </div>
@@ -203,6 +204,421 @@
                 </tr>
                 </thead>
                 <tbody>
+
+                <tr *ngIf="isBatchEditActive" class="batch-edit-header-row">
+                    <td *ngIf="showIds || showDates"></td> <!-- creation date column -->
+                    <td *ngIf="showIds"></td> <!-- animal id column -->
+                    <td *ngIf="showIds"></td> <!-- aiind column -->
+                    <td *ngIf="showIds"></td> <!-- nickname column -->
+                    <td *ngIf="showIds"></td> <!-- collar column -->
+                    <td><h6>{{ 'ACTIVATE BATCH EDIT OPTIONS' | translate }}</h6></td> <!-- uln column -->
+                    <td>
+                        <button
+                                class="button alert"
+                                (click)="resetBatchEditOptions()"
+                        >{{ 'RESET BATCH EDIT OPTIONS' | translate }}</button>
+                    </td> <!-- stn -->
+                    <td></td> <!-- type/gender column -->
+                    <td>
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="batchCurrentLocationIsActive"
+                                (boolValChanged)="batchCurrentLocationIsActive = $event; batchResetCurrentLocation()"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+                    <td>
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="batchIsAliveIsActive"
+                                (boolValChanged)="batchIsAliveIsActive = $event; batchResetIsAlive()"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+                    <td *ngIf="showNote">
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="batchNoteIsActive"
+                                (boolValChanged)="batchNoteIsActive = $event; batchResetNote()"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+
+                    <td *ngIf="showPedigreeData || showDates"></td><!-- date of birth column -->
+                    <td *ngIf="showDates" class="date-input"></td> <!-- date of death column -->
+
+                    <td *ngIf="showPedigreeData">
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="batchPedigreeRegisterIsActive"
+                                (boolValChanged)="batchPedigreeRegisterIsActive = $event; batchResetPedigreeRegister()"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+                    <td *ngIf="showPedigreeData"></td> <!-- father column -->
+                    <td *ngIf="showPedigreeData"></td> <!-- mother column -->
+                    <td *ngIf="showPedigreeData || showBreedData"></td> <!-- nLing column -->
+
+                    <td *ngIf="showPedigreeData">
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="batchUbnOfBirthIsActive"
+                                (boolValChanged)="batchUbnOfBirthIsActive = $event; batchResetUbnOfBirth()"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+                    <td *ngIf="showPedigreeData">
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="batchLocationOfBirthIsActive"
+                                (boolValChanged)="batchLocationOfBirthIsActive = $event; batchResetLocationOfBirth()"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+                    <td *ngIf="showPedigreeData"></td> <!-- surrogate mother column -->
+
+                    <td *ngIf="showPedigreeData">
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="batchLambarIsActive"
+                                (boolValChanged)="batchLambarIsActive = $event; batchResetLambar()"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+
+                    <td *ngIf="showPedigreeData">
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="batchBirthProgressIsActive"
+                                (boolValChanged)="batchBirthProgressIsActive = $event; batchResetBirthProgress()"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+
+                    <td *ngIf="showBreedData">
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="batchBreedTypeIsActive"
+                                (boolValChanged)="batchBreedTypeIsActive = $event; batchResetBreedType()"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+
+                    <td *ngIf="showBreedData">
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="batchBreedCodeIsActive"
+                                (boolValChanged)="batchBreedCodeIsActive = $event; batchResetBreedCode()"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+
+                    <td *ngIf="showExaminationData">
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="batchPredicateIsActive"
+                                (boolValChanged)="batchPredicateIsActive = $event; batchResetPredicate()"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+
+                    <td *ngIf="showExaminationData">
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="batchPredicateScoreIsActive"
+                                (boolValChanged)="batchPredicateScoreIsActive = $event; batchResetPredicateScore()"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+
+                    <td *ngIf="showHealthData">
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="batchScrapieGenotypeIsActive"
+                                (boolValChanged)="batchScrapieGenotypeIsActive = $event; batchResetScrapieGenotype()"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+
+                    <td *ngIf="showHealthData">
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="batchBlindnessFactorIsActive"
+                                (boolValChanged)="batchBlindnessFactorIsActive = $event; batchResetBlindnessFactor()"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+
+                    <td *ngIf="showHealthData">
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="batchMyoMaxIsActive"
+                                (boolValChanged)="batchMyoMaxIsActive = $event; batchResetMyoMax()"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+
+                    <td></td> <!-- extra uln column -->
+                </tr>
+
+                <tr *ngIf="isBatchEditActive" class="batch-edit-row">
+                    <td *ngIf="showIds || showDates"></td> <!-- creation date column -->
+                    <td *ngIf="showIds"></td> <!-- animal id column -->
+                    <td *ngIf="showIds"></td> <!-- aiind column -->
+                    <td *ngIf="showIds"></td> <!-- nickname column -->
+                    <td *ngIf="showIds"></td> <!-- collar column -->
+                    <td></td> <!-- uln column -->
+                    <td></td> <!-- stn -->
+                    <td></td> <!-- type/gender column -->
+                    <td>
+                        <ng-template *ngIf="!batchCurrentLocationIsActive">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                        </ng-template>
+                        <ng-template *ngIf="batchCurrentLocationIsActive">
+                            <app-ubn-dropdown
+                                    [labelText]="'CURRENT UBN'"
+                                    (selectedLocationChange)="batchAnimal.location = $event; batchSetCurrentLocation()"
+                            ></app-ubn-dropdown>
+                        </ng-template>
+                    </td>
+                    <td>
+                        <ng-template *ngIf="!batchIsAliveIsActive">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                        </ng-template>
+                        <ng-template *ngIf="batchIsAliveIsActive">
+                            <app-boolean-input
+                                    [allowNull]="false"
+                                    [boolVal]="batchAnimal.is_alive"
+                                    (boolValChanged)="batchAnimal.is_alive = $event; batchSetIsAlive()"
+                                    [disabled]="isSaving"
+                            ></app-boolean-input>
+                        </ng-template>
+                    </td>
+                    <td *ngIf="showNote">
+                        <ng-template *ngIf="!batchNoteIsActive">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                        </ng-template>
+                        <ng-template *ngIf="batchNoteIsActive">
+                            <input
+                                    title="note"
+                                    class="table-input"
+                                    type="text"
+                                    [(ngModel)]="batchAnimal.note"
+                                    [disabled]="isSaving"
+                                    (keyup)="batchSetNote()"
+                            >
+                        </ng-template>
+                    </td>
+
+                    <td *ngIf="showPedigreeData || showDates"></td><!-- date of birth column -->
+                    <td *ngIf="showDates" class="date-input"></td> <!-- date of death column -->
+
+                    <td *ngIf="showPedigreeData">
+                        <ng-template *ngIf="!batchPedigreeRegisterIsActive">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                        </ng-template>
+                        <ng-template *ngIf="batchPedigreeRegisterIsActive">
+                            {{ batchAnimal.pedigree_register ? batchAnimal.pedigree_register.abbreviation : '-' }}
+                        </ng-template>
+                    </td>
+                    <td *ngIf="showPedigreeData"></td> <!-- father column -->
+                    <td *ngIf="showPedigreeData"></td> <!-- mother column -->
+                    <td *ngIf="showPedigreeData || showBreedData"></td> <!-- nLing column -->
+
+                    <td *ngIf="showPedigreeData">
+                        <ng-template *ngIf="!batchUbnOfBirthIsActive">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                        </ng-template>
+                        <ng-template *ngIf="batchUbnOfBirthIsActive">
+                            <input
+                                    title="ubnOfBirth"
+                                    class="table-input"
+                                    type="number"
+                                    [(ngModel)]="batchAnimal.ubn_of_birth"
+                                    [disabled]="isSaving"
+                                    (keyup)="batchSetUbnOfBirth()"
+                            >
+                        </ng-template>
+                    </td>
+
+                    <td *ngIf="showPedigreeData">
+                        <ng-template *ngIf="!batchLocationOfBirthIsActive">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                        </ng-template>
+                        <ng-template *ngIf="batchLocationOfBirthIsActive">
+                            <app-ubn-dropdown
+                                    [labelText]="'CURRENT UBN'"
+                                    (selectedLocationChange)="batchAnimal.location_of_birth = $event; batchSetLocationOfBirth()"
+                            ></app-ubn-dropdown>
+                        </ng-template>
+                    <td *ngIf="showPedigreeData"></td> <!-- surrogate mother column -->
+
+                    <td *ngIf="showPedigreeData">
+                        <ng-template *ngIf="!batchLambarIsActive">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                        </ng-template>
+                        <ng-template *ngIf="batchLambarIsActive">
+                            <app-boolean-input
+                                    [allowNull]="false"
+                                    [boolVal]="batchAnimal.lambar"
+                                    (boolValChanged)="batchAnimal.lambar = $event; batchSetLambar()"
+                                    [disabled]="isSaving"
+                            ></app-boolean-input>
+                        </ng-template>
+                    </td>
+
+                    <td *ngIf="showPedigreeData">
+                        <ng-template *ngIf="!batchBirthProgressIsActive">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                        </ng-template>
+                        <ng-template *ngIf="batchBirthProgressIsActive">
+                            <select
+                                    title="birthProgress"
+                                    class="table-input birth-progress-input"
+                                    [(ngModel)]="batchAnimal.birth_progress"
+                                    [disabled]="isSaving"
+                                    (click)="batchSetBirthProgress()"
+                            >
+                                <option [value]=""> </option>
+                                <option *ngFor="let birthProgressType of birthProgressTypes" value="{{ birthProgressType }}"
+                                >{{ birthProgressType | translate }}</option>
+                            </select>
+                        </ng-template>
+                    </td>
+
+                    <td *ngIf="showBreedData">
+                        <ng-template *ngIf="!batchBreedTypeIsActive">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                        </ng-template>
+                        <ng-template *ngIf="batchBreedTypeIsActive">
+                            <select
+                                    type="breedType"
+                                    class="table-input breed-type-input"
+                                    [(ngModel)]="batchAnimal.breed_type"
+                                    [disabled]="isSaving"
+                                    (click)="batchSetBreedType()"
+                            >
+                                <option [value]=""> </option>
+                                <option *ngFor="let breedType of breedTypes" value="{{ breedType }}"
+                                >{{ breedType | translate }}</option>
+                            </select>
+                        </ng-template>
+                    </td>
+
+                    <td *ngIf="showBreedData">
+                        <ng-template *ngIf="!batchBreedCodeIsActive">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                        </ng-template>
+                        <ng-template *ngIf="batchBreedCodeIsActive">
+                            <input
+                                    title="breedCode"
+                                    class="table-input"
+                                    type="text"
+                                    [(ngModel)]="batchAnimal.breed_code"
+                                    [disabled]="isSaving"
+                                    (keyup)="batchSetBreedCode()"
+                            >
+                        </ng-template>
+                    </td>
+
+                    <td *ngIf="showExaminationData">
+                        <ng-template *ngIf="!batchPredicateIsActive">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                        </ng-template>
+                        <ng-template *ngIf="batchPredicateIsActive">
+                            <select
+                                    title="predicate"
+                                    type="predicate"
+                                    class="table-input predicate-type-input"
+                                    [(ngModel)]="batchAnimal.predicate"
+                                    [disabled]="isSaving"
+                                    (click)="batchSetPredicate()"
+                            >
+                                <option [value]=""> </option>
+                                <option *ngFor="let predicateType of predicateTypes" value="{{ predicateType }}"
+                                >{{ predicateType | translate }}</option>
+                            </select>
+                        </ng-template>
+                    </td>
+                    <td *ngIf="showExaminationData">
+                        <ng-template *ngIf="!batchPredicateScoreIsActive">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                        </ng-template>
+                        <ng-template *ngIf="batchPredicateScoreIsActive">
+                            <input
+                                    title="predicateScore"
+                                    class="table-input predicate-score-input"
+                                    type="number" min="0" max="1000"
+                                    [(ngModel)]="batchAnimal.predicate_score"
+                                    [disabled]="isSaving"
+                                    (keyup)="batchSetPredicateScore()"
+                            >
+                        </ng-template>
+                    </td>
+
+                    <td *ngIf="showHealthData">
+                        <ng-template *ngIf="!batchScrapieGenotypeIsActive">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                        </ng-template>
+                        <ng-template *ngIf="batchScrapieGenotypeIsActive">
+                            <select
+                                    title="scrapieGenotype"
+                                    type="scrapieGenotype"
+                                    class="table-input scrapiegenotype-input"
+                                    [(ngModel)]="batchAnimal.scrapie_genotype"
+                                    [disabled]="isSaving"
+                                    (click)="batchSetScrapieGenotype()"
+                            >
+                                <option [value]=""> </option>
+                                <option *ngFor="let scrapieGenotype of scrapieGenotypes" value="{{ scrapieGenotype }}"
+                                >{{ scrapieGenotype }}</option>
+                            </select>
+                        </ng-template>
+                    </td>
+
+                    <td *ngIf="showHealthData">
+                        <ng-template *ngIf="!batchBlindnessFactorIsActive">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                        </ng-template>
+                        <ng-template *ngIf="batchBlindnessFactorIsActive">
+                            <select
+                                    title="blindnessFactor"
+                                    type="blindnessFactor"
+                                    class="table-input blindness-factor-type-input"
+                                    [(ngModel)]="batchAnimal.blindness_factor"
+                                    [disabled]="isSaving"
+                                    (click)="batchSetBlindnessFactor()"
+                            >
+                                <option [value]=""> </option>
+                                <option *ngFor="let blindnessFactorType of blindnessFactorTypes" value="{{ blindnessFactorType }}"
+                                >{{ blindnessFactorType | translate }}</option>
+                            </select>
+                        </ng-template>
+                    </td>
+
+                    <td *ngIf="showHealthData">
+                        <ng-template *ngIf="!batchMyoMaxIsActive">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                        </ng-template>
+                        <ng-template *ngIf="batchMyoMaxIsActive">
+                            <select
+                                    title="myoMax"
+                                    type="myoMax"
+                                    class="table-input myo-max-type-input"
+                                    [(ngModel)]="batchAnimal.myo_max"
+                                    [disabled]="isSaving"
+                                    (click)="batchSetMyoMax()"
+                            >
+                                <option [value]=""> </option>
+                                <option *ngFor="let myoMaxType of myoMaxTypes" value="{{ myoMaxType }}"
+                                >{{ myoMaxType }}</option>
+                            </select>
+                        </ng-template>
+                    </td>
+
+                    <td></td> <!-- extra uln column -->
+                </tr>
+
                 <tr *ngFor="let animal of editedAnimals">
                     <td *ngIf="showIds || showDates" title="{{ animal.creation_date  | date: 'dd-MM-yyyy @HH:mm:ss' }}">{{ animal.creation_date  | date: 'dd-MM-yyyy' }}</td>
                     <td *ngIf="showIds">{{ animal.id }}</td>
@@ -249,6 +665,7 @@
                                 [allowNull]="false"
                                 [boolVal]="animal.is_alive"
                                 (boolValChanged)="animal.is_alive = $event"
+                                [disabled]="isSaving"
                         ></app-boolean-input>
                     </td>
                     <td *ngIf="showNote"><input title="note" class="table-input" type="text" [(ngModel)]="animal.note" [disabled]="isSaving"></td>
@@ -289,6 +706,7 @@
                                 [allowNull]="false"
                                 [boolVal]="animal.lambar"
                                 (boolValChanged)="animal.lambar = $event"
+                                [disabled]="isSaving"
                         ></app-boolean-input>
                     </td>
 
