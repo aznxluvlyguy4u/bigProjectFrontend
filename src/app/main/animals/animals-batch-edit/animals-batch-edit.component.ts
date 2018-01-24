@@ -26,13 +26,20 @@ import { MYO_MAX_TYPES } from '../../../global/constants/myo-max-type.constant';
 import { SCRAPIE_GENOTYPES } from '../../../global/constants/scrapiegenotype.constant';
 import { PREDICATE_TYPE } from '../../../global/constants/predicate-type.constant';
 import { UbnDropdownComponent } from '../../../global/components/ubndropdown/ubn-dropdown.component';
+import { AnimalsBatchEditFilterPipe } from './pipes/animals-batch-edit-filter.pipe';
+import { PaginatePipe, PaginationService } from 'ng2-pagination';
+import { PaginationComponent } from '../../../global/components/pagination/pagination.component';
+import { SearchComponent } from '../../../global/components/searchbox/seach-box.component';
+import { GENDER_TYPES } from '../../../global/constants/gender-type.contant';
 
 @Component({
+		providers: [PaginationService],
 		directives: [REACTIVE_FORM_DIRECTIVES, UlnInputComponent, StnInputComponent,
 			HttpCallButtonComponent, StartInputModalComponent, TableSpinnerComponent, CollarInputComponent,
-			BooleanInputComponent, DatepickerV2Component, UbnDropdownComponent],
+			BooleanInputComponent, DatepickerV2Component, UbnDropdownComponent, PaginationComponent,
+			SearchComponent],
 		template: require('./animals-batch-edit.component.html'),
-		pipes: [TranslatePipe]
+		pipes: [TranslatePipe, AnimalsBatchEditFilterPipe, PaginatePipe]
 })
 export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 		retrievedAnimals: Animal[];
@@ -52,6 +59,7 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 		myoMaxTypes: string[] = MYO_MAX_TYPES;
 		scrapieGenotypes: string[] = SCRAPIE_GENOTYPES;
 		predicateTypes: string[] = PREDICATE_TYPE;
+		genderTypes: string[] = GENDER_TYPES;
 
 		showIds: boolean;
 		showBreedData: boolean;
@@ -92,12 +100,40 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 		batchBlindnessFactorIsActive: boolean;
 		batchMyoMaxIsActive: boolean;
 
+		page: number;
+
+		filterAmount: number = 10;
+		filterAmountOptions = [10, 25, 50];
+
+		filterUlnCountryCode: string;
+		filterUlnNumber: string;
+		filterPedigreeCountryCode: string;
+		filterPedigreeNumber: string;
+		filterCollarNumber: string;
+		filterCollarColor: string;
+		filterNickName: string;
+		filterId: number;
+		filterAiind: number;
+		filterGenderType: string;
+		filterCurrentLocationUbn: string;
+		filterIsAlive: boolean;
+		filterNote: string;
+		filterUbnOfBirth: number;
+		filterLocationOfBirthUbn: string;
+		filterBreedType: string;
+		filterBreedCode: string;
+		filterPredicate: string;
+		filterPredicateScore: number;
+
+
 		constructor(private nsfo: NSFOService,
 								private translate: TranslateService,
 								private locationStorage: LocationStorage,
 								private settings: SettingsService) {}
 
 		private initializeValues() {
+				this.page = 1;
+
 				this.retrievedAnimals = [];
 				this.editedAnimals = [];
 				this.filteredAnimals = [];
@@ -144,6 +180,8 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 				this.batchScrapieGenotypeIsActive = false;
 				this.batchBlindnessFactorIsActive = false;
 				this.batchMyoMaxIsActive = false;
+
+				this.resetFilterOptions();
 		}
 
 		ngOnInit() {
@@ -266,6 +304,7 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 
 
 		private animalsListWasUpdated() {
+			  this.page = 1;
 				this.isAnimalsLoaded = true;
 				this.initialValuesChanged.emit(true);
 		}
@@ -276,8 +315,48 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 			this.resetBatchEditOptions();
 		}
 
+		getFilterOptions() {
+			return [
+				this.filterUlnCountryCode + this.filterUlnNumber,
+				this.filterPedigreeCountryCode + this.filterPedigreeNumber,
+				this.filterCollarNumber,
+				this.filterCollarColor,
+				this.filterNickName,
+				this.filterId,
+				this.filterAiind,
+				this.filterGenderType,
+				this.filterCurrentLocationUbn,
+				this.filterIsAlive,
+				this.filterNote,
+				this.filterUbnOfBirth,
+				this.filterLocationOfBirthUbn,
+				this.filterBreedType,
+				this.filterBreedCode,
+				this.filterPredicate,
+				this.filterPredicateScore,
+			];
+		}
+
 		resetFilterOptions() {
-			 //TODO
+			this.filterUlnCountryCode = '';
+			this.filterUlnNumber = '';
+			this.filterPedigreeCountryCode = '';
+			this.filterPedigreeNumber = '';
+			this.filterCollarNumber = '';
+			this.filterCollarColor = '';
+			this.filterNickName = '';
+			this.filterId = null;
+			this.filterAiind = null;
+			this.filterGenderType = '';
+			this.filterCurrentLocationUbn = null;
+			this.filterIsAlive = null;
+			this.filterNote = '';
+			this.filterUbnOfBirth = 0;
+			this.filterLocationOfBirthUbn = null;
+			this.filterBreedType = '';
+			this.filterBreedCode = '';
+			this.filterPredicate = '';
+			this.filterPredicateScore = 0;
 		}
 
 		resetBatchEditOptions() {

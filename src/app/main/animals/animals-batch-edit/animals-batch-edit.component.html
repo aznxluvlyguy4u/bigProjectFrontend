@@ -22,7 +22,7 @@
                 <button
                         type="button"
                         class="button success"
-                        (click)="displayStartInputModal = 'block'"
+                        (click)="displayStartInputModal = 'block'; page = 1"
                 >{{'RETRIEVE ANIMALS'|translate}}</button>
             </ng-template>
             <ng-template *ngIf="retrievingAnimals">
@@ -91,57 +91,20 @@
         </div>
     </div>
 
-    <hr *ngIf="openFilters">
+    <!--<hr *ngIf="openFilters">-->
 
-    <div class="row">
-        <div class="column large-6 end">
-            <div class="accordion-container" [hidden]="!openFilters">
-                <div class="filler-block">{{ 'FILTERS' | translate }}</div>
+    <!--<div class="row">-->
+        <!--<div class="column large-6 end">-->
+            <!--<div class="accordion-container" [hidden]="!openFilters">-->
+                <!--<div class="filler-block">{{ 'FILTERS' | translate }}</div>-->
 
-                <label>ADD FILTERS HERE</label>
+                <!--<label>ADD FILTERS HERE</label>-->
 
-            </div>
-        </div>
-    </div>
-        
-        <!--&lt;!&ndash;ACCORDION BUTTON&ndash;&gt;-->
-        <!--<button class="accordion-button expanded" [ngClass]="{'toggled': filter_toggled}" (click)="filter_toggled = !filter_toggled">-->
-            <!--<i *ngIf="!filter_toggled" class="fa fa-caret-right fa-fw" aria-hidden="true"></i>-->
-            <!--<i *ngIf="filter_toggled" class="fa fa-caret-down fa-fw" aria-hidden="true"></i>-->
-            <!--{{ '' | translate }} - -->
-            <!--<span> {{ 'REFINE RESULTS' | translate }} </span>-->
-        <!--</button>-->
-
-        <!--&lt;!&ndash;FILTERS&ndash;&gt;-->
-        <!--<div class="accordion-container" [hidden]="!filter_toggled">-->
-            <!--<div class="filler-block">-->
-                <!--{{ 'FILTERS' | translate }}-->
             <!--</div>-->
-
-            <!--&lt;!&ndash;FILTER BIRTH OF DATE&ndash;&gt;-->
-            <!--<label>{{ 'DATE OF BIRTH' | translate }}-->
-                <!--<input [(ngModel)]="startDateFieldFilter" type="text" #startDateField (keyup)="0" id="filter_begindate" placeholder="{{ 'VIEW_DATE_FORMAT' | translate }}">-->
-            <!--</label>-->
-            <!--<label> {{'TILL' | translate }}-->
-                <!--<input [(ngModel)]="endDateFieldFilter" type="text" #endDateField (keyup)="0" id="filter_enddate" placeholder="{{ 'VIEW_DATE_FORMAT' | translate }}">-->
-            <!--</label>-->
-
-            <!--&lt;!&ndash;FILTER GENDER&ndash;&gt;-->
-            <!--<label>{{ 'GENDER' | translate }}-->
-                <!--<select #filters_gender [(ngModel)]="genderFilterValue" [isActive]="onlyFemales">-->
-                    <!--<option *ngFor="let gender of gender_filter_options" value="{{ gender }}">{{ gender | translate }}</option>-->
-                <!--</select>-->
-            <!--</label>-->
-
-            <!--&lt;!&ndash;FILTER HISTORIC ANIMALS&ndash;&gt;-->
-            <!--<label *ngIf="activateHistoricAnimalsFilter()">{{ 'SHOW HISTORIC ANIMALS' | translate }}-->
-                <!--<select #filter_historic (change)="showHistoricAnimals(filter_historic.value)">-->
-                    <!--<option value="NO" selected>{{ 'NO' | translate}}</option>-->
-                    <!--<option value="YES">{{ 'YES' | translate}}</option>-->
-                <!--</select>-->
-            <!--</label>-->
         <!--</div>-->
     <!--</div>-->
+
+    <!--<hr *ngIf="openFilters">-->
 
     <app-table-spinner
             [isActive]="retrievingAnimals"
@@ -204,6 +167,196 @@
                 </tr>
                 </thead>
                 <tbody>
+
+                <tr *ngIf="openFilters" class="filter-row">
+                    <td *ngIf="showIds || showDates">{{ 'FILTERS' | translate }}</td> <!-- creation date column -->
+                    <td *ngIf="showIds"> <!-- animal id column -->
+                        <input
+                                title="idFilter"
+                                class="table-input"
+                                type="number"
+                                [(ngModel)]="filterId"
+                                [disabled]="isSaving"
+                        >
+                    </td>
+                    <td *ngIf="showIds"> <!-- aiind column -->
+                        <input
+                                title="aiindFilter"
+                                class="table-input"
+                                type="number"
+                                [(ngModel)]="filterAiind"
+                                [disabled]="isSaving"
+                        >
+                    </td>
+                    <td *ngIf="showIds"> <!-- nickname column -->
+                        <input
+                                title="nickNameFilter"
+                                class="table-input"
+                                type="text"
+                                [(ngModel)]="filterNickName"
+                                [disabled]="isSaving"
+                        >
+                    </td>
+                    <td *ngIf="showIds"> <!-- collar column -->
+                        <app-collar-input
+                                [collarColor]="filterCollarColor"
+                                (collarColorChange)="filterCollarColor=$event; page = 1"
+                                [collarNumber]="filterCollarNumber"
+                                (collarNumberChange)="filterCollarNumber=$event; page = 1"
+                                [disabled]="isSaving"
+                                [updateInitialValues]="(initialValuesChanged)"
+                        ></app-collar-input>
+                    </td>
+                    <td> <!-- uln column -->
+                        <app-uln-input
+                                [ulnCountryCode]="filterUlnCountryCode"
+                                (ulnCountryCodeChange)="filterUlnCountryCode=$event; page = 1"
+                                [ulnNumber]="filterUlnNumber"
+                                (ulnNumberChange)="filterUlnNumber=$event; page = 1"
+                                [disabled]="isSaving"
+                                [updateInitialValues]="(initialValuesChanged)"
+                        ></app-uln-input>
+                    </td>
+                    <td> <!-- stn -->
+                        <app-stn-input
+                                [pedigreeCountryCode]="filterPedigreeCountryCode"
+                                (pedigreeCountryCodeChange)="filterPedigreeCountryCode=$event; page = 1"
+                                [pedigreeNumber]="filterPedigreeNumber"
+                                (pedigreeNumberChange)="filterPedigreeNumber=$event; page = 1"
+                                [disabled]="isSaving"
+                                [updateInitialValues]="(initialValuesChanged)"
+                        ></app-stn-input>
+                    </td>
+                    <td> <!-- type/gender column -->
+                        <select
+                                title="genderFilter"
+                                class="table-input gender-input"
+                                [(ngModel)]="filterGenderType"
+                                [disabled]="isSaving"
+                                (click)="page = 1"
+                        >
+                            <option [value]=""> </option>
+                            <option *ngFor="let genderType of genderTypes" value="{{ genderType }}"
+                            >{{ genderType | translate }}</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input
+                                title="currentUbnFilter"
+                                class="table-input"
+                                type="number"
+                                [(ngModel)]="filterCurrentLocationUbn"
+                                [disabled]="isSaving"
+                        >
+                    </td>
+                    <td>
+                        <app-boolean-input
+                                [allowNull]="true"
+                                [boolVal]="filterIsAlive"
+                                (boolValChanged)="filterIsAlive = $event; page = 1"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+                    <td *ngIf="showNote">
+                        <input
+                                title="noteFilter"
+                                class="table-input"
+                                type="text"
+                                [(ngModel)]="filterNote"
+                                [disabled]="isSaving"
+                        >
+                    </td>
+
+                    <td *ngIf="showPedigreeData || showDates"></td><!-- date of birth column -->
+                    <td *ngIf="showDates" class="date-input"></td> <!-- date of death column -->
+
+                    <td *ngIf="showPedigreeData">
+                        <!-- TODO -->
+                    </td>
+                    <td *ngIf="showPedigreeData"></td> <!-- father column -->
+                    <td *ngIf="showPedigreeData"></td> <!-- mother column -->
+                    <td *ngIf="showPedigreeData || showBreedData"></td> <!-- nLing column -->
+
+                    <td *ngIf="showPedigreeData">
+                        <input
+                                title="ubnOfBirthFilter"
+                                class="table-input"
+                                type="number"
+                                [(ngModel)]="filterUbnOfBirth"
+                                [disabled]="isSaving"
+                        >
+                    </td>
+
+                    <td *ngIf="showPedigreeData">
+                        <input
+                                title="locationOfBirthUbnFilter"
+                                class="table-input"
+                                type="number"
+                                [(ngModel)]="filterLocationOfBirthUbn"
+                                [disabled]="isSaving"
+                        >
+                    <td *ngIf="showPedigreeData"></td> <!-- surrogate mother column -->
+
+                    <td *ngIf="showPedigreeData"></td> <!-- Lambar -->
+
+                    <td *ngIf="showPedigreeData"></td> <!-- BirthProgress -->
+
+                    <td *ngIf="showBreedData">
+                        <select
+                                type="breedTypeFilter"
+                                class="table-input breed-type-input"
+                                [(ngModel)]="filterBreedType"
+                                [disabled]="isSaving"
+                                (click)="page = 1"
+                        >
+                            <option [value]=""> </option>
+                            <option *ngFor="let breedType of breedTypes" value="{{ breedType }}"
+                            >{{ breedType | translate }}</option>
+                        </select>
+                    </td>
+
+                    <td *ngIf="showBreedData">
+                        <input
+                                title="breedCodeFilter"
+                                class="table-input"
+                                type="text"
+                                [(ngModel)]="filterBreedCode"
+                                [disabled]="isSaving"
+                        >
+                    </td>
+
+                    <td *ngIf="showExaminationData">
+                        <select
+                                title="predicateFilter"
+                                type="predicateFilter"
+                                class="table-input predicate-type-input"
+                                [(ngModel)]="filterPredicate"
+                                [disabled]="isSaving"
+                                (click)="page = 1"
+                        >
+                            <option [value]=""> </option>
+                            <option *ngFor="let predicateType of predicateTypes" value="{{ predicateType }}"
+                            >{{ predicateType | translate }}</option>
+                        </select>
+                    </td>
+                    <td *ngIf="showExaminationData">
+                        <input
+                                title="predicateScoreFilter"
+                                class="table-input predicate-score-input"
+                                type="number" min="0" max="1000"
+                                [(ngModel)]="filterPredicateScore"
+                                [disabled]="isSaving"
+                        >
+                    </td>
+
+                    <td *ngIf="showHealthData"></td> <!-- ScrapieGenotype -->
+
+                    <td *ngIf="showHealthData"></td> <!-- BlindnessFactor -->
+
+                    <td *ngIf="showHealthData"></td> <!-- MyoMax -->
+
+                    <td></td> <!-- extra uln column -->
+                </tr>
 
                 <tr *ngIf="isBatchEditActive" class="batch-edit-header-row">
                     <td *ngIf="showIds || showDates"></td> <!-- creation date column -->
@@ -621,7 +774,7 @@
                     <td></td> <!-- extra uln column -->
                 </tr>
 
-                <tr *ngFor="let animal of editedAnimals">
+                <tr *ngFor="let animal of editedAnimals | animalBatchEditFilter:getFilterOptions() | paginate: {itemsPerPage: filterAmount, currentPage: page}">
                     <td *ngIf="showIds || showDates" title="{{ animal.creation_date  | date: 'dd-MM-yyyy @HH:mm:ss' }}">{{ animal.creation_date  | date: 'dd-MM-yyyy' }}</td>
                     <td *ngIf="showIds">{{ animal.id }}</td>
                     <td *ngIf="showIds"><input title="aiind" class="table-input" type="number" [(ngModel)]="animal.name" [disabled]="isSaving"></td>
@@ -814,6 +967,8 @@
                 </tr>
                 </tbody>
             </table>
+
+            <pagination (pageChange)="page = $event"></pagination>
         </div>
     </div>
     </ng-template>
