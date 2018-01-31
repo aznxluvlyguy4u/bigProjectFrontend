@@ -70,6 +70,12 @@ export class Datepicker {
             n -= firstWeekDay - 1;
         }
 
+        // Fix: In case the first day is on a sunday
+        if (!this.firstWeekDaySunday && n === 2 && firstWeekDay === 0) {
+            n = -5;
+            firstWeekDay = -7;
+        }
+
         for (let i = n; i <= lastDayOfMonth; i += 1) {
             if (i > 0) {
                 this.days.push({ day: i, month: month + 1, year: year, enabled: true });
