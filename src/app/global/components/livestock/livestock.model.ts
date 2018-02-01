@@ -18,7 +18,7 @@ export class Animal {
     public gender: string;
     public scrapie_genotype: string;
     public inflow_date: string;
-    public birth_progress: string;+
+    public birth_progress: string;
     public date_of_birth_sort: string;
     public ulnLastFive: string;
     public selected: boolean;
