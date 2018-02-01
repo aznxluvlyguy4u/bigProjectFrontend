@@ -112,8 +112,6 @@ export class LogFilterPipe implements PipeTransform {
 						});
 				}
 
-				console.log(user_action_type_options);
-
 				// FILTER: USER ACTION TYPE
 				if (user_action_type_options !== 'ALL' && user_action_type_options !== null) {
 						user_action_type_options = user_action_type_options.toLowerCase();
