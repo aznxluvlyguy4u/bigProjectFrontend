@@ -23,6 +23,7 @@ import { DateTimeService } from '../../global/services/utils/date-time.service';
 import { FormUtilService } from '../../global/services/utils/form-util.service';
 import { UtilsService } from '../../global/services/utils/utils.service';
 import { UcFirstPipe } from '../../global/pipes/uc-first.pipe';
+import { TranslateUserActionTypeSortPipe } from './pipes/translate-user-action-type-sort.pipe';
 
 declare var $;
 
@@ -30,7 +31,7 @@ declare var $;
     providers: [PaginationService, SortService, DateTimeService, FormUtilService],
     directives: [REACTIVE_FORM_DIRECTIVES, ROUTER_DIRECTIVES, PaginationComponent, SearchComponent, Datepicker, CheckMarkComponent, SortSwitchComponent],
     template: require('./technical-log-overview.component.html'),
-    pipes: [TranslatePipe, LogFilterPipe, PaginatePipe, UserSearchPipe, LoginEnvironmentPipe, UpperCasePipe, LowerCasePipe, UcFirstPipe ]
+    pipes: [TranslatePipe, LogFilterPipe, PaginatePipe, UserSearchPipe, LoginEnvironmentPipe, UpperCasePipe, LowerCasePipe, UcFirstPipe, TranslateUserActionTypeSortPipe ]
 })
 export class TechnicalLogOverviewComponent {
     private isUsersLoaded: boolean = false;
