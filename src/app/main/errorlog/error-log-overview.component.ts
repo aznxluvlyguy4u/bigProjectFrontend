@@ -35,13 +35,14 @@ import { DeclareBirth } from '../../global/models/declare-birth.model';
 import { DeclareTagTransfer } from '../../global/models/declare-tag-transfer.model';
 import { TagTransferItemResponse } from '../../global/models/tag-transfer-item-response.model';
 import { DeclareTagTransferFilterPipe } from './pipes/declare-tag-transfer-filter.pipe';
+import { UcFirstPipe } from '../../global/pipes/uc-first.pipe';
 
 @Component({
 		providers: [PaginationService, SortService, DateTimeService, FormUtilService, ErrorLogFilterPipe],
 		directives: [REACTIVE_FORM_DIRECTIVES, ROUTER_DIRECTIVES, PaginationComponent, SearchComponent, Datepicker,
 			CheckMarkComponent, SortSwitchComponent, HideButtonComponent, GhostLoginModalComponent, InfoButtonComponent],
 		template: require('./error-log-overview.component.html'),
-		pipes: [TranslatePipe, ErrorLogFilterPipe, PaginatePipe, UserSearchPipe, DeclareTagTransferFilterPipe]
+		pipes: [TranslatePipe, ErrorLogFilterPipe, PaginatePipe, UserSearchPipe, DeclareTagTransferFilterPipe, UcFirstPipe ]
 })
 export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 

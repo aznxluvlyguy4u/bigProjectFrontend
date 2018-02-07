@@ -84,7 +84,7 @@
                             [formControl]="dateForm.controls['selectedUserActionType']"
                     >
                         <option value="ALL">{{ 'ALL' | translate }}</option>
-                        <option *ngFor="let logType of logTypesList"  value="{{logType}}">{{ logType | translate }}</option>
+                        <option *ngFor="let logType of logTypesList | translatedUserActionTypeSortPipe"  value="{{logType}}">{{ logType | translate }}</option>
                     </select>
                 </label>
             </div>
@@ -150,7 +150,7 @@
                 {{ 'USER ACTION TYPES' | translate }}
                 <select [(ngModel)]="filterUserActionTypes" (change)="page = 1">
                     <option value="ALL">{{ 'ALL' | translate }}</option>
-                    <option *ngFor="let logType of logTypesFilterList"  value="{{logType}}">{{ logType | translate }}</option>
+                    <option *ngFor="let logType of logTypesFilterList | translatedUserActionTypeSortPipe"  value="{{logType}}">{{ logType | translate }}</option>
                 </select>
             </label>
         </div>
@@ -237,7 +237,7 @@
                         {{getFullName(log.action_by)}}
                     </td>
                     <td>
-                        {{ log.user_action_type }}
+                        {{ log.user_action_type | translate }}
                     </td>
                     <td>
                         {{ log.description }}

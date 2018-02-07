@@ -11,7 +11,7 @@
 
         <div class="row">
             <div class="large-1 medium-12 columns">
-                <h5>{{ 'FILTERS' | translate }}</h5>
+                <h5>{{ 'FILTERS' | translate  | ucFirstPipe }}</h5>
             </div>
         </div>
 
@@ -19,7 +19,7 @@
         <div class="row table-options-container">
 
             <div class="large-2 medium-3 columns">
-                <label>{{ 'LOG DATE' | translate }} {{ 'START' | translate }}
+                <label>{{ 'LOG DATE' | translate | ucFirstPipe }} {{ 'START' | translate | ucFirstPipe }}
                     <input
                             [(ngModel)]="filterLogDateStart"
                             type="text"
@@ -31,7 +31,7 @@
             </div>
 
             <div class="large-2 medium-3 columns">
-                <label>{{ 'LOG DATE' | translate }} {{ 'END' | translate }}
+                <label>{{ 'LOG DATE' | translate | ucFirstPipe }} {{ 'END' | translate  | ucFirstPipe }}
                     <input
                             [(ngModel)]="filterLogDateEnd"
                             type="text"
@@ -43,7 +43,7 @@
             </div>
 
             <div class="large-2 medium-3 columns">
-                <label>{{ 'EVENT DATE' | translate }} {{ 'START' | translate }}
+                <label>{{ 'EVENT DATE' | translate | ucFirstPipe }} {{ 'START' | translate  | ucFirstPipe }}
                     <input
                             [(ngModel)]="filterEventDateStart"
                             type="text"
@@ -55,7 +55,7 @@
             </div>
 
             <div class="large-2 medium-3 columns">
-                <label>{{ 'EVENT DATE' | translate }} {{ 'END' | translate }}
+                <label>{{ 'EVENT DATE' | translate | ucFirstPipe }} {{ 'END' | translate | ucFirstPipe }}
                     <input
                             [(ngModel)]="filterEventDateEnd"
                             type="text"
@@ -79,7 +79,7 @@
 
             <div class="large-2 columns end">
                 <label>
-                    {{'DISPLAY' | translate }} {{'HIDDEN FOR USERS' | translate | lowercase}}
+                    {{'DISPLAY' | translate | ucFirstPipe }} {{'HIDDEN FOR USERS' | translate | lowercase}}
                     <select [(ngModel)]="filterIsHiddenForUser" (change)="page = 1">
                         <option *ngFor="let option of filterIsHiddenForUserOptions" [value]="option">
                             {{getBoolDrowDownText(option) | translate}}
@@ -97,14 +97,14 @@
 
             <div class="large-3 columns">
                 <label>
-                    {{ 'SEARCH' | translate }} <i class="fa fa-info-circle" aria-hidden="true" title="{{ 'ERROR LOG SEARCH INFO' | translate}}"></i>
+                    {{ 'SEARCH' | translate | ucFirstPipe }} <i class="fa fa-info-circle" aria-hidden="true" title="{{ 'ERROR LOG SEARCH INFO' | translate}}"></i>
                     <input type="text" [(ngModel)]="filterSearch" (keydown)="page = 1" placeholder="{{ 'SEARCH' | translate }}" maxlength="50">
                 </label>
             </div>
 
             <div class="large-2 columns">
                 <label>
-                    {{'DECLARE TYPE' | translate | lowercase}}
+                    {{'DECLARE TYPE' | translate | ucFirstPipe }}
                     <select [(ngModel)]="filterType" (change)="page = 1">
                         <option *ngFor="let actionByTypes of getDeclareTypes()" [value]="actionByTypes">{{actionByTypes == undefined ? ('ALL'|translate) : actionByTypes}}</option>
                     </select>
@@ -114,7 +114,7 @@
             <!-- DISABLED BECAUSE PAGINATION IS A BIT BROKEN -->
             <!--<div class="large-1 columns">-->
                 <!--<label>-->
-                    <!--{{ 'PER PAGE' | translate }}-->
+                    <!--{{ 'PER PAGE' | translate | ucFirstPipe }}-->
                     <!--<select [(ngModel)]="filterAmount" (change)="page = 1">-->
                         <!--<option *ngFor="let option of filterAmountOptions" [value]="option">{{option}}</option>-->
                     <!--</select>-->
@@ -130,14 +130,14 @@
 
             <div class="large-2 columns">
                 <label>
-                    {{ 'RELATED' | translate }} {{ 'UBN' | translate }}
+                    {{ 'RELATED' | translate | ucFirstPipe }} {{ 'UBN' | translate }}
                     <input type="text" [(ngModel)]="filterRelatedUbn" (keydown)="page = 1" placeholder="{{ 'RELATED' | translate }} {{ 'UBN' | translate }}" maxlength="15">
                 </label>
             </div>
 
             <div class="large-2 columns">
                 <label>
-                    {{ 'ACTION BY TYPE' | translate }}
+                    {{ 'ACTION BY TYPE' | translate | ucFirstPipe }}
                     <select [(ngModel)]="filterActionByType" (change)="page = 1">
                         <option value="ALL">{{ 'ALL' | translate }}</option>
                         <option *ngFor="let typeOption of getActionByTypeOptions()" value="{{typeOption}}">{{ typeOption |
@@ -169,31 +169,31 @@
             <table class="stack client-overview">
                 <thead>
                 <tr>
-                    <td>{{ 'LOG DATE' | translate }}
+                    <td>{{ 'LOG DATE' | translate | ucFirstPipe }}
                         <app-sort-switch
                                 [pointsUp]="isLogDateSortAscending"
                                 [neutral]="isLogDateSortNeutral"
                                 (sortSwitchToggled)="onSortByLogDateToggle(); page = 1">
                         </app-sort-switch>
                     </td>
-                    <td>{{ 'EVENT DATE' | translate }}
+                    <td>{{ 'EVENT DATE' | translate | ucFirstPipe }}
                         <app-sort-switch
                                 [pointsUp]="isEventDateSortAscending"
                                 [neutral]="isEventDateSortNeutral"
                                 (sortSwitchToggled)="onSortByEventDateToggle(); page = 1">
                         </app-sort-switch>
                     </td>
-                    <td>{{ 'DECLARE TYPE' | translate }}</td>
+                    <td>{{ 'DECLARE TYPE' | translate | ucFirstPipe }}</td>
                     <td>{{ 'UBN' | translate }}</td>
-                    <td>{{ 'RELATED' | translate }} {{ 'UBN' | translate }}</td>
-                    <td>{{ 'ACTION BY' | translate }}</td>
-                    <td>{{ 'ACTION BY TYPE' | translate }}</td>
-                    <td>{{ 'DESCRIPTION' | translate }}</td>
-                    <td>{{ 'HIDDEN FOR ADMINS' | translate | lowercase}}</td>
-                    <td>{{ 'HIDDEN FOR USERS' | translate | lowercase}}</td>
-                    <td>{{ 'HIDE FOR ADMINS' | translate }}</td>
-                    <td>{{ 'LOGIN' |  translate}}</td>
-                    <td>{{ 'INFO' |  translate}}</td>
+                    <td>{{ 'RELATED' | translate | ucFirstPipe }} {{ 'UBN' | translate }}</td>
+                    <td>{{ 'ACTION BY' | translate | ucFirstPipe }}</td>
+                    <td>{{ 'ACTION BY TYPE' | translate | ucFirstPipe }}</td>
+                    <td>{{ 'DESCRIPTION' | translate | ucFirstPipe }}</td>
+                    <td>{{ 'HIDDEN FOR ADMINS' | translate | ucFirstPipe}}</td>
+                    <td>{{ 'HIDDEN FOR USERS' | translate  | ucFirstPipe}}</td>
+                    <td>{{ 'HIDE FOR ADMINS' | translate | ucFirstPipe }}</td>
+                    <td>{{ 'LOGIN' |  translate | ucFirstPipe}}</td>
+                    <td>{{ 'INFO' |  translate | ucFirstPipe}}</td>
                 </tr>
                 </thead>
                 <tbody>
