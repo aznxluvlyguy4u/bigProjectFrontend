@@ -52,6 +52,8 @@ export class NSFOService {
 
 	  public URI_TECHNICAL_LOG = '/v1/log/action';
 
+	  public URI_PEDIGREE_REGISTERS = '/v1/pedigreeregisters';
+
 	  public URI_TREATMENTS = '/v1/treatments';
 	  public URI_TREATMENT_TYPES = '/v1/treatment-types';
 

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { TranslatePipe } from 'ng2-translate';
 import { NSFOService } from '../../services/nsfo/nsfo.service';
 

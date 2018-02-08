@@ -31,13 +31,15 @@ import { PaginatePipe, PaginationService } from 'ng2-pagination';
 import { PaginationComponent } from '../../../global/components/pagination/pagination.component';
 import { SearchComponent } from '../../../global/components/searchbox/seach-box.component';
 import { GENDER_TYPES } from '../../../global/constants/gender-type.contant';
+import { PedigreeRegisterStorage } from '../../../global/services/storage/pedigree-register.storage';
+import { PedigreeRegisterDropdownComponent } from '../../../global/components/pedigreeregisterdropdown/pedigree-register-dropdown.component';
 
 @Component({
 		providers: [PaginationService],
 		directives: [REACTIVE_FORM_DIRECTIVES, UlnInputComponent, StnInputComponent,
 			HttpCallButtonComponent, StartInputModalComponent, TableSpinnerComponent, CollarInputComponent,
 			BooleanInputComponent, DatepickerV2Component, UbnDropdownComponent, PaginationComponent,
-			SearchComponent],
+			SearchComponent, PedigreeRegisterDropdownComponent],
 		template: require('./animals-batch-edit.component.html'),
 		pipes: [TranslatePipe, AnimalsBatchEditFilterPipe, PaginatePipe]
 })
@@ -82,6 +84,7 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 		displayBatchPedigreeRegisterEditModal: string;
 
 		initialValuesChanged = new EventEmitter<boolean>();
+		resetPedigreeRegisterValues = new EventEmitter<boolean>();
 
 
 		batchCurrentLocationIsActive: boolean;
@@ -129,6 +132,7 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 		constructor(private nsfo: NSFOService,
 								private translate: TranslateService,
 								private locationStorage: LocationStorage,
+								private pedigreeRegisterStorage: PedigreeRegisterStorage,
 								private settings: SettingsService) {}
 
 		private initializeValues() {
@@ -200,6 +204,7 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 
 		getGeneralData() {
 				this.locationStorage.refreshLocations();
+				this.pedigreeRegisterStorage.initialize();
 		}
 
 		getLocations(): Location[] {
@@ -505,6 +510,7 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 				animal.pedigree_register = retrievedAnimal.pedigree_register;
 			}
 		}
+		this.resetPedigreeRegisterValues.emit(true);
 	}
 
 	batchResetUbnOfBirth() {

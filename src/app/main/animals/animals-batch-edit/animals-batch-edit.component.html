@@ -572,7 +572,12 @@
                             <i class="fa fa-ban" aria-hidden="true"></i>
                         </ng-template>
                         <ng-template *ngIf="batchPedigreeRegisterIsActive">
-                            {{ batchAnimal.pedigree_register ? batchAnimal.pedigree_register.abbreviation : '-' }}
+                            <app-pedigree-register-dropdown
+                                    [selectedPedigreeRegisterId]="batchAnimal.pedigree_register ? batchAnimal.pedigree_register.id : null"
+                                    [disabled]="isSaving"
+                                    [updateInitialValues]="(initialValuesChanged)"
+                                    (pedigreeRegisterChange)="batchAnimal.pedigree_register=$event; batchSetPedigreeRegister()"
+                            ></app-pedigree-register-dropdown>
                         </ng-template>
                     </td>
                     <td *ngIf="showPedigreeData"></td> <!-- father column -->
@@ -845,7 +850,16 @@
                         ></app-datepicker-v2>
                     </td>
 
-                    <td *ngIf="showPedigreeData">{{ animal.pedigree_register ? animal.pedigree_register.abbreviation : '-' }}</td>
+                    <td *ngIf="showPedigreeData">
+                        <app-pedigree-register-dropdown
+                                [selectedPedigreeRegisterId]="animal.pedigree_register ? animal.pedigree_register.id : null"
+                                [disabled]="isSaving"
+                                [updateInitialValues]="(initialValuesChanged)"
+                                (pedigreeRegisterChange)="animal.pedigree_register=$event"
+                                [reset]="(resetPedigreeRegisterValues)"
+                        ></app-pedigree-register-dropdown>
+                    </td>
+
                     <td *ngIf="showPedigreeData">{{ animal.parent_father ?
                         animal.parent_father.uln_country_code + animal.parent_father.uln_number : '-'}}</td>
                     <td *ngIf="showPedigreeData">{{ animal.parent_mother ?
