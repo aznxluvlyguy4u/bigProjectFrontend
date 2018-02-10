@@ -177,6 +177,7 @@
                                 type="number"
                                 [(ngModel)]="filterId"
                                 [disabled]="isSaving"
+                                (keyup)="updateFilterAnimals()"
                         >
                     </td>
                     <td *ngIf="showIds"> <!-- aiind column -->
@@ -186,6 +187,7 @@
                                 type="number"
                                 [(ngModel)]="filterAiind"
                                 [disabled]="isSaving"
+                                (keyup)="updateFilterAnimals()"
                         >
                     </td>
                     <td *ngIf="showIds"> <!-- nickname column -->
@@ -195,12 +197,13 @@
                                 type="text"
                                 [(ngModel)]="filterNickName"
                                 [disabled]="isSaving"
+                                (keyup)="updateFilterAnimals()"
                         >
                     </td>
                     <td *ngIf="showIds"> <!-- collar column -->
                         <app-collar-input
                                 [collarColor]="filterCollarColor"
-                                (collarColorChange)="filterCollarColor=$event; page = 1"
+                                (collarColorChange)="filterCollarColor=$event; page = 1; updateFilterAnimals()"
                                 [collarNumber]="filterCollarNumber"
                                 (collarNumberChange)="filterCollarNumber=$event; page = 1"
                                 [disabled]="isSaving"
@@ -210,7 +213,7 @@
                     <td> <!-- uln column -->
                         <app-uln-input
                                 [ulnCountryCode]="filterUlnCountryCode"
-                                (ulnCountryCodeChange)="filterUlnCountryCode=$event; page = 1"
+                                (ulnCountryCodeChange)="filterUlnCountryCode=$event; page = 1; updateFilterAnimals()"
                                 [ulnNumber]="filterUlnNumber"
                                 (ulnNumberChange)="filterUlnNumber=$event; page = 1"
                                 [disabled]="isSaving"
@@ -220,7 +223,7 @@
                     <td> <!-- stn -->
                         <app-stn-input
                                 [pedigreeCountryCode]="filterPedigreeCountryCode"
-                                (pedigreeCountryCodeChange)="filterPedigreeCountryCode=$event; page = 1"
+                                (pedigreeCountryCodeChange)="filterPedigreeCountryCode=$event; page = 1; updateFilterAnimals()"
                                 [pedigreeNumber]="filterPedigreeNumber"
                                 (pedigreeNumberChange)="filterPedigreeNumber=$event; page = 1"
                                 [disabled]="isSaving"
@@ -233,7 +236,7 @@
                                 class="table-input gender-input"
                                 [(ngModel)]="filterGenderType"
                                 [disabled]="isSaving"
-                                (click)="page = 1"
+                                (click)="page = 1; updateFilterAnimals()"
                         >
                             <option [value]=""> </option>
                             <option *ngFor="let genderType of genderTypes" value="{{ genderType }}"
@@ -247,13 +250,14 @@
                                 type="number"
                                 [(ngModel)]="filterCurrentLocationUbn"
                                 [disabled]="isSaving"
+                                (keyup)="updateFilterAnimals()"
                         >
                     </td>
                     <td>
                         <app-boolean-input
                                 [allowNull]="true"
                                 [boolVal]="filterIsAlive"
-                                (boolValChanged)="filterIsAlive = $event; page = 1"
+                                (boolValChanged)="filterIsAlive = $event; page = 1; updateFilterAnimals()"
                                 [disabled]="isSaving"
                         ></app-boolean-input>
                     </td>
@@ -264,6 +268,7 @@
                                 type="text"
                                 [(ngModel)]="filterNote"
                                 [disabled]="isSaving"
+                                (keyup)="updateFilterAnimals()"
                         >
                     </td>
 
@@ -284,6 +289,7 @@
                                 type="number"
                                 [(ngModel)]="filterUbnOfBirth"
                                 [disabled]="isSaving"
+                                (keyup)="updateFilterAnimals()"
                         >
                     </td>
 
@@ -294,6 +300,7 @@
                                 type="number"
                                 [(ngModel)]="filterLocationOfBirthUbn"
                                 [disabled]="isSaving"
+                                (keyup)="updateFilterAnimals()"
                         >
                     <td *ngIf="showPedigreeData"></td> <!-- surrogate mother column -->
 
@@ -307,7 +314,7 @@
                                 class="table-input breed-type-input"
                                 [(ngModel)]="filterBreedType"
                                 [disabled]="isSaving"
-                                (click)="page = 1"
+                                (click)="page = 1; updateFilterAnimals()"
                         >
                             <option [value]=""> </option>
                             <option *ngFor="let breedType of breedTypes" value="{{ breedType }}"
@@ -322,6 +329,7 @@
                                 type="text"
                                 [(ngModel)]="filterBreedCode"
                                 [disabled]="isSaving"
+                                (keyup)="updateFilterAnimals()"
                         >
                     </td>
 
@@ -332,7 +340,7 @@
                                 class="table-input predicate-type-input"
                                 [(ngModel)]="filterPredicate"
                                 [disabled]="isSaving"
-                                (click)="page = 1"
+                                (click)="page = 1; updateFilterAnimals()"
                         >
                             <option [value]=""> </option>
                             <option *ngFor="let predicateType of predicateTypes" value="{{ predicateType }}"
@@ -346,6 +354,7 @@
                                 type="number" min="0" max="1000"
                                 [(ngModel)]="filterPredicateScore"
                                 [disabled]="isSaving"
+                                (keyup)="updateFilterAnimals()"
                         >
                     </td>
 

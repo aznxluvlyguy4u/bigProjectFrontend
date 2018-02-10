@@ -36,7 +36,7 @@ import { ParentSelectorComponent } from '../../../global/components/parentselect
 import { ParentsStorage } from '../../../global/services/storage/parents.storage';
 
 @Component({
-		providers: [PaginationService],
+		providers: [PaginationService, AnimalsBatchEditFilterPipe],
 		directives: [REACTIVE_FORM_DIRECTIVES, UlnInputComponent, StnInputComponent,
 			HttpCallButtonComponent, StartInputModalComponent, TableSpinnerComponent, CollarInputComponent,
 			BooleanInputComponent, DatepickerV2Component, UbnDropdownComponent, PaginationComponent,
@@ -135,6 +135,7 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 								private locationStorage: LocationStorage,
 								private pedigreeRegisterStorage: PedigreeRegisterStorage,
 								private parentStorage: ParentsStorage,
+								private filterPipe: AnimalsBatchEditFilterPipe,
 								private settings: SettingsService) {}
 
 		private initializeValues() {
@@ -234,9 +235,7 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 
 									this.animalsListWasUpdated();
 
-									//TODO remove after we have actual filtered animals
-									// this.filteredAnimals = this.editedAnimals;
-									this.filteredAnimals = res.result.animals;
+									this.updateFilterAnimals();
 									this.retrievingAnimals = false;
 
 									}, error => {
@@ -246,6 +245,9 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 					);
 		}
 
+		updateFilterAnimals() {
+			this.filteredAnimals = this.filterPipe.transform(this.editedAnimals, this.getFilterOptions());
+		}
 
 		doPutUpdateAnimals() {
 
@@ -254,9 +256,7 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 				}
 
 				this.isSaving = true;
-
-				//TODO return real filtered animals
-				this.filteredAnimals = this.editedAnimals;
+				this.updateFilterAnimals();
 
 				const updateBody = {
 						animals: this.filteredAnimals
