@@ -600,5 +600,10 @@
   "REMOVE PARENT": "Verwijder ouder",
   "PARENT WAS FOUND": "Ouder was gevonden",
   "PARENT WAS REMOVED": "Geselecteerde ouder is verwijderd",
-  "USE SELECTION": "Gebruik selectie"
+  "USE SELECTION": "Gebruik selectie",
+  "INPUT ERRORS": "Invoerfouten",
+  "THERE ARE NO INPUT ERRORS": "Er zijn geen invoerfouten",
+  "INVALID INPUT": "Onjuiste invoer",
+  "ULNS WITHOUT FOUND ANIMALS": "ULNs zonder gevonden dieren",
+  "STNS WITHOUT FOUND ANIMALS": "STNs zonder gevonden dieren"
 }

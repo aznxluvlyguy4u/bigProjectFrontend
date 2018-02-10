@@ -83,6 +83,7 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 		displayBatchLocationEditModal: string;
 		displayBatchLocationOfBirthEditModal: string;
 		displayBatchPedigreeRegisterEditModal: string;
+		displayIncorrectGetInputModal: string;
 
 		initialValuesChanged = new EventEmitter<boolean>();
 		resetPedigreeRegisterValues = new EventEmitter<boolean>();
@@ -171,6 +172,7 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 				this.displayBatchLocationEditModal = 'none';
 				this.displayBatchLocationOfBirthEditModal = 'none';
 				this.displayBatchPedigreeRegisterEditModal = 'none';
+				this.displayIncorrectGetInputModal = 'none';
 
 				this.batchCurrentLocationIsActive = false;
 				this.batchIsAliveIsActive = false;
@@ -238,11 +240,29 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 									this.updateFilterAnimals();
 									this.retrievingAnimals = false;
 
-									}, error => {
+									if (this.hasInputErrors()) {
+										this.openIncorrectGetInputModal();
+									}
+								},
+							error => {
 									alert(this.nsfo.getErrorMessage(error));
 									this.retrievingAnimals = false;
 							}
 					);
+		}
+
+		hasInputErrors() {
+			if (this.animalsResult != null
+			&& this.animalsResult.invalid  != null
+			&& this.animalsResult.ulns_without_found_animals  != null
+			&& this.animalsResult.stns_without_found_animals  != null
+			) {
+				return this.animalsResult.invalid.length > 0
+					|| this.animalsResult.ulns_without_found_animals.length > 0
+					|| this.animalsResult.stns_without_found_animals.length > 0
+					;
+			}
+			return false;
 		}
 
 		updateFilterAnimals() {
@@ -390,6 +410,14 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 
 		openBatchPedigreeRegisterModal() {
 			this.displayBatchPedigreeRegisterEditModal = 'block';
+		}
+
+		closeIncorrectGetInputModal() {
+			this.displayIncorrectGetInputModal = 'none';
+		}
+
+		openIncorrectGetInputModal() {
+			this.displayIncorrectGetInputModal = 'block';
 		}
 
 		closeBatchPedigreeRegisterModal() {

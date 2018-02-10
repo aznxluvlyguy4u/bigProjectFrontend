@@ -19,11 +19,23 @@
         <div class="column large-2">
             <!--OPEN GET ANIMALS MODAL BUTTON-->
             <ng-template *ngIf="!retrievingAnimals">
-                <button
-                        type="button"
-                        class="button success"
-                        (click)="displayStartInputModal = 'block'; page = 1"
-                >{{'RETRIEVE ANIMALS'|translate}}</button>
+                <span style="white-space: nowrap">
+                    <button
+                            type="button"
+                            class="button success"
+                            (click)="displayStartInputModal = 'block'; page = 1"
+                    >{{'RETRIEVE ANIMALS'|translate}}
+                    </button>
+                    <button
+                            type="button"
+                            class="button alert"
+                            style="width: 1rem; text-indent: -0.23rem"
+                            [title]="(hasInputErrors() ? ('INPUT ERRORS' | translate) : ('THERE ARE NO INPUT ERRORS' | translate))"
+                            [disabled]="!hasInputErrors()"
+                            (click)="openIncorrectGetInputModal()"
+                    ><i class="fa fa-exclamation-triangle"></i>
+                    </button>
+                </span>
             </ng-template>
             <ng-template *ngIf="retrievingAnimals">
                 <button
@@ -1057,6 +1069,88 @@
                 >{{ 'CANCEL' | translate}}</button>
             </span>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!--BATCH LOCATION OF BIRTH MODAL-->
+    <div class="reveal-overlay" [ngStyle]="{'display': displayIncorrectGetInputModal}">
+        <div class="tiny reveal" [ngStyle]="{'display': displayIncorrectGetInputModal}">
+            <div class="modal-header">
+                {{ 'INPUT ERRORS' | translate }}
+                <button type="button" (click)="closeIncorrectGetInputModal()" class="pull-right" aria-label="Close modal">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <ng-template *ngIf="animalsResult.invalid != null && animalsResult.invalid.length > 0">
+                    <table class="stacked">
+                        <thead>
+                            <tr>
+                                <td>
+                                    {{ 'INVALID INPUT' | translate }}
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let invalidInput of animalsResult.invalid">
+                                <td>
+                                    {{ invalidInput }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </ng-template>
+
+                <ng-template *ngIf="animalsResult.ulns_without_found_animals != null && animalsResult.ulns_without_found_animals.length > 0">
+                    <table class="stacked">
+                        <thead>
+                        <tr>
+                            <td>
+                                {{ 'ULNS WITHOUT FOUND ANIMALS' | translate }}
+                            </td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let ulnNotFound of animalsResult.ulns_without_found_animals">
+                            <td>
+                                {{ ulnNotFound }}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </ng-template>
+
+                <ng-template *ngIf="animalsResult.stns_without_found_animals != null && animalsResult.stns_without_found_animals.length > 0">
+                    <table class="stacked">
+                        <thead>
+                        <tr>
+                            <td>
+                                {{ 'STNS WITHOUT FOUND ANIMALS' | translate }}
+                            </td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let stnNotFound of animalsResult.stns_without_found_animals">
+                            <td>
+                                {{ stnNotFound }}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </ng-template>
+
+            </div>
+
+            <div class="modal-footer">
+                    <span class="pull-right">
+                        <button
+                                class="tiny alert button"
+                                (click)="closeIncorrectGetInputModal();"
+                        >{{ 'CANCEL' | translate}}</button>
+                    </span>
             </div>
         </div>
     </div>
