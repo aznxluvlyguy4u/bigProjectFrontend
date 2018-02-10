@@ -96,6 +96,11 @@ export class PaginationComponent {
         return this.getLastPage() === this.getCurrent() || this.getLastPage() == 0;
     }
 
+    @Input()
+    goToFirstPage() {
+        this.setCurrent(1);
+    }
+
     /**
      * Set the current page number.
      */

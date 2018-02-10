@@ -87,6 +87,7 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 
 		initialValuesChanged = new EventEmitter<boolean>();
 		resetPedigreeRegisterValues = new EventEmitter<boolean>();
+		retrievedNewAnimalsBatch = new EventEmitter<boolean>();
 
 
 		batchCurrentLocationIsActive: boolean;
@@ -243,6 +244,8 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 									if (this.hasInputErrors()) {
 										this.openIncorrectGetInputModal();
 									}
+
+									this.retrievedNewAnimalsBatch.emit(true);
 								},
 							error => {
 									alert(this.nsfo.getErrorMessage(error));

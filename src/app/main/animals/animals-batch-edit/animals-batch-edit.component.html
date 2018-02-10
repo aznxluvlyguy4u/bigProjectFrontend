@@ -1001,7 +1001,7 @@
                 </tbody>
             </table>
 
-            <pagination (pageChange)="page = $event"></pagination>
+            <pagination (pageChange)="page = $event" [goToFirstPage]="(retrievedNewAnimalsBatch)"></pagination>
         </div>
     </div>
     </ng-template>
