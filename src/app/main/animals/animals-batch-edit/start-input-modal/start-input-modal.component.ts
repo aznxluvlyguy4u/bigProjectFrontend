@@ -29,6 +29,7 @@ export class StartInputModalComponent {
 
 	openModal() {
 			this.displayModal = 'block';
+			this.selectedLocation = null;
 	}
 
 	closeModal() {
