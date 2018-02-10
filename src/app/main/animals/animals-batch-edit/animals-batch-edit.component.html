@@ -860,15 +860,36 @@
                         ></app-pedigree-register-dropdown>
                     </td>
 
-                    <td *ngIf="showPedigreeData">{{ animal.parent_father ?
-                        animal.parent_father.uln_country_code + animal.parent_father.uln_number : '-'}}</td>
-                    <td *ngIf="showPedigreeData">{{ animal.parent_mother ?
-                        animal.parent_mother.uln_country_code + animal.parent_mother.uln_number : '-'}}</td>
+                    <td *ngIf="showPedigreeData">
+                        <app-parent-selector
+                                [parentType]="'FATHER'"
+                                [parent]=animal.parent_father
+                                [disabled]="isSaving"
+                                (parentChange)="animal.parent_father=$event"
+                        ></app-parent-selector>
+                    </td>
+
+                    <td *ngIf="showPedigreeData">
+                        <app-parent-selector
+                                [parentType]="'MOTHER'"
+                                [parent]=animal.parent_mother
+                                [disabled]="isSaving"
+                                (parentChange)="animal.parent_mother=$event"
+                        ></app-parent-selector>
+                    </td>
+
                     <td *ngIf="showPedigreeData || showBreedData">{{ animal.litter ? animal.litter.born_alive_count + animal.litter.stillborn_count : '-' }}</td>
                     <td *ngIf="showPedigreeData"><input title="ubnOfBirth" class="table-input" type="number" [(ngModel)]="animal.ubn_of_birth" [disabled]="isSaving"></td>
                     <td *ngIf="showPedigreeData">{{ animal.location_of_birth ? animal.location_of_birth.ubn : '-' }}</td>
-                    <td *ngIf="showPedigreeData">{{ animal.surrogate ?
-                        animal.surrogate.uln_country_code + animal.surrogate.uln_number : '-'}}</td>
+
+                    <td *ngIf="showPedigreeData">
+                        <app-parent-selector
+                                [parentType]="'SURROGATE'"
+                                [parent]=animal.surrogate
+                                [disabled]="isSaving"
+                                (parentChange)="animal.surrogate=$event"
+                        ></app-parent-selector>
+                    </td>
 
                     <td *ngIf="showPedigreeData">
                         <app-boolean-input

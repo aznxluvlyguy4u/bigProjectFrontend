@@ -593,5 +593,12 @@
   "USER_LOGIN": "Gebruiker inlog",
   "USER_PASSWORD_CHANGE": "Gebruiker wachtwoord aangepast",
   "USER_PASSWORD_RESET": "Gebruiker wachtwoordreset",
-  "ALL USERS": "Alle gebruikers"
+  "ALL USERS": "Alle gebruikers",
+  "PARENT": "Ouder",
+  "ULN CANNOT BE EMTPY": "ULN mag niet leeg zijn",
+  "ANIMAL WAS FOUND, BUT HAD INCORRECT GENDER": "Dier was gevonden, maar had een onjuist geslacht",
+  "REMOVE PARENT": "Verwijder ouder",
+  "PARENT WAS FOUND": "Ouder was gevonden",
+  "PARENT WAS REMOVED": "Geselecteerde ouder is verwijderd",
+  "USE SELECTION": "Gebruik selectie"
 }

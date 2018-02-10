@@ -2,7 +2,6 @@ import { REACTIVE_FORM_DIRECTIVES, Validators } from '@angular/forms';
 import { TranslatePipe, TranslateService } from 'ng2-translate';
 import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { NSFOService } from '../../../global/services/nsfo/nsfo.service';
-import { AnimalDetailsResult } from './get-animal.model';
 import { AnimalsResult } from './animals-result.model';
 import { GetAnimalsBody } from './get-animals-body.model';
 import { Animal } from '../../../global/components/livestock/livestock.model';
@@ -33,13 +32,15 @@ import { SearchComponent } from '../../../global/components/searchbox/seach-box.
 import { GENDER_TYPES } from '../../../global/constants/gender-type.contant';
 import { PedigreeRegisterStorage } from '../../../global/services/storage/pedigree-register.storage';
 import { PedigreeRegisterDropdownComponent } from '../../../global/components/pedigreeregisterdropdown/pedigree-register-dropdown.component';
+import { ParentSelectorComponent } from '../../../global/components/parentselector/parent-selector.component';
+import { ParentsStorage } from '../../../global/services/storage/parents.storage';
 
 @Component({
 		providers: [PaginationService],
 		directives: [REACTIVE_FORM_DIRECTIVES, UlnInputComponent, StnInputComponent,
 			HttpCallButtonComponent, StartInputModalComponent, TableSpinnerComponent, CollarInputComponent,
 			BooleanInputComponent, DatepickerV2Component, UbnDropdownComponent, PaginationComponent,
-			SearchComponent, PedigreeRegisterDropdownComponent],
+			SearchComponent, PedigreeRegisterDropdownComponent, ParentSelectorComponent],
 		template: require('./animals-batch-edit.component.html'),
 		pipes: [TranslatePipe, AnimalsBatchEditFilterPipe, PaginatePipe]
 })
@@ -133,6 +134,7 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 								private translate: TranslateService,
 								private locationStorage: LocationStorage,
 								private pedigreeRegisterStorage: PedigreeRegisterStorage,
+								private parentStorage: ParentsStorage,
 								private settings: SettingsService) {}
 
 		private initializeValues() {
@@ -195,6 +197,7 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 
 		ngOnDestroy() {
 				this.initializeValues();
+				this.parentStorage.clear();
 		}
 
 		isDataLoaded() {
