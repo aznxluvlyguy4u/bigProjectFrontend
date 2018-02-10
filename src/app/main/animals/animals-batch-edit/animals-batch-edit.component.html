@@ -91,21 +91,6 @@
         </div>
     </div>
 
-    <!--<hr *ngIf="openFilters">-->
-
-    <!--<div class="row">-->
-        <!--<div class="column large-6 end">-->
-            <!--<div class="accordion-container" [hidden]="!openFilters">-->
-                <!--<div class="filler-block">{{ 'FILTERS' | translate }}</div>-->
-
-                <!--<label>ADD FILTERS HERE</label>-->
-
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
-
-    <!--<hr *ngIf="openFilters">-->
-
     <app-table-spinner
             [isActive]="retrievingAnimals"
             [showLoadingText]="true"
@@ -157,12 +142,6 @@
                     <td *ngIf="showHealthData">{{ 'BLINDNESS FACTOR' | translate}}</td>
                     <td *ngIf="showHealthData">{{ 'MYOMAX' | translate}}</td>
                     <td>{{ 'ULN' | translate}}</td>
-                    <!--<td>-->
-                    <!--<button type="button" (click)="openModal(false)" class="small primary button pull-right">-->
-                    <!--<i class="fa fa-user-plus fa-fw" aria-hidden="true"></i>-->
-                    <!--{{ 'ADD ADMIN' | translate }}-->
-                    <!--</button>-->
-                    <!--</td>-->
 
                 </tr>
                 </thead>
@@ -275,9 +254,7 @@
                     <td *ngIf="showPedigreeData || showDates"></td><!-- date of birth column -->
                     <td *ngIf="showDates" class="date-input"></td> <!-- date of death column -->
 
-                    <td *ngIf="showPedigreeData">
-                        <!-- TODO -->
-                    </td>
+                    <td *ngIf="showPedigreeData"></td> <!-- pedigree register column -->
                     <td *ngIf="showPedigreeData"></td> <!-- father column -->
                     <td *ngIf="showPedigreeData"></td> <!-- mother column -->
                     <td *ngIf="showPedigreeData || showBreedData"></td> <!-- nLing column -->
@@ -1002,12 +979,6 @@
                                 [updateInitialValues]="(initialValuesChanged)"
                         ></app-uln-input>
                     </td>
-                    <!--<td>-->
-                            <!--<span *ngIf="admin.email_address != superAdminDetails?.email" class="pull-right overview-controls">-->
-                                <!--<a (click)="openModal(true, admin)"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>-->
-                                <!--<a (click)="openRemoveModal(admin)" class="remove-button"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>-->
-                            <!--</span>-->
-                    <!--</td>-->
                 </tr>
                 </tbody>
             </table>
@@ -1089,114 +1060,5 @@
             </div>
         </div>
     </div>
-<!--&lt;!&ndash;ADD REASON MODAL&ndash;&gt;-->
-<!--<div class="reveal-overlay" [ngStyle]="{'display': displayModal}">-->
-    <!--<div class="tiny reveal" [ngStyle]="{'display': displayModal}">-->
-        <!--<div class="modal-header">-->
-            <!--<span *ngIf="!isModalEditMode">{{ 'NEW ADMIN' | translate }}</span>-->
-            <!--<span *ngIf="isModalEditMode">{{ 'EDIT ADMIN' | translate }}</span>-->
-            <!--<button type="button" class="pull-right" aria-label="Close modal" (click)="closeModal()">-->
-                <!--<i class="fa fa-times" aria-hidden="true"></i>-->
-            <!--</button>-->
-        <!--</div>-->
-        <!--<div [formGroup]="form" class="modal-body">-->
-            <!--<div class="row">-->
-                <!--<div class="large-4 columns">-->
-                    <!--<label class="middle"> {{ 'E-MAIL ADDRESS' | translate }} * </label>-->
-                <!--</div>-->
-                <!--<div class="large-8 columns">-->
-                    <!--<input type="text" [(ngModel)]="admin.email_address" formControlName="email_address" maxlength="50" (keydown)="resetValidation()">-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="row">-->
-                <!--<div class="large-4 columns">-->
-                    <!--<label class="middle"> {{ 'FIRST NAME' | translate }} * </label>-->
-                <!--</div>-->
-                <!--<div class="large-8 columns">-->
-                    <!--<input type="text" [(ngModel)]="admin.first_name" formControlName="first_name" maxlength="50" (keydown)="resetValidation()">-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="row">-->
-                <!--<div class="large-4 columns">-->
-                    <!--<label class="middle"> {{ 'LAST NAME' | translate }} * </label>-->
-                <!--</div>-->
-                <!--<div class="large-8 columns">-->
-                    <!--<input type="text" [(ngModel)]="admin.last_name" formControlName="last_name" maxlength="50" (keydown)="resetValidation()">-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="row">-->
-                <!--<div class="large-4 columns">-->
-                    <!--<label class="middle"> {{ 'ACCESS LEVEL' | translate }} * </label>-->
-                <!--</div>-->
-                <!--<div class="large-8 columns">-->
-                    <!--<select [(ngModel)]="admin.access_level" formControlName="type" (change)="resetValidation()">-->
-                        <!--<option value="">&#45;&#45;</option>-->
-                        <!--<option value="ADMIN">{{ 'ADMIN' | translate}}</option>-->
-                        <!--<option value="SUPER_ADMIN">{{ 'SUPER_ADMIN' | translate}}</option>-->
-                    <!--</select>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="modal-footer">-->
-            <!--<div class="row">-->
-                <!--<div class="large-12 columns">-->
-                    <!--<span class="pull-right required-description"> * {{ 'IS A REQUIRED FIELD' | translate }} </span>-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<span class="pull-left">-->
-                <!--<label *ngIf="!hasUniqueEmails" class="input-error-msg">{{ 'E-MAIL ADDRESS IS NOT UNIQUE' | translate }}</label>-->
-                <!--<label *ngIf="!isValidForm" class="input-error-msg">{{ 'FILL IN ALL THE REQUIRED FIELDS' | translate }}</label>-->
-                <!--<label *ngIf="errorMessage" class="input-error-msg">{{ errorMessage | translate }}</label>-->
-            <!--</span>-->
-            <!--<span class="pull-right">-->
-                <!--<button *ngIf="!isModalEditMode" [isActive]="isProcessing" (click)="addAdmin()" class="tiny primary button">-->
-                    <!--<span *ngIf="!isProcessing">-->
-                        <!--{{ 'ADD' | translate}}-->
-                    <!--</span>-->
-                    <!--<span *ngIf="isProcessing">-->
-                        <!--<i class="fa fa-gear fa-spin fa-fw"></i>-->
-                    <!--</span>-->
-                <!--</button>-->
-                <!--<button *ngIf="isModalEditMode" [isActive]="isProcessing" (click)="editAdmin()" class="tiny primary button">-->
-                    <!--<span *ngIf="!isProcessing">-->
-                        <!--{{ 'EDIT' | translate}}-->
-                    <!--</span>-->
-                    <!--<span *ngIf="isProcessing">-->
-                        <!--<i class="fa fa-gear fa-spin fa-fw"></i>-->
-                    <!--</span>-->
-                <!--</button>-->
-                <!--<button (click)="closeModal()" [isActive]="isProcessing" class="tiny alert button">{{ 'CANCEL' | translate}}</button>-->
-            <!--</span>-->
-        <!--</div>-->
-    <!--</div>-->
-<!--</div>-->
 
-<!--&lt;!&ndash;REMOVE MODAL&ndash;&gt;-->
-<!--<div class="reveal-overlay" [ngStyle]="{'display': displayModal}">-->
-    <!--<div class="tiny reveal" [ngStyle]="{'display': displayModal}">-->
-        <!--<div class="modal-header">-->
-            <!--{{ 'REMOVE ADMIN' | translate }}-->
-            <!--<button type="button" (click)="closeRemoveModal()" class="pull-right" aria-label="Close modal">-->
-                <!--<i class="fa fa-times" aria-hidden="true"></i>-->
-            <!--</button>-->
-        <!--</div>-->
-        <!--<div class="modal-body"> {{ 'ARE YOU SURE YOU WANT TO REMOVE THIS ADMIN' | translate }} </div>-->
-        <!--<div class="modal-footer">-->
-            <!--<span class="pull-left">-->
-                <!--<label *ngIf="errorMessage" class="input-error-msg">{{ errorMessage | translate }}</label>-->
-            <!--</span>-->
-            <!--<span class="pull-right">-->
-            <!--<button class="tiny alert button" [isActive]="isProcessing" (click)="removeAdmin()">-->
-                <!--<span *ngIf="!isProcessing">-->
-                    <!--{{ 'REMOVE' | translate}}-->
-                <!--</span>-->
-                <!--<span *ngIf="isProcessing">-->
-                    <!--<i class="fa fa-gear fa-spin fa-fw"></i>-->
-                <!--</span>-->
-            <!--</button>-->
-            <!--<button class="tiny primary button" [isActive]="isProcessing" (click)="closeRemoveModal()">{{ 'CANCEL' | translate}}</button>-->
-            <!--</span>-->
-        <!--</div>-->
-    <!--</div>-->
-<!--</div>-->
 </div>
