@@ -605,5 +605,6 @@
   "THERE ARE NO INPUT ERRORS": "Er zijn geen invoerfouten",
   "INVALID INPUT": "Onjuiste invoer",
   "ULNS WITHOUT FOUND ANIMALS": "ULNs zonder gevonden dieren",
-  "STNS WITHOUT FOUND ANIMALS": "STNs zonder gevonden dieren"
+  "STNS WITHOUT FOUND ANIMALS": "STNs zonder gevonden dieren",
+  "USE BATCH EDIT AND FILTER TO EDIT LOCATION INFO": "Om een enkele (fokker)locatie aan te passen, zet de batch edit optie aan en filter de desgewenste UBN eruit"
 }

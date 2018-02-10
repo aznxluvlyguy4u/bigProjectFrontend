@@ -817,7 +817,10 @@
                     </td>
 
                     <td>{{ animal.type | translate}}</td>
-                    <td>{{ animal.location ? animal.location.ubn : '-' }}</td>
+                    <td  style="white-space: nowrap">
+                        {{ animal.location ? animal.location.ubn : '-' }} <i class="fa fa-info-circle" aria-hidden="true"
+                                                                             title="{{ 'USE BATCH EDIT AND FILTER TO EDIT LOCATION INFO' | translate }}"></i>
+                    </td>
                     <td>
                         <app-boolean-input
                                 [allowNull]="false"
@@ -878,7 +881,10 @@
 
                     <td *ngIf="showPedigreeData || showBreedData">{{ animal.litter ? animal.litter.born_alive_count + animal.litter.stillborn_count : '-' }}</td>
                     <td *ngIf="showPedigreeData"><input title="ubnOfBirth" class="table-input" type="number" [(ngModel)]="animal.ubn_of_birth" [disabled]="isSaving"></td>
-                    <td *ngIf="showPedigreeData">{{ animal.location_of_birth ? animal.location_of_birth.ubn : '-' }}</td>
+                    <td *ngIf="showPedigreeData" style="white-space: nowrap">
+                        {{ animal.location_of_birth ? animal.location_of_birth.ubn : '-' }}  <i class="fa fa-info-circle" aria-hidden="true"
+                                                                                                title="{{ 'USE BATCH EDIT AND FILTER TO EDIT LOCATION INFO' | translate }}"></i>
+                    </td>
 
                     <td *ngIf="showPedigreeData">
                         <app-parent-selector
