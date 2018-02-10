@@ -89,7 +89,8 @@ const routes: RouterConfig = [
                         ]},
                     {path: 'choice_fields', component: ConfigChoiceFieldsComponent}
                 ]},
-              {path: 'animals', component: AnimalsComponent, canActivate: [DeveloperGuard],
+              // {path: 'animals', component: AnimalsComponent, canActivate: [DeveloperGuard],
+              {path: 'animals', component: AnimalsComponent,
                 children: [
                   {path: '', terminal: true, redirectTo: 'batch-edit'},
                   {path: 'batch-edit', component: AnimalsBatchEditComponent}
