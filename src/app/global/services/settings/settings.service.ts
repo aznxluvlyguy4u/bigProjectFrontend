@@ -9,6 +9,14 @@ export class SettingsService {
     private viewDateTimeFormat: string = 'DD-MM-YYYY HH:mm';
     private modelDateTimeFormat: string = 'YYYY-MM-DDTHH:mm:ssZ';
 
+
+    private ENV: string = ENVIRONMENT;
+
+
+    public isDevEnv() {
+        return this.ENV === 'LOCAL';
+    }
+
     public setLanguage(language: string) {
         this.language = language;
     }

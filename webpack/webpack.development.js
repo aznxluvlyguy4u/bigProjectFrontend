@@ -115,6 +115,7 @@ module.exports = {
         new webpack.DefinePlugin({
             NSFO_API_SERVER_URL: JSON.stringify(process.env.NSFO_API_SERVER_URL_STAGING),
             NSFO_USER_ENV_URL: JSON.stringify(process.env.NSFO_USER_ENV_URL_STAGING),
+            ENVIRONMENT: JSON.stringify(process.env.ENVIRONMENT_STAGING)
         })
     ],
     resolve: {
