@@ -7,6 +7,7 @@ import { User } from '../../../main/client/client.model';
 export class UtilsService {
     private provinces: ReplaySubject<any> = new ReplaySubject();
     private adminDetails: ReplaySubject<any> = new ReplaySubject();
+    isDeveloper = false;
 
     constructor(private nsfo: NSFOService) {
         this.initAdminDetails();
@@ -18,6 +19,7 @@ export class UtilsService {
         this.nsfo.doGetRequest(this.nsfo.URI_MENUBAR)
             .subscribe(res => {
                 this.setAdminDetails(res.result);
+                this.isDeveloper = res.result.access_level === 'DEVELOPER';
             })
     }
 

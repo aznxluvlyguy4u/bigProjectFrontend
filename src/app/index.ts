@@ -8,6 +8,12 @@ import {NSFOService} from "./global/services/nsfo/nsfo.service";
 import {provideForms} from "@angular/forms";
 import {UtilsService} from "./global/services/utils/utils.service";
 import {AuthenticatedGuard} from "./global/guards/authenticated.guard";
+import { DeveloperGuard } from './global/guards/developer.guard';
+import { LocationStorage } from './global/services/storage/LocationStorage';
+import { CollarStorage } from './global/services/storage/collar.storage';
+import { PedigreeRegisterStorage } from './global/services/storage/pedigree-register.storage';
+import { FormatService } from './global/services/utils/format.service';
+import { ParentsStorage } from './global/services/storage/parents.storage';
 
 require('font-awesome-loader');
 
@@ -21,7 +27,13 @@ bootstrap(IndexComponent, [
     },
     provideForms(),
     AuthenticatedGuard,
+    DeveloperGuard,
+    LocationStorage,
+    CollarStorage,
+    PedigreeRegisterStorage,
     NSFOService,
+    FormatService,
+    ParentsStorage,
     TranslateService,
     SettingsService,
     UtilsService

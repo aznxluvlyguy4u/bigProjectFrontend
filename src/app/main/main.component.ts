@@ -41,7 +41,13 @@ export class MainComponent {
                 res => {
                     this.admin.first_name = res.first_name;
                     this.admin.last_name = res.last_name;
+                    this.admin.email = res.email_address;
+                    this.admin.access_level = res.access_level;
                 });
+    }
+
+    isDeveloper() {
+        return this.utils.isDeveloper;
     }
 
     private toggleSideMenu() {

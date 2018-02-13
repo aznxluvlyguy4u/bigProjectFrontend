@@ -1,0 +1,34 @@
+<span id="component-uln-input" class="uid-input-group">
+    <select
+            id="component-uln-input-country-code"
+            class="uln-country-code"
+            [(ngModel)]="ulnCountryCode"
+            title="ulnCountryCode" [disabled]="disabled"
+            (click)="changeCountryCode()"
+            [ngClass]="{'ng-dirty': isCountryCodeDirty}"
+    >
+        <option
+                *ngFor="let countryCode of getCountryCodeList()"
+                value="{{ countryCode.code }}"
+        >{{ countryCode.code }}</option>
+    </select>
+    <input id="component-uln-input-number"
+           class="uln-number"
+           type="text"
+           title="{{ 'ULN NUMBER FORMAT DESCRIPTION' | translate }}"
+           [(ngModel)]="ulnNumber"
+           [disabled]="disabled"
+           pattern="[0-9]{8,12}"
+           maxlength="12"
+           (keyup)="changeNumber()"
+           (mouseleave)="changeNumber()"
+           [ngClass]="{'ng-dirty': isNumberDirty}"
+    >
+    <button *ngIf="!disabled"
+            type="submit"
+            (click)="reset()"
+            class="button secondary"
+            [disabled]="disabled || hasOriginalValues()"
+            title="{{'RESET TO ORIGINAL VALUE' | translate}}"
+    ><i class="fa fa-fast-backward" aria-hidden="true"></i></button>
+</span>

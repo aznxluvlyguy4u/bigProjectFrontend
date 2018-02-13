@@ -7,7 +7,15 @@ export class SettingsService {
     private locale: string = 'nl';
     private viewDateFormat: string = 'DD-MM-YYYY';
     private viewDateTimeFormat: string = 'DD-MM-YYYY HH:mm';
-    private modelDateTimeFormat: string = 'YYYY-MM-DDThh:mm:ssZ';
+    private modelDateTimeFormat: string = 'YYYY-MM-DDTHH:mm:ssZ';
+
+
+    private ENV: string = ENVIRONMENT;
+
+
+    public isDevEnv() {
+        return this.ENV === 'LOCAL';
+    }
 
     public setLanguage(language: string) {
         this.language = language;

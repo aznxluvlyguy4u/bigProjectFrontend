@@ -1,6 +1,8 @@
-import {Injectable} from "@angular/core";
+import { Injectable } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
 import { QueryParam } from '../../../main/client/client.model';
+
+import _ = require("lodash");
 
 @Injectable()
 export class NSFOService {
@@ -10,7 +12,11 @@ export class NSFOService {
     public URI_RESET_PASSWORD = '/v1/admins/auth/password-reset';
     public URI_VALIDATE_TOKEN = '/v1/auth/validate-token';
     public URI_PROVINCES = '/v1/countries/nl/provinces';
-    
+
+    public URI_ANIMALS = '/v1/animals';
+    public URI_ANIMALS_DETAILS = '/v1/animals-details';
+    public URI_GET_COLLAR_COLORS = '/v1/collars';
+
     public URI_GHOST_LOGIN: string = '/v1/admins/ghost';
     public URI_ADMIN: string = '/v1/admins';
     public URI_ADMIN_DEACTIVATE: string = '/v1/admins-deactivate';
@@ -21,6 +27,7 @@ export class NSFOService {
     public URI_INVOICE_RULE_TEMPLATE = '/v1/invoice-rule-templates';
     public URI_INVOICE_SENDER_DETAILS = '/v1/invoice-sender-details';
 
+	  public URI_GET_COUNTRY_CODES = '/v1/countries?continent=europe';
     public URI_CMS: string = '/v1/cms';
     public URI_DASHBOARD: string = '/v1/admin/dashboard';
     public URI_MENUBAR: string = '/v1/components/admin-menu-bar';
@@ -45,6 +52,8 @@ export class NSFOService {
 
 	  public URI_TECHNICAL_LOG = '/v1/log/action';
 
+	  public URI_PEDIGREE_REGISTERS = '/v1/pedigreeregisters';
+
 	  public URI_TREATMENTS = '/v1/treatments';
 	  public URI_TREATMENT_TYPES = '/v1/treatment-types';
 
@@ -57,8 +66,24 @@ export class NSFOService {
     public access_token: string = "AccessToken";
     
     private ACCESS_TOKEN_NAMESPACE: string = 'access_token';
-    
-    constructor(private http:Http) {}
+
+		countryCodeList = [];
+
+    constructor(private http:Http) {
+				this.doGetCountryCodeList(); // if in OnInit it is loaded too late
+		}
+
+		private doGetCountryCodeList() {
+			this.doGetRequest(this.URI_GET_COUNTRY_CODES)
+				.subscribe(
+					res => {
+						this.countryCodeList = _.sortBy(res.result, ['code']);
+					},
+					error => {
+						alert(this.getErrorMessage(error));
+					}
+				);
+		}
 
     public doLoginRequest(username:string, password:string) {
         let headers = new Headers();

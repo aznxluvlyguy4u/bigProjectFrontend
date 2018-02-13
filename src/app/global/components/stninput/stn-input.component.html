@@ -1,0 +1,34 @@
+<span id="component-stn-input" class="uid-input-group">
+    <select
+            id="component-stn-input-country-code"
+            class="pedigree-country-code"
+            [(ngModel)]="pedigreeCountryCode"
+            title="pedigreeCountryCode" [disabled]="disabled"
+            (click)="changeCountryCode()"
+            [ngClass]="{'ng-dirty': isColorDirty}"
+    >
+        <option
+                *ngFor="let countryCode of getCountryCodeList()"
+                value="{{ countryCode.code }}"
+        >{{ countryCode.code }}</option>
+    </select>
+    <input id="component-stn-input-number"
+           class="pedigree-number"
+           type="text"
+           title="{{ 'PEDIGREE NUMBER FORMAT DESCRIPTION' | translate }}"
+           [(ngModel)]="pedigreeNumber"
+           [disabled]="disabled"
+           maxlength="11"
+           pattern="[A-Z0-9]{5}[-][a-zA-Z0-9]{5}"
+           (keyup)="changeNumber()"
+           (mouseleave)="changeNumber()"
+           [ngClass]="{'ng-dirty': isNumberDirty}"
+    >
+    <button *ngIf="!disabled"
+            type="submit"
+            (click)="reset()"
+            class="button secondary"
+            [disabled]="disabled || hasOriginalValues()"
+            title="{{'RESET TO ORIGINAL VALUE' | translate}}"
+    ><i class="fa fa-fast-backward" aria-hidden="true"></i></button>
+</span>

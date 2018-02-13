@@ -1,0 +1,101 @@
+<span id="component-parent-selector" class="parent-selector">
+    <button
+            class="button secondary tiny main-button"
+            [disabled]="disabled"
+            (click)="openModal()"
+            style="white-space: nowrap; width: 7.3rem"
+    >
+        {{ (ulnCountryCode != null || ulnNumber != null ? ulnCountryCode + ' ' + ulnNumber : '-') }}
+    </button>
+    <button *ngIf="!disabled"
+            type="submit"
+            (click)="reset()"
+            class="button secondary"
+            [disabled]="disabled || hasOriginalValues()"
+            title="{{'RESET TO ORIGINAL VALUE' | translate}}"
+    ><i class="fa fa-fast-backward" aria-hidden="true"></i></button>
+</span>
+
+<div class="reveal-overlay" [ngStyle]="{'display': displayModal}">
+    <div class="tiny reveal" [ngStyle]="{'display': displayModal}">
+        <div class="modal-header">
+            {{ getParentLabel() | translate }}
+            <button *ngIf="!isSearchingParent" type="button" (click)="clickCancel()" class="pull-right" aria-label="Close modal">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+
+            <div class="row">
+                <div class="columns small-12 align-center">
+                    <span class="align-center">
+                        <app-uln-input
+                                [ulnCountryCode]="searchUlnCountryCode"
+                                (ulnCountryCodeChange)="searchUlnCountryCode=$event"
+                                [ulnNumber]="searchUlnNumber"
+                                (ulnNumberChange)="searchUlnNumber=$event"
+                                [disabled]="disabled || isSearchingParent"
+                        ></app-uln-input>
+
+                        <ng-template *ngIf="isSearchingParent">
+                            <app-spinner></app-spinner>
+                        </ng-template>
+                    </span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="columns small-6 align-center">
+                    <span class="pull-left">
+                        <button
+                                class="tiny primary button"
+                                [disabled]="isSearchingParent"
+                                (click)="removeParent();"
+                        >{{ 'REMOVE PARENT' | translate}}</button>
+                    </span>
+                </div>
+                <div class="columns small-6 align-center">
+                    <span class="pull-right">
+                        <button
+                                class="tiny primary button"
+                                [disabled]="isSearchingParent"
+                                (click)="searchParent();"
+                        >{{ 'SEARCH' | translate}}</button>
+                    </span>
+                </div>
+            </div>
+
+            <ng-template *ngIf="!isSearchingParent">
+
+                <hr>
+
+                <p *ngIf="isParentFound && foundParent != null">
+                    {{ 'PARENT WAS FOUND' | translate }}
+                </p>
+                <p *ngIf="isParentFound && foundParent == null">
+                    {{ 'PARENT WAS REMOVED' | translate }}
+                </p>
+            </ng-template>
+
+        </div>
+        <div class="modal-footer">
+            <hr>
+
+           <span class="pull-left" *ngIf="isParentFound || !isSearchingParent">
+                <button
+                        class="tiny primary button"
+                        [disabled]="!isParentFound || isSearchingParent"
+                        (click)="clickOK()"
+                >{{ 'USE SELECTION' | translate}}</button>
+            </span>
+
+            <span class="pull-right">
+                <button
+                        class="tiny alert button"
+                        [disabled]="isSearchingParent"
+                        (click)="clickCancel();"
+                >{{ 'CANCEL' | translate}}</button>
+            </span>
+        </div>
+    </div>
+</div>

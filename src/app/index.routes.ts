@@ -36,6 +36,9 @@ import { TreatmentTemplateComponent } from './main/treatment/treatment-template/
 import { TreatmentTypeComponent } from './main/treatment/treatment-type/treatment-type.component';
 import { TreatmentPrescriptionComponent } from './main/treatment/treatment-prescription/treatment-prescription.component';
 import { ErrorLogOverviewComponent } from './main/errorlog/error-log-overview.component';
+import { DeveloperGuard } from './global/guards/developer.guard';
+import { AnimalsComponent } from './main/animals/animals.component';
+import { AnimalsBatchEditComponent } from './main/animals/animals-batch-edit/animals-batch-edit.component';
 
 const routes: RouterConfig = [
     {
@@ -85,6 +88,12 @@ const routes: RouterConfig = [
                             {path: 'maedi_visna_supporting', component: MaediVisnaSupportComponent},
                         ]},
                     {path: 'choice_fields', component: ConfigChoiceFieldsComponent}
+                ]},
+              // {path: 'animals', component: AnimalsComponent, canActivate: [DeveloperGuard],
+              {path: 'animals', component: AnimalsComponent,
+                children: [
+                  {path: '', terminal: true, redirectTo: 'batch-edit'},
+                  {path: 'batch-edit', component: AnimalsBatchEditComponent}
                 ]},
             {path: 'report', terminal: true, component: ReportComponent},
 					  {path: 'log', terminal: true, component: TechnicalLogOverviewComponent},

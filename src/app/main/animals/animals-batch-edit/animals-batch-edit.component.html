@@ -1,0 +1,1164 @@
+<div id="animals-batch-edit">
+    <div class="row">
+        <div class="column large-2">
+            <!--OPEN OPTIONS ACCORDION BUTTON-->
+            <button class="accordion-button expanded" [ngClass]="{'toggled': openOptions}" (click)="openOptions = !openOptions">
+                <i *ngIf="!openOptions" class="fa fa-caret-right fa-fw" aria-hidden="true"></i>
+                <i *ngIf="openOptions" class="fa fa-caret-down fa-fw" aria-hidden="true"></i>
+                <span> {{ 'OPTIONS' | translate }} </span>
+            </button>
+        </div>
+        <div class="column large-2">
+            <!--OPEN FILTER ACCORION BUTTON-->
+            <button class="accordion-button expanded" [ngClass]="{'toggled': openFilters}" (click)="openFilters = !openFilters">
+                <i *ngIf="!openFilters" class="fa fa-caret-right fa-fw" aria-hidden="true"></i>
+                <i *ngIf="openFilters" class="fa fa-caret-down fa-fw" aria-hidden="true"></i>
+                <span> {{ 'FILTERS' | translate }} </span>
+            </button>
+        </div>
+        <div class="column large-2">
+            <!--OPEN GET ANIMALS MODAL BUTTON-->
+            <ng-template *ngIf="!retrievingAnimals">
+                <span style="white-space: nowrap">
+                    <button
+                            type="button"
+                            class="button success"
+                            (click)="displayStartInputModal = 'block'; page = 1"
+                    >{{'RETRIEVE ANIMALS'|translate}}
+                    </button>
+                    <button
+                            type="button"
+                            class="button alert"
+                            style="width: 1rem; text-indent: -0.23rem"
+                            [title]="(hasInputErrors() ? ('INPUT ERRORS' | translate) : ('THERE ARE NO INPUT ERRORS' | translate))"
+                            [disabled]="!hasInputErrors()"
+                            (click)="openIncorrectGetInputModal()"
+                    ><i class="fa fa-exclamation-triangle"></i>
+                    </button>
+                </span>
+            </ng-template>
+            <ng-template *ngIf="retrievingAnimals">
+                <button
+                        type="button"
+                        class="button secondary"
+                        [disabled]="true"
+                >{{'RETRIEVE ANIMALS'|translate}}</button>
+            </ng-template>
+        </div>
+        <div class="column large-2">
+            <!--RESET ANIMALS MODAL BUTTON-->
+            <ng-template *ngIf="!retrievingAnimals">
+                <button
+                        type="button"
+                        class="button alert"
+                        (click)="resetAnimals()"
+                        title="{{'CANCEL ALL UNSAVED EDITS'|translate}}"
+                >{{'ALL'|translate}} <i class="fa fa-fast-backward" aria-hidden="true"></i></button>
+            </ng-template>
+            <ng-template *ngIf="retrievingAnimals">
+                <button
+                        type="button"
+                        class="button secondary"
+                        [disabled]="true"
+                        title="{{'CANCEL ALL UNSAVED EDITS'|translate}}"
+                >{{'ALL'|translate}} <i class="fa fa-fast-backward" aria-hidden="true"></i></button>
+            </ng-template>
+        </div>
+        <div class="column large-3">
+            <!--UPDATE ANIMALS BUTTON-->
+            <app-http-call-button
+                    [labelText]="'UPDATE ALL FILTERED ANIMALS'"
+                    [processing]="isSaving"
+                    [disabled]="!isDataLoaded()"
+                    (click)="doPutUpdateAnimals()"
+            ></app-http-call-button>
+        </div>
+    </div>
+
+    <hr *ngIf="openOptions">
+
+    <div class="row">
+        <div class="column large-3">
+            <div class="accordion-container" [hidden]="!openOptions">
+                <div class="filler-block">{{ 'SHOW DATA OPTIONS' | translate }}</div>
+
+                <label>{{ 'IDENTITY' | translate }} <input   [(ngModel)]="showIds" type="checkbox"></label>
+                <label>{{ 'BREED' | translate }} <input      [(ngModel)]="showBreedData" type="checkbox"></label>
+                <label>{{ 'BLOODLINE' | translate }} <input  [(ngModel)]="showPedigreeData" type="checkbox"></label>
+                <label>{{ 'NOTE' | translate }} <input       [(ngModel)]="showNote" type="checkbox"></label>
+                <label>{{ 'DATES' | translate }} <input      [(ngModel)]="showDates" type="checkbox"></label>
+                <label>{{ 'EXAMINATION' | translate }} <input [(ngModel)]="showExaminationData" type="checkbox"></label>
+                <label>{{ 'HEALTH' | translate }} <input     [(ngModel)]="showHealthData" type="checkbox"></label>
+
+            </div>
+        </div>
+        <div class="column large-3 end">
+            <div class="accordion-container" [hidden]="!openOptions">
+                <div class="filler-block">{{ 'EDIT OPTIONS' | translate }}</div>
+
+                <label>{{ 'EDIT ULNS' | translate }} <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                    {{'EDIT ULNS WARNING' | translate}} <input   [(ngModel)]="allowUlnEdit" type="checkbox"></label>
+                <label>{{ 'ACTIVATE BATCH EDIT' | translate }} <input [(ngModel)]="isBatchEditActive" type="checkbox"></label>
+            </div>
+        </div>
+    </div>
+
+    <app-table-spinner
+            [isActive]="retrievingAnimals"
+            [showLoadingText]="true"
+    ></app-table-spinner>
+
+    <ng-template *ngIf="!retrievingAnimals">
+        <div class="row">
+        <div class="large-12 columns">
+            <table class="stacked">
+                <thead>
+                <tr>
+                    <td *ngIf="showIds || showDates">{{ 'CREATION DATE' | translate}}</td>
+                    <td *ngIf="showIds">{{ 'ID' | translate}}</td>
+                    <td *ngIf="showIds">{{ 'AIIND' | translate}}</td>
+                    <td *ngIf="showIds">{{ 'NAME' | translate}}</td>
+                    <td *ngIf="showIds">{{ 'COLLAR NUMBER' | translate}}</td>
+                    <td>{{ 'ULN' | translate}}</td>
+                    <td>{{ 'STN' | translate}}</td>
+                    <td>{{ 'GENDER' | translate}}</td>
+                    <td>{{ 'CURRENT UBN' | translate}}</td>
+                    <td>{{ 'ALIVE' | translate}}
+                        <i class="fa fa-info-circle" aria-hidden="true" title="{{'CLICK ON BOOLEAN TO TOGGLE VALUE' | translate}}"></i>
+                    </td>
+
+                    <td *ngIf="showNote">{{ 'NOTE' | translate}}</td>
+
+                    <td *ngIf="showPedigreeData || showDates">{{ 'DATE OF BIRTH' | translate}}</td>
+                    <td *ngIf="showDates">{{ 'DATE OF DEATH' | translate}}</td>
+
+                    <td *ngIf="showPedigreeData">{{ 'PEDIGREE REGISTER' | translate}}</td>
+                    <td *ngIf="showPedigreeData">{{ 'FATHER' | translate}}</td>
+                    <td *ngIf="showPedigreeData">{{ 'MOTHER' | translate}}</td>
+                    <td *ngIf="showBreedData || showPedigreeData">{{ 'N-LING' | translate}}</td>
+                    <td *ngIf="showPedigreeData">{{ 'BREEDER UBN' | translate}}</td>
+                    <td *ngIf="showPedigreeData">{{ 'BREEDER UBN' | translate}}({{ 'LOCATION' | translate}})</td>
+                    <td *ngIf="showPedigreeData">{{ 'SURROGATE MOTHER' | translate}}</td>
+                    <td *ngIf="showPedigreeData">{{ 'LAMBAR' | translate}}
+                        <i class="fa fa-info-circle" aria-hidden="true" title="{{'CLICK ON BOOLEAN TO TOGGLE VALUE' | translate}}"></i>
+                    </td>
+                    <td *ngIf="showPedigreeData">{{ 'BIRTH PROGRESS' | translate}}</td>
+
+                    <td *ngIf="showBreedData">{{ 'BREED TYPE' | translate}}</td>
+                    <td *ngIf="showBreedData">{{ 'BREED CODE' | translate}}</td>
+                    <td *ngIf="showExaminationData">{{ 'PREDICATE' | translate}}</td>
+                    <td *ngIf="showExaminationData">{{ 'PREDICATE SCORE' | translate}}
+                        <i class="fa fa-info-circle" aria-hidden="true" title="{{'SET TO ZERO TO REMOVE VALUE' | translate}}"></i>
+                    </td>
+                    <td *ngIf="showHealthData">{{ 'SCRAPIE GENOTYPE' | translate}}</td>
+                    <td *ngIf="showHealthData">{{ 'BLINDNESS FACTOR' | translate}}</td>
+                    <td *ngIf="showHealthData">{{ 'MYOMAX' | translate}}</td>
+                    <td>{{ 'ULN' | translate}}</td>
+
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr *ngIf="openFilters" class="filter-row">
+                    <td *ngIf="showIds || showDates">{{ 'FILTERS' | translate }}</td> <!-- creation date column -->
+                    <td *ngIf="showIds"> <!-- animal id column -->
+                        <input
+                                title="idFilter"
+                                class="table-input"
+                                type="number"
+                                [(ngModel)]="filterId"
+                                [disabled]="isSaving"
+                                (keyup)="updateFilterAnimals()"
+                        >
+                    </td>
+                    <td *ngIf="showIds"> <!-- aiind column -->
+                        <input
+                                title="aiindFilter"
+                                class="table-input"
+                                type="number"
+                                [(ngModel)]="filterAiind"
+                                [disabled]="isSaving"
+                                (keyup)="updateFilterAnimals()"
+                        >
+                    </td>
+                    <td *ngIf="showIds"> <!-- nickname column -->
+                        <input
+                                title="nickNameFilter"
+                                class="table-input"
+                                type="text"
+                                [(ngModel)]="filterNickName"
+                                [disabled]="isSaving"
+                                (keyup)="updateFilterAnimals()"
+                        >
+                    </td>
+                    <td *ngIf="showIds"> <!-- collar column -->
+                        <app-collar-input
+                                [collarColor]="filterCollarColor"
+                                (collarColorChange)="filterCollarColor=$event; page = 1; updateFilterAnimals()"
+                                [collarNumber]="filterCollarNumber"
+                                (collarNumberChange)="filterCollarNumber=$event; page = 1"
+                                [disabled]="isSaving"
+                                [updateInitialValues]="(initialValuesChanged)"
+                        ></app-collar-input>
+                    </td>
+                    <td> <!-- uln column -->
+                        <app-uln-input
+                                [ulnCountryCode]="filterUlnCountryCode"
+                                (ulnCountryCodeChange)="filterUlnCountryCode=$event; page = 1; updateFilterAnimals()"
+                                [ulnNumber]="filterUlnNumber"
+                                (ulnNumberChange)="filterUlnNumber=$event; page = 1"
+                                [disabled]="isSaving"
+                                [updateInitialValues]="(initialValuesChanged)"
+                        ></app-uln-input>
+                    </td>
+                    <td> <!-- stn -->
+                        <app-stn-input
+                                [pedigreeCountryCode]="filterPedigreeCountryCode"
+                                (pedigreeCountryCodeChange)="filterPedigreeCountryCode=$event; page = 1; updateFilterAnimals()"
+                                [pedigreeNumber]="filterPedigreeNumber"
+                                (pedigreeNumberChange)="filterPedigreeNumber=$event; page = 1"
+                                [disabled]="isSaving"
+                                [updateInitialValues]="(initialValuesChanged)"
+                        ></app-stn-input>
+                    </td>
+                    <td> <!-- type/gender column -->
+                        <select
+                                title="genderFilter"
+                                class="table-input gender-input"
+                                [(ngModel)]="filterGenderType"
+                                [disabled]="isSaving"
+                                (click)="page = 1; updateFilterAnimals()"
+                        >
+                            <option [value]=""> </option>
+                            <option *ngFor="let genderType of genderTypes" value="{{ genderType }}"
+                            >{{ genderType | translate }}</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input
+                                title="currentUbnFilter"
+                                class="table-input"
+                                type="number"
+                                [(ngModel)]="filterCurrentLocationUbn"
+                                [disabled]="isSaving"
+                                (keyup)="updateFilterAnimals()"
+                        >
+                    </td>
+                    <td>
+                        <app-boolean-input
+                                [allowNull]="true"
+                                [boolVal]="filterIsAlive"
+                                (boolValChanged)="filterIsAlive = $event; page = 1; updateFilterAnimals()"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+                    <td *ngIf="showNote">
+                        <input
+                                title="noteFilter"
+                                class="table-input"
+                                type="text"
+                                [(ngModel)]="filterNote"
+                                [disabled]="isSaving"
+                                (keyup)="updateFilterAnimals()"
+                        >
+                    </td>
+
+                    <td *ngIf="showPedigreeData || showDates"></td><!-- date of birth column -->
+                    <td *ngIf="showDates" class="date-input"></td> <!-- date of death column -->
+
+                    <td *ngIf="showPedigreeData"></td> <!-- pedigree register column -->
+                    <td *ngIf="showPedigreeData"></td> <!-- father column -->
+                    <td *ngIf="showPedigreeData"></td> <!-- mother column -->
+                    <td *ngIf="showPedigreeData || showBreedData"></td> <!-- nLing column -->
+
+                    <td *ngIf="showPedigreeData">
+                        <input
+                                title="ubnOfBirthFilter"
+                                class="table-input"
+                                type="number"
+                                [(ngModel)]="filterUbnOfBirth"
+                                [disabled]="isSaving"
+                                (keyup)="updateFilterAnimals()"
+                        >
+                    </td>
+
+                    <td *ngIf="showPedigreeData">
+                        <input
+                                title="locationOfBirthUbnFilter"
+                                class="table-input"
+                                type="number"
+                                [(ngModel)]="filterLocationOfBirthUbn"
+                                [disabled]="isSaving"
+                                (keyup)="updateFilterAnimals()"
+                        >
+                    <td *ngIf="showPedigreeData"></td> <!-- surrogate mother column -->
+
+                    <td *ngIf="showPedigreeData"></td> <!-- Lambar -->
+
+                    <td *ngIf="showPedigreeData"></td> <!-- BirthProgress -->
+
+                    <td *ngIf="showBreedData">
+                        <select
+                                type="breedTypeFilter"
+                                class="table-input breed-type-input"
+                                [(ngModel)]="filterBreedType"
+                                [disabled]="isSaving"
+                                (click)="page = 1; updateFilterAnimals()"
+                        >
+                            <option [value]=""> </option>
+                            <option *ngFor="let breedType of breedTypes" value="{{ breedType }}"
+                            >{{ breedType | translate }}</option>
+                        </select>
+                    </td>
+
+                    <td *ngIf="showBreedData">
+                        <input
+                                title="breedCodeFilter"
+                                class="table-input"
+                                type="text"
+                                [(ngModel)]="filterBreedCode"
+                                [disabled]="isSaving"
+                                (keyup)="updateFilterAnimals()"
+                        >
+                    </td>
+
+                    <td *ngIf="showExaminationData">
+                        <select
+                                title="predicateFilter"
+                                type="predicateFilter"
+                                class="table-input predicate-type-input"
+                                [(ngModel)]="filterPredicate"
+                                [disabled]="isSaving"
+                                (click)="page = 1; updateFilterAnimals()"
+                        >
+                            <option [value]=""> </option>
+                            <option *ngFor="let predicateType of predicateTypes" value="{{ predicateType }}"
+                            >{{ predicateType | translate }}</option>
+                        </select>
+                    </td>
+                    <td *ngIf="showExaminationData">
+                        <input
+                                title="predicateScoreFilter"
+                                class="table-input predicate-score-input"
+                                type="number" min="0" max="1000"
+                                [(ngModel)]="filterPredicateScore"
+                                [disabled]="isSaving"
+                                (keyup)="updateFilterAnimals()"
+                        >
+                    </td>
+
+                    <td *ngIf="showHealthData"></td> <!-- ScrapieGenotype -->
+
+                    <td *ngIf="showHealthData"></td> <!-- BlindnessFactor -->
+
+                    <td *ngIf="showHealthData"></td> <!-- MyoMax -->
+
+                    <td></td> <!-- extra uln column -->
+                </tr>
+
+                <tr *ngIf="isBatchEditActive" class="batch-edit-header-row">
+                    <td *ngIf="showIds || showDates"></td> <!-- creation date column -->
+                    <td *ngIf="showIds"></td> <!-- animal id column -->
+                    <td *ngIf="showIds"></td> <!-- aiind column -->
+                    <td *ngIf="showIds"></td> <!-- nickname column -->
+                    <td *ngIf="showIds"></td> <!-- collar column -->
+                    <td><h6>{{ 'ACTIVATE BATCH EDIT OPTIONS' | translate }}</h6></td> <!-- uln column -->
+                    <td>
+                        <button
+                                class="button alert"
+                                (click)="resetBatchEditOptions()"
+                        >{{ 'RESET BATCH EDIT OPTIONS' | translate }}</button>
+                    </td> <!-- stn -->
+                    <td></td> <!-- type/gender column -->
+                    <td>
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="batchCurrentLocationIsActive"
+                                (boolValChanged)="batchCurrentLocationIsActive = $event; batchResetCurrentLocation()"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+                    <td>
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="batchIsAliveIsActive"
+                                (boolValChanged)="batchIsAliveIsActive = $event; batchResetIsAlive()"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+                    <td *ngIf="showNote">
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="batchNoteIsActive"
+                                (boolValChanged)="batchNoteIsActive = $event; batchResetNote()"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+
+                    <td *ngIf="showPedigreeData || showDates"></td><!-- date of birth column -->
+                    <td *ngIf="showDates" class="date-input"></td> <!-- date of death column -->
+
+                    <td *ngIf="showPedigreeData">
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="batchPedigreeRegisterIsActive"
+                                (boolValChanged)="batchPedigreeRegisterIsActive = $event; batchResetPedigreeRegister()"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+                    <td *ngIf="showPedigreeData"></td> <!-- father column -->
+                    <td *ngIf="showPedigreeData"></td> <!-- mother column -->
+                    <td *ngIf="showPedigreeData || showBreedData"></td> <!-- nLing column -->
+
+                    <td *ngIf="showPedigreeData">
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="batchUbnOfBirthIsActive"
+                                (boolValChanged)="batchUbnOfBirthIsActive = $event; batchResetUbnOfBirth()"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+                    <td *ngIf="showPedigreeData">
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="batchLocationOfBirthIsActive"
+                                (boolValChanged)="batchLocationOfBirthIsActive = $event; batchResetLocationOfBirth()"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+                    <td *ngIf="showPedigreeData"></td> <!-- surrogate mother column -->
+
+                    <td *ngIf="showPedigreeData">
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="batchLambarIsActive"
+                                (boolValChanged)="batchLambarIsActive = $event; batchResetLambar()"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+
+                    <td *ngIf="showPedigreeData">
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="batchBirthProgressIsActive"
+                                (boolValChanged)="batchBirthProgressIsActive = $event; batchResetBirthProgress()"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+
+                    <td *ngIf="showBreedData">
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="batchBreedTypeIsActive"
+                                (boolValChanged)="batchBreedTypeIsActive = $event; batchResetBreedType()"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+
+                    <td *ngIf="showBreedData">
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="batchBreedCodeIsActive"
+                                (boolValChanged)="batchBreedCodeIsActive = $event; batchResetBreedCode()"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+
+                    <td *ngIf="showExaminationData">
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="batchPredicateIsActive"
+                                (boolValChanged)="batchPredicateIsActive = $event; batchResetPredicate()"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+
+                    <td *ngIf="showExaminationData">
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="batchPredicateScoreIsActive"
+                                (boolValChanged)="batchPredicateScoreIsActive = $event; batchResetPredicateScore()"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+
+                    <td *ngIf="showHealthData">
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="batchScrapieGenotypeIsActive"
+                                (boolValChanged)="batchScrapieGenotypeIsActive = $event; batchResetScrapieGenotype()"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+
+                    <td *ngIf="showHealthData">
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="batchBlindnessFactorIsActive"
+                                (boolValChanged)="batchBlindnessFactorIsActive = $event; batchResetBlindnessFactor()"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+
+                    <td *ngIf="showHealthData">
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="batchMyoMaxIsActive"
+                                (boolValChanged)="batchMyoMaxIsActive = $event; batchResetMyoMax()"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+
+                    <td></td> <!-- extra uln column -->
+                </tr>
+
+                <tr *ngIf="isBatchEditActive" class="batch-edit-row">
+                    <td *ngIf="showIds || showDates"></td> <!-- creation date column -->
+                    <td *ngIf="showIds"></td> <!-- animal id column -->
+                    <td *ngIf="showIds"></td> <!-- aiind column -->
+                    <td *ngIf="showIds"></td> <!-- nickname column -->
+                    <td *ngIf="showIds"></td> <!-- collar column -->
+                    <td></td> <!-- uln column -->
+                    <td></td> <!-- stn -->
+                    <td></td> <!-- type/gender column -->
+                    <td>
+                        <ng-template *ngIf="!batchCurrentLocationIsActive">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                        </ng-template>
+                        <ng-template *ngIf="batchCurrentLocationIsActive">
+                            <button
+                                    type="button"
+                                    class="button primary"
+                                    (click)="openBatchCurrentLocationModal()"
+                            >{{batchAnimal.location? batchAnimal.location.ubn : '-' }}</button>
+                        </ng-template>
+                    </td>
+                    <td>
+                        <ng-template *ngIf="!batchIsAliveIsActive">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                        </ng-template>
+                        <ng-template *ngIf="batchIsAliveIsActive">
+                            <app-boolean-input
+                                    [allowNull]="false"
+                                    [boolVal]="batchAnimal.is_alive"
+                                    (boolValChanged)="batchAnimal.is_alive = $event; batchSetIsAlive()"
+                                    [disabled]="isSaving"
+                            ></app-boolean-input>
+                        </ng-template>
+                    </td>
+                    <td *ngIf="showNote">
+                        <ng-template *ngIf="!batchNoteIsActive">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                        </ng-template>
+                        <ng-template *ngIf="batchNoteIsActive">
+                            <input
+                                    title="note"
+                                    class="table-input"
+                                    type="text"
+                                    [(ngModel)]="batchAnimal.note"
+                                    [disabled]="isSaving"
+                                    (keyup)="batchSetNote()"
+                            >
+                        </ng-template>
+                    </td>
+
+                    <td *ngIf="showPedigreeData || showDates"></td><!-- date of birth column -->
+                    <td *ngIf="showDates" class="date-input"></td> <!-- date of death column -->
+
+                    <td *ngIf="showPedigreeData">
+                        <ng-template *ngIf="!batchPedigreeRegisterIsActive">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                        </ng-template>
+                        <ng-template *ngIf="batchPedigreeRegisterIsActive">
+                            <app-pedigree-register-dropdown
+                                    [selectedPedigreeRegisterId]="batchAnimal.pedigree_register ? batchAnimal.pedigree_register.id : null"
+                                    [disabled]="isSaving"
+                                    [updateInitialValues]="(initialValuesChanged)"
+                                    (pedigreeRegisterChange)="batchAnimal.pedigree_register=$event; batchSetPedigreeRegister()"
+                            ></app-pedigree-register-dropdown>
+                        </ng-template>
+                    </td>
+                    <td *ngIf="showPedigreeData"></td> <!-- father column -->
+                    <td *ngIf="showPedigreeData"></td> <!-- mother column -->
+                    <td *ngIf="showPedigreeData || showBreedData"></td> <!-- nLing column -->
+
+                    <td *ngIf="showPedigreeData">
+                        <ng-template *ngIf="!batchUbnOfBirthIsActive">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                        </ng-template>
+                        <ng-template *ngIf="batchUbnOfBirthIsActive">
+                            <input
+                                    title="ubnOfBirth"
+                                    class="table-input"
+                                    type="number"
+                                    [(ngModel)]="batchAnimal.ubn_of_birth"
+                                    [disabled]="isSaving"
+                                    (keyup)="batchSetUbnOfBirth()"
+                            >
+                        </ng-template>
+                    </td>
+
+                    <td *ngIf="showPedigreeData">
+                        <ng-template *ngIf="!batchLocationOfBirthIsActive">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                        </ng-template>
+                        <ng-template *ngIf="batchLocationOfBirthIsActive">
+                            <button
+                                    type="button"
+                                    class="button primary"
+                                    (click)="openBatchLocationOfBirthModal()"
+                            >{{batchAnimal.location_of_birth ? batchAnimal.location_of_birth.ubn : '-' }}</button>
+                        </ng-template>
+                    <td *ngIf="showPedigreeData"></td> <!-- surrogate mother column -->
+
+                    <td *ngIf="showPedigreeData">
+                        <ng-template *ngIf="!batchLambarIsActive">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                        </ng-template>
+                        <ng-template *ngIf="batchLambarIsActive">
+                            <app-boolean-input
+                                    [allowNull]="false"
+                                    [boolVal]="batchAnimal.lambar"
+                                    (boolValChanged)="batchAnimal.lambar = $event; batchSetLambar()"
+                                    [disabled]="isSaving"
+                            ></app-boolean-input>
+                        </ng-template>
+                    </td>
+
+                    <td *ngIf="showPedigreeData">
+                        <ng-template *ngIf="!batchBirthProgressIsActive">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                        </ng-template>
+                        <ng-template *ngIf="batchBirthProgressIsActive">
+                            <select
+                                    title="birthProgress"
+                                    class="table-input birth-progress-input"
+                                    [(ngModel)]="batchAnimal.birth_progress"
+                                    [disabled]="isSaving"
+                                    (click)="batchSetBirthProgress()"
+                            >
+                                <option [value]=""> </option>
+                                <option *ngFor="let birthProgressType of birthProgressTypes" value="{{ birthProgressType }}"
+                                >{{ birthProgressType | translate }}</option>
+                            </select>
+                        </ng-template>
+                    </td>
+
+                    <td *ngIf="showBreedData">
+                        <ng-template *ngIf="!batchBreedTypeIsActive">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                        </ng-template>
+                        <ng-template *ngIf="batchBreedTypeIsActive">
+                            <select
+                                    type="breedType"
+                                    class="table-input breed-type-input"
+                                    [(ngModel)]="batchAnimal.breed_type"
+                                    [disabled]="isSaving"
+                                    (click)="batchSetBreedType()"
+                            >
+                                <option [value]=""> </option>
+                                <option *ngFor="let breedType of breedTypes" value="{{ breedType }}"
+                                >{{ breedType | translate }}</option>
+                            </select>
+                        </ng-template>
+                    </td>
+
+                    <td *ngIf="showBreedData">
+                        <ng-template *ngIf="!batchBreedCodeIsActive">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                        </ng-template>
+                        <ng-template *ngIf="batchBreedCodeIsActive">
+                            <input
+                                    title="breedCode"
+                                    class="table-input"
+                                    type="text"
+                                    [(ngModel)]="batchAnimal.breed_code"
+                                    [disabled]="isSaving"
+                                    (keyup)="batchSetBreedCode()"
+                            >
+                        </ng-template>
+                    </td>
+
+                    <td *ngIf="showExaminationData">
+                        <ng-template *ngIf="!batchPredicateIsActive">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                        </ng-template>
+                        <ng-template *ngIf="batchPredicateIsActive">
+                            <select
+                                    title="predicate"
+                                    type="predicate"
+                                    class="table-input predicate-type-input"
+                                    [(ngModel)]="batchAnimal.predicate"
+                                    [disabled]="isSaving"
+                                    (click)="batchSetPredicate()"
+                            >
+                                <option [value]=""> </option>
+                                <option *ngFor="let predicateType of predicateTypes" value="{{ predicateType }}"
+                                >{{ predicateType | translate }}</option>
+                            </select>
+                        </ng-template>
+                    </td>
+                    <td *ngIf="showExaminationData">
+                        <ng-template *ngIf="!batchPredicateScoreIsActive">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                        </ng-template>
+                        <ng-template *ngIf="batchPredicateScoreIsActive">
+                            <input
+                                    title="predicateScore"
+                                    class="table-input predicate-score-input"
+                                    type="number" min="0" max="1000"
+                                    [(ngModel)]="batchAnimal.predicate_score"
+                                    [disabled]="isSaving"
+                                    (keyup)="batchSetPredicateScore()"
+                            >
+                        </ng-template>
+                    </td>
+
+                    <td *ngIf="showHealthData">
+                        <ng-template *ngIf="!batchScrapieGenotypeIsActive">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                        </ng-template>
+                        <ng-template *ngIf="batchScrapieGenotypeIsActive">
+                            <select
+                                    title="scrapieGenotype"
+                                    type="scrapieGenotype"
+                                    class="table-input scrapiegenotype-input"
+                                    [(ngModel)]="batchAnimal.scrapie_genotype"
+                                    [disabled]="isSaving"
+                                    (click)="batchSetScrapieGenotype()"
+                            >
+                                <option [value]=""> </option>
+                                <option *ngFor="let scrapieGenotype of scrapieGenotypes" value="{{ scrapieGenotype }}"
+                                >{{ scrapieGenotype }}</option>
+                            </select>
+                        </ng-template>
+                    </td>
+
+                    <td *ngIf="showHealthData">
+                        <ng-template *ngIf="!batchBlindnessFactorIsActive">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                        </ng-template>
+                        <ng-template *ngIf="batchBlindnessFactorIsActive">
+                            <select
+                                    title="blindnessFactor"
+                                    type="blindnessFactor"
+                                    class="table-input blindness-factor-type-input"
+                                    [(ngModel)]="batchAnimal.blindness_factor"
+                                    [disabled]="isSaving"
+                                    (click)="batchSetBlindnessFactor()"
+                            >
+                                <option [value]=""> </option>
+                                <option *ngFor="let blindnessFactorType of blindnessFactorTypes" value="{{ blindnessFactorType }}"
+                                >{{ blindnessFactorType | translate }}</option>
+                            </select>
+                        </ng-template>
+                    </td>
+
+                    <td *ngIf="showHealthData">
+                        <ng-template *ngIf="!batchMyoMaxIsActive">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                        </ng-template>
+                        <ng-template *ngIf="batchMyoMaxIsActive">
+                            <select
+                                    title="myoMax"
+                                    type="myoMax"
+                                    class="table-input myo-max-type-input"
+                                    [(ngModel)]="batchAnimal.myo_max"
+                                    [disabled]="isSaving"
+                                    (click)="batchSetMyoMax()"
+                            >
+                                <option [value]=""> </option>
+                                <option *ngFor="let myoMaxType of myoMaxTypes" value="{{ myoMaxType }}"
+                                >{{ myoMaxType }}</option>
+                            </select>
+                        </ng-template>
+                    </td>
+
+                    <td></td> <!-- extra uln column -->
+                </tr>
+
+                <tr *ngFor="let animal of editedAnimals | animalBatchEditFilter:getFilterOptions() | paginate: {itemsPerPage: filterAmount, currentPage: page}">
+                    <td *ngIf="showIds || showDates" title="{{ animal.creation_date  | date: 'dd-MM-yyyy @HH:mm:ss' }}">{{ animal.creation_date  | date: 'dd-MM-yyyy' }}</td>
+                    <td *ngIf="showIds">{{ animal.id }}</td>
+                    <td *ngIf="showIds"><input title="aiind" class="table-input" type="number" [(ngModel)]="animal.name" [disabled]="isSaving"></td>
+                    <td *ngIf="showIds"><input title="nickname" class="table-input" type="text" [(ngModel)]="animal.nickname" [disabled]="isSaving"></td>
+
+                    <td *ngIf="showIds">
+                        <app-collar-input
+                                [collarColor]="animal.collar_color"
+                                (collarColorChange)="animal.collar_color=$event"
+                                [collarNumber]="animal.collar_number"
+                                (collarNumberChange)="animal.collar_number=$event"
+                                [disabled]="isSaving"
+                                [updateInitialValues]="(initialValuesChanged)"
+                        ></app-collar-input>
+                    </td>
+
+                    <td>
+                        <app-uln-input
+                                [ulnCountryCode]="animal.uln_country_code"
+                                (ulnCountryCodeChange)="animal.uln_country_code=$event"
+                                [ulnNumber]="animal.uln_number"
+                                (ulnNumberChange)="animal.uln_number=$event"
+                                [disabled]="isSaving || !allowUlnEdit"
+                                [updateInitialValues]="(initialValuesChanged)"
+                        ></app-uln-input>
+                    </td>
+
+                    <td>
+                        <app-stn-input
+                                [pedigreeCountryCode]="animal.pedigree_country_code"
+                                (pedigreeCountryCodeChange)="animal.pedigree_country_code=$event"
+                                [pedigreeNumber]="animal.pedigree_number"
+                                (pedigreeNumberChange)="animal.pedigree_number=$event"
+                                [disabled]="isSaving"
+                                [updateInitialValues]="(initialValuesChanged)"
+                        ></app-stn-input>
+                    </td>
+
+                    <td>{{ animal.type | translate}}</td>
+                    <td  style="white-space: nowrap">
+                        {{ animal.location ? animal.location.ubn : '-' }} <i class="fa fa-info-circle" aria-hidden="true"
+                                                                             title="{{ 'USE BATCH EDIT AND FILTER TO EDIT LOCATION INFO' | translate }}"></i>
+                    </td>
+                    <td>
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="animal.is_alive"
+                                (boolValChanged)="animal.is_alive = $event"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+                    <td *ngIf="showNote"><input title="note" class="table-input" type="text" [(ngModel)]="animal.note" [disabled]="isSaving"></td>
+
+                    <td *ngIf="showPedigreeData || showDates">
+                        <app-datepicker-v2
+                                [dateString]="animal.date_of_birth"
+                                [modelFormat]="settings.getModelDateTimeFormat()"
+                                [disabled]="isSaving"
+                                [updateInitialValues]="(initialValuesChanged)"
+                                (isDateStringChanged)="animal.date_of_birth = $event"
+                        ></app-datepicker-v2>
+                    </td>
+
+                    <td *ngIf="showDates" class="date-input">
+                        <app-datepicker-v2
+                                [dateString]="animal.date_of_death"
+                                [modelFormat]="settings.getModelDateTimeFormat()"
+                                [disabled]="isSaving"
+                                [updateInitialValues]="(initialValuesChanged)"
+                                (isDateStringChanged)="animal.date_of_death = $event"
+                        ></app-datepicker-v2>
+                    </td>
+
+                    <td *ngIf="showPedigreeData">
+                        <app-pedigree-register-dropdown
+                                [selectedPedigreeRegisterId]="animal.pedigree_register ? animal.pedigree_register.id : null"
+                                [disabled]="isSaving"
+                                [updateInitialValues]="(initialValuesChanged)"
+                                (pedigreeRegisterChange)="animal.pedigree_register=$event"
+                                [reset]="(resetPedigreeRegisterValues)"
+                        ></app-pedigree-register-dropdown>
+                    </td>
+
+                    <td *ngIf="showPedigreeData">
+                        <app-parent-selector
+                                [parentType]="'FATHER'"
+                                [parent]=animal.parent_father
+                                [disabled]="isSaving"
+                                (parentChange)="animal.parent_father=$event"
+                        ></app-parent-selector>
+                    </td>
+
+                    <td *ngIf="showPedigreeData">
+                        <app-parent-selector
+                                [parentType]="'MOTHER'"
+                                [parent]=animal.parent_mother
+                                [disabled]="isSaving"
+                                (parentChange)="animal.parent_mother=$event"
+                        ></app-parent-selector>
+                    </td>
+
+                    <td *ngIf="showPedigreeData || showBreedData">{{ animal.litter ? animal.litter.born_alive_count + animal.litter.stillborn_count : '-' }}</td>
+                    <td *ngIf="showPedigreeData"><input title="ubnOfBirth" class="table-input" type="number" [(ngModel)]="animal.ubn_of_birth" [disabled]="isSaving"></td>
+                    <td *ngIf="showPedigreeData" style="white-space: nowrap">
+                        {{ animal.location_of_birth ? animal.location_of_birth.ubn : '-' }}  <i class="fa fa-info-circle" aria-hidden="true"
+                                                                                                title="{{ 'USE BATCH EDIT AND FILTER TO EDIT LOCATION INFO' | translate }}"></i>
+                    </td>
+
+                    <td *ngIf="showPedigreeData">
+                        <app-parent-selector
+                                [parentType]="'SURROGATE'"
+                                [parent]=animal.surrogate
+                                [disabled]="isSaving"
+                                (parentChange)="animal.surrogate=$event"
+                        ></app-parent-selector>
+                    </td>
+
+                    <td *ngIf="showPedigreeData">
+                        <app-boolean-input
+                                [allowNull]="false"
+                                [boolVal]="animal.lambar"
+                                (boolValChanged)="animal.lambar = $event"
+                                [disabled]="isSaving"
+                        ></app-boolean-input>
+                    </td>
+
+                    <td *ngIf="showPedigreeData">
+                        <select
+                                title="birthProgress"
+                                class="table-input birth-progress-input"
+                                [(ngModel)]="animal.birth_progress"
+                                [disabled]="isSaving">
+                            <option [value]=""> </option>
+                            <option *ngFor="let birthProgressType of birthProgressTypes" value="{{ birthProgressType }}"
+                            >{{ birthProgressType | translate }}</option>
+                        </select>
+                    </td>
+
+                    <td *ngIf="showBreedData">
+                        <select
+                                type="breedType"
+                                class="table-input breed-type-input"
+                                [(ngModel)]="animal.breed_type"
+                                [disabled]="isSaving">
+                            <option [value]=""> </option>
+                            <option *ngFor="let breedType of breedTypes" value="{{ breedType }}"
+                            >{{ breedType | translate }}</option>
+                        </select>
+                    </td>
+
+                    <td *ngIf="showBreedData"><input title="breedCode" class="table-input" type="text" [(ngModel)]="animal.breed_code" [disabled]="isSaving"></td>
+
+                    <td *ngIf="showExaminationData">
+                        <select
+                                title="predicate"
+                                type="predicate"
+                                class="table-input predicate-type-input"
+                                [(ngModel)]="animal.predicate"
+                                [disabled]="isSaving">
+                            <option [value]=""> </option>
+                            <option *ngFor="let predicateType of predicateTypes" value="{{ predicateType }}"
+                            >{{ predicateType | translate }}</option>
+                        </select>
+                    </td>
+                    <td *ngIf="showExaminationData">
+                        <input title="predicateScore" class="table-input predicate-score-input"
+                               type="number" min="0" max="1000"
+                               [(ngModel)]="animal.predicate_score" [disabled]="isSaving">
+                    </td>
+
+                    <td *ngIf="showHealthData">
+                        <select
+                                title="scrapieGenotype"
+                                type="scrapieGenotype"
+                                class="table-input scrapiegenotype-input"
+                                [(ngModel)]="animal.scrapie_genotype"
+                                [disabled]="isSaving">
+                            <option [value]=""> </option>
+                            <option *ngFor="let scrapieGenotype of scrapieGenotypes" value="{{ scrapieGenotype }}"
+                            >{{ scrapieGenotype }}</option>
+                        </select>
+                    </td>
+
+                    <td *ngIf="showHealthData">
+                        <select
+                                title="blindnessFactor"
+                                type="blindnessFactor"
+                                class="table-input blindness-factor-type-input"
+                                [(ngModel)]="animal.blindness_factor"
+                                [disabled]="isSaving">
+                            <option [value]=""> </option>
+                            <option *ngFor="let blindnessFactorType of blindnessFactorTypes" value="{{ blindnessFactorType }}"
+                            >{{ blindnessFactorType | translate }}</option>
+                        </select>
+                    </td>
+
+                    <td *ngIf="showHealthData">
+                        <select
+                                title="myoMax"
+                                type="myoMax"
+                                class="table-input myo-max-type-input"
+                                [(ngModel)]="animal.myo_max"
+                                [disabled]="isSaving">
+                            <option [value]=""> </option>
+                            <option *ngFor="let myoMaxType of myoMaxTypes" value="{{ myoMaxType }}"
+                            >{{ myoMaxType }}</option>
+                        </select>
+                    </td>
+
+                    <td>
+                        <app-uln-input
+                                [ulnCountryCode]="animal.uln_country_code"
+                                (ulnCountryCodeChange)="animal.uln_country_code=$event"
+                                [ulnNumber]="animal.uln_number"
+                                (ulnNumberChange)="animal.uln_number=$event"
+                                [disabled]="isSaving || !allowUlnEdit"
+                                [updateInitialValues]="(initialValuesChanged)"
+                        ></app-uln-input>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <pagination (pageChange)="page = $event" [goToFirstPage]="(retrievedNewAnimalsBatch)"></pagination>
+        </div>
+    </div>
+    </ng-template>
+
+<app-start-input-modal
+        [displayModal]="displayStartInputModal"
+        (inputDataRequested)="getAnimals($event)"
+        (closedModal)="displayStartInputModal = 'none'"
+></app-start-input-modal>
+
+
+    <!--BATCH CURRENT LOCATION MODAL-->
+    <div class="reveal-overlay" [ngStyle]="{'display': displayBatchLocationEditModal}">
+        <div class="tiny reveal" [ngStyle]="{'display': displayBatchLocationEditModal}">
+            <div class="modal-header">
+                {{ 'CURRENT UBN' | translate }}
+                <button type="button" (click)="closeBatchCurrentLocationModal()" class="pull-right" aria-label="Close modal">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <app-ubn-dropdown
+                        [labelText]="'CURRENT UBN'"
+                        (selectedLocationChange)="batchAnimal.location = $event;"
+                ></app-ubn-dropdown>
+                <div class="modal-footer">
+                   <span class="pull-left">
+                        <button
+                                class="tiny primary button"
+                                (click)="closeBatchCurrentLocationModal(); batchSetCurrentLocation()"
+                        >{{ 'OK' | translate}}</button>
+                    </span>
+
+                    <span class="pull-right">
+                        <button
+                                class="tiny alert button"
+                                (click)="closeBatchCurrentLocationModal();"
+                        >{{ 'CANCEL' | translate}}</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--BATCH LOCATION OF BIRTH MODAL-->
+    <div class="reveal-overlay" [ngStyle]="{'display': displayBatchLocationOfBirthEditModal}">
+        <div class="tiny reveal" [ngStyle]="{'display': displayBatchLocationOfBirthEditModal}">
+            <div class="modal-header">
+                {{ 'BREEDER UBN' | translate }}
+                <button type="button" (click)="closeBatchLocationOfBirthModal()" class="pull-right" aria-label="Close modal">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <app-ubn-dropdown
+                        [labelText]="'BREEDER UBN'"
+                        (selectedLocationChange)="batchAnimal.location_of_birth = $event;"
+                ></app-ubn-dropdown>
+                <div class="modal-footer">
+           <span class="pull-left">
+                <button
+                        class="tiny primary button"
+                        (click)="closeBatchLocationOfBirthModal(); batchSetLocationOfBirth()"
+                >{{ 'OK' | translate}}</button>
+            </span>
+
+                    <span class="pull-right">
+                <button
+                        class="tiny alert button"
+                        (click)="closeBatchLocationOfBirthModal();"
+                >{{ 'CANCEL' | translate}}</button>
+            </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--BATCH LOCATION OF BIRTH MODAL-->
+    <div class="reveal-overlay" [ngStyle]="{'display': displayIncorrectGetInputModal}">
+        <div class="tiny reveal" [ngStyle]="{'display': displayIncorrectGetInputModal}">
+            <div class="modal-header">
+                {{ 'INPUT ERRORS' | translate }}
+                <button type="button" (click)="closeIncorrectGetInputModal()" class="pull-right" aria-label="Close modal">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <ng-template *ngIf="animalsResult.invalid != null && animalsResult.invalid.length > 0">
+                    <table class="stacked">
+                        <thead>
+                            <tr>
+                                <td>
+                                    {{ 'INVALID INPUT' | translate }}
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let invalidInput of animalsResult.invalid">
+                                <td>
+                                    {{ invalidInput }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </ng-template>
+
+                <ng-template *ngIf="animalsResult.ulns_without_found_animals != null && animalsResult.ulns_without_found_animals.length > 0">
+                    <table class="stacked">
+                        <thead>
+                        <tr>
+                            <td>
+                                {{ 'ULNS WITHOUT FOUND ANIMALS' | translate }}
+                            </td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let ulnNotFound of animalsResult.ulns_without_found_animals">
+                            <td>
+                                {{ ulnNotFound }}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </ng-template>
+
+                <ng-template *ngIf="animalsResult.stns_without_found_animals != null && animalsResult.stns_without_found_animals.length > 0">
+                    <table class="stacked">
+                        <thead>
+                        <tr>
+                            <td>
+                                {{ 'STNS WITHOUT FOUND ANIMALS' | translate }}
+                            </td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let stnNotFound of animalsResult.stns_without_found_animals">
+                            <td>
+                                {{ stnNotFound }}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </ng-template>
+
+            </div>
+
+            <div class="modal-footer">
+                    <span class="pull-right">
+                        <button
+                                class="tiny alert button"
+                                (click)="closeIncorrectGetInputModal();"
+                        >{{ 'CLOSE' | translate}}</button>
+                    </span>
+            </div>
+        </div>
+    </div>
+
+</div>
