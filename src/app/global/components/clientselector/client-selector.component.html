@@ -1,0 +1,235 @@
+<span>
+    <button
+            class="button primary expanded main-button"
+            [disabled]="disabled"
+            (click)="openModal()"
+            style="white-space: nowrap; width: 7.3rem"
+    >
+        {{ buttonText() | translate }}
+    </button>
+</span>
+
+<div class="reveal-overlay" [ngStyle]="{'display': displayModal}">
+    <div class="large reveal" [ngStyle]="{'display': displayModal}">
+        <div class="modal-header">
+
+            <div class="row table-options-container">
+                <div class="large-6 columns">
+                    <h4>{{ 'SELECT COMPANY' | translate }}</h4>
+                </div>
+                <div class="large-2 columns">
+                    <span class="text-center">
+                        <button
+                                class="tiny success button"
+                                [disabled]="isClientsEmpty() || selectedClient == null || selectedLocation == null"
+                                (click)="clickOK()"
+                        >{{ 'USE SELECTION' | translate}}</button>
+                    </span>
+                </div>
+                <div class="large-4 columns">
+                    <span class="pull-right">
+                        <button
+                                  class="tiny alert button"
+                                [disabled]="isSearchingParent"
+                                (click)="clickCancel();"
+                        >{{ 'CANCEL' | translate}}</button>
+                    </span>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-body">
+
+            <hr>
+
+            <ng-template
+                    *ngIf="selectedClient != null"
+            >
+                <div class="row table-options-container">
+                    <div class="large-12 columns">
+                        <h5>
+                            <span>{{ 'SELECTED COMPANY' | translate }}: {{selectedClient.company_name}}</span>
+                        </h5>
+                    </div>
+                </div>
+
+                <div class="row table-options-container">
+                    <div class="large-6 columns">
+                        <h5>
+                            <span *ngIf="hasSelectedLocation()">. {{ 'SELECTED LOCATION' | translate }}: {{selectedLocation['address'].city}} -
+                                    {{selectedLocation['address'].street_name}} {{selectedLocation['address'].address_number}} - {{selectedLocation.ubn}}</span>
+                        </h5>
+                    </div>
+
+                    <div class="large-6 columns">
+                        <ng-template *ngIf="hasLocations()">
+                            <label>
+                                {{'LOCATION SELECTION' | translate }}
+                            </label>
+                            <select
+                                    name="selected-location"
+                                    [(ngModel)]="selectedLocation"
+                            >
+                                <option value="undefined" disabled>
+                                    {{'SELECT LOCATION' | translate}}
+                                </option>
+                                <option *ngFor="let location of selectedClient.locations" value="{{location.ubn}}">{{location['address'].city}} -
+                                    {{location['address'].street_name}} {{location['address'].address_number}} - {{location.ubn}}
+                                </option>
+                            </select>
+                        </ng-template>
+                        <ng-template *ngIf="!hasLocations()">
+                            <span>{{ 'NO LOCATIONS AVAILABLE' | translate }}</span>
+                        </ng-template>
+                    </div>
+                </div>
+
+                <hr>
+            </ng-template>
+
+
+            <div class="row table-options-container">
+                <div class="large-2 columns">
+                    <label>
+                        {{ 'SEARCH' | translate }}
+                        <input type="text" [(ngModel)]="filterSearch" (keydown)="page = 1" placeholder="{{ 'SEARCH' | translate }}" maxlength="50">
+                    </label>
+                </div>
+                <div class="large-2 columns">
+                    <label>
+                        {{ 'INVOICES' | translate }}
+                        <select [(ngModel)]="filterInvoices" (change)="page = 1">
+                            <option value="ALL">{{ 'ALL' | translate }}</option>
+                            <option value="UNPAID INVOICES">{{ 'UNPAID INVOICES' | translate }}</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="large-2 columns end">
+                    <label>
+                        {{ 'DISPLAY AMOUNT' | translate }}
+                        <select [(ngModel)]="filterAmount" (change)="page = 1">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="large-12 columns">
+                    <table class="stack client-overview">
+                        <thead>
+                        <tr>
+                            <td>{{ 'DEBTORS' | translate }} #</td>
+                            <td>{{ 'COMPANY NAME' | translate }}</td>
+                            <td>{{ 'PLACE' | translate }}</td>
+                            <td>{{ 'PRIMARY CONTACTPERSON' | translate }}</td>
+                            <td>{{ 'UBN' | translate }}</td>
+                            <td>{{ 'PEDIGREE' | translate }}</td>
+                            <td>{{ 'SUBSCRIPTION DATE' | translate }}</td>
+                            <td>{{ 'ANIMAL HEALTH' | translate }}</td>
+                            <td>{{ 'STATUS' | translate }}</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngIf="isClientsEmpty()">
+                            <td colspan="10">
+                                <div class="spinner">
+                                    <div class="bounce1"></div>
+                                    <div class="bounce2"></div>
+                                    <div class="bounce3"></div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr *ngFor="let client of getClients() | clientFilter:[filterSearch, filterInvoices] | paginate: {itemsPerPage: filterAmount, currentPage: page}; let i = index">
+                            <td>
+                                <span *ngIf="client.debtor_number">{{ client.debtor_number }}</span>
+                                <span *ngIf="!client.debtor_number">--</span>
+                            </td>
+                            <td>
+                                <span *ngIf="client.company_name">{{ client.company_name }}</span>
+                                <span *ngIf="!client.company_name">--</span>
+                            </td>
+                            <td>
+                                <span *ngIf="client.address.city">{{ client.address.city }}</span>
+                                <span *ngIf="!client.address.city">--</span>
+                            </td>
+                            <td>{{ client.owner.first_name }} {{ client.owner.last_name }}</td>
+                            <td>
+                                <span *ngIf="client.locations.length == 0">--</span>
+                                <div *ngIf="client.locations.length > 0" *ngFor="let location of client.locations" >
+                                    {{ location }}
+                                    <span *ngIf="client.locations.length > 1">
+                                <br>
+                            </span>
+                                </div>
+                            </td>
+                            <td>
+                                <span *ngIf="client.pedigrees.length == 0">--</span>
+                                <div *ngIf="client.pedigrees.length > 0" *ngFor="let pedigree of client.pedigrees" >
+                                    {{ pedigree }}
+                                    <span *ngIf="client.pedigrees.length > 1">
+                                <br>
+                            </span>
+                                </div>
+                            </td>
+                            <td>
+                                <span *ngIf="client.subscription_date && client.subscription_date.date">{{ settings.convertToViewDate(client.subscription_date.date) }}</span>
+                                <span *ngIf="!client.subscription_date || (client.subscription_date != null && client.subscription_date.date == null)">--</span>
+                            </td>
+                            <td>
+                                <span *ngIf="client.animal_health">{{ 'YES' | translate }}</span>
+                                <span *ngIf="!client.animal_health">{{ 'NO' | translate }}</span>
+                            </td>
+                            <td>
+                                <span *ngIf="client.status">{{ 'ACTIVE' | translate }}</span>
+                                <span *ngIf="!client.status">{{ 'NON-ACTIVE' | translate }}</span>
+                            </td>
+                            <td>
+                        <span *ngIf="client.unpaid_invoices.length > 0" class="alert label">
+                            {{ client.unpaid_invoices.length }} <i class="fa fa-file-text-o fa-fw" aria-hidden="true"></i>
+                        </span>
+                            </td>
+                            <td>
+                                <button type="button" class="tiny button primary float-right"
+                                        (click)="selectClient(client)">
+                                    <span>
+                                        {{ 'SELECT' | translate }}
+                                    </span>
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <pagination (pageChange)="page = $event" [goToFirstPage]="(isLoadedEvent)"></pagination>
+                </div>
+            </div>
+
+        </div>
+        <div *ngIf="filterAmount > 15" class="modal-footer">
+
+            <hr>
+
+            <span class="pull-left">
+                <button
+                        class="tiny primary button"
+                        [disabled]="isClientsEmpty() || selectedClient == null || selectedLocation == null"
+                        (click)="clickOK()"
+                >{{ 'USE SELECTION' | translate}}</button>
+            </span>
+
+            <span class="pull-right">
+                <button
+                        class="tiny alert button"
+                        [disabled]="isSearchingParent"
+                        (click)="clickCancel();"
+                >{{ 'CANCEL' | translate}}</button>
+            </span>
+        </div>
+    </div>
+</div>

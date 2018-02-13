@@ -8,6 +8,11 @@
             <label>
                 {{ 'FIND COMPANY' | translate }}
             </label>
+
+            <app-client-selector
+
+            ></app-client-selector>
+
             <div class="large-4">
                 <input type="text" [(ngModel)]="companyName">
             </div>
@@ -121,7 +126,7 @@
                     </td>
                     <td class="large-6 columns">
                         <span>
-                            {{ senderDetails.name }}
+                            {{ senderDetails ? senderDetails.name : '' }}
                         </span>
                     </td>
                 </tr>
@@ -131,7 +136,7 @@
                     </td>
                     <td class="large-6 columns">
                         <span>
-                            {{senderDetails.iban}}
+                            {{ senderDetails? senderDetails.iban : ''}}
                         </span>
                     </td>
                 </tr>
@@ -141,7 +146,7 @@
                     </td>
                     <td class="large-6 columns">
                         <span>
-                            {{senderDetails.vat_number}}
+                            {{ senderDetails ? senderDetails.vat_number : ''}}
                         </span>
                     </td>
                 </tr>

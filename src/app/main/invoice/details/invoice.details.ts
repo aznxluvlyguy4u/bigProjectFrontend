@@ -1,3 +1,5 @@
+import { ClientSelectorComponent } from '../../../global/components/clientselector/client-selector.component';
+
 var _ = require('lodash');
 import {Component} from "@angular/core";
 import {Subscription} from "rxjs/Rx";
@@ -19,7 +21,7 @@ import {
         'multiple',
         'showSearchInputInDropdown'
     ],
-    directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES],
+    directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, ClientSelectorComponent],
     template: require('./invoice.details.html'),
     pipes: [TranslatePipe]
 })
