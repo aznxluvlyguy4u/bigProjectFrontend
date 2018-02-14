@@ -642,5 +642,8 @@
   "SPAIN": "Spanje",
   "CZECH REPUBLIC": "Tsjechië",
   "SWEDEN": "Zweden",
-  "INVOICE SENDER DETAILS EDIT ONLY ALLOWED DURING CREATE INFO": "De NSFO factuurgegevens kunnen alleen worden aangepast voor nieuwe facturen"
+  "INVOICE SENDER DETAILS EDIT ONLY ALLOWED IF NOT SENT YET INFO": "De NSFO factuurgegevens kunnen alleen worden aangepast voor facturen die nog niet zijn verzonden",
+  "EDIT INVOICE": "Wijzig factuur",
+  "LATEST VERSION": "Laatste versie",
+  "USE": "Gebruik"
 }

@@ -85,17 +85,51 @@
         <div class="large-3 columns end">
             <table>
                 <tr class="row">
-                    <td class="large-12 columns section-title">
+                    <td class="large-6 columns section-title">
                         {{ 'YOUR INFORMATION' | translate }}
-                        <span *ngIf="isCreateMode()"
-                                class="pull-right"
-                                title="{{ 'EDIT' | translate }}"
-                                (click)="navigateToInvoiceSenderDetailsEdit()"
-                        ><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></span>
-                        <span *ngIf="isEditMode()"
+                    </td>
+                    <td class="large-6 columns">
+
+                        <ng-template *ngIf="isCreateMode() || isEditMode()">
+
+                            <!-- TODO: DROPDOWN OPTION MENU DOESN'T WORK YET -->
+                            <!--<button type="button" class="tiny dropdown button float-right" [attr.data-toggle]="'dropdown-sender-details-options'">-->
+                                <!--{{ 'OPTIONS' | translate }}-->
+                            <!--</button>-->
+                            <!--<div class="dropdown-pane bottom" data-dropdown data-hover="true"-->
+                                 <!--data-hover-pane="true" id="dropdown-sender-details-options">-->
+                                <!--<ul>-->
+                                    <!--<li>-->
+                                        <!--<a (click)="refreshSenderDetails()"-->
+                                           <!--title="{{ 'USE' | translate }} {{ 'LATEST VERSION' | translate | lowercase }}"-->
+                                        <!--&gt;<i class="fa fa-refresh fa-2x" aria-hidden="true"></i></a>-->
+                                    <!--</li>-->
+                                    <!--<li>-->
+                                        <!--<a (click)="navigateToInvoiceSenderDetailsEdit()"-->
+                                           <!--title="{{ 'EDIT' | translate }} {{ 'LATEST VERSION' | translate | lowercase }}"-->
+                                        <!--&gt;<i class="fa fa-pencil-square-o fa-fw fa-2x" aria-hidden="true"></i></a>-->
+                                    <!--</li>-->
+                                <!--</ul>-->
+                            <!--</div>-->
+
+
+                            <span
+                                    class="pull-left"
+                                    title="{{ 'USE' | translate }} {{ 'LATEST VERSION' | translate | lowercase }}"
+                                    (click)="refreshSenderDetails()"
+                            ><i class="fa fa-refresh fa-2x" aria-hidden="true"></i></span>
+                            <span
+                                    class="pull-right"
+                                    title="{{ 'EDIT' | translate }} {{ 'LATEST VERSION' | translate | lowercase }}"
+                                    (click)="navigateToInvoiceSenderDetailsEdit()"
+                            ><i class="fa fa-pencil-square-o fa-fw fa-2x" aria-hidden="true"></i></span>
+                        </ng-template>
+
+                        <span *ngIf="isViewMode()"
                               class="pull-right"
-                              title="{{ 'INVOICE SENDER DETAILS EDIT ONLY ALLOWED DURING CREATE INFO' | translate }}"
+                              title="{{ 'INVOICE SENDER DETAILS EDIT ONLY ALLOWED IF NOT SENT YET INFO' | translate }}"
                         ><i class="fa fa-info-circle" aria-hidden="true"></i></span>
+
                     </td>
                 </tr>
                 <tr class="row">
@@ -308,7 +342,11 @@
                 <button type="button" (click)="saveInvoice()" class="small primary button">
                     {{ 'SAVE' | translate }}
                 </button>
-                <button *ngIf="!onlyView" [disabled]="invoice.status != 'NOT SEND' && invoice.status != 'INCOMPLETE'" type="button" (click)="deleteInvoice()" class="small alert button">
+                <button *ngIf="!onlyView"
+                        [disabled]="(invoice.status != 'NOT SEND' && invoice.status != 'INCOMPLETE') || invoiceId == null"
+                        type="button"
+                        (click)="deleteInvoice()"
+                        class="small alert button">
                     {{'DELETE' | translate}}
                 </button>
                 <button type="button" (click)="navigateTo('/invoice')" class="small primary button">

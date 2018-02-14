@@ -28,7 +28,7 @@ export class InvoiceDetailsComponent {
     private senderDetails: InvoiceSenderDetails = new InvoiceSenderDetails();
     private pageTitle: string;
     private pageMode: string;
-    private invoiceId: string;
+    private invoiceId: number;
     private selectedUbn: string;
     private selectedCompany: Client;
     clientUbns: string[] = [];
@@ -55,7 +55,6 @@ export class InvoiceDetailsComponent {
     ngOnInit() {
         this.getGeneralInvoiceRulesOptions();
         this.getAnimalHealthInvoiceRulesOptions();
-        this.getSenderDetails();
         this.dataSub = this.activatedRoute.params.subscribe(params => {
             this.pageMode = params['mode'];
             if(this.isEditMode()) {
@@ -64,10 +63,8 @@ export class InvoiceDetailsComponent {
                 this.nsfo.doGetRequest(this.nsfo.URI_INVOICE + "/" + this.invoiceId)
                     .subscribe(res => {
                         this.invoice = res.result;
-                        this.invoice.invoice_rules = res.result['invoice_rules'];
-											  this.selectedCompany = this.invoice.company;
+												this.updateInvoiceDataInVariables();
 												this.updateClientUbns();
-											  this.selectedUbn = this.invoice.ubn;
                         this.doVATCalculations();
                     },
 											error => {
@@ -77,23 +74,10 @@ export class InvoiceDetailsComponent {
             }
 
             if(this.isCreateMode()) {
-                this.pageTitle = 'NEW INVOICE';
-                this.invoice.status = "INCOMPLETE";
+							  this.pageTitle = 'NEW INVOICE';
 							  this.selectedCompany = null;
 							  this.selectedUbn = null;
-                this.nsfo.doPostRequest(this.nsfo.URI_INVOICE, this.invoice)
-                    .subscribe(
-                        res => {
-                            this.invoice = res.result;
-                            this.invoice.invoice_number = res.result['invoice_number'];
-													  this.selectedCompany = this.invoice.company;
-													  this.updateClientUbns();
-													  this.selectedUbn = this.invoice.ubn;
-                        },
-                          error => {
-                            alert(this.nsfo.getErrorMessage(error));
-                          }
-                    );
+							  this.getSenderDetailsAndInitializeNewInvoice();
             }
 
             if (this.isViewMode()) {
@@ -102,12 +86,7 @@ export class InvoiceDetailsComponent {
                 this.nsfo.doGetRequest(this.nsfo.URI_INVOICE + "/" + this.invoiceId)
                     .subscribe(res => {
                         this.invoice = res.result;
-                        this.senderDetails = this.invoice['sender_details'];
-											  this.selectedCompany = this.invoice.company;
-												this.updateClientUbns();
-											  this.invoice.sender_details = this.senderDetails;
-											  this.selectedUbn = this.invoice.ubn;
-                        this.invoice.invoice_rules = res.result['invoice_rules'];
+												this.updateInvoiceDataInVariables();
                         this.doVATCalculations();
                         },
                           error => {
@@ -130,6 +109,57 @@ export class InvoiceDetailsComponent {
 		isViewMode() {
 			return this.pageMode == 'view';
 		}
+
+		private updateInvoiceDataInVariables() {
+			this.senderDetails = this.invoice.sender_details;
+			this.selectedCompany = this.invoice.company;
+			this.selectedUbn = this.invoice.ubn;
+		}
+
+	private getSenderDetailsAndInitializeNewInvoice() {
+		let details = new InvoiceSenderDetails();
+		let address = new Address();
+		this.nsfo.doGetRequest(this.nsfo.URI_INVOICE_SENDER_DETAILS)
+			.subscribe(
+				res => {
+					this.senderDetails = res.result;
+					this.initializeNewInvoice();
+				},
+				error => {
+					alert(this.nsfo.getErrorMessage(error));
+				}
+			);
+	}
+
+	private initializeNewInvoice() {
+		this.invoice.status = "INCOMPLETE";
+		this.invoice.sender_details = this.senderDetails;
+
+		this.nsfo.doPostRequest(this.nsfo.URI_INVOICE, this.invoice)
+			.subscribe(
+				res => {
+					this.invoice = res.result;
+					this.invoiceId = this.invoice.id;
+					this.updateInvoiceDataInVariables();
+					this.updateClientUbns();
+				},
+				error => {
+					alert(this.nsfo.getErrorMessage(error));
+				}
+			);
+  }
+
+	refreshSenderDetails() {
+		this.nsfo.doGetRequest(this.nsfo.URI_INVOICE_SENDER_DETAILS)
+			.subscribe(
+				res => {
+					this.senderDetails = res.result;
+				},
+				error => {
+					alert(this.nsfo.getErrorMessage(error));
+				}
+			);
+	}
 
     private getGeneralInvoiceRulesOptions(): void {
         this.nsfo.doGetRequest(this.nsfo.URI_INVOICE_RULE + "?category=GENERAL&type=standard")
@@ -325,25 +355,6 @@ export class InvoiceDetailsComponent {
 			} else {
 				this.invoice.ubn = this.selectedUbn;
 			}
-    }
-
-    private getSenderDetails() {
-        let details = new InvoiceSenderDetails();
-        let address = new Address();
-        this.nsfo.doGetRequest(this.nsfo.URI_INVOICE_SENDER_DETAILS)
-            .subscribe(
-                res => {
-                    details = res.result;
-                    if(details != undefined) {
-                        this.senderDetails = res.result;
-                        address = res.result.address;
-                        this.senderDetails.address = address;
-                    }
-                },
-                  error => {
-                    alert(this.nsfo.getErrorMessage(error));
-                  }
-            );
     }
 
     updateClientUbns() {
