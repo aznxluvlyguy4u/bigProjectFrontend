@@ -35,8 +35,9 @@ export class InvoiceDetailsComponent {
     private selectedCompany: Company = new Company();
     private selectedLocation: Local_Location = new Local_Location();
     private selectedInvoiceRuleId: number;
-    private standardInvoiceRuleOptions: InvoiceRule[] = [];
-    private temporaryRule: InvoiceRuleTemplate = new InvoiceRuleTemplate();
+    private standardGeneralInvoiceRuleOptions: InvoiceRule[] = [];
+    private standardAnimalHealthInvoiceRuleOptions: InvoiceRule[] = [];
+    private temporaryRule: InvoiceRule = new InvoiceRule();
     private companyName: string = "";
     private invoice: Invoice = new Invoice;
     private form: FormGroup;
@@ -51,13 +52,15 @@ export class InvoiceDetailsComponent {
     constructor(private fb: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute, private nsfo: NSFOService) {
         this.form = fb.group({
             description: ['', Validators.required],
+            category: ['', Validators.required],
             price_excl_vat: ['', Validators.required],
             vat_percentage_rate: ['', Validators.required],
         });
     }
 
     ngOnInit() {
-        this.getInvoiceRulesOptions();
+        this.getGeneralInvoiceRulesOptions();
+        this.getAnimalHealthInvoiceRulesOptions();
         this.getSenderDetails();
         this.dataSub = this.activatedRoute.params.subscribe(params => {
             this.pageMode = params['mode'];
@@ -99,38 +102,52 @@ export class InvoiceDetailsComponent {
         });
     }
 
-    private getInvoiceRulesOptions(): void {
+    private getGeneralInvoiceRulesOptions(): void {
         this.nsfo.doGetRequest(this.nsfo.URI_INVOICE_RULE + "?category=GENERAL&type=standard")
             .subscribe(
                 res => {
-                    this.standardInvoiceRuleOptions = <InvoiceRule[]> res.result;
+                    this.standardGeneralInvoiceRuleOptions = <InvoiceRule[]> res.result;
+                }
+            )
+    }
+
+    private getAnimalHealthInvoiceRulesOptions(): void {
+        this.nsfo.doGetRequest(this.nsfo.URI_INVOICE_RULE + "?category=ANIMAL HEALTH&type=standard")
+            .subscribe(
+                res => {
+                    this.standardAnimalHealthInvoiceRuleOptions = <InvoiceRule[]> res.result;
                 }
             )
     }
     
-    private addInvoiceRule(type): void {
+    private addInvoiceRule(type, category): void {
         let rule = new InvoiceRule();
         rule.type = "custom";
         rule.sort_order = 1;
         if (type == "standard") {
             let selectedId = this.selectedInvoiceRuleId;
             if (this.selectedInvoiceRuleId) {
-                let standardInvoiceRule = _.find(this.standardInvoiceRuleOptions, function (o) {
+                let standardInvoiceRule = _.find(this.standardGeneralInvoiceRuleOptions, function (o) {
                     return o.id == selectedId;
                 });
+                if (category == "ANIMAL HEALTH") {
+                    standardInvoiceRule = _.find(this.standardAnimalHealthInvoiceRuleOptions, function (o) {
+                        return o.id == selectedId;
+                    });
+                }
                 rule.description = standardInvoiceRule.description;
                 rule.vat_percentage_rate = standardInvoiceRule.vat_percentage_rate;
                 rule.price_excl_vat = standardInvoiceRule.price_excl_vat;
                 rule.category = standardInvoiceRule.category;
-                this.addCustomInvoiceRule(rule);
+                this.addCustomInvoiceRule(rule, type);
             }
         } else {
-            rule.category = "GENERAL";
             rule.sort_order = 1;
+            rule.category = this.temporaryRule.category;
             rule.vat_percentage_rate = this.temporaryRule.vat_percentage_rate;
             rule.price_excl_vat = this.temporaryRule.price_excl_vat;
             rule.description = this.temporaryRule.description;
-            this.addCustomInvoiceRule(rule);
+            this.addCustomInvoiceRule(rule, type);
         }
         this.doVATCalculations();
     }
@@ -180,11 +197,14 @@ export class InvoiceDetailsComponent {
         this.invoice.total = this.totalInclVAT;
     }
 
-    private addCustomInvoiceRule(newRule: InvoiceRule){
+    private addCustomInvoiceRule(newRule: InvoiceRule, type: String){
         this.nsfo
             .doPostRequest(this.nsfo.URI_INVOICE+ "/" + this.invoice.id + "/invoice-rules", newRule)
             .subscribe(
                 res => {
+                    if (type !== "standard") {
+                        this.temporaryRule = new InvoiceRule();
+                    }
                     this.invoice.invoice_rules.push(res.result);
                     this.doVATCalculations();
                 }
