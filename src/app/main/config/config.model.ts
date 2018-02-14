@@ -20,7 +20,7 @@ export class HealthLetter {
     public first_name: string;
 }
 
-export class InvoiceRuleTemplate {
+export class InvoiceRule {
     public id: number;
     public description: string;
     public vat_percentage_rate: number;
