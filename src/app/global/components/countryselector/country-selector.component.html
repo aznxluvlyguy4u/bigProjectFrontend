@@ -1,0 +1,23 @@
+<span id="component-country-input" class="country-input-group">
+    <select
+            id="component-country-input-dropdown"
+            class="country-input-dropdown"
+            [(ngModel)]="countryName"
+            title="countryName" [disabled]="disabled"
+            (click)="changeCountryName()"
+            [ngClass]="{'ng-dirty': isDirty}"
+    >
+        <option [value]=undefined>{{ 'NONE' | translate }}</option>
+        <option
+                *ngFor="let country of getCountries()"
+                [value]="country.name"
+        >{{ country.name | uppercase | translate }}</option>
+    </select>
+    <button *ngIf="!disabled && includeResetButton"
+            type="submit"
+            (click)="reset()"
+            class="button secondary"
+            [disabled]="disabled || hasOriginalValues()"
+            title="{{'RESET TO ORIGINAL VALUE' | translate}}"
+    ><i class="fa fa-fast-backward" aria-hidden="true"></i></button>
+</span>

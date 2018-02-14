@@ -31,6 +31,7 @@ export class InvoiceDetailsComponent {
     private invoiceId: string;
     private selectedUbn: string;
     private selectedCompany: Client;
+    clientUbns: string[] = [];
     private selectedInvoiceRuleId: number;
     private standardGeneralInvoiceRuleOptions: InvoiceRule[] = [];
     private standardAnimalHealthInvoiceRuleOptions: InvoiceRule[] = [];
@@ -65,6 +66,7 @@ export class InvoiceDetailsComponent {
                         this.invoice = res.result;
                         this.invoice.invoice_rules = res.result['invoice_rules'];
 											  this.selectedCompany = this.invoice.company;
+												this.updateClientUbns();
 											  this.selectedUbn = this.invoice.ubn;
                         this.doVATCalculations();
                     },
@@ -85,6 +87,7 @@ export class InvoiceDetailsComponent {
                             this.invoice = res.result;
                             this.invoice.invoice_number = res.result['invoice_number'];
 													  this.selectedCompany = this.invoice.company;
+													  this.updateClientUbns();
 													  this.selectedUbn = this.invoice.ubn;
                         },
                           error => {
@@ -101,6 +104,7 @@ export class InvoiceDetailsComponent {
                         this.invoice = res.result;
                         this.senderDetails = this.invoice['sender_details'];
 											  this.selectedCompany = this.invoice.company;
+												this.updateClientUbns();
 											  this.invoice.sender_details = this.senderDetails;
 											  this.selectedUbn = this.invoice.ubn;
                         this.invoice.invoice_rules = res.result['invoice_rules'];
@@ -299,6 +303,7 @@ export class InvoiceDetailsComponent {
         }
 
         this.setInvoiceUbn();
+        this.updateClientUbns();
     }
 
     setInvoiceUbn() {
@@ -327,6 +332,24 @@ export class InvoiceDetailsComponent {
                     alert(this.nsfo.getErrorMessage(error));
                   }
             );
+    }
+
+    updateClientUbns() {
+			this.clientUbns = [];
+
+			if (this.selectedCompany == null
+        || this.selectedCompany.locations == null
+        || this.selectedCompany.locations.length === 0) {
+        return;
+      }
+
+			for(let location of this.selectedCompany.locations) {
+			  if (typeof location === 'string') {
+			    this.clientUbns.push(location);
+        } else {
+			    this.clientUbns.push(location.ubn);
+        }
+			}
     }
 
     private sendInvoiceToClient() {
@@ -402,5 +425,21 @@ export class InvoiceDetailsComponent {
 
     private navigateTo(url: string) {
         this.router.navigate([url]);
+    }
+
+    areSenderDetailsComplete(): boolean {
+			return this.senderDetails != null &&
+        this.senderDetails.id != null &&
+        this.senderDetails.iban != null &&
+        this.senderDetails.chamber_of_commerce_number != null &&
+        this.senderDetails.vat_number != null &&
+        this.senderDetails.payment_deadline_in_days != null &&
+        this.senderDetails.name != null &&
+        this.senderDetails.address != null &&
+        this.senderDetails.address.street_name != null &&
+        this.senderDetails.address.address_number != null &&
+        this.senderDetails.address.postal_code != null &&
+        this.senderDetails.address.city != null
+      ;
     }
 }

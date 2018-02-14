@@ -29,7 +29,7 @@
                     title="{{'SELECT LOCATION' | translate}}"
             >
                 <option [value]=null>{{'NONE' | translate}}</option>
-                <option *ngFor="let ubn of selectedCompany.locations" [value]="ubn">{{ubn}}</option>
+                <option *ngFor="let ubn of clientUbns" [value]="ubn">{{ubn}}</option>
             </select>
         </div>
     </div>
