@@ -67,7 +67,11 @@ export class InvoiceDetailsComponent {
 											  this.selectedCompany = this.invoice.company;
 											  this.selectedUbn = this.invoice.ubn;
                         this.doVATCalculations();
-                    });
+                    },
+											error => {
+												alert(this.nsfo.getErrorMessage(error));
+											}
+                    );
             }
 
             if(this.pageMode == 'new') {
@@ -82,7 +86,10 @@ export class InvoiceDetailsComponent {
                             this.invoice.invoice_number = res.result['invoice_number'];
 													  this.selectedCompany = this.invoice.company;
 													  this.selectedUbn = this.invoice.ubn;
-                        }
+                        },
+                          error => {
+                            alert(this.nsfo.getErrorMessage(error));
+                          }
                     );
             }
 
@@ -98,7 +105,11 @@ export class InvoiceDetailsComponent {
 											  this.selectedUbn = this.invoice.ubn;
                         this.invoice.invoice_rules = res.result['invoice_rules'];
                         this.doVATCalculations();
-                    });
+                        },
+                          error => {
+                            alert(this.nsfo.getErrorMessage(error));
+                          }
+											);
                 this.onlyView = true;
             }
         });
@@ -109,7 +120,10 @@ export class InvoiceDetailsComponent {
             .subscribe(
                 res => {
                     this.standardGeneralInvoiceRuleOptions = <InvoiceRule[]> res.result;
-                }
+                },
+                  error => {
+                    alert(this.nsfo.getErrorMessage(error));
+                  }
             )
     }
 
@@ -118,7 +132,10 @@ export class InvoiceDetailsComponent {
             .subscribe(
                 res => {
                     this.standardAnimalHealthInvoiceRuleOptions = <InvoiceRule[]> res.result;
-                }
+                },
+                  error => {
+                    alert(this.nsfo.getErrorMessage(error));
+                  }
             )
     }
     
@@ -209,7 +226,10 @@ export class InvoiceDetailsComponent {
                     }
                     this.invoice.invoice_rules.push(res.result);
                     this.doVATCalculations();
-                }
+                },
+                  error => {
+                    alert(this.nsfo.getErrorMessage(error));
+                  }
             );
     }
 
@@ -222,7 +242,10 @@ export class InvoiceDetailsComponent {
             .doDeleteRequest(this.nsfo.URI_INVOICE + "/" + this.invoice.id + "/invoice-rules" + "/" + id.toString(), "")
             .subscribe(
                 res => {
-                }
+                },
+                  error => {
+                    alert(this.nsfo.getErrorMessage(error));
+                  }
             );
     }
 
@@ -299,7 +322,10 @@ export class InvoiceDetailsComponent {
                         address = res.result.address;
                         this.senderDetails.address = address;
                     }
-                }
+                },
+                  error => {
+                    alert(this.nsfo.getErrorMessage(error));
+                  }
             );
     }
 
@@ -312,7 +338,10 @@ export class InvoiceDetailsComponent {
                 .subscribe(
                     res => {
                         this.navigateTo("/invoice");
-                    }
+                    },
+                      error => {
+                        alert(this.nsfo.getErrorMessage(error));
+                      }
                 );
         }
         else {
@@ -320,7 +349,10 @@ export class InvoiceDetailsComponent {
                 .subscribe(
                     res => {
                         this.navigateTo("/invoice");
-                    }
+                    },
+                      error => {
+                        alert(this.nsfo.getErrorMessage(error));
+                      }
                 );
         }
     }
@@ -337,6 +369,9 @@ export class InvoiceDetailsComponent {
                 .subscribe(
                     res => {
                         this.navigateTo("/invoice");
+                    },
+                  error => {
+                        alert(this.nsfo.getErrorMessage(error));
                     }
                 );
         }
@@ -345,7 +380,10 @@ export class InvoiceDetailsComponent {
                 .subscribe(
                     res => {
                         this.navigateTo("/invoice");
-                    }
+                    },
+                      error => {
+                        alert(this.nsfo.getErrorMessage(error));
+                      }
                 );
         }
     }
@@ -355,7 +393,10 @@ export class InvoiceDetailsComponent {
             .subscribe(
                 res => {
                     this.navigateTo("/invoice");
-                }
+                },
+                  error => {
+                    alert(this.nsfo.getErrorMessage(error));
+                  }
             )
     }
 

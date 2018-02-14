@@ -614,5 +614,6 @@
   "COUNTRY": "Land",
   "MISSING": "Ontbreekt",
   "NONE": "Geen",
-  "CATEGORY": "Categorie"
+  "CATEGORY": "Categorie",
+  "SENDER DETAILS ARE MISSING": "NSFO Facturatiegegevens ontbreken"
 }

@@ -3,6 +3,7 @@ import { Http, Headers, Response } from '@angular/http';
 import { QueryParam } from '../../../main/client/client.model';
 
 import _ = require("lodash");
+import { TranslateService } from 'ng2-translate';
 
 @Injectable()
 export class NSFOService {
@@ -68,7 +69,7 @@ export class NSFOService {
 
 		countryCodeList = [];
 
-    constructor(private http:Http) {
+    constructor(private http:Http, private translate: TranslateService) {
 				this.doGetCountryCodeList(); // if in OnInit it is loaded too late
 		}
 
@@ -143,9 +144,9 @@ export class NSFOService {
 
     public getErrorMessage(err: Response): string {
 			if (err.status !== 500) {
-				return err.json().result.message;
+				return this.translate.instant(err.json().result.message);
 			} else {
-				return "SOMETHING WENT WRONG. TRY ANOTHER TIME."
+				return this.translate.instant("SOMETHING WENT WRONG. TRY ANOTHER TIME.");
 			}
     }
 }
