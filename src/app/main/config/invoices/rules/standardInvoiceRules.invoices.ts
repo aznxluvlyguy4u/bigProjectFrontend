@@ -2,7 +2,7 @@ import _ = require("lodash");
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {Component} from "@angular/core";
 import {ROUTER_DIRECTIVES} from "@angular/router";
-import {InvoiceRuleTemplate} from "../../config.model";
+import {InvoiceRule} from "../../config.model";
 import {FormGroup, FormBuilder, REACTIVE_FORM_DIRECTIVES, Validators} from "@angular/forms";
 import {NSFOService} from "../../../../global/services/nsfo/nsfo.service";
 
@@ -13,11 +13,11 @@ import {NSFOService} from "../../../../global/services/nsfo/nsfo.service";
 })
 
 export class InvoicesRuleTemplatesComponent {
-    private rules: InvoiceRuleTemplate[] = [];
-    private generalRules: InvoiceRuleTemplate[] = [];
-    private animalHealthRules: InvoiceRuleTemplate[] = [];
-    private selectedRule: InvoiceRuleTemplate = new InvoiceRuleTemplate();
-    private selectedRuleTemp: InvoiceRuleTemplate;
+    private rules: InvoiceRule[] = [];
+    private generalRules: InvoiceRule[] = [];
+    private animalHealthRules: InvoiceRule[] = [];
+    private selectedRule: InvoiceRule = new InvoiceRule();
+    private selectedRuleTemp: InvoiceRule;
     private displayModal: string = 'none';
     private isModalEditMode: boolean = false;
     private isValidForm: boolean = true;
@@ -36,7 +36,7 @@ export class InvoicesRuleTemplatesComponent {
 
     private getInvoiceRules() {
         this.nsfo
-            .doGetRequest(this.nsfo.URI_INVOICE_RULE_TEMPLATE)
+            .doGetRequest(this.nsfo.URI_INVOICE_RULE + "?type=standard")
             .subscribe(
                 res => {
                     this.rules = res.result;
@@ -71,7 +71,7 @@ export class InvoicesRuleTemplatesComponent {
             this.selectedRule.sort_order = this.rules.length;
 
             this.nsfo
-                .doPostRequest(this.nsfo.URI_INVOICE_RULE_TEMPLATE , this.selectedRule)
+                .doPostRequest(this.nsfo.URI_INVOICE_RULE , this.selectedRule)
                 .subscribe(
                     res => {
                         let rule = res.result;
@@ -101,7 +101,7 @@ export class InvoicesRuleTemplatesComponent {
 
         if(this.form.valid) {
             this.nsfo
-                .doPutRequest(this.nsfo.URI_INVOICE_RULE_TEMPLATE, this.selectedRule)
+                .doPutRequest(this.nsfo.URI_INVOICE_RULE, this.selectedRule)
                 .subscribe(
                     res => {
                         switch (this.selectedRule.category) {
@@ -131,7 +131,7 @@ export class InvoicesRuleTemplatesComponent {
         }
     }
 
-    private removeInvoiceRule(rule: InvoiceRuleTemplate) {
+    private removeInvoiceRule(rule: InvoiceRule) {
         switch (rule.category) {
             case InvoiceCategory.General:
                 _.remove(this.generalRules, rule);
@@ -141,24 +141,16 @@ export class InvoicesRuleTemplatesComponent {
                 _.remove(this.animalHealthRules, rule);
                 break;
         }
-        this.nsfo.doDeleteRequest(this.nsfo.URI_INVOICE_RULE_TEMPLATE + "/" + rule.id, rule)
+        this.nsfo.doDeleteRequest(this.nsfo.URI_INVOICE_RULE + "/" + rule.id, rule)
             .subscribe();
     }
     
-    private openModal(isEditMode: boolean = false, category: string, rule: InvoiceRuleTemplate): void {
+    private openModal(isEditMode: boolean = false, category: string, rule: InvoiceRule): void {
         this.isModalEditMode = isEditMode;
         this.displayModal = 'block';
 
         if(!isEditMode) {
-            switch (category) {
-                case InvoiceCategory.General:
-                    this.selectedRule.category = category;
-                    break;
-
-                case InvoiceCategory.AnimalHealth:
-                    this.selectedRule.category = category;
-                    break;
-            }
+            this.selectedRule.category = category;
         }
 
         if(isEditMode) {
@@ -169,7 +161,7 @@ export class InvoicesRuleTemplatesComponent {
 
     private closeModal(): void {
         this.displayModal = 'none';
-        this.selectedRule = new InvoiceRuleTemplate();
+        this.selectedRule = new InvoiceRule();
         this.resetValidation();
     }
 
@@ -177,6 +169,6 @@ export class InvoicesRuleTemplatesComponent {
 }
 
 enum InvoiceCategory {
-    General = 'GENERAL',
-    AnimalHealth = 'ANIMAL HEALTH'
+    General = "GENERAL",
+    AnimalHealth = "ANIMAL HEALTH"
 }
