@@ -32,11 +32,10 @@ export class InvoiceDetailsComponent {
     private pageTitle: string;
     private pageMode: string;
     private invoiceId: string;
-    private selectedTemplate: InvoiceRuleTemplate = new InvoiceRuleTemplate();
     private selectedCompany: Company = new Company();
     private selectedLocation: Local_Location = new Local_Location();
     private selectedInvoiceRuleId: number;
-    private invoiceRuleTemplatesOptions: InvoiceRuleTemplate[] = [];
+    private standardInvoiceRuleOptions: InvoiceRule[] = [];
     private temporaryRule: InvoiceRuleTemplate = new InvoiceRuleTemplate();
     private companyName: string = "";
     private invoice: Invoice = new Invoice;
@@ -101,42 +100,39 @@ export class InvoiceDetailsComponent {
     }
 
     private getInvoiceRulesOptions(): void {
-        this.nsfo.doGetRequest(this.nsfo.URI_INVOICE_RULE_TEMPLATE + "?category=GENERAL")
+        this.nsfo.doGetRequest(this.nsfo.URI_INVOICE_RULE + "?category=GENERAL&type=standard")
             .subscribe(
                 res => {
-                    this.invoiceRuleTemplatesOptions = <InvoiceRuleTemplate[]> res.result;
+                    this.standardInvoiceRuleOptions = <InvoiceRule[]> res.result;
                 }
             )
     }
     
-    private addInvoiceRule(): void {
-            let temporaryInvoiceRule = new InvoiceRule();
-            temporaryInvoiceRule.type = "custom";
-            temporaryInvoiceRule.category = "GENERAL";
-            temporaryInvoiceRule.sort_order = 1;
-            temporaryInvoiceRule.vat_percentage_rate = this.temporaryRule.vat_percentage_rate;
-            temporaryInvoiceRule.price_excl_vat = this.temporaryRule.price_excl_vat;
-            temporaryInvoiceRule.description = this.temporaryRule.description;
-            this.addCustomInvoiceRule(temporaryInvoiceRule);
-            this.temporaryRule = new InvoiceRuleTemplate();
-    }
-
-    private addInvoiceRuleTemplate(): void {
+    private addInvoiceRule(type): void {
         let rule = new InvoiceRule();
-        let selectedId = this.selectedInvoiceRuleId;
-        if (this.selectedInvoiceRuleId) {
-            let invoiceRuleTemplate = _.find(this.invoiceRuleTemplatesOptions, function(o) {
-                return o.id == selectedId;
-            });
-            rule.description = invoiceRuleTemplate.description;
-            rule.vat_percentage_rate = invoiceRuleTemplate.vat_percentage_rate;
-            rule.price_excl_vat = invoiceRuleTemplate.price_excl_vat;
-            rule.type = "custom";
+        rule.type = "custom";
+        rule.sort_order = 1;
+        if (type == "standard") {
+            let selectedId = this.selectedInvoiceRuleId;
+            if (this.selectedInvoiceRuleId) {
+                let standardInvoiceRule = _.find(this.standardInvoiceRuleOptions, function (o) {
+                    return o.id == selectedId;
+                });
+                rule.description = standardInvoiceRule.description;
+                rule.vat_percentage_rate = standardInvoiceRule.vat_percentage_rate;
+                rule.price_excl_vat = standardInvoiceRule.price_excl_vat;
+                rule.category = standardInvoiceRule.category;
+                this.addCustomInvoiceRule(rule);
+            }
+        } else {
             rule.category = "GENERAL";
-            rule.sort_order = 0;
+            rule.sort_order = 1;
+            rule.vat_percentage_rate = this.temporaryRule.vat_percentage_rate;
+            rule.price_excl_vat = this.temporaryRule.price_excl_vat;
+            rule.description = this.temporaryRule.description;
             this.addCustomInvoiceRule(rule);
-            this.doVATCalculations();
         }
+        this.doVATCalculations();
     }
 
     private removeInvoiceRule(invoiceRule: InvoiceRule): void {

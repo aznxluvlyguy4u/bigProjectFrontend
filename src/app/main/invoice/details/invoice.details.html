@@ -155,14 +155,14 @@
                 {{ 'STANDARD INVOICE RULE' | translate }}
                 <select [(ngModel)]="selectedInvoiceRuleId">
                     <option value="">--</option>
-                    <option *ngFor="let rule of invoiceRuleTemplatesOptions" value="{{ rule.id }}">{{ rule.description }}</option>
+                    <option *ngFor="let rule of standardInvoiceRuleOptions" value="{{ rule.id }}">{{ rule.description }}</option>
                 </select>
             </label>
         </div>
         <div class="large-2 columns end">
             <label>
                 &nbsp;
-                <button (click)="addInvoiceRuleTemplate()" class="small primary button expanded">
+                <button (click)="addInvoiceRule('standard')" class="small primary button expanded">
                     <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
                     {{ 'ADD' | translate }}
                 </button>
@@ -202,7 +202,7 @@
         <div class="large-2 columns end">
             <label>
                 &nbsp;
-                <button [disabled]="!temporaryRule" (click)="addInvoiceRule()" class="small primary button expanded">
+                <button [disabled]="!temporaryRule" (click)="addInvoiceRule('custom')" class="small primary button expanded">
                     <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
                     {{ 'ADD' | translate }}
                 </button>
