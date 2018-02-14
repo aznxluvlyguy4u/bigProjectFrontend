@@ -8,7 +8,7 @@ import {NSFOService} from "../../../../global/services/nsfo/nsfo.service";
 
 @Component({
     directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES],
-    template: require('./invoicesRuleTemplates.invoices.html'),
+    template: require('./standardInvoiceRules.html'),
     pipes: [TranslatePipe]
 })
 
