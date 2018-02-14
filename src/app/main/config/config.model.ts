@@ -1,15 +1,28 @@
+import { Address } from '../client/client.model';
+
 export class Choice {
     public code: string;
     public name: string;
     public order: string;
 }
 
-export class Admin {
-    public person_id: number;
-    public email_address: string;
-    public first_name: string;
-    public last_name: string;
+export class Person {
+	public person_id: number;
+	public prefix: string;
+	public first_name: string;
+	public last_name: string;
+	public email_address: string;
+	public is_active: boolean;
+	public type: string;
+}
+
+export class Admin extends Person {
     public access_level: string;
+}
+
+export class VwaEmployee extends Person {
+	public last_login_date: string;
+	public invitation_date: string;
 }
 
 export class HealthLetter {
@@ -39,24 +52,4 @@ export class InvoiceSenderDetails {
     public iban: string;
     public payment_deadline_in_days: number;
     public is_deleted: boolean;
-}
-
-export class Address {
-    public street_name: string;
-    public address_number: string;
-    public address_number_suffix: string;
-    public postal_code: string;
-    public city: string;
-    public state: string;
-    public country: string;
-}
-
-export class VwaEmployee {
-    public person_id: number;
-    public email_address: string;
-    public first_name: string;
-    public last_name: string;
-    public is_active: boolean;
-    public last_login_date: string;
-    public invitation_date: string;
 }

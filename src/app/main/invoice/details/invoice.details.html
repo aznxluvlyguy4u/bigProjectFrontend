@@ -4,64 +4,33 @@
     </div>
 
     <div *ngIf="!onlyView" class="row client-selection">
-        <div class="large-12 columns">
+        <div class="large-6 columns">
             <label>
                 {{ 'FIND COMPANY' | translate }}
             </label>
 
-            <app-client-selector
+            <app-company-selector
+                    [disabled]="false"
+                    [selectedClient]="selectedCompany"
+                    (selectedClientChanged)="selectedCompany = $event; setInvoiceRecipient()"
+            ></app-company-selector>
 
-            ></app-client-selector>
+        </div>
 
-            <div class="large-4">
-                <input type="text" [(ngModel)]="companyName">
-            </div>
-            <div class="large-2">
-                <label>
-                    <button (click)="searchCompanies()" class="small primary button expanded">
-                        {{ 'SEARCH COMPANIES' | translate }}
-                    </button>
-                </label>
-            </div>
-        </div>
-        <div *ngIf="showCompanies" class="large-12 columns">
-            <label>
-                {{'COMPANY SELECTION' | translate }}
-            </label>
-            <div class="large-4">
-                <select [(ngModel)]="selectedCompany.company_id" name="" id="companies">
-                <option *ngFor="let company of companies" value="{{company.company_id}}">{{company.company_name}}</option>
-                </select>
-            </div>
-            <div class="large-2 end">
-                <label *ngIf="showCompanies">
-                    <button (click)="getCompanyLocations()" class="small primary button expanded">
-                        {{ 'SELECT COMPANY' | translate }}
-                    </button>
-                </label>
-            </div>
-        </div>
-        <div *ngIf="showLocations" class="large-12 columns">
+        <div *ngIf="selectedCompany != null" class="large-6 columns">
             <label>
                 {{'LOCATION SELECTION' | translate }}
             </label>
-            <div class="large-4">
-                <select name="" [(ngModel)]="selectedLocation.ubn" id="locations">
-                    <option value="undefined" disabled>
-                        {{'SELECT LOCATION' | translate}}
-                    </option>
-                    <option *ngFor="let location of locations" value="{{location.ubn}}">{{location['address'].city}} -
-                        {{location['address'].street_name}} {{location['address'].address_number}} - {{location.ubn}}
-                    </option>
-                </select>
-            </div>
-            <div class="large-2 end">
-                <label>
-                    <button (click)="setInvoiceRecipient()" class="small primary button expanded">
-                        {{ 'CONFIRM SELECTION' | translate }}
-                    </button>
-                </label>
-            </div>
+            <select
+                    name=""
+                    [(ngModel)]="selectedUbn"
+                    id="locations"
+                    (click)="setInvoiceUbn()"
+                    title="{{'SELECT LOCATION' | translate}}"
+            >
+                <option [value]=null>{{'NONE' | translate}}</option>
+                <option *ngFor="let ubn of selectedCompany.locations" [value]="ubn">{{ubn}}</option>
+            </select>
         </div>
     </div>
 <hr>
@@ -79,7 +48,7 @@
                     </td>
                     <td class="large-6 columns">
                         <span>
-                            {{ invoice.ubn }}
+                            {{ invoice.ubn == null ? '-' : invoice.ubn }}
                         </span>
                     </td>
                 </tr>

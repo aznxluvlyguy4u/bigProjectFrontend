@@ -2,9 +2,9 @@ import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {Component} from "@angular/core";
 import {ROUTER_DIRECTIVES} from "@angular/router";
 import {InvoiceSenderDetails} from "../../config.model";
-import {Address} from "../../config.model";
 import {FormGroup, FormBuilder, REACTIVE_FORM_DIRECTIVES, Validators} from "@angular/forms";
 import {NSFOService} from "../../../../global/services/nsfo/nsfo.service";
+import { Address } from '../../../client/client.model';
 
 @Component({
     directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES],

@@ -1,35 +1,34 @@
-<span>
-    <button
-            class="button primary expanded main-button"
-            [disabled]="disabled"
-            (click)="openModal()"
-            style="white-space: nowrap; width: 7.3rem"
-    >
-        {{ buttonText() | translate }}
-    </button>
-</span>
+<button
+        class="button primary expanded"
+        [disabled]="disabled"
+        (click)="openModal()"
+        [title]="clientName()"
+        style="white-space: nowrap; width: 7.3rem"
+>
+    {{ buttonText() | translate }}
+</button>
 
 <div class="reveal-overlay" [ngStyle]="{'display': displayModal}">
     <div class="large reveal" [ngStyle]="{'display': displayModal}">
         <div class="modal-header">
 
             <div class="row table-options-container">
-                <div class="large-6 columns">
+                <div class="large-8 columns">
                     <h4>{{ 'SELECT COMPANY' | translate }}</h4>
                 </div>
                 <div class="large-2 columns">
-                    <span class="text-center">
+                    <span class="pull-right">
                         <button
                                 class="tiny success button"
-                                [disabled]="isClientsEmpty() || selectedClient == null || selectedLocation == null"
+                                [disabled]="isClientsEmpty() || selectedClient == null"
                                 (click)="clickOK()"
                         >{{ 'USE SELECTION' | translate}}</button>
                     </span>
                 </div>
-                <div class="large-4 columns">
+                <div class="large-2 columns">
                     <span class="pull-right">
                         <button
-                                  class="tiny alert button"
+                                class="tiny alert button"
                                 [disabled]="isSearchingParent"
                                 (click)="clickCancel();"
                         >{{ 'CANCEL' | translate}}</button>
@@ -46,40 +45,49 @@
                     *ngIf="selectedClient != null"
             >
                 <div class="row table-options-container">
-                    <div class="large-12 columns">
+                    <div class="large-10 columns">
                         <h5>
                             <span>{{ 'SELECTED COMPANY' | translate }}: {{selectedClient.company_name}}</span>
                         </h5>
+                    </div>
+                    <div class="large-2 columns">
+                        <span class="pull-right">
+                            <button
+                                    class="button primary tiny"
+                                    [disabled]="selectedClient == null"
+                                    (click)="navigateToEditSelectedClient()"
+                            >
+                                {{ 'EDIT' | translate }} <i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i>
+                            </button>
+                        </span>
                     </div>
                 </div>
 
                 <div class="row table-options-container">
                     <div class="large-6 columns">
                         <h5>
-                            <span *ngIf="hasSelectedLocation()">. {{ 'SELECTED LOCATION' | translate }}: {{selectedLocation['address'].city}} -
-                                    {{selectedLocation['address'].street_name}} {{selectedLocation['address'].address_number}} - {{selectedLocation.ubn}}</span>
+                            <span *ngIf="hasSelectedClientWithBillingAddress()">{{ 'BILLING ADDRESS' | translate }}: {{ billingAddressText() }}</span>
                         </h5>
                     </div>
 
-                    <div class="large-6 columns">
-                        <ng-template *ngIf="hasLocations()">
-                            <label>
-                                {{'LOCATION SELECTION' | translate }}
-                            </label>
-                            <select
-                                    name="selected-location"
-                                    [(ngModel)]="selectedLocation"
-                            >
-                                <option value="undefined" disabled>
-                                    {{'SELECT LOCATION' | translate}}
-                                </option>
-                                <option *ngFor="let location of selectedClient.locations" value="{{location.ubn}}">{{location['address'].city}} -
-                                    {{location['address'].street_name}} {{location['address'].address_number}} - {{location.ubn}}
-                                </option>
-                            </select>
-                        </ng-template>
-                        <ng-template *ngIf="!hasLocations()">
-                            <span>{{ 'NO LOCATIONS AVAILABLE' | translate }}</span>
+                    <div class="large-6 columns input-error-msg">
+                        <ng-template *ngIf="selectedClient != null">
+                            <p *ngIf="selectedClient.vat_number == null">{{ 'VAT NUMBER' | translate }} {{ 'MISSING' | translate | lowercase }}</p>
+
+                            <ng-template *ngIf="!hasSelectedClientWithBillingAddress()">
+
+                                <ng-template *ngIf="selectedClient.billing_address == null">
+                                    <p>{{ 'BILLING ADDRESS IS MISSING' |  translate }}</p>
+                                </ng-template>
+
+                                <ng-template *ngIf="selectedClient.billing_address != null">
+                                    <p *ngIf="selectedClient.billing_address.street_name == null">{{ 'STREET NAME' | translate }} {{ 'MISSING' | translate | lowercase }}</p>
+                                    <p *ngIf="selectedClient.billing_address.address_number == null">{{ 'ADDRESS NUMBER' | translate }} {{ 'MISSING' | translate | lowercase }}</p>
+                                    <p *ngIf="selectedClient.billing_address.postal_code == null">{{ 'POSTAL CODE' | translate }} {{ 'MISSING' | translate | lowercase }}</p>
+                                    <p *ngIf="selectedClient.billing_address.city == null">{{ 'CITY' | translate }} {{ 'MISSING' | translate | lowercase }}</p>
+                                </ng-template>
+
+                            </ng-template>
                         </ng-template>
                     </div>
                 </div>
@@ -218,7 +226,7 @@
             <span class="pull-left">
                 <button
                         class="tiny primary button"
-                        [disabled]="isClientsEmpty() || selectedClient == null || selectedLocation == null"
+                        [disabled]="isClientsEmpty() || selectedClient == null"
                         (click)="clickOK()"
                 >{{ 'USE SELECTION' | translate}}</button>
             </span>
