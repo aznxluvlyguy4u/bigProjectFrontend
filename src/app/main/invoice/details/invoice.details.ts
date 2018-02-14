@@ -29,12 +29,12 @@ export class InvoiceDetailsComponent {
     private pageTitle: string;
     private pageMode: string;
     private invoiceId: string;
-    private selectedTemplate: InvoiceRuleTemplate = new InvoiceRuleTemplate();
-    private selectedCompany: Client;
     private selectedUbn: string;
+    private selectedCompany: Client;
     private selectedInvoiceRuleId: number;
-    private invoiceRuleTemplatesOptions: InvoiceRuleTemplate[] = [];
-    private temporaryRule: InvoiceRuleTemplate = new InvoiceRuleTemplate();
+    private standardGeneralInvoiceRuleOptions: InvoiceRule[] = [];
+    private standardAnimalHealthInvoiceRuleOptions: InvoiceRule[] = [];
+    private temporaryRule: InvoiceRule = new InvoiceRule();
     private invoice: Invoice = new Invoice;
     private form: FormGroup;
     private onlyView: boolean = false;
@@ -45,13 +45,15 @@ export class InvoiceDetailsComponent {
     constructor(private fb: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute, private nsfo: NSFOService) {
         this.form = fb.group({
             description: ['', Validators.required],
+            category: ['', Validators.required],
             price_excl_vat: ['', Validators.required],
             vat_percentage_rate: ['', Validators.required],
         });
     }
 
     ngOnInit() {
-        this.getInvoiceRulesOptions();
+        this.getGeneralInvoiceRulesOptions();
+        this.getAnimalHealthInvoiceRulesOptions();
         this.getSenderDetails();
         this.dataSub = this.activatedRoute.params.subscribe(params => {
             this.pageMode = params['mode'];
@@ -102,43 +104,54 @@ export class InvoiceDetailsComponent {
         });
     }
 
-    private getInvoiceRulesOptions(): void {
-        this.nsfo.doGetRequest(this.nsfo.URI_INVOICE_RULE_TEMPLATE + "?category=GENERAL")
+    private getGeneralInvoiceRulesOptions(): void {
+        this.nsfo.doGetRequest(this.nsfo.URI_INVOICE_RULE + "?category=GENERAL&type=standard")
             .subscribe(
                 res => {
-                    this.invoiceRuleTemplatesOptions = <InvoiceRuleTemplate[]> res.result;
+                    this.standardGeneralInvoiceRuleOptions = <InvoiceRule[]> res.result;
+                }
+            )
+    }
+
+    private getAnimalHealthInvoiceRulesOptions(): void {
+        this.nsfo.doGetRequest(this.nsfo.URI_INVOICE_RULE + "?category=ANIMAL HEALTH&type=standard")
+            .subscribe(
+                res => {
+                    this.standardAnimalHealthInvoiceRuleOptions = <InvoiceRule[]> res.result;
                 }
             )
     }
     
-    private addInvoiceRule(): void {
-            let temporaryInvoiceRule = new InvoiceRule();
-            temporaryInvoiceRule.type = "custom";
-            temporaryInvoiceRule.category = "GENERAL";
-            temporaryInvoiceRule.sort_order = 1;
-            temporaryInvoiceRule.vat_percentage_rate = this.temporaryRule.vat_percentage_rate;
-            temporaryInvoiceRule.price_excl_vat = this.temporaryRule.price_excl_vat;
-            temporaryInvoiceRule.description = this.temporaryRule.description;
-            this.addCustomInvoiceRule(temporaryInvoiceRule);
-            this.temporaryRule = new InvoiceRuleTemplate();
-    }
-
-    private addInvoiceRuleTemplate(): void {
+    private addInvoiceRule(type, category): void {
         let rule = new InvoiceRule();
-        let selectedId = this.selectedInvoiceRuleId;
-        if (this.selectedInvoiceRuleId) {
-            let invoiceRuleTemplate = _.find(this.invoiceRuleTemplatesOptions, function(o) {
-                return o.id == selectedId;
-            });
-            rule.description = invoiceRuleTemplate.description;
-            rule.vat_percentage_rate = invoiceRuleTemplate.vat_percentage_rate;
-            rule.price_excl_vat = invoiceRuleTemplate.price_excl_vat;
-            rule.type = "custom";
-            rule.category = "GENERAL";
-            rule.sort_order = 0;
-            this.addCustomInvoiceRule(rule);
-            this.doVATCalculations();
+        rule.type = "custom";
+        rule.sort_order = 1;
+        if (type == "standard") {
+            let selectedId = this.selectedInvoiceRuleId;
+            if (this.selectedInvoiceRuleId) {
+                let standardInvoiceRule = _.find(this.standardGeneralInvoiceRuleOptions, function (o) {
+                    return o.id == selectedId;
+                });
+                if (category == "ANIMAL HEALTH") {
+                    standardInvoiceRule = _.find(this.standardAnimalHealthInvoiceRuleOptions, function (o) {
+                        return o.id == selectedId;
+                    });
+                }
+                rule.description = standardInvoiceRule.description;
+                rule.vat_percentage_rate = standardInvoiceRule.vat_percentage_rate;
+                rule.price_excl_vat = standardInvoiceRule.price_excl_vat;
+                rule.category = standardInvoiceRule.category;
+                this.addCustomInvoiceRule(rule, type);
+            }
+        } else {
+            rule.sort_order = 1;
+            rule.category = this.temporaryRule.category;
+            rule.vat_percentage_rate = this.temporaryRule.vat_percentage_rate;
+            rule.price_excl_vat = this.temporaryRule.price_excl_vat;
+            rule.description = this.temporaryRule.description;
+            this.addCustomInvoiceRule(rule, type);
         }
+        this.doVATCalculations();
     }
 
     private removeInvoiceRule(invoiceRule: InvoiceRule): void {
@@ -186,11 +199,14 @@ export class InvoiceDetailsComponent {
         this.invoice.total = this.totalInclVAT;
     }
 
-    private addCustomInvoiceRule(newRule: InvoiceRule){
+    private addCustomInvoiceRule(newRule: InvoiceRule, type: String){
         this.nsfo
             .doPostRequest(this.nsfo.URI_INVOICE+ "/" + this.invoice.id + "/invoice-rules", newRule)
             .subscribe(
                 res => {
+                    if (type !== "standard") {
+                        this.temporaryRule = new InvoiceRule();
+                    }
                     this.invoice.invoice_rules.push(res.result);
                     this.doVATCalculations();
                 }

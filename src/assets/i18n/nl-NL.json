@@ -201,7 +201,9 @@
   "SELECT": "Selecteren",
   "YOUR INFORMATION": "Uw gegevens",
   "INVOICE RULE": "Factuurregel",
-  "STANDARD INVOICE RULE": "Standaard factuurregels",
+  "GENERAL INVOICE RULE": "Algemene factuurregels",
+  "ANIMAL HEALTH INVOICE RULE": "Diergezondheid factuurregels",
+  "GENERAL": "Algemeen",
   "CUSTOM INVOICE RULE": "Speciale factuurregels",
   "DESCRIPTION": "Omschrijving",
   "VAT RATE": "BTW tarief",
@@ -606,10 +608,11 @@
   "INVALID INPUT": "Onjuiste invoer",
   "ULNS WITHOUT FOUND ANIMALS": "ULNs zonder gevonden dieren",
   "STNS WITHOUT FOUND ANIMALS": "STNs zonder gevonden dieren",
-  "USE BATCH EDIT AND FILTER TO EDIT LOCATION INFO": "Om een enkele (fokker)locatie aan te passen, zet de batch edit optie aan en filter de desgewenste UBN eruit",
+  "USE BATCH EDIT AND FILTER TO EDIT LOCATION INFO": "Om een enkele (fokker)locatie aan te passen, zereturn ResultUtil::successResult($id);t de batch edit optie aan en filter de desgewenste UBN eruit",
   "SELECTED COMPANY": "Geselecteerd bedrijf",
   "ADDRESS NUMBER": "Huisnummer",
   "COUNTRY": "Land",
   "MISSING": "Ontbreekt",
-  "NONE": "Geen"
+  "NONE": "Geen",
+  "CATEGORY": "Categorie"
 }

@@ -126,17 +126,31 @@
     <div *ngIf="!onlyView" class="row invoice-rules">
         <div class="large-6 columns">
             <label>
-                {{ 'STANDARD INVOICE RULE' | translate }}
+                {{ 'GENERAL INVOICE RULE' | translate }}
                 <select [(ngModel)]="selectedInvoiceRuleId">
                     <option value="">--</option>
-                    <option *ngFor="let rule of invoiceRuleTemplatesOptions" value="{{ rule.id }}">{{ rule.description }}</option>
+                    <option *ngFor="let rule of standardGeneralInvoiceRuleOptions" value="{{ rule.id }}">{{ rule.description }}</option>
+                </select>
+            </label>
+            <label>
+                {{ 'ANIMAL HEALTH INVOICE RULE' | translate }}
+                <select [(ngModel)]="selectedInvoiceRuleId">
+                    <option value="">--</option>
+                    <option *ngFor="let rule of standardAnimalHealthInvoiceRuleOptions" value="{{ rule.id }}">{{ rule.description }}</option>
                 </select>
             </label>
         </div>
         <div class="large-2 columns end">
             <label>
                 &nbsp;
-                <button (click)="addInvoiceRuleTemplate()" class="small primary button expanded">
+                <button (click)="addInvoiceRule('standard', 'GENERAL')" class="small primary button expanded">
+                    <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
+                    {{ 'ADD' | translate }}
+                </button>
+            </label>
+            <label>
+                &nbsp;
+                <button (click)="addInvoiceRule('standard', 'ANIMAL HEALTH')" class="small primary button expanded">
                     <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
                     {{ 'ADD' | translate }}
                 </button>
@@ -154,6 +168,15 @@
                         {{'DESCRIPTION' | translate}}
                     </label>
                     <input type="text" [(ngModel)]="temporaryRule.description" formControlName="description">
+                </div>
+                <div class="large-12">
+                    <label>
+                        {{'CATEGORY' | translate}}
+                    </label>
+                    <select type="number" [(ngModel)]="temporaryRule.category" formControlName="category">
+                        <option value="GENERAL">{{"GENERAL" | translate}}</option>
+                        <option value="ANIMAL HEALTH">{{"ANIMAL HEALTH" | translate}}</option>
+                    </select>
                 </div>
                 <div class="large-12">
                     <label>
@@ -176,7 +199,7 @@
         <div class="large-2 columns end">
             <label>
                 &nbsp;
-                <button [disabled]="!temporaryRule" (click)="addInvoiceRule()" class="small primary button expanded">
+                <button [disabled]="!temporaryRule" (click)="addInvoiceRule('custom', null)" class="small primary button expanded">
                     <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
                     {{ 'ADD' | translate }}
                 </button>
@@ -193,6 +216,9 @@
                         <td>
                             {{ 'DESCRIPTION' | translate }}
                         </td>
+                        <td>
+                            {{"CATEGORY" | translate }}
+                        </td>
                         <td class="text-right">
                             {{ 'VAT RATE' | translate }}
                         </td>
@@ -208,6 +234,9 @@
                         </td>
                         <td>
                             {{rule.description}}
+                        </td>
+                        <td>
+                           {{rule.category | translate}}
                         </td>
                         <td class="text-right">
                             {{rule.vat_percentage_rate}}%

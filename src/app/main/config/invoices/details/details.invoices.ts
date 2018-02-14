@@ -14,6 +14,7 @@ import { Address } from '../../../client/client.model';
 
 export class InvoicesNSFODetailsComponent {
     private form: FormGroup;
+    private editText;
     private invoiceSenderDetails: InvoiceSenderDetails = new InvoiceSenderDetails();
     private details: InvoiceSenderDetails[] = [];
     private senderAddress: Address = new Address();
@@ -34,6 +35,10 @@ export class InvoicesNSFODetailsComponent {
         });
     }
 
+    ngAfterViewInit() {
+        this.editText = document.getElementById("result-text");
+    }
+
     private getInvoiceSenderDetails(){
         let details = new InvoiceSenderDetails();
         this.nsfo.doGetRequest(this.nsfo.URI_INVOICE_SENDER_DETAILS).subscribe(
@@ -47,16 +52,20 @@ export class InvoicesNSFODetailsComponent {
                     this.invoiceSenderDetails = res.result;
                     this.invoiceSenderDetails.address = this.senderAddress;
                 }
-
+                
             }
         );
     }
 
     private CreateInvoiceSenderDetails(){
+            while (this.editText.firstChild) {
+                this.editText.removeChild(this.editText.firstChild);
+            }
             this.invoiceSenderDetails.address = this.senderAddress;
             this.nsfo.doPostRequest(this.nsfo.URI_INVOICE_SENDER_DETAILS , this.invoiceSenderDetails).subscribe(
                 res => {
                     this.invoiceSenderDetails = res.result;
+                    this.editText.appendChild(document.createTextNode("Uw wijzigingen zijn opgeslagen"));
                 }
             );
     }
