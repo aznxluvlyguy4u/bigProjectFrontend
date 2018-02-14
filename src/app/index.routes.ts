@@ -25,7 +25,7 @@ import {ScrapieAnnouncementComponent} from "./main/config/healthLetters/scrapie/
 import {ScrapieSupportComponent} from "./main/config/healthLetters/scrapie/support/scrapie.support";
 import {LoadingComponent} from "./loading/loading.component";
 import {ConfigInvoicesComponent} from "./main/config/invoices/invoices.component";
-import {InvoicesRuleTemplatesComponent} from "./main/config/invoices/rules/invoicesRuleTemplates.invoices";
+import {InvoicesRuleTemplatesComponent} from "./main/config/invoices/rules/standardInvoiceRules.invoices";
 import {InvoicesNSFODetailsComponent} from "./main/config/invoices/details/details.invoices";
 import {MaediVisnaAnnouncementComponent} from "./main/config/healthLetters/maediVisna/announcement/maediVisna.announcement";
 import {MaediVisnaSupportComponent} from "./main/config/healthLetters/maediVisna/support/maediVisna.support";
