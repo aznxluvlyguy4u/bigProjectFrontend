@@ -24,7 +24,6 @@ export class NSFOService {
     public URI_ADMIN_PROFILE: string = '/v1/profiles-admin';
     public URI_INVOICE = '/v1/invoices';
     public URI_INVOICE_RULE = '/v1/invoice-rules';
-    public URI_INVOICE_RULE_TEMPLATE = '/v1/invoice-rule-templates';
     public URI_INVOICE_SENDER_DETAILS = '/v1/invoice-sender-details';
 
 	  public URI_GET_COUNTRY_CODES = '/v1/countries?continent=europe';
