@@ -87,6 +87,15 @@
                 <tr class="row">
                     <td class="large-12 columns section-title">
                         {{ 'YOUR INFORMATION' | translate }}
+                        <span *ngIf="isCreateMode()"
+                                class="pull-right"
+                                title="{{ 'EDIT' | translate }}"
+                                (click)="navigateToInvoiceSenderDetailsEdit()"
+                        ><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></span>
+                        <span *ngIf="isEditMode()"
+                              class="pull-right"
+                              title="{{ 'INVOICE SENDER DETAILS EDIT ONLY ALLOWED DURING CREATE INFO' | translate }}"
+                        ><i class="fa fa-info-circle" aria-hidden="true"></i></span>
                     </td>
                 </tr>
                 <tr class="row">

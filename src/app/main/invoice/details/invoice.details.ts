@@ -58,7 +58,7 @@ export class InvoiceDetailsComponent {
         this.getSenderDetails();
         this.dataSub = this.activatedRoute.params.subscribe(params => {
             this.pageMode = params['mode'];
-            if(this.pageMode == 'edit') {
+            if(this.isEditMode()) {
                 this.pageTitle = 'EDIT INVOICE';
                 this.invoiceId = params['id'];
                 this.nsfo.doGetRequest(this.nsfo.URI_INVOICE + "/" + this.invoiceId)
@@ -76,7 +76,7 @@ export class InvoiceDetailsComponent {
                     );
             }
 
-            if(this.pageMode == 'new') {
+            if(this.isCreateMode()) {
                 this.pageTitle = 'NEW INVOICE';
                 this.invoice.status = "INCOMPLETE";
 							  this.selectedCompany = null;
@@ -96,7 +96,7 @@ export class InvoiceDetailsComponent {
                     );
             }
 
-            if (this.pageMode == "view") {
+            if (this.isViewMode()) {
                 this.pageTitle = 'VIEW INVOICE';
                 this.invoiceId = params['id'];
                 this.nsfo.doGetRequest(this.nsfo.URI_INVOICE + "/" + this.invoiceId)
@@ -118,6 +118,18 @@ export class InvoiceDetailsComponent {
             }
         });
     }
+
+    isCreateMode() {
+    	return this.pageMode == 'new';
+		}
+
+		isEditMode() {
+			return this.pageMode == 'edit';
+		}
+
+		isViewMode() {
+			return this.pageMode == 'view';
+		}
 
     private getGeneralInvoiceRulesOptions(): void {
         this.nsfo.doGetRequest(this.nsfo.URI_INVOICE_RULE + "?category=GENERAL&type=standard")
@@ -425,6 +437,10 @@ export class InvoiceDetailsComponent {
 
     private navigateTo(url: string) {
         this.router.navigate([url]);
+    }
+
+    navigateToInvoiceSenderDetailsEdit() {
+      this.navigateTo('/configuration/invoices/invoices_details');
     }
 
     areSenderDetailsComplete(): boolean {
