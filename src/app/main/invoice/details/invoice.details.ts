@@ -1,14 +1,13 @@
-var _ = require('lodash');
+import _ = require('lodash');
 import {Component} from "@angular/core";
 import {Subscription} from "rxjs/Rx";
 import {Router, ActivatedRoute, ROUTER_DIRECTIVES} from "@angular/router";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {FormGroup, FormBuilder, REACTIVE_FORM_DIRECTIVES, Validators} from "@angular/forms";
 import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
-import {
-    InvoiceRuleTemplate, Invoice, Company, Local_Location, InvoiceSenderDetails, Address,
-    InvoiceRule
-} from "../invoice.model";
+import { InvoiceRuleTemplate, Invoice, InvoiceSenderDetails, InvoiceRule } from "../invoice.model";
+import { CompanySelectorComponent } from '../../../global/components/clientselector/company-selector.component';
+import { Address, Client } from '../../client/client.model';
 
 @Component({
     selector: 'ng-select',
@@ -19,31 +18,26 @@ import {
         'multiple',
         'showSearchInputInDropdown'
     ],
-    directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES],
+    directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, CompanySelectorComponent],
     template: require('./invoice.details.html'),
     pipes: [TranslatePipe]
 })
 
 export class InvoiceDetailsComponent {
     private dataSub: Subscription;
-    private companies: Company[] = [];
-    private locations: Local_Location[] = [];
     private senderDetails: InvoiceSenderDetails = new InvoiceSenderDetails();
     private pageTitle: string;
     private pageMode: string;
-    private invoiceId: string;
-    private selectedCompany: Company = new Company();
-    private selectedLocation: Local_Location = new Local_Location();
+    private invoiceId: number;
+    private selectedUbn: string;
+    private selectedCompany: Client;
+    clientUbns: string[] = [];
     private selectedInvoiceRuleId: number;
     private standardGeneralInvoiceRuleOptions: InvoiceRule[] = [];
     private standardAnimalHealthInvoiceRuleOptions: InvoiceRule[] = [];
     private temporaryRule: InvoiceRule = new InvoiceRule();
-    private companyName: string = "";
     private invoice: Invoice = new Invoice;
     private form: FormGroup;
-    private company: FormGroup;
-    private showCompanies: boolean = false;
-    private showLocations: boolean = false;
     private onlyView: boolean = false;
     private totalExclVAT: number = 0;
     private totalInclVAT: number = 0;
@@ -61,53 +55,121 @@ export class InvoiceDetailsComponent {
     ngOnInit() {
         this.getGeneralInvoiceRulesOptions();
         this.getAnimalHealthInvoiceRulesOptions();
-        this.getSenderDetails();
         this.dataSub = this.activatedRoute.params.subscribe(params => {
             this.pageMode = params['mode'];
-            if(this.pageMode == 'edit') {
+            if(this.isEditMode()) {
                 this.pageTitle = 'EDIT INVOICE';
                 this.invoiceId = params['id'];
                 this.nsfo.doGetRequest(this.nsfo.URI_INVOICE + "/" + this.invoiceId)
                     .subscribe(res => {
                         this.invoice = res.result;
-                        this.invoice.invoice_rules = res.result['invoice_rules'];
+												this.updateInvoiceDataInVariables();
+												this.updateClientUbns();
                         this.doVATCalculations();
-                    });
+                    },
+											error => {
+												alert(this.nsfo.getErrorMessage(error));
+											}
+                    );
             }
 
-            if(this.pageMode == 'new') {
-                this.pageTitle = 'NEW INVOICE';
-                this.invoice.status = "INCOMPLETE";
-                this.nsfo.doPostRequest(this.nsfo.URI_INVOICE, this.invoice)
-                    .subscribe(
-                        res => {
-                            this.invoice = res.result;
-                            this.invoice.invoice_number = res.result['invoice_number'];
-                        }
-                    )
+            if(this.isCreateMode()) {
+							  this.pageTitle = 'NEW INVOICE';
+							  this.selectedCompany = null;
+							  this.selectedUbn = null;
+							  this.getSenderDetailsAndInitializeNewInvoice();
             }
 
-            if (this.pageMode == "view") {
+            if (this.isViewMode()) {
                 this.pageTitle = 'VIEW INVOICE';
                 this.invoiceId = params['id'];
                 this.nsfo.doGetRequest(this.nsfo.URI_INVOICE + "/" + this.invoiceId)
                     .subscribe(res => {
                         this.invoice = res.result;
-                        this.senderDetails = this.invoice['sender_details'];
-                        this.invoice.invoice_rules = res.result['invoice_rules'];
+												this.updateInvoiceDataInVariables();
                         this.doVATCalculations();
-                    });
+                        },
+                          error => {
+                            alert(this.nsfo.getErrorMessage(error));
+                          }
+											);
                 this.onlyView = true;
             }
         });
     }
+
+    isCreateMode() {
+    	return this.pageMode == 'new';
+		}
+
+		isEditMode() {
+			return this.pageMode == 'edit';
+		}
+
+		isViewMode() {
+			return this.pageMode == 'view';
+		}
+
+		private updateInvoiceDataInVariables() {
+			this.senderDetails = this.invoice.sender_details;
+			this.selectedCompany = this.invoice.company;
+			this.selectedUbn = this.invoice.ubn;
+		}
+
+	private getSenderDetailsAndInitializeNewInvoice() {
+		let details = new InvoiceSenderDetails();
+		let address = new Address();
+		this.nsfo.doGetRequest(this.nsfo.URI_INVOICE_SENDER_DETAILS)
+			.subscribe(
+				res => {
+					this.senderDetails = res.result;
+					this.initializeNewInvoice();
+				},
+				error => {
+					alert(this.nsfo.getErrorMessage(error));
+				}
+			);
+	}
+
+	private initializeNewInvoice() {
+		this.invoice.status = "INCOMPLETE";
+		this.invoice.sender_details = this.senderDetails;
+
+		this.nsfo.doPostRequest(this.nsfo.URI_INVOICE, this.invoice)
+			.subscribe(
+				res => {
+					this.invoice = res.result;
+					this.invoiceId = this.invoice.id;
+					this.updateInvoiceDataInVariables();
+					this.updateClientUbns();
+				},
+				error => {
+					alert(this.nsfo.getErrorMessage(error));
+				}
+			);
+  }
+
+	refreshSenderDetails() {
+		this.nsfo.doGetRequest(this.nsfo.URI_INVOICE_SENDER_DETAILS)
+			.subscribe(
+				res => {
+					this.senderDetails = res.result;
+				},
+				error => {
+					alert(this.nsfo.getErrorMessage(error));
+				}
+			);
+	}
 
     private getGeneralInvoiceRulesOptions(): void {
         this.nsfo.doGetRequest(this.nsfo.URI_INVOICE_RULE + "?category=GENERAL&type=standard")
             .subscribe(
                 res => {
                     this.standardGeneralInvoiceRuleOptions = <InvoiceRule[]> res.result;
-                }
+                },
+                  error => {
+                    alert(this.nsfo.getErrorMessage(error));
+                  }
             )
     }
 
@@ -116,7 +178,10 @@ export class InvoiceDetailsComponent {
             .subscribe(
                 res => {
                     this.standardAnimalHealthInvoiceRuleOptions = <InvoiceRule[]> res.result;
-                }
+                },
+                  error => {
+                    alert(this.nsfo.getErrorMessage(error));
+                  }
             )
     }
     
@@ -206,7 +271,10 @@ export class InvoiceDetailsComponent {
                     }
                     this.invoice.invoice_rules.push(res.result);
                     this.doVATCalculations();
-                }
+                },
+                  error => {
+                    alert(this.nsfo.getErrorMessage(error));
+                  }
             );
     }
 
@@ -215,68 +283,91 @@ export class InvoiceDetailsComponent {
             .doDeleteRequest(this.nsfo.URI_INVOICE + "/" + this.invoice.id + "/invoice-rules" + "/" + id.toString(), "")
             .subscribe(
                 res => {
-                }
+                },
+                  error => {
+                    alert(this.nsfo.getErrorMessage(error));
+                  }
             );
     }
 
-    private getClients(){
-        this.nsfo
-            .doGetRequest(this.nsfo.URI_COMPANIES_INVOICE)
-            .subscribe(
-                res => {
-                    this.companies = res.result;
-                    this.showLocations = true;
-                }
-            );
-    }
+    setInvoiceRecipient() {
+        if (this.selectedCompany) {
+					this.invoice.company = this.selectedCompany;
+					this.invoice.company_id = this.selectedCompany.company_id;
+					this.invoice.company_name = this.selectedCompany.company_name;
+					this.invoice.company_vat_number = this.selectedCompany.vat_number;
+					this.invoice.company_debtor_number = this.selectedCompany.debtor_number;
 
-    private searchCompanies() {
-        this.showCompanies = false;
-        this.nsfo.doGetRequest(this.nsfo.URI_CLIENTS + "/company/name?company_name=" + this.companyName)
-            .subscribe(
-                res => {
-                    this.companies = res.result;
-                    this.showCompanies = true;
-                }
-            );
-    }
+					if (this.selectedCompany.owner) {
+					    const firstName = this.selectedCompany.owner.first_name != null && this.selectedCompany.owner.first_name != ''
+                ? this.selectedCompany.owner.first_name + ' ' : '';
+					    this.invoice.name = firstName + this.selectedCompany.owner.last_name;
+          } else {
+					    this.invoice.name = null;
+          }
 
-    private getCompanyLocations(){
-            this.nsfo.doGetRequest(this.nsfo.URI_CLIENTS + "/" + this.selectedCompany.company_id)
-                .subscribe(
-                    res => {
-                        this.selectedCompany = res.result;
-                        this.locations = res.result.locations;
-                        this.showLocations = true;
-                    }
-                );
-    }
-
-    private setInvoiceRecipient() {
-        this.invoice.sender_details = this.senderDetails;
-        this.invoice.ubn = this.selectedLocation.ubn;
-        this.invoice.company = this.selectedCompany;
-        this.invoice.company_id = this.selectedCompany.company_id;
-        this.invoice.company_name = this.selectedCompany.company_name;
-        this.invoice.company_vat_number = this.selectedCompany.vat_number;
-        this.invoice.company_debtor_number = this.selectedCompany.debtor_number;
-        this.invoice.name = this.selectedCompany['owner'].first_name + this.selectedCompany['owner'].last_name;
-    }
-
-    private getSenderDetails() {
-        let details = new InvoiceSenderDetails();
-        let address = new Address();
-        this.nsfo.doGetRequest(this.nsfo.URI_INVOICE_SENDER_DETAILS)
-            .subscribe(
-                res => {
-                    details = res.result;
-                    if(details != undefined) {
-                        this.senderDetails = res.result;
-                        address = res.result.address;
-                        this.senderDetails.address = address;
+          // Remove selectedUbn if the old selectedUbn does not belong to the new selectedCompany
+          if (this.selectedCompany.locations) {
+					      let hasSelectedUbn = false;
+						    for (let location of this.selectedCompany.locations) {
+						        if (typeof location === 'string') {
+						            if (location === this.selectedUbn) {
+						                hasSelectedUbn = true;
+						                break;
+                        }
+                    } else {
+						            if (location.ubn != null && location.ubn === this.selectedUbn) {
+						                hasSelectedUbn = true;
+						                break;
+                        }
                     }
                 }
-            );
+                if (!hasSelectedUbn) {
+						        this.selectedUbn = null;
+                }
+
+          } else {
+					    this.selectedUbn = null;
+          }
+
+        } else {
+					this.invoice.company = null;
+					this.invoice.company_id = null;
+					this.invoice.company_name = null;
+					this.invoice.company_vat_number = null;
+					this.invoice.company_debtor_number = null;
+					this.selectedUbn = null;
+        }
+
+        this.setInvoiceUbn();
+        this.updateClientUbns();
+    }
+
+    setInvoiceUbn() {
+			if (this.selectedUbn == null || this.selectedUbn == '' || this.selectedUbn == 'null') {
+			  this.selectedUbn = null;
+				this.invoice.ubn = null;
+			} else {
+				this.invoice.ubn = this.selectedUbn;
+			}
+    }
+
+    updateClientUbns() {
+			this.clientUbns = [];
+
+			if (this.selectedCompany == null
+        || this.selectedCompany.locations == null
+        || this.selectedCompany.locations.length === 0) {
+        return;
+      }
+
+			for(let location of this.selectedCompany.locations) {
+			  if (typeof location === 'string') {
+			    this.clientUbns.push(location);
+        } else {
+			    this.clientUbns.push(location.ubn);
+        }
+			}
     }
 
     private sendInvoiceToClient() {
@@ -288,7 +379,10 @@ export class InvoiceDetailsComponent {
                 .subscribe(
                     res => {
                         this.navigateTo("/invoice");
-                    }
+                    },
+                      error => {
+                        alert(this.nsfo.getErrorMessage(error));
+                      }
                 );
         }
         else {
@@ -296,7 +390,10 @@ export class InvoiceDetailsComponent {
                 .subscribe(
                     res => {
                         this.navigateTo("/invoice");
-                    }
+                    },
+                      error => {
+                        alert(this.nsfo.getErrorMessage(error));
+                      }
                 );
         }
     }
@@ -313,6 +410,9 @@ export class InvoiceDetailsComponent {
                 .subscribe(
                     res => {
                         this.navigateTo("/invoice");
+                    },
+                  error => {
+                        alert(this.nsfo.getErrorMessage(error));
                     }
                 );
         }
@@ -321,7 +421,10 @@ export class InvoiceDetailsComponent {
                 .subscribe(
                     res => {
                         this.navigateTo("/invoice");
-                    }
+                    },
+                      error => {
+                        alert(this.nsfo.getErrorMessage(error));
+                      }
                 );
         }
     }
@@ -331,11 +434,34 @@ export class InvoiceDetailsComponent {
             .subscribe(
                 res => {
                     this.navigateTo("/invoice");
-                }
+                },
+                  error => {
+                    alert(this.nsfo.getErrorMessage(error));
+                  }
             )
     }
 
     private navigateTo(url: string) {
         this.router.navigate([url]);
+    }
+
+    navigateToInvoiceSenderDetailsEdit() {
+      this.navigateTo('/configuration/invoices/invoices_details');
+    }
+
+    areSenderDetailsComplete(): boolean {
+			return this.senderDetails != null &&
+        this.senderDetails.id != null &&
+        this.senderDetails.iban != null &&
+        this.senderDetails.chamber_of_commerce_number != null &&
+        this.senderDetails.vat_number != null &&
+        this.senderDetails.payment_deadline_in_days != null &&
+        this.senderDetails.name != null &&
+        this.senderDetails.address != null &&
+        this.senderDetails.address.street_name != null &&
+        this.senderDetails.address.address_number != null &&
+        this.senderDetails.address.postal_code != null &&
+        this.senderDetails.address.city != null
+      ;
     }
 }

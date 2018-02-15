@@ -1,13 +1,14 @@
-import {TranslatePipe} from "ng2-translate/ng2-translate";
+import { TranslatePipe, TranslateService } from 'ng2-translate/ng2-translate';
 import {Component} from "@angular/core";
 import {ROUTER_DIRECTIVES} from "@angular/router";
 import {InvoiceSenderDetails} from "../../config.model";
-import {Address} from "../../config.model";
 import {FormGroup, FormBuilder, REACTIVE_FORM_DIRECTIVES, Validators} from "@angular/forms";
 import {NSFOService} from "../../../../global/services/nsfo/nsfo.service";
+import { Address } from '../../../client/client.model';
+import { CountrySelectorComponent } from '../../../../global/components/countryselector/country-selector.component';
 
 @Component({
-    directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES],
+    directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, CountrySelectorComponent],
     template: require('./details.invoices.html'),
     pipes: [TranslatePipe]
 })
@@ -19,7 +20,7 @@ export class InvoicesNSFODetailsComponent {
     private details: InvoiceSenderDetails[] = [];
     private senderAddress: Address = new Address();
 
-    constructor(private fb: FormBuilder, private nsfo: NSFOService) {
+    constructor(private fb: FormBuilder, private nsfo: NSFOService, private tar: TranslateService) {
         this.getInvoiceSenderDetails();
         this.form = fb.group({
             name: ['', Validators.required],
@@ -30,6 +31,7 @@ export class InvoicesNSFODetailsComponent {
             address_number: ['', Validators.required],
             suffix: ['', Validators.required],
             postal_code: ['', Validators.required],
+            city: ['', Validators.required],
             payment_deadline: ['', Validators.required],
             company_name: ['', Validators.required],
         });
@@ -53,7 +55,11 @@ export class InvoicesNSFODetailsComponent {
                     this.invoiceSenderDetails.address = this.senderAddress;
                 }
                 
+            },
+            error => {
+                alert(this.nsfo.getErrorMessage(error));
             }
+
         );
     }
 
@@ -65,8 +71,11 @@ export class InvoicesNSFODetailsComponent {
             this.nsfo.doPostRequest(this.nsfo.URI_INVOICE_SENDER_DETAILS , this.invoiceSenderDetails).subscribe(
                 res => {
                     this.invoiceSenderDetails = res.result;
-                    this.editText.appendChild(document.createTextNode("Uw wijzigingen zijn opgeslagen"));
-                }
+                    this.editText.appendChild(document.createTextNode(this.tar.instant("Uw wijzigingen zijn opgeslagen")));
+                },
+              error => {
+                  alert(this.nsfo.getErrorMessage(error));
+              }
             );
     }
 
@@ -76,7 +85,10 @@ export class InvoicesNSFODetailsComponent {
                 .subscribe(
                 res => {
                     this.invoiceSenderDetails = res.result;
-                }
+                },
+									error => {
+										  alert(this.nsfo.getErrorMessage(error));
+									}
             );
     }
 }

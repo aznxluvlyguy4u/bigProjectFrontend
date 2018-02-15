@@ -4,59 +4,33 @@
     </div>
 
     <div *ngIf="!onlyView" class="row client-selection">
-        <div class="large-12 columns">
+        <div class="large-6 columns">
             <label>
                 {{ 'FIND COMPANY' | translate }}
             </label>
-            <div class="large-4">
-                <input type="text" [(ngModel)]="companyName">
-            </div>
-            <div class="large-2">
-                <label>
-                    <button (click)="searchCompanies()" class="small primary button expanded">
-                        {{ 'SEARCH COMPANIES' | translate }}
-                    </button>
-                </label>
-            </div>
+
+            <app-company-selector
+                    [disabled]="false"
+                    [selectedClient]="selectedCompany"
+                    (selectedClientChanged)="selectedCompany = $event; setInvoiceRecipient()"
+            ></app-company-selector>
+
         </div>
-        <div *ngIf="showCompanies" class="large-12 columns">
-            <label>
-                {{'COMPANY SELECTION' | translate }}
-            </label>
-            <div class="large-4">
-                <select [(ngModel)]="selectedCompany.company_id" name="" id="companies">
-                <option *ngFor="let company of companies" value="{{company.company_id}}">{{company.company_name}}</option>
-                </select>
-            </div>
-            <div class="large-2 end">
-                <label *ngIf="showCompanies">
-                    <button (click)="getCompanyLocations()" class="small primary button expanded">
-                        {{ 'SELECT COMPANY' | translate }}
-                    </button>
-                </label>
-            </div>
-        </div>
-        <div *ngIf="showLocations" class="large-12 columns">
+
+        <div *ngIf="selectedCompany != null" class="large-6 columns">
             <label>
                 {{'LOCATION SELECTION' | translate }}
             </label>
-            <div class="large-4">
-                <select name="" [(ngModel)]="selectedLocation.ubn" id="locations">
-                    <option value="undefined" disabled>
-                        {{'SELECT LOCATION' | translate}}
-                    </option>
-                    <option *ngFor="let location of locations" value="{{location.ubn}}">{{location['address'].city}} -
-                        {{location['address'].street_name}} {{location['address'].address_number}} - {{location.ubn}}
-                    </option>
-                </select>
-            </div>
-            <div class="large-2 end">
-                <label>
-                    <button (click)="setInvoiceRecipient()" class="small primary button expanded">
-                        {{ 'CONFIRM SELECTION' | translate }}
-                    </button>
-                </label>
-            </div>
+            <select
+                    name=""
+                    [(ngModel)]="selectedUbn"
+                    id="locations"
+                    (click)="setInvoiceUbn()"
+                    title="{{'SELECT LOCATION' | translate}}"
+            >
+                <option [value]=null>{{'NONE' | translate}}</option>
+                <option *ngFor="let ubn of clientUbns" [value]="ubn">{{ubn}}</option>
+            </select>
         </div>
     </div>
 <hr>
@@ -74,7 +48,7 @@
                     </td>
                     <td class="large-6 columns">
                         <span>
-                            {{ invoice.ubn }}
+                            {{ invoice.ubn == null ? '-' : invoice.ubn }}
                         </span>
                     </td>
                 </tr>
@@ -111,8 +85,51 @@
         <div class="large-3 columns end">
             <table>
                 <tr class="row">
-                    <td class="large-12 columns section-title">
+                    <td class="large-6 columns section-title">
                         {{ 'YOUR INFORMATION' | translate }}
+                    </td>
+                    <td class="large-6 columns">
+
+                        <ng-template *ngIf="isCreateMode() || isEditMode()">
+
+                            <!-- TODO: DROPDOWN OPTION MENU DOESN'T WORK YET -->
+                            <!--<button type="button" class="tiny dropdown button float-right" [attr.data-toggle]="'dropdown-sender-details-options'">-->
+                                <!--{{ 'OPTIONS' | translate }}-->
+                            <!--</button>-->
+                            <!--<div class="dropdown-pane bottom" data-dropdown data-hover="true"-->
+                                 <!--data-hover-pane="true" id="dropdown-sender-details-options">-->
+                                <!--<ul>-->
+                                    <!--<li>-->
+                                        <!--<a (click)="refreshSenderDetails()"-->
+                                           <!--title="{{ 'USE' | translate }} {{ 'LATEST VERSION' | translate | lowercase }}"-->
+                                        <!--&gt;<i class="fa fa-refresh fa-2x" aria-hidden="true"></i></a>-->
+                                    <!--</li>-->
+                                    <!--<li>-->
+                                        <!--<a (click)="navigateToInvoiceSenderDetailsEdit()"-->
+                                           <!--title="{{ 'EDIT' | translate }} {{ 'LATEST VERSION' | translate | lowercase }}"-->
+                                        <!--&gt;<i class="fa fa-pencil-square-o fa-fw fa-2x" aria-hidden="true"></i></a>-->
+                                    <!--</li>-->
+                                <!--</ul>-->
+                            <!--</div>-->
+
+
+                            <span
+                                    class="pull-left"
+                                    title="{{ 'USE' | translate }} {{ 'LATEST VERSION' | translate | lowercase }}"
+                                    (click)="refreshSenderDetails()"
+                            ><i class="fa fa-refresh fa-2x" aria-hidden="true"></i></span>
+                            <span
+                                    class="pull-right"
+                                    title="{{ 'EDIT' | translate }} {{ 'LATEST VERSION' | translate | lowercase }}"
+                                    (click)="navigateToInvoiceSenderDetailsEdit()"
+                            ><i class="fa fa-pencil-square-o fa-fw fa-2x" aria-hidden="true"></i></span>
+                        </ng-template>
+
+                        <span *ngIf="isViewMode()"
+                              class="pull-right"
+                              title="{{ 'INVOICE SENDER DETAILS EDIT ONLY ALLOWED IF NOT SENT YET INFO' | translate }}"
+                        ><i class="fa fa-info-circle" aria-hidden="true"></i></span>
+
                     </td>
                 </tr>
                 <tr class="row">
@@ -121,7 +138,7 @@
                     </td>
                     <td class="large-6 columns">
                         <span>
-                            {{ senderDetails.name }}
+                            {{ senderDetails ? senderDetails.name : '' }}
                         </span>
                     </td>
                 </tr>
@@ -131,7 +148,7 @@
                     </td>
                     <td class="large-6 columns">
                         <span>
-                            {{senderDetails.iban}}
+                            {{ senderDetails? senderDetails.iban : ''}}
                         </span>
                     </td>
                 </tr>
@@ -141,7 +158,7 @@
                     </td>
                     <td class="large-6 columns">
                         <span>
-                            {{senderDetails.vat_number}}
+                            {{ senderDetails ? senderDetails.vat_number : ''}}
                         </span>
                     </td>
                 </tr>
@@ -325,7 +342,11 @@
                 <button type="button" (click)="saveInvoice()" class="small primary button">
                     {{ 'SAVE' | translate }}
                 </button>
-                <button *ngIf="!onlyView" [disabled]="invoice.status != 'NOT SEND' && invoice.status != 'INCOMPLETE'" type="button" (click)="deleteInvoice()" class="small alert button">
+                <button *ngIf="!onlyView"
+                        [disabled]="(invoice.status != 'NOT SEND' && invoice.status != 'INCOMPLETE') || invoiceId == null"
+                        type="button"
+                        (click)="deleteInvoice()"
+                        class="small alert button">
                     {{'DELETE' | translate}}
                 </button>
                 <button type="button" (click)="navigateTo('/invoice')" class="small primary button">

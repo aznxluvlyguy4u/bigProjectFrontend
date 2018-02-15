@@ -3,6 +3,8 @@ import { Http, Headers, Response } from '@angular/http';
 import { QueryParam } from '../../../main/client/client.model';
 
 import _ = require("lodash");
+import { TranslateService } from 'ng2-translate';
+import { Country } from '../../models/country.model';
 
 @Injectable()
 export class NSFOService {
@@ -66,9 +68,10 @@ export class NSFOService {
     
     private ACCESS_TOKEN_NAMESPACE: string = 'access_token';
 
-		countryCodeList = [];
+		countryCodeList: Country[] = [];
+		countries: Country[] = [];
 
-    constructor(private http:Http) {
+    constructor(private http:Http, private translate: TranslateService) {
 				this.doGetCountryCodeList(); // if in OnInit it is loaded too late
 		}
 
@@ -77,6 +80,7 @@ export class NSFOService {
 				.subscribe(
 					res => {
 						this.countryCodeList = _.sortBy(res.result, ['code']);
+						this.countries = _.sortBy(res.result, ['name']);
 					},
 					error => {
 						alert(this.getErrorMessage(error));
@@ -143,9 +147,9 @@ export class NSFOService {
 
     public getErrorMessage(err: Response): string {
 			if (err.status !== 500) {
-				return err.json().result.message;
+				return this.translate.instant(err.json().result.message);
 			} else {
-				return "SOMETHING WENT WRONG. TRY ANOTHER TIME."
+				return this.translate.instant("SOMETHING WENT WRONG. TRY ANOTHER TIME.");
 			}
     }
 }
