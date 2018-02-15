@@ -139,7 +139,6 @@ export class InvoiceDetailsComponent {
                 rule.vat_percentage_rate = standardInvoiceRule.vat_percentage_rate;
                 rule.price_excl_vat = standardInvoiceRule.price_excl_vat;
                 rule.category = standardInvoiceRule.category;
-                this.addCustomInvoiceRule(rule, type);
             }
         } else {
             rule.sort_order = 1;
@@ -147,14 +146,14 @@ export class InvoiceDetailsComponent {
             rule.vat_percentage_rate = this.temporaryRule.vat_percentage_rate;
             rule.price_excl_vat = this.temporaryRule.price_excl_vat;
             rule.description = this.temporaryRule.description;
-            this.addCustomInvoiceRule(rule, type);
         }
+        this.postInvoiceRule(rule, type);
         this.doVATCalculations();
     }
 
     private removeInvoiceRule(invoiceRule: InvoiceRule): void {
         let index = this.invoice.invoice_rules.indexOf(invoiceRule);
-        this.deleteCustomInvoiceRule(this.invoice.invoice_rules[index].id);
+        this.deleteInvoiceRule(this.invoice.invoice_rules[index].id);
         this.invoice.invoice_rules.splice(index, 1);
         this.doVATCalculations();
     }
@@ -197,7 +196,7 @@ export class InvoiceDetailsComponent {
         this.invoice.total = this.totalInclVAT;
     }
 
-    private addCustomInvoiceRule(newRule: InvoiceRule, type: String){
+    private postInvoiceRule(newRule: InvoiceRule, type: String){
         this.nsfo
             .doPostRequest(this.nsfo.URI_INVOICE+ "/" + this.invoice.id + "/invoice-rules", newRule)
             .subscribe(
@@ -211,11 +210,7 @@ export class InvoiceDetailsComponent {
             );
     }
 
-    private updateCustomInvoiceRule(){
-
-    }
-
-    private deleteCustomInvoiceRule(id: number){
+    private deleteInvoiceRule(id: number){
         this.nsfo
             .doDeleteRequest(this.nsfo.URI_INVOICE + "/" + this.invoice.id + "/invoice-rules" + "/" + id.toString(), "")
             .subscribe(
