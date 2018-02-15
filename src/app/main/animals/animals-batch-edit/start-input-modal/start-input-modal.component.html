@@ -18,6 +18,8 @@
                                 [(ngModel)]="separator"
                                 type="text"
                                 maxlength="1"
+                                [title]="'SEPARATOR SYMBOL CANNOT BE EMPTY' | translate"
+                                [placeholder]="'CANNOT BE EMPTY' | translate"
                         >
                     </div>
                 </div>
@@ -57,7 +59,7 @@
                 <span class="pull-right">
                     <button
                             class="tiny primary button"
-                            [disabled]="plainTextInputString == null || plainTextInputString == '' || separator == null || separator == ''"
+                            [disabled]="disableGetAnimalsButton()"
                             (click)="sentInputData()"
                     >
                         <span *ngIf="!isProcessing">

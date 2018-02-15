@@ -606,5 +606,7 @@
   "INVALID INPUT": "Onjuiste invoer",
   "ULNS WITHOUT FOUND ANIMALS": "ULNs zonder gevonden dieren",
   "STNS WITHOUT FOUND ANIMALS": "STNs zonder gevonden dieren",
-  "USE BATCH EDIT AND FILTER TO EDIT LOCATION INFO": "Om een enkele (fokker)locatie aan te passen, zet de batch edit optie aan en filter de desgewenste UBN eruit"
+  "USE BATCH EDIT AND FILTER TO EDIT LOCATION INFO": "Om een enkele (fokker)locatie aan te passen, zet de batch edit optie aan en filter de desgewenste UBN eruit",
+  "SEPARATOR SYMBOL CANNOT BE EMPTY": "Scheidingssymbool mag niet leeg zijn",
+  "CANNOT BE EMPTY": "Mag niet leeg zijn"
 }
