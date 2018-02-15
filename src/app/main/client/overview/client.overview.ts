@@ -7,12 +7,13 @@ import {ClientFilterPipe} from "./pipes/clientFilter.pipe";
 import {PaginationService, PaginatePipe} from "ng2-pagination/index";
 import {PaginationComponent} from "../../../global/components/pagination/pagination.component";
 import {SettingsService} from "../../../global/services/settings/settings.service";
+import { CheckMarkComponent } from '../../../global/components/checkmark/check-mark.component';
 
 declare var $;
 
 @Component({
     providers: [PaginationService],
-    directives: [ROUTER_DIRECTIVES, PaginationComponent],
+    directives: [ROUTER_DIRECTIVES, PaginationComponent, CheckMarkComponent],
     template: require('./client.overview.html'),
     pipes: [TranslatePipe, ClientFilterPipe, PaginatePipe]
 })
