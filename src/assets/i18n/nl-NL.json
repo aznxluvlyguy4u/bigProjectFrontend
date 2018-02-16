@@ -608,7 +608,6 @@
   "INVALID INPUT": "Onjuiste invoer",
   "ULNS WITHOUT FOUND ANIMALS": "ULNs zonder gevonden dieren",
   "STNS WITHOUT FOUND ANIMALS": "STNs zonder gevonden dieren",
-  "USE BATCH EDIT AND FILTER TO EDIT LOCATION INFO": "Om een enkele (fokker)locatie aan te passen, zereturn ResultUtil::successResult($id);t de batch edit optie aan en filter de desgewenste UBN eruit",
   "SELECTED COMPANY": "Geselecteerd bedrijf",
   "ADDRESS NUMBER": "Huisnummer",
   "COUNTRY": "Land",
@@ -645,5 +644,8 @@
   "INVOICE SENDER DETAILS EDIT ONLY ALLOWED IF NOT SENT YET INFO": "De NSFO factuurgegevens kunnen alleen worden aangepast voor facturen die nog niet zijn verzonden",
   "EDIT INVOICE": "Wijzig factuur",
   "LATEST VERSION": "Laatste versie",
-  "USE": "Gebruik"
+  "USE": "Gebruik",
+  "USE BATCH EDIT AND FILTER TO EDIT LOCATION INFO": "Om een enkele (fokker)locatie aan te passen, zet de batch edit optie aan en filter de desgewenste UBN eruit",
+  "SEPARATOR SYMBOL CANNOT BE EMPTY": "Scheidingssymbool mag niet leeg zijn",
+  "CANNOT BE EMPTY": "Mag niet leeg zijn"
 }

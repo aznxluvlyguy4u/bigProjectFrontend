@@ -105,8 +105,7 @@
                         <span *ngIf="!client.subscription_date">--</span>
                     </td>
                     <td>
-                        <span *ngIf="client.animal_health">{{ 'YES' | translate }}</span>
-                        <span *ngIf="!client.animal_health">{{ 'NO' | translate }}</span>
+                        <app-check-mark [boolVal]="client.animal_health_subscription"></app-check-mark>
                     </td>
                     <td>
                         <span *ngIf="client.status">{{ 'ACTIVE' | translate }}</span>

@@ -38,6 +38,18 @@ export class StartInputModalComponent {
 			this.closedModal.emit(true);
 	}
 
+	isPlainTextInputEmpty() {
+		return this.plainTextInputString == null || this.plainTextInputString == '';
+	}
+
+	isSeparatorEmpty() {
+		return this.separator == null || this.separator == '';
+	}
+
+	disableGetAnimalsButton() {
+		return (this.isPlainTextInputEmpty() && this.selectedLocation == null) || this.isSeparatorEmpty();
+	}
+
 	sentInputData() {
 			let getAnimalsBody = new GetAnimalsBody();
 			getAnimalsBody.plain_text_input = this.plainTextInputString;
