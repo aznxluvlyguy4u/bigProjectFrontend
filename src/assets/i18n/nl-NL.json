@@ -647,5 +647,6 @@
   "USE": "Gebruik",
   "USE BATCH EDIT AND FILTER TO EDIT LOCATION INFO": "Om een enkele (fokker)locatie aan te passen, zet de batch edit optie aan en filter de desgewenste UBN eruit",
   "SEPARATOR SYMBOL CANNOT BE EMPTY": "Scheidingssymbool mag niet leeg zijn",
-  "CANNOT BE EMPTY": "Mag niet leeg zijn"
+  "CANNOT BE EMPTY": "Mag niet leeg zijn",
+  "YOUR CHANGES HAVE BEEN SAVED": "Uw wijzigingen zijn opgeslagen"
 }

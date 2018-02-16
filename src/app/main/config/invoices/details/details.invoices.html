@@ -93,14 +93,18 @@
     </div>
     <div class="row">
         <div class="large-push-2 large-4 columns">
-            <span class="pull-left">
-                <button [disabled]="selectedInvoiceSenderDetails" (click)="CreateInvoiceSenderDetails()" class="tiny primary button">{{ 'SAVE' | translate }}</button>
-            </span>
-            <div class="pull-right">
-            <span id="result-text">
-
-            </span>
-            </div>
+            <app-spinner *ngIf="!invoiceSenderDetails"></app-spinner>
+            <ng-template *ngIf="invoiceSenderDetails">
+                <span class="pull-left">
+                    <button [disabled]="isUpdating" (click)="CreateInvoiceSenderDetails()" class="tiny primary button">{{ 'SAVE' | translate }}</button>
+                </span>
+                <div class="pull-right">
+                     <span *ngIf="!displayingSaveConfirmation" class="pull-left">
+                        <button [disabled]="displayingSaveConfirmation" (click)="getInvoiceSenderDetails()" class="tiny alert button">{{ 'CANCEL' | translate }}</button>
+                    </span>
+                <span id="result-text"></span>
+                </div>
+            </ng-template>
         </div>
     </div>
 </div>

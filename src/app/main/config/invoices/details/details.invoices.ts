@@ -6,9 +6,10 @@ import {FormGroup, FormBuilder, REACTIVE_FORM_DIRECTIVES, Validators} from "@ang
 import {NSFOService} from "../../../../global/services/nsfo/nsfo.service";
 import { Address } from '../../../client/client.model';
 import { CountrySelectorComponent } from '../../../../global/components/countryselector/country-selector.component';
+import { SpinnerComponent } from '../../../../global/components/spinner/spinner.component';
 
 @Component({
-    directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, CountrySelectorComponent],
+    directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, CountrySelectorComponent, SpinnerComponent],
     template: require('./details.invoices.html'),
     pipes: [TranslatePipe]
 })
@@ -19,8 +20,10 @@ export class InvoicesNSFODetailsComponent {
     private invoiceSenderDetails: InvoiceSenderDetails = new InvoiceSenderDetails();
     private details: InvoiceSenderDetails[] = [];
     private senderAddress: Address = new Address();
+    isUpdating: boolean;
+    displayingSaveConfirmation: boolean;
 
-    constructor(private fb: FormBuilder, private nsfo: NSFOService, private tar: TranslateService) {
+    constructor(private fb: FormBuilder, private nsfo: NSFOService, private translate: TranslateService) {
         this.getInvoiceSenderDetails();
         this.form = fb.group({
             name: ['', Validators.required],
@@ -35,13 +38,15 @@ export class InvoicesNSFODetailsComponent {
             payment_deadline: ['', Validators.required],
             company_name: ['', Validators.required],
         });
+        this.isUpdating = false;
+        this.displayingSaveConfirmation = false;
     }
 
     ngAfterViewInit() {
         this.editText = document.getElementById("result-text");
     }
 
-    private getInvoiceSenderDetails(){
+    getInvoiceSenderDetails(){
         let details = new InvoiceSenderDetails();
         this.nsfo.doGetRequest(this.nsfo.URI_INVOICE_SENDER_DETAILS).subscribe(
             res => {
@@ -63,23 +68,39 @@ export class InvoicesNSFODetailsComponent {
         );
     }
 
-    private CreateInvoiceSenderDetails(){
+    CreateInvoiceSenderDetails(){
             while (this.editText.firstChild) {
-                this.editText.removeChild(this.editText.firstChild);
+                this.removeSaveConfirmationText();
             }
+            this.isUpdating = true;
             this.invoiceSenderDetails.address = this.senderAddress;
             this.nsfo.doPostRequest(this.nsfo.URI_INVOICE_SENDER_DETAILS , this.invoiceSenderDetails).subscribe(
                 res => {
                     this.invoiceSenderDetails = res.result;
-                    this.editText.appendChild(document.createTextNode(this.tar.instant("Uw wijzigingen zijn opgeslagen")));
+                    this.isUpdating = false;
+                    this.displaySaveConfirmationText();
                 },
               error => {
                   alert(this.nsfo.getErrorMessage(error));
+								  this.isUpdating = false;
               }
             );
     }
 
-    private UpdateInvoiceSenderDetails(){
+    private displaySaveConfirmationText() {
+			this.editText.appendChild(document.createTextNode(this.translate.instant("YOUR CHANGES HAVE BEEN SAVED")));
+			this.displayingSaveConfirmation = true;
+			setTimeout(() => {
+				this.removeSaveConfirmationText();
+			}, 3 * 1000);
+    }
+
+    private removeSaveConfirmationText() {
+			this.editText.removeChild(this.editText.firstChild);
+			this.displayingSaveConfirmation = false;
+    }
+
+    UpdateInvoiceSenderDetails(){
         this.invoiceSenderDetails.address = this.senderAddress;
             this.nsfo.doPutRequest(this.nsfo.URI_INVOICE_SENDER_DETAILS + "/" + this.invoiceSenderDetails.id.toString() , this.invoiceSenderDetails)
                 .subscribe(
