@@ -2,12 +2,14 @@ import _ = require("lodash");
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {Component} from "@angular/core";
 import {ROUTER_DIRECTIVES} from "@angular/router";
+import { LedgerCategory } from "../../../../global/models/ledger-category.model";
 import {InvoiceRule} from "../../config.model";
 import {FormGroup, FormBuilder, REACTIVE_FORM_DIRECTIVES, Validators} from "@angular/forms";
 import {NSFOService} from "../../../../global/services/nsfo/nsfo.service";
+import { LedgerCategoryDropdownComponent } from "../../../../global/components/ledgercategorydropdown/ledger-category-dropdown.component";
 
 @Component({
-    directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES],
+    directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, LedgerCategoryDropdownComponent],
     template: require('./standardInvoiceRules.html'),
     pipes: [TranslatePipe]
 })
@@ -18,12 +20,14 @@ export class InvoicesRuleTemplatesComponent {
     private animalHealthRules: InvoiceRule[] = [];
     private selectedRule: InvoiceRule = new InvoiceRule();
     private selectedRuleTemp: InvoiceRule;
+    selectedLedgerCategory: LedgerCategory;
     private displayModal: string = 'none';
     private isModalEditMode: boolean = false;
     private isValidForm: boolean = true;
     private isSending: boolean = false;
-    private isLoading: boolean = true;
     private form: FormGroup;
+
+	  isLoading: boolean = true;
 
     constructor(private fb: FormBuilder, private nsfo: NSFOService) {
         this.form = fb.group({
@@ -55,18 +59,27 @@ export class InvoicesRuleTemplatesComponent {
 
                     this.isLoading = false;
                 },
-                err => {
-                    this.isLoading = false;
+							error => {
+									this.isLoading = false;
+									alert(this.nsfo.getErrorMessage(error));
                 }
 
             );
 
     }
 
+    private setSelectedLedgerCategoryOnSelectedRule() {
+        if(this.selectedRule) {
+            this.selectedRule.ledger_category = this.selectedLedgerCategory;
+        }
+    }
+
     private addInvoiceRule() {
         this.isValidForm = true;
         this.isSending = true;
         this.selectedRule.type = "standard";
+        this.setSelectedLedgerCategoryOnSelectedRule();
+
         if(this.form.valid) {
             this.selectedRule.sort_order = this.rules.length;
 
@@ -98,6 +111,7 @@ export class InvoicesRuleTemplatesComponent {
     private editInvoiceRule() {
         this.isValidForm = true;
         this.isSending = true;
+			  this.setSelectedLedgerCategoryOnSelectedRule();
 
         if(this.form.valid) {
             this.nsfo
@@ -131,7 +145,7 @@ export class InvoicesRuleTemplatesComponent {
         }
     }
 
-    private removeInvoiceRule(rule: InvoiceRule) {
+    removeInvoiceRule(rule: InvoiceRule) {
         switch (rule.category) {
             case InvoiceCategory.General:
                 _.remove(this.generalRules, rule);
@@ -145,17 +159,19 @@ export class InvoicesRuleTemplatesComponent {
             .subscribe();
     }
     
-    private openModal(isEditMode: boolean = false, category: string, rule: InvoiceRule): void {
+    openModal(isEditMode: boolean = false, category: string, rule: InvoiceRule): void {
         this.isModalEditMode = isEditMode;
         this.displayModal = 'block';
 
         if(!isEditMode) {
             this.selectedRule.category = category;
+            this.selectedLedgerCategory = null;
         }
 
         if(isEditMode) {
             this.selectedRule = _.cloneDeep(rule);
             this.selectedRuleTemp = _.cloneDeep(rule);
+            this.selectedLedgerCategory = _.cloneDeep(rule.ledger_category);
         }
     }
 
@@ -163,6 +179,16 @@ export class InvoicesRuleTemplatesComponent {
         this.displayModal = 'none';
         this.selectedRule = new InvoiceRule();
         this.resetValidation();
+    }
+
+    disableEditOrInsertButton(): boolean {
+        return this.isSending
+            || this.selectedRule == null
+            || this.selectedLedgerCategory == null
+            || this.selectedRule.description == '' || this.selectedRule.description == null
+            || this.selectedRule.price_excl_vat == undefined
+            || this.selectedRule.vat_percentage_rate == undefined
+          ;
     }
 
     private resetValidation() {}

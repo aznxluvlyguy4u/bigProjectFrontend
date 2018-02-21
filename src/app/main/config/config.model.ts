@@ -1,4 +1,5 @@
 import { Address } from '../client/client.model';
+import { LedgerCategory } from '../../global/models/ledger-category.model';
 
 export class Choice {
     public code: string;
@@ -41,6 +42,7 @@ export class InvoiceRule {
     public sort_order: number;
     public category: string;
     public type: string;
+		ledger_category: LedgerCategory;
 }
 
 export class InvoiceSenderDetails {
