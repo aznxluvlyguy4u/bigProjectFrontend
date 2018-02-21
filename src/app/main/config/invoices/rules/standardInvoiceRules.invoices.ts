@@ -101,7 +101,12 @@ export class InvoicesRuleTemplatesComponent {
                         
                         this.isSending = false;
                         this.closeModal();
-                    }
+                    },
+                  error => {
+										this.isSending = false;
+										this.closeModal();
+										alert(this.nsfo.getErrorMessage(error));
+                  }
                 )
         } else {
             this.isValidForm = false;
@@ -139,7 +144,12 @@ export class InvoicesRuleTemplatesComponent {
                         }
                         this.isSending = false;
                         this.closeModal();
-                    }
+                    },
+                  error => {
+										this.isSending = false;
+										this.closeModal();
+										alert(this.nsfo.getErrorMessage(error));
+                  }
                 );
         } else {
             this.isValidForm = false;
