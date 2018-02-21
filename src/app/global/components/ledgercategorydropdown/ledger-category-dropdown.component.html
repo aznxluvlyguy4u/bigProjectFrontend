@@ -9,7 +9,7 @@
 
 <div class="reveal-overlay" [ngStyle]="{'display': displayModal}">
     <div class="medium reveal" [ngStyle]="{'display': displayModal}">
-        <div class="modal-header">
+        <div class="modal-header" style="background-color:silver">
 
             <div class="row table-options-container">
                 <div class="large-8 columns">
@@ -17,7 +17,7 @@
                 </div>
                 <div class="large-2 columns">
                     <span class="pull-right">
-                        <button
+                        <button style="min-height:2.5rem"
                                 class="small primary button"
                                 [disabled]="disableEditOrInsertButton()"
                                 (click)="clickOK()"
@@ -26,7 +26,7 @@
                 </div>
                 <div class="large-2 columns end">
                     <span class="pull-right">
-                        <button
+                        <button style="min-height:2.5rem"
                                 class="small alert button"
                                 (click)="clickCancel();"
                         >{{ 'CANCEL' | translate}}</button>
@@ -67,7 +67,7 @@
 
 
             <div class="row table-options-container">
-                <div class="large-2 columns end">
+                <div class="large-8 columns">
                     <label>
                         {{ 'SEARCH' | translate }}
                         <input type="text" [(ngModel)]="filterSearch" (keydown)="page = 1" placeholder="{{ 'SEARCH' | translate }}" maxlength="50">

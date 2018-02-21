@@ -232,10 +232,7 @@
                         {{'VAT PERCENTAGE RATE' | translate}}
                     </label>
                     <select [(ngModel)]="temporaryRule.vat_percentage_rate" formControlName="vat_percentage_rate">
-                        <option value="0"> 0% </option>
-                        <option value="6"> 6% </option>
-                        <option value="12"> 12% </option>
-                        <option value="21"> 21% </option>
+                        <option *ngFor="let percentageNumber of getVatPercentages()" [value]="percentageNumber"> {{percentageNumber}}% </option>
                     </select>
                 </div>
             </div>

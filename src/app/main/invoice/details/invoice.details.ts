@@ -8,6 +8,7 @@ import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
 import { InvoiceRuleTemplate, Invoice, InvoiceSenderDetails, InvoiceRule } from "../invoice.model";
 import { CompanySelectorComponent } from '../../../global/components/clientselector/company-selector.component';
 import { Address, Client } from '../../client/client.model';
+import { SettingsService } from '../../../global/services/settings/settings.service';
 
 @Component({
     selector: 'ng-select',
@@ -43,7 +44,7 @@ export class InvoiceDetailsComponent {
     private totalInclVAT: number = 0;
     private vatCalculations = [];
 
-    constructor(private fb: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute, private nsfo: NSFOService) {
+    constructor(private fb: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute, private nsfo: NSFOService, private settings: SettingsService) {
         this.form = fb.group({
             description: ['', Validators.required],
             category: ['', Validators.required],
@@ -444,6 +445,10 @@ export class InvoiceDetailsComponent {
     private navigateTo(url: string) {
         this.router.navigate([url]);
     }
+
+    getVatPercentages(): number[] {
+    	return this.settings.getVatPercentages();
+		}
 
     navigateToInvoiceSenderDetailsEdit() {
       this.navigateTo('/configuration/invoices/invoices_details');

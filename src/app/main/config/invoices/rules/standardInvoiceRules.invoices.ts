@@ -7,6 +7,7 @@ import {InvoiceRule} from "../../config.model";
 import {FormGroup, FormBuilder, REACTIVE_FORM_DIRECTIVES, Validators} from "@angular/forms";
 import {NSFOService} from "../../../../global/services/nsfo/nsfo.service";
 import { LedgerCategoryDropdownComponent } from "../../../../global/components/ledgercategorydropdown/ledger-category-dropdown.component";
+import { SettingsService } from '../../../../global/services/settings/settings.service';
 
 @Component({
     directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, LedgerCategoryDropdownComponent],
@@ -29,7 +30,7 @@ export class InvoicesRuleTemplatesComponent {
 
 	  isLoading: boolean = true;
 
-    constructor(private fb: FormBuilder, private nsfo: NSFOService) {
+    constructor(private fb: FormBuilder, private nsfo: NSFOService, private settings: SettingsService) {
         this.form = fb.group({
             description: ['', Validators.required],
             price_excl_vat: ['', Validators.required],
@@ -189,6 +190,10 @@ export class InvoicesRuleTemplatesComponent {
             || this.selectedRule.price_excl_vat == undefined
             || this.selectedRule.vat_percentage_rate == undefined
           ;
+    }
+
+    getVatPercentages(): number[] {
+        return this.settings.getVatPercentages();
     }
 
     private resetValidation() {}

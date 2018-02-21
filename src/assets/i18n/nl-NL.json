@@ -651,5 +651,13 @@
   "YOUR CHANGES HAVE BEEN SAVED": "Uw wijzigingen zijn opgeslagen",
   "SELECT LEDGER CATEGORY": "Selecteer grootboekrekening",
   "LEDGER CATEGORY": "Grootboekrekening",
-  "CODE": "Code"
+  "CODE": "Code",
+  "LEDGER CATEGORY IS NOT FOUND.": "Grootboekrekening is niet gevonden",
+  "THE INVOICE RULE IS NOT FOUND.": "Factuurregel is niet gevonden",
+  "REQUEST BODY IS EMPTY": "Request body is leeg",
+  "LEDGER CATEGORY IS MISSING": "Grootboekrekening ontbreekt",
+  "DESCRIPTION IS MISSING": "Beschrijving ontbreekt",
+  "PRICE EXCL. VAT IS MISSING": "Prijs excl. BTW ontbreekt",
+  "VAT PERCENTAGE RATE IS MISSING": "BTW-tarief ontbreekt",
+  "INVOICE RULE ID IS EMPTY": "Factuurregel id ontbreekt"
 }
