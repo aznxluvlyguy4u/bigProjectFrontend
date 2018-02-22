@@ -1,5 +1,6 @@
 import DateTimeFormat = Intl.DateTimeFormat;
 import { Address, Client } from '../client/client.model';
+import { LedgerCategory } from '../../global/models/ledger-category.model';
 
 export class Invoice {
     public id: number;
@@ -37,6 +38,7 @@ export class InvoiceRule {
     public sort_order: number;
     public category: string;
     public type: string;
+	  ledger_category: LedgerCategory;
 }
 
 export class InvoiceSenderDetails {

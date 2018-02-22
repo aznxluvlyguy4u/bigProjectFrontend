@@ -1,5 +1,5 @@
-import { Person } from '../config/config.model';
 import { Invoice } from '../invoice/invoice.model';
+import { Person } from '../../global/models/person.model';
 
 export class Client {
 	  public id: number;

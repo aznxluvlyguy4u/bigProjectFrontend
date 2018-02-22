@@ -1,7 +1,7 @@
 import _ = require("lodash");
 import {Component} from "@angular/core";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
-import {VwaEmployee} from "../config.model";
+import { VwaEmployee } from '../../../global/models/vwa-employee.model';
 import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
 import {Validators} from "@angular/common";
 import {FormGroup, FormBuilder, REACTIVE_FORM_DIRECTIVES} from "@angular/forms";

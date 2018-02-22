@@ -1,8 +1,14 @@
 <div class="row">
-    <div class="large-12 columns sub-page-header">
+    <div class="large-6 columns sub-page-header">
         <span class="sub-page-title">
            {{ 'INVOICES VARIABLES' | translate }}
         </span>
+    </div>
+    <div class="large-6 columns">
+        <label>
+            {{ 'SEARCH' | translate }}
+            <input type="text" [(ngModel)]="filterSearch" (keydown)="page = 1" placeholder="{{ 'SEARCH' | translate }}" maxlength="50">
+        </label>
     </div>
 </div>
 <div class="row">

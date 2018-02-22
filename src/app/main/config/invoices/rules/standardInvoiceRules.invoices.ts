@@ -3,7 +3,7 @@ import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {Component} from "@angular/core";
 import {ROUTER_DIRECTIVES} from "@angular/router";
 import { LedgerCategory } from "../../../../global/models/ledger-category.model";
-import {InvoiceRule} from "../../config.model";
+import { InvoiceRule } from '../../../invoice/invoice.model';
 import {FormGroup, FormBuilder, REACTIVE_FORM_DIRECTIVES, Validators} from "@angular/forms";
 import {NSFOService} from "../../../../global/services/nsfo/nsfo.service";
 import { LedgerCategoryDropdownComponent } from "../../../../global/components/ledgercategorydropdown/ledger-category-dropdown.component";
@@ -25,6 +25,7 @@ export class InvoicesRuleTemplatesComponent {
     private isSending: boolean = false;
     private form: FormGroup;
 
+	  filterSearch = '';
 	  isLoading: boolean = true;
 
     constructor(private fb: FormBuilder, private nsfo: NSFOService, private settings: SettingsService) {
