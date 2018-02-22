@@ -659,5 +659,6 @@
   "DESCRIPTION IS MISSING": "Beschrijving ontbreekt",
   "PRICE EXCL. VAT IS MISSING": "Prijs excl. BTW ontbreekt",
   "VAT PERCENTAGE RATE IS MISSING": "BTW-tarief ontbreekt",
-  "INVOICE RULE ID IS EMPTY": "Factuurregel id ontbreekt"
+  "INVOICE RULE ID IS EMPTY": "Factuurregel id ontbreekt",
+  "CURRENCY CANNOT EXCEED 3 DECIMAL SPACES": "Valuta mag niet meer dan 3 decimalen bevatten"
 }

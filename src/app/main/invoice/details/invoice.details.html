@@ -225,7 +225,12 @@
                     <label>
                         {{'PRICE (EXCL. VAT)' | translate}}
                     </label>
-                    <input type="number" [(ngModel)]="temporaryRule.price_excl_vat" formControlName="price_excl_vat">
+                    <input
+                            type="number"
+                            [(ngModel)]="temporaryRule.price_excl_vat"
+                            formControlName="price_excl_vat"
+                            step="0.001"
+                    >
                 </div>
                 <div class="large-12">
                     <label>
