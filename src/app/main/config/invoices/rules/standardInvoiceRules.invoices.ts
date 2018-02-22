@@ -17,10 +17,7 @@ import { SettingsService } from '../../../../global/services/settings/settings.s
 
 export class InvoicesRuleTemplatesComponent {
     private rules: InvoiceRule[] = [];
-    private generalRules: InvoiceRule[] = [];
-    private animalHealthRules: InvoiceRule[] = [];
     private selectedRule: InvoiceRule = new InvoiceRule();
-    private selectedRuleTemp: InvoiceRule;
     selectedLedgerCategory: LedgerCategory;
     private displayModal: string = 'none';
     private isModalEditMode: boolean = false;
@@ -45,19 +42,6 @@ export class InvoicesRuleTemplatesComponent {
             .subscribe(
                 res => {
                     this.rules = res.result;
-
-                    for(let rule of this.rules) {
-                        switch (rule.category) {
-                            case InvoiceCategory.General:
-                                this.generalRules.push(rule);
-                                break;
-
-                            case InvoiceCategory.AnimalHealth:
-                                this.animalHealthRules.push(rule);
-                                break;
-                        }
-                    }
-
                     this.isLoading = false;
                 },
 							error => {
@@ -89,16 +73,9 @@ export class InvoicesRuleTemplatesComponent {
                 .subscribe(
                     res => {
                         let rule = res.result;
-                        switch (rule.category) {
-                            case InvoiceCategory.General:
-                                this.generalRules.push(rule);
-                                break;
+                        this.rules.push(rule);
+											  this.selectedRule = new InvoiceRule();
 
-                            case InvoiceCategory.AnimalHealth:
-                                this.animalHealthRules.push(rule);
-                                break;
-                        }
-                        
                         this.isSending = false;
                         this.closeModal();
                     },
@@ -124,24 +101,10 @@ export class InvoicesRuleTemplatesComponent {
                 .doPutRequest(this.nsfo.URI_INVOICE_RULE, this.selectedRule)
                 .subscribe(
                     res => {
-                        switch (this.selectedRule.category) {
-                            case InvoiceCategory.General:
-                                this.generalRules.push(this.selectedRule);
-                                break;
-
-                            case InvoiceCategory.AnimalHealth:
-                                this.animalHealthRules.push(this.selectedRule);
-                                break;
-                        }
-                        switch (this.selectedRuleTemp.category) {
-                            case InvoiceCategory.General:
-                                _.remove(this.generalRules, this.selectedRuleTemp);
-                                break;
-
-                            case InvoiceCategory.AnimalHealth:
-                                _.remove(this.animalHealthRules, this.selectedRuleTemp);
-                                break;
-                        }
+                        const invoice = res.result;
+                        const index = _.findIndex(this.rules, {id: invoice.id});
+                        this.rules.splice(index, 1, invoice);
+                        this.selectedRule = new InvoiceRule();
                         this.isSending = false;
                         this.closeModal();
                     },
@@ -157,17 +120,15 @@ export class InvoicesRuleTemplatesComponent {
     }
 
     removeInvoiceRule(rule: InvoiceRule) {
-        switch (rule.category) {
-            case InvoiceCategory.General:
-                _.remove(this.generalRules, rule);
-                break;
-
-            case InvoiceCategory.AnimalHealth:
-                _.remove(this.animalHealthRules, rule);
-                break;
-        }
         this.nsfo.doDeleteRequest(this.nsfo.URI_INVOICE_RULE + "/" + rule.id, rule)
-            .subscribe();
+            .subscribe(
+              res => {
+                  _.remove(this.rules, {id: rule.id});
+              },
+							error => {
+								alert(this.nsfo.getErrorMessage(error));
+							}
+            );
     }
     
     openModal(isEditMode: boolean = false, category: string, rule: InvoiceRule): void {
@@ -181,7 +142,6 @@ export class InvoicesRuleTemplatesComponent {
 
         if(isEditMode) {
             this.selectedRule = _.cloneDeep(rule);
-            this.selectedRuleTemp = _.cloneDeep(rule);
             this.selectedLedgerCategory = _.cloneDeep(rule.ledger_category);
         }
     }
@@ -207,9 +167,4 @@ export class InvoicesRuleTemplatesComponent {
     }
 
     private resetValidation() {}
-}
-
-enum InvoiceCategory {
-    General = "GENERAL",
-    AnimalHealth = "ANIMAL HEALTH"
 }

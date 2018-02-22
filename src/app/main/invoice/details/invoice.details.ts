@@ -35,7 +35,6 @@ export class InvoiceDetailsComponent {
     clientUbns: string[] = [];
     private selectedInvoiceRuleId: number;
     private standardGeneralInvoiceRuleOptions: InvoiceRule[] = [];
-    private standardAnimalHealthInvoiceRuleOptions: InvoiceRule[] = [];
     private temporaryRule: InvoiceRule = new InvoiceRule();
     private invoice: Invoice = new Invoice;
     private form: FormGroup;
@@ -55,7 +54,6 @@ export class InvoiceDetailsComponent {
 
     ngOnInit() {
         this.getGeneralInvoiceRulesOptions();
-        this.getAnimalHealthInvoiceRulesOptions();
         this.dataSub = this.activatedRoute.params.subscribe(params => {
             this.pageMode = params['mode'];
             if(this.isEditMode()) {
@@ -173,18 +171,6 @@ export class InvoiceDetailsComponent {
                   }
             )
     }
-
-    private getAnimalHealthInvoiceRulesOptions(): void {
-        this.nsfo.doGetRequest(this.nsfo.URI_INVOICE_RULE + "?category=ANIMAL HEALTH&type=standard")
-            .subscribe(
-                res => {
-                    this.standardAnimalHealthInvoiceRuleOptions = <InvoiceRule[]> res.result;
-                },
-                  error => {
-                    alert(this.nsfo.getErrorMessage(error));
-                  }
-            )
-    }
     
     private addInvoiceRule(type, category): void {
         let rule = new InvoiceRule();
@@ -196,11 +182,7 @@ export class InvoiceDetailsComponent {
                 let standardInvoiceRule = _.find(this.standardGeneralInvoiceRuleOptions, function (o) {
                     return o.id == selectedId;
                 });
-                if (category == "ANIMAL HEALTH") {
-                    standardInvoiceRule = _.find(this.standardAnimalHealthInvoiceRuleOptions, function (o) {
-                        return o.id == selectedId;
-                    });
-                }
+
                 rule.description = standardInvoiceRule.description;
                 rule.vat_percentage_rate = standardInvoiceRule.vat_percentage_rate;
                 rule.price_excl_vat = standardInvoiceRule.price_excl_vat;

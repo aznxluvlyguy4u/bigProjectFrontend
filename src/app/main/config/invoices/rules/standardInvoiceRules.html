@@ -23,7 +23,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngIf="isLoading && generalRules.length == 0">
+                <tr *ngIf="isLoading && rules.length == 0">
                     <td colspan="10">
                         <div class="spinner">
                             <div class="bounce1"></div>
@@ -33,11 +33,11 @@
                     </td>
                 </tr>
 
-                <tr *ngIf="!isLoading && generalRules.length == 0">
+                <tr *ngIf="!isLoading && rules.length == 0">
                     <td colspan="4" class="text-center">{{ 'NO RULES HAVE BEEN ADDED' | translate }}</td>
                 </tr>
 
-                <tr *ngFor="let rule of generalRules">
+                <tr *ngFor="let rule of rules">
                     <td>
                         {{ rule.ledger_category ? rule.ledger_category.description : '-' }} [{{ rule.ledger_category ? rule.ledger_category.code : '-' }}]
                     </td>
@@ -57,70 +57,6 @@
                         </span>
                     </td>
                 </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-
-<div class="row">
-    <div class="large-12 columns sub-page-header">
-        <span class="sub-page-title">
-           {{ 'INSPECTION ANIMAL HEALTH' | translate }}
-        </span>
-    </div>
-</div>
-<div class="row">
-    <div class="large-12 columns">
-        <table>
-            <thead>
-            <tr>
-                <td>{{'LEDGER CATEGORY' | translate}}</td>
-                <td>{{'DESCRIPTION' | translate}}</td>
-                <td>{{'PRICE (EXCL. VAT)' | translate}}</td>
-                <td>{{'VAT PERCENTAGE RATE' | translate}}</td>
-                <td>
-                    <button type="button" (click)="openModal(false, 'ANIMAL HEALTH')" class="small primary button pull-right">
-                        <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
-                        {{ 'ADD INVOICE RULE' | translate }}
-                    </button>
-                </td>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngIf="isLoading && animalHealthRules.length == 0">
-                <td colspan="10">
-                    <div class="spinner">
-                        <div class="bounce1"></div>
-                        <div class="bounce2"></div>
-                        <div class="bounce3"></div>
-                    </div>
-                </td>
-            </tr>
-
-            <tr *ngIf="!isLoading && animalHealthRules.length == 0">
-                <td colspan="4" class="text-center">{{ 'NO RULES HAVE BEEN ADDED' | translate }}</td>
-            </tr>
-
-            <tr *ngFor="let rule of animalHealthRules">
-                <td>
-                    {{ rule.ledger_category ? rule.ledger_category.description : '-' }} [{{ rule.ledger_category ? rule.ledger_category.code : '-' }}]
-                </td>
-                <td>
-                    {{ rule.description }}
-                </td>
-                <td>
-                    {{ rule.price_excl_vat }}
-                </td>
-                <td>
-                    {{ rule.vat_percentage_rate }}
-                </td>
-                <td>
-                    <span class="pull-right">
-                        <a (click)="openModal(true, rule.category, rule)"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
-                        <a (click)="removeInvoiceRule(rule)" class="remove-button"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
-                    </span>
-                </td>
-            </tr>
             </tbody>
         </table>
     </div>
@@ -223,7 +159,8 @@
                     </span>
                 </button>
 
-                <button (click)="closeModal()" class="tiny alert button">{{ 'CANCEL' | translate}}</button>
+                <button *ngIf="!isModalEditMode" (click)="closeModal()" class="tiny alert button">{{ 'CANCEL' | translate}}</button>
+                <button *ngIf="isModalEditMode" (click)="closeModal(); cancelEdit()" class="tiny alert button">{{ 'CANCEL' | translate}}</button>
             </span>
         </div>
     </div>

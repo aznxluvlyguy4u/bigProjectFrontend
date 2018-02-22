@@ -175,25 +175,11 @@
                     <option *ngFor="let rule of standardGeneralInvoiceRuleOptions" value="{{ rule.id }}">{{ rule.description }}</option>
                 </select>
             </label>
-            <label>
-                {{ 'ANIMAL HEALTH INVOICE RULE' | translate }}
-                <select [(ngModel)]="selectedInvoiceRuleId">
-                    <option value="">--</option>
-                    <option *ngFor="let rule of standardAnimalHealthInvoiceRuleOptions" value="{{ rule.id }}">{{ rule.description }}</option>
-                </select>
-            </label>
         </div>
         <div class="large-2 columns end">
             <label>
                 &nbsp;
                 <button (click)="addInvoiceRule('standard', 'GENERAL')" class="small primary button expanded">
-                    <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
-                    {{ 'ADD' | translate }}
-                </button>
-            </label>
-            <label>
-                &nbsp;
-                <button (click)="addInvoiceRule('standard', 'ANIMAL HEALTH')" class="small primary button expanded">
                     <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
                     {{ 'ADD' | translate }}
                 </button>
