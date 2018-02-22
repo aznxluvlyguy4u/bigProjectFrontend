@@ -1,14 +1,28 @@
 <div class="row">
-    <div class="large-6 columns sub-page-header">
+    <div class="large-3 columns sub-page-header">
         <span class="sub-page-title">
            {{ 'INVOICES VARIABLES' | translate }}
         </span>
     </div>
+
+
+    <div class="large-3 columns" >
+        <span>
+            <select style="font-size:0.7rem" [(ngModel)]="filterAmount" (change)="page = 1">
+                <option value="5">{{ 'DISPLAY AMOUNT' | translate }} 5</option>
+                <option value="10">{{ 'DISPLAY AMOUNT' | translate }} 10</option>
+                <option value="25">{{ 'DISPLAY AMOUNT' | translate }} 25</option>
+            </select>
+        </span>
+    </div>
+
     <div class="large-6 columns">
-        <label>
-            {{ 'SEARCH' | translate }}
-            <input type="text" [(ngModel)]="filterSearch" (keydown)="page = 1" placeholder="{{ 'SEARCH' | translate }}" maxlength="50">
-        </label>
+        <input style="font-size:0.7rem"
+                type="text"
+               [(ngModel)]="filterSearch"
+               (keydown)="page = 1"
+               placeholder="{{ 'SEARCH' | translate }}"
+               maxlength="50">
     </div>
 </div>
 <div class="row">
@@ -43,7 +57,7 @@
                     <td colspan="4" class="text-center">{{ 'NO RULES HAVE BEEN ADDED' | translate }}</td>
                 </tr>
 
-                <tr *ngFor="let rule of rules">
+                <tr *ngFor="let rule of rules | invoiceRuleSearchPipe:getFilterOptions()  | paginate: {itemsPerPage: filterAmount, currentPage: page}">
                     <td>
                         {{ rule.ledger_category ? rule.ledger_category.description : '-' }} [{{ rule.ledger_category ? rule.ledger_category.code : '-' }}]
                     </td>
@@ -65,6 +79,8 @@
                 </tr>
             </tbody>
         </table>
+
+        <pagination (pageChange)="page = 1" [goToFirstPage]="(isLoadedEvent)"></pagination>
     </div>
 </div>
 
@@ -165,8 +181,7 @@
                     </span>
                 </button>
 
-                <button *ngIf="!isModalEditMode" (click)="closeModal()" class="tiny alert button">{{ 'CANCEL' | translate}}</button>
-                <button *ngIf="isModalEditMode" (click)="closeModal(); cancelEdit()" class="tiny alert button">{{ 'CANCEL' | translate}}</button>
+                <button (click)="closeModal()" class="tiny alert button">{{ 'CANCEL' | translate}}</button>
             </span>
         </div>
     </div>

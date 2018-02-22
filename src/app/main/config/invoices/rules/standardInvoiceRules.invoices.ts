@@ -1,6 +1,6 @@
 import _ = require("lodash");
 import {TranslatePipe} from "ng2-translate/ng2-translate";
-import {Component} from "@angular/core";
+import { Component, EventEmitter } from '@angular/core';
 import {ROUTER_DIRECTIVES} from "@angular/router";
 import { LedgerCategory } from "../../../../global/models/ledger-category.model";
 import { InvoiceRule } from '../../../invoice/invoice.model';
@@ -8,11 +8,16 @@ import {FormGroup, FormBuilder, REACTIVE_FORM_DIRECTIVES, Validators} from "@ang
 import {NSFOService} from "../../../../global/services/nsfo/nsfo.service";
 import { LedgerCategoryDropdownComponent } from "../../../../global/components/ledgercategorydropdown/ledger-category-dropdown.component";
 import { SettingsService } from '../../../../global/services/settings/settings.service';
+import { PaginatePipe, PaginationService } from 'ng2-pagination';
+import { PaginationComponent } from '../../../../global/components/pagination/pagination.component';
+import { InvoiceRulePipe } from '../../../../global/pipes/invoice-rule.pipe';
 
 @Component({
-    directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, LedgerCategoryDropdownComponent],
+    directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, LedgerCategoryDropdownComponent,
+			PaginationComponent],
     template: require('./standardInvoiceRules.html'),
-    pipes: [TranslatePipe]
+	  providers: [PaginationService],
+    pipes: [TranslatePipe, PaginatePipe, InvoiceRulePipe]
 })
 
 export class InvoicesRuleTemplatesComponent {
@@ -26,7 +31,10 @@ export class InvoicesRuleTemplatesComponent {
     private form: FormGroup;
 
 	  filterSearch = '';
+		filterAmount = 10;
 	  isLoading: boolean = true;
+
+	  isLoadedEvent = new EventEmitter<boolean>();
 
     constructor(private fb: FormBuilder, private nsfo: NSFOService, private settings: SettingsService) {
         this.form = fb.group({
@@ -47,6 +55,7 @@ export class InvoicesRuleTemplatesComponent {
                 },
 							error => {
 									this.isLoading = false;
+									this.isLoadedEvent.emit(true);
 									alert(this.nsfo.getErrorMessage(error));
                 }
 
@@ -168,4 +177,10 @@ export class InvoicesRuleTemplatesComponent {
     }
 
     private resetValidation() {}
+
+	getFilterOptions(): any[] {
+		return [
+			this.filterSearch,
+		];
+	}
 }
