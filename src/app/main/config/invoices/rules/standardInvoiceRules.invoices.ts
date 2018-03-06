@@ -141,12 +141,11 @@ export class InvoicesRuleTemplatesComponent {
             );
     }
     
-    openModal(isEditMode: boolean = false, category: string, rule: InvoiceRule): void {
+    openModal(isEditMode: boolean = false, rule: InvoiceRule): void {
         this.isModalEditMode = isEditMode;
         this.displayModal = 'block';
 
         if(!isEditMode) {
-            this.selectedRule.category = category;
             this.selectedLedgerCategory = null;
         }
 

@@ -36,7 +36,6 @@ export class InvoiceRule {
     public vat_percentage_rate: number;
     public price_excl_vat: number;
     public sort_order: number;
-    public category: string;
     public type: string;
 	  ledger_category: LedgerCategory;
 }

@@ -5,10 +5,12 @@ import {Router, ActivatedRoute, ROUTER_DIRECTIVES} from "@angular/router";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {FormGroup, FormBuilder, REACTIVE_FORM_DIRECTIVES, Validators} from "@angular/forms";
 import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
-import { InvoiceRuleTemplate, Invoice, InvoiceSenderDetails, InvoiceRule } from "../invoice.model";
+import { Invoice, InvoiceSenderDetails, InvoiceRule } from "../invoice.model";
 import { CompanySelectorComponent } from '../../../global/components/clientselector/company-selector.component';
 import { Address, Client } from '../../client/client.model';
 import { SettingsService } from '../../../global/services/settings/settings.service';
+import { LedgerCategoryDropdownComponent } from '../../../global/components/ledgercategorydropdown/ledger-category-dropdown.component';
+import { FormatService } from '../../../global/services/utils/format.service';
 
 @Component({
     selector: 'ng-select',
@@ -19,7 +21,8 @@ import { SettingsService } from '../../../global/services/settings/settings.serv
         'multiple',
         'showSearchInputInDropdown'
     ],
-    directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, CompanySelectorComponent],
+    directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, CompanySelectorComponent,
+			LedgerCategoryDropdownComponent],
     template: require('./invoice.details.html'),
     pipes: [TranslatePipe]
 })
@@ -160,6 +163,21 @@ export class InvoiceDetailsComponent {
 			);
 	}
 
+	isCustomInvoiceRuleCreateButtonActive(): boolean {
+    	return this.temporaryRule != null
+					&& this.temporaryRule.description != null
+					&& this.temporaryRule.vat_percentage_rate != null
+					&& this.temporaryRule.price_excl_vat != null
+					&& this.temporaryRule.ledger_category != null
+					&& this.temporaryRule.ledger_category.id != null
+					&& this.priceExclVatDecimalCountIsValid()
+			;
+	}
+
+	priceExclVatDecimalCountIsValid() {
+    	return FormatService.doesNotExceedMaxCurrencyDecimalCount(this.temporaryRule.price_excl_vat);
+	}
+
     private getGeneralInvoiceRulesOptions(): void {
         this.nsfo.doGetRequest(this.nsfo.URI_INVOICE_RULE + "?category=GENERAL&type=standard")
             .subscribe(
@@ -172,7 +190,7 @@ export class InvoiceDetailsComponent {
             )
     }
     
-    private addInvoiceRule(type, category): void {
+    private addInvoiceRule(type): void {
         let rule = new InvoiceRule();
         rule.type = "custom";
         rule.sort_order = 1;
@@ -186,11 +204,11 @@ export class InvoiceDetailsComponent {
                 rule.description = standardInvoiceRule.description;
                 rule.vat_percentage_rate = standardInvoiceRule.vat_percentage_rate;
                 rule.price_excl_vat = standardInvoiceRule.price_excl_vat;
-                rule.category = standardInvoiceRule.category;
+                rule.ledger_category = standardInvoiceRule.ledger_category;
             }
         } else {
             rule.sort_order = 1;
-            rule.category = this.temporaryRule.category;
+            rule.ledger_category = this.temporaryRule.ledger_category;
             rule.vat_percentage_rate = this.temporaryRule.vat_percentage_rate;
             rule.price_excl_vat = this.temporaryRule.price_excl_vat;
             rule.description = this.temporaryRule.description;
