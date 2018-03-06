@@ -18,4 +18,12 @@ export class FormatService {
 	static doesNotExceedMaxCurrencyDecimalCount(number: number): boolean {
 		return UtilsService.countDecimals(number) <= MAX_CURRENCY_DECIMAL_COUNT;
 	}
+
+	static roundCurrency(price: number): number {
+		if (price == null) {
+			return null;
+		}
+
+		return Math.round(price * 100) / 100;
+	}
 }

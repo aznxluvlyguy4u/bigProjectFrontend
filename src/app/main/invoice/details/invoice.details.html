@@ -362,10 +362,10 @@
                         </td>
                     </tr>
                     <tr>
-                        <td> {{ 'TOTAL INCL VAT' | translate }}</td>
+                        <td> {{ 'TOTAL INCL VAT' | translate }} <i class="fa fa-info-circle" aria-hidden="true" title="{{ 'ROUNDED TO THE NEAREST TWO DECIMALS' | translate }}"></i></td>
                         <td>
                             <span class="pull-right">
-                                {{ totalInclVAT.toFixed(3) }}
+                                {{ totalInclVAT }}
                             </span>
                         </td>
                     </tr>

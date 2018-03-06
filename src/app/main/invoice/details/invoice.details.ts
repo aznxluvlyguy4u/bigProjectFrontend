@@ -255,13 +255,14 @@ export class InvoiceDetailsComponent {
                 amount: totalAmount,
                 total: (totalAmount/100) * vat_percentage_rate
             };
-            this.totalInclVAT += (totalAmount/100) * vat_percentage_rate;
+            this.totalInclVAT +=totalAmount/100 * vat_percentage_rate;
             this.vatCalculations.push(calculation);
 
 
         }
 
         this.totalInclVAT += this.totalExclVAT;
+        this.totalInclVAT = FormatService.roundCurrency(this.totalInclVAT);
         this.invoice.total = this.totalInclVAT;
     }
 
