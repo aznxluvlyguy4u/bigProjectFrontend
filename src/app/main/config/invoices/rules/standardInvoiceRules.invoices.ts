@@ -11,6 +11,7 @@ import { SettingsService } from '../../../../global/services/settings/settings.s
 import { PaginatePipe, PaginationService } from 'ng2-pagination';
 import { PaginationComponent } from '../../../../global/components/pagination/pagination.component';
 import { InvoiceRulePipe } from '../../../../global/pipes/invoice-rule.pipe';
+import { InvoiceDetailsComponent } from '../../../invoice/details/invoice.details';
 
 @Component({
     directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, LedgerCategoryDropdownComponent,
@@ -168,8 +169,13 @@ export class InvoicesRuleTemplatesComponent {
             || this.selectedRule.description == '' || this.selectedRule.description == null
             || this.selectedRule.price_excl_vat == undefined
             || this.selectedRule.vat_percentage_rate == undefined
+						|| !this.priceHasValidDecimalCount()
           ;
     }
+
+    priceHasValidDecimalCount(): boolean {
+    	return InvoiceDetailsComponent.priceExclVatDecimalCountIsValid(this.selectedRule.price_excl_vat);
+		}
 
     getVatPercentages(): number[] {
         return this.settings.getVatPercentages();

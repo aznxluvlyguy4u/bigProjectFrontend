@@ -172,22 +172,31 @@
 
         <div class="row invoice-rules">
             <div class="large-6 columns">
-                <h5>
-                    {{ 'GENERAL INVOICE RULE' | translate }}
-                    <select [(ngModel)]="selectedInvoiceRuleId">
-                        <option value="">--</option>
-                        <option *ngFor="let rule of standardGeneralInvoiceRuleOptions" value="{{ rule.id }}">{{ rule.description }}</option>
-                    </select>
-                </h5>
+
+                <div class="row">
+                    <div class="large-12 columns">
+                        <h5>{{ 'GENERAL INVOICE RULE' | translate }}</h5>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="large-12 columns">
+                        <select [(ngModel)]="selectedInvoiceRuleId">
+                            <option value="">--</option>
+                            <option *ngFor="let rule of standardGeneralInvoiceRuleOptions" value="{{ rule.id }}">{{ rule.description }}</option>
+                        </select>
+                    </div>
+                </div>
+
             </div>
             <div class="large-2 columns end">
-                <h5>
-                    &nbsp;
-                    <button (click)="addInvoiceRule('standard', 'GENERAL')" class="small primary button expanded">
+                <div class="row">
+                    <h5>&nbsp;</h5>
+                    <button (click)="addInvoiceRule('standard', 'GENERAL')" class="small primary button">
                         <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
                         {{ 'ADD' | translate }}
                     </button>
-                </h5>
+                </div>
             </div>
         </div>
 
@@ -238,6 +247,7 @@
                             </label>
                         </div>
                         <div class="large-8 columns">
+                            <label *ngIf="!tempRulePriceExclVatDecimalCountIsValid()" class="input-error-msg" style="text-align: left">{{'CURRENCY CANNOT EXCEED 3 DECIMAL SPACES'|translate}}!</label>
                             <input
                                     type="number"
                                     [(ngModel)]="temporaryRule.price_excl_vat"
@@ -264,18 +274,14 @@
 
                 </div>
 
-                <div class="large-2 columns end">
-                    <h4>
-                        &nbsp;
-                        <button [disabled]="!isCustomInvoiceRuleCreateButtonActive()" (click)="addInvoiceRule('custom', null)" class="small primary button expanded">
+                <div class="large-6 columns end">
+                    <div class="row">
+                        <h5>&nbsp;</h5>
+                        <button [disabled]="!isCustomInvoiceRuleCreateButtonActive()" (click)="addInvoiceRule('custom', null)" class="small primary button">
                             <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
                             {{ 'ADD' | translate }}
                         </button>
-                    </h4>
-                </div>
-
-                <div class="large-2 columns end">
-                    <p *ngIf="!priceExclVatDecimalCountIsValid()">{{'CURRENCY CANNOT EXCEED 3 DECIMAL SPACES'|translate}}!</p>
+                    </div>
                 </div>
             </div>
 

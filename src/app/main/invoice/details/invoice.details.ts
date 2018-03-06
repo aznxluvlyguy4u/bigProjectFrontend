@@ -170,14 +170,17 @@ export class InvoiceDetailsComponent {
 					&& this.temporaryRule.price_excl_vat != null
 					&& this.temporaryRule.ledger_category != null
 					&& this.temporaryRule.ledger_category.id != null
-					&& this.priceExclVatDecimalCountIsValid()
+					&& InvoiceDetailsComponent.priceExclVatDecimalCountIsValid(this.temporaryRule.price_excl_vat)
 			;
 	}
 
-	priceExclVatDecimalCountIsValid() {
-    	return FormatService.doesNotExceedMaxCurrencyDecimalCount(this.temporaryRule.price_excl_vat);
+	tempRulePriceExclVatDecimalCountIsValid(): boolean {
+    	return InvoiceDetailsComponent.priceExclVatDecimalCountIsValid(this.temporaryRule.price_excl_vat);
 	}
 
+	static priceExclVatDecimalCountIsValid(priceExclVat: number) {
+    	return FormatService.doesNotExceedMaxCurrencyDecimalCount(priceExclVat);
+	}
     private getGeneralInvoiceRulesOptions(): void {
         this.nsfo.doGetRequest(this.nsfo.URI_INVOICE_RULE + "?category=GENERAL&type=standard")
             .subscribe(
