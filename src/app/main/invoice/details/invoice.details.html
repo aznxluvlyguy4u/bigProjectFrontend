@@ -326,7 +326,7 @@
                             {{rule.vat_percentage_rate}}%
                         </td>
                         <td class="text-right">
-                            {{rule.price_excl_vat.toFixed(2)}}
+                            {{rule.price_excl_vat.toFixed(3)}}
                         </td>
                     </tr>
                     <tr>
@@ -347,17 +347,17 @@
                         <td> {{ 'TOTAL EXCL VAT' | translate }}</td>
                         <td>
                             <span class="pull-right">
-                                {{ totalExclVAT.toFixed(2) }}
+                                {{ totalExclVAT.toFixed(3) }}
                             </span>
                         </td>
                     </tr>
                     <tr *ngFor="let vat of vatCalculations">
                         <td>
-                            {{ vat.category }}% {{ 'VAT ON' | translate }} {{ vat.amount.toFixed(2) }}
+                            {{ vat.category }}% {{ 'VAT ON' | translate }} {{ vat.amount.toFixed(3) }}
                         </td>
                         <td>
                             <span class="pull-right">
-                                {{ vat.total.toFixed(2) }}
+                                {{ vat.total.toFixed(3) }}
                             </span>
                         </td>
                     </tr>
@@ -365,7 +365,7 @@
                         <td> {{ 'TOTAL INCL VAT' | translate }}</td>
                         <td>
                             <span class="pull-right">
-                                {{ totalInclVAT.toFixed(2) }}
+                                {{ totalInclVAT.toFixed(3) }}
                             </span>
                         </td>
                     </tr>
