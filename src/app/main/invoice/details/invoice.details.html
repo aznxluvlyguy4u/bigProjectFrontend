@@ -188,6 +188,24 @@
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="large-4 columns">
+                        <label>
+                            {{'AMOUNT' | translate}}
+                        </label>
+                    </div>
+                    <div class="large-8 columns">
+                        <label *ngIf="!tempRuleAmountDecimalCountIsValid()" class="input-error-msg" style="text-align: left">{{'ONLY INTEGERS ARE ALLOWED'|translate}}!</label>
+                        <label *ngIf="!ruleAmountIsAboveAllowedMinimum()" class="input-error-msg" style="text-align: left">{{('AMOUNT MUST BE AT LEAST'|translate) + ' ' + minRuleAmount}}!</label>
+                        <input
+                                type="number"
+                                [(ngModel)]="temporaryRuleAmount"
+                                step="1"
+                                [min]="minRuleAmount"
+                        >
+                    </div>
+                </div>
+
             </div>
             <div class="large-2 columns end">
                 <div class="row">
@@ -272,6 +290,25 @@
                         </div>
                     </div>
 
+                    <div class="row">
+                        <div class="large-4 columns">
+                            <label>
+                                {{'AMOUNT' | translate}}
+                            </label>
+                        </div>
+                        <div class="large-8 columns">
+                            <label *ngIf="!tempRuleAmountDecimalCountIsValid()" class="input-error-msg" style="text-align: left">{{'ONLY INTEGERS ARE ALLOWED'|translate}}!</label>
+                            <label *ngIf="!ruleAmountIsAboveAllowedMinimum()" class="input-error-msg" style="text-align: left">{{('AMOUNT MUST BE AT LEAST'|translate) + ' ' + minRuleAmount}}!</label>
+                            <input
+                                    type="number"
+                                    [(ngModel)]="temporaryRuleAmount"
+                                    formControlName="amount"
+                                    step="1"
+                                    [min]="minRuleAmount"
+                            >
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class="large-6 columns end">
@@ -307,30 +344,42 @@
                             {{ 'VAT RATE' | translate }}
                         </td>
                         <td class="text-right">
+                            {{ 'UNIT COST' | translate }}
+                        </td>
+                        <td class="text-right">
+                            {{ 'AMOUNT' | translate }}
+                        </td>
+                        <td class="text-right">
                             {{ 'PRICE' | translate }}
                         </td>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let rule of invoice.invoice_rules">
+                    <tr *ngFor="let invoice_rule_selection of invoice.invoice_rule_selections" *ngIf="invoice_rule_selection != null && invoice_rule_selection.invoice_rule != null">
                         <td width="1">
-                            <i *ngIf="!onlyView" class="fa fa-times fa-fw remove-button" (click)="removeInvoiceRule(rule)" aria-hidden="true"></i>
+                            <i *ngIf="!onlyView" class="fa fa-times fa-fw remove-button" (click)="removeInvoiceRule(invoice_rule_selection.invoice_rule)" aria-hidden="true"></i>
                         </td>
                         <td>
-                            {{rule.ledger_category ? rule.ledger_category.code + ': ' + rule.ledger_category.description : ''}}
+                            {{invoice_rule_selection.invoice_rule.ledger_category ? invoice_rule_selection.invoice_rule.ledger_category.code + ': ' + invoice_rule_selection.invoice_rule.ledger_category.description : ''}}
                         </td>
                         <td>
-                            {{rule.description}}
+                            {{invoice_rule_selection.invoice_rule.description}}
                         </td>
                         <td class="text-right">
-                            {{rule.vat_percentage_rate}}%
+                            {{invoice_rule_selection.invoice_rule.vat_percentage_rate}}%
                         </td>
                         <td class="text-right">
-                            {{rule.price_excl_vat.toFixed(3)}}
+                            {{invoice_rule_selection.invoice_rule.price_excl_vat.toFixed(3)}}
+                        </td>
+                        <td class="text-right">
+                            {{invoice_rule_selection.amount}}
+                        </td>
+                        <td class="text-right">
+                            {{(invoice_rule_selection.invoice_rule.price_excl_vat * invoice_rule_selection.amount).toFixed(3)}}
                         </td>
                     </tr>
                     <tr>
-                        <td *ngIf="invoice.invoice_rules.length == 0" colspan="4" class="text-center">
+                        <td *ngIf="invoice.invoice_rule_selections.length == 0" colspan="4" class="text-center">
                             {{ 'ADD A INVOICE RULE' | translate }}
                         </td>
                     </tr>
@@ -351,13 +400,13 @@
                             </span>
                         </td>
                     </tr>
-                    <tr *ngFor="let vat of vatCalculations">
+                    <tr *ngFor="let vatGroup of vatCalculations">
                         <td>
-                            {{ vat.category }}% {{ 'VAT ON' | translate }} {{ vat.amount.toFixed(3) }}
+                            {{ vatGroup.vat_percentage_rate }}% {{ 'VAT ON' | translate }} {{ vatGroup.price_excl_vat_total.toFixed(3) }}
                         </td>
                         <td>
                             <span class="pull-right">
-                                {{ vat.total.toFixed(3) }}
+                                {{ vatGroup.vat.toFixed(3) }}
                             </span>
                         </td>
                     </tr>
@@ -365,7 +414,7 @@
                         <td> {{ 'TOTAL INCL VAT' | translate }} <i class="fa fa-info-circle" aria-hidden="true" title="{{ 'ROUNDED TO THE NEAREST TWO DECIMALS' | translate }}"></i></td>
                         <td>
                             <span class="pull-right">
-                                {{ totalInclVAT }}
+                                {{ totalInclVAT.toFixed(2) }}
                             </span>
                         </td>
                     </tr>

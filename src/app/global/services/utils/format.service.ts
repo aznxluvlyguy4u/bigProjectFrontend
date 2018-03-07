@@ -19,6 +19,10 @@ export class FormatService {
 		return UtilsService.countDecimals(number) <= MAX_CURRENCY_DECIMAL_COUNT;
 	}
 
+	static isInteger(number: number) {
+		return UtilsService.countDecimals(number) === 0;
+	}
+
 	static roundCurrency(price: number): number {
 		if (price == null) {
 			return null;

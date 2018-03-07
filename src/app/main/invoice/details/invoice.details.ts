@@ -5,7 +5,10 @@ import {Router, ActivatedRoute, ROUTER_DIRECTIVES} from "@angular/router";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {FormGroup, FormBuilder, REACTIVE_FORM_DIRECTIVES, Validators} from "@angular/forms";
 import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
-import { Invoice, InvoiceSenderDetails, InvoiceRule } from "../invoice.model";
+import {
+	Invoice, InvoiceSenderDetails, InvoiceRule, InvoiceRuleSelection,
+	VatCalculationGroup
+} from '../invoice.model';
 import { CompanySelectorComponent } from '../../../global/components/clientselector/company-selector.component';
 import { Address, Client } from '../../client/client.model';
 import { SettingsService } from '../../../global/services/settings/settings.service';
@@ -38,13 +41,15 @@ export class InvoiceDetailsComponent {
     clientUbns: string[] = [];
     private selectedInvoiceRuleId: number;
     private standardGeneralInvoiceRuleOptions: InvoiceRule[] = [];
-    private temporaryRule: InvoiceRule = new InvoiceRule();
+    private temporaryRule: InvoiceRule;
+    temporaryRuleAmount: number;
+    minRuleAmount = 1;
     private invoice: Invoice = new Invoice;
     private form: FormGroup;
     private onlyView: boolean = false;
     private totalExclVAT: number = 0;
     private totalInclVAT: number = 0;
-    private vatCalculations = [];
+    private vatCalculations: VatCalculationGroup[] = [];
 
     constructor(private fb: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute, private nsfo: NSFOService, private settings: SettingsService) {
         this.form = fb.group({
@@ -52,10 +57,12 @@ export class InvoiceDetailsComponent {
             category: ['', Validators.required],
             price_excl_vat: ['', Validators.required],
             vat_percentage_rate: ['', Validators.required],
+            amount: ['', Validators.required],
         });
     }
 
     ngOnInit() {
+    		this.initializeNewTempInvoiceRuleValues();
         this.getGeneralInvoiceRulesOptions();
         this.dataSub = this.activatedRoute.params.subscribe(params => {
             this.pageMode = params['mode'];
@@ -133,6 +140,11 @@ export class InvoiceDetailsComponent {
 			);
 	}
 
+	private initializeNewTempInvoiceRuleValues() {
+    	this.temporaryRuleAmount = 1;
+    	this.temporaryRule = new InvoiceRule();
+	}
+
 	private initializeNewInvoice() {
 		this.invoice.status = "INCOMPLETE";
 		this.invoice.sender_details = this.senderDetails;
@@ -170,8 +182,21 @@ export class InvoiceDetailsComponent {
 					&& this.temporaryRule.price_excl_vat != null
 					&& this.temporaryRule.ledger_category != null
 					&& this.temporaryRule.ledger_category.id != null
-					&& InvoiceDetailsComponent.priceExclVatDecimalCountIsValid(this.temporaryRule.price_excl_vat)
+					&& this.tempRulePriceExclVatDecimalCountIsValid()
+					&& this.tempRuleAmountDecimalCountIsValid()
+					&& this.ruleAmountIsAboveAllowedMinimum()
 			;
+	}
+
+	tempRuleAmountDecimalCountIsValid(): boolean {
+    	if (this.temporaryRuleAmount == null) {
+    		return false;
+			}
+		return FormatService.isInteger(this.temporaryRuleAmount);
+	}
+
+	ruleAmountIsAboveAllowedMinimum(): boolean {
+    	return this.temporaryRuleAmount >= this.minRuleAmount;
 	}
 
 	tempRulePriceExclVatDecimalCountIsValid(): boolean {
@@ -197,13 +222,16 @@ export class InvoiceDetailsComponent {
         let rule = new InvoiceRule();
         rule.type = "custom";
         rule.sort_order = 1;
+
         if (type == "standard") {
+						rule.type = type;
             let selectedId = this.selectedInvoiceRuleId;
             if (this.selectedInvoiceRuleId) {
                 let standardInvoiceRule = _.find(this.standardGeneralInvoiceRuleOptions, function (o) {
                     return o.id == selectedId;
                 });
 
+                rule.id = selectedId;
                 rule.description = standardInvoiceRule.description;
                 rule.vat_percentage_rate = standardInvoiceRule.vat_percentage_rate;
                 rule.price_excl_vat = standardInvoiceRule.price_excl_vat;
@@ -216,15 +244,19 @@ export class InvoiceDetailsComponent {
             rule.price_excl_vat = this.temporaryRule.price_excl_vat;
             rule.description = this.temporaryRule.description;
         }
-        this.postInvoiceRule(rule, type);
+
+        // TODO check if amount is used correctly for both paths
+
+				let ruleSelection = new InvoiceRuleSelection();
+        ruleSelection.invoice_rule = rule;
+        ruleSelection.amount = this.temporaryRuleAmount;
+
+        this.postInvoiceRuleSelection(ruleSelection, type);
         this.doVATCalculations();
     }
 
     private removeInvoiceRule(invoiceRule: InvoiceRule): void {
-        let index = this.invoice.invoice_rules.indexOf(invoiceRule);
-        this.deleteInvoiceRule(this.invoice.invoice_rules[index].id);
-        this.invoice.invoice_rules.splice(index, 1);
-        this.doVATCalculations();
+        this.deleteInvoiceRule(invoiceRule);
     }
 
     private doVATCalculations(): void {
@@ -232,49 +264,59 @@ export class InvoiceDetailsComponent {
         this.totalExclVAT = 0;
         this.totalInclVAT = 0;
 
-        let calculations = [];
-        let categories = _.uniqBy(this.invoice.invoice_rules, 'vat_percentage_rate');
-        for(let category of categories) {
-            let filteredArray = _.filter(this.invoice.invoice_rules, {'vat_percentage_rate': category.vat_percentage_rate});
-            calculations.push(filteredArray);
-        }
+        for(let invoiceRuleSelection of this.invoice.invoice_rule_selections) {
+        	if (invoiceRuleSelection.invoice_rule && invoiceRuleSelection.invoice_rule.vat_percentage_rate != 0) {
+						let vatPercentageRate = invoiceRuleSelection.invoice_rule.vat_percentage_rate;
+						let amount = invoiceRuleSelection.amount;
+						let singlePriceExclVat = invoiceRuleSelection.invoice_rule.price_excl_vat;
 
-        for(let group of calculations) {
+						let priceExclVat = singlePriceExclVat * amount;
+						let vat = priceExclVat * (vatPercentageRate/100);
+						let priceInclVat = priceExclVat + vat;
 
-            let totalAmount = 0;
-            let vat_percentage_rate = 0;
+						let vatCalculationGroup = _.find(this.vatCalculations, {vat_percentage_rate: vatPercentageRate});
 
-            for(let single of group) {
-                this.totalExclVAT += single.price_excl_vat;
-                totalAmount += single.price_excl_vat;
-                vat_percentage_rate = single.vat_percentage_rate;
-            }
+						if (vatCalculationGroup != null) {
+							vatCalculationGroup.price_excl_vat_total += priceExclVat;
+							vatCalculationGroup.price_incl_vat_total += priceInclVat;
+							vatCalculationGroup.vat += vat;
+						} else {
+							vatCalculationGroup = new VatCalculationGroup();
+							vatCalculationGroup.vat_percentage_rate = vatPercentageRate;
+							vatCalculationGroup.price_excl_vat_total = priceExclVat;
+							vatCalculationGroup.price_incl_vat_total = priceInclVat;
+							vatCalculationGroup.vat = vat;
+							this.vatCalculations.push(vatCalculationGroup);
+						}
 
-            let calculation = {
-                category: vat_percentage_rate,
-                amount: totalAmount,
-                total: (totalAmount/100) * vat_percentage_rate
-            };
-            this.totalInclVAT +=totalAmount/100 * vat_percentage_rate;
-            this.vatCalculations.push(calculation);
+						this.totalExclVAT += priceExclVat;
+						this.totalInclVAT += priceInclVat;
+					}
+				}
 
+				_.orderBy(this.vatCalculations, ['vat_percentage_rate'], ['desc']);
 
-        }
-
-        this.totalInclVAT += this.totalExclVAT;
         this.totalInclVAT = FormatService.roundCurrency(this.totalInclVAT);
         this.invoice.total = this.totalInclVAT;
     }
 
-    private postInvoiceRule(newRule: InvoiceRule, type: String){
+		private getVATpercentageCategories(): InvoiceRule[] {
+			let invoiceRules: InvoiceRule[] = [];
+			for(let invoiceRuleSelection of this.invoice.invoice_rule_selections) {
+				invoiceRules.push(invoiceRuleSelection.invoice_rule);
+			}
+			return _.uniqBy(invoiceRules, 'vat_percentage_rate');
+		}
+
+    private postInvoiceRuleSelection(newRuleSelection: InvoiceRuleSelection, type: String){
         this.nsfo
-            .doPostRequest(this.nsfo.URI_INVOICE+ "/" + this.invoice.id + "/invoice-rules", newRule)
+            .doPostRequest(this.nsfo.URI_INVOICE+ "/" + this.invoice.id + "/invoice-rule-selection", newRuleSelection)
             .subscribe(
                 res => {
                     if (type !== "standard") {
-                        this.temporaryRule = new InvoiceRule();
+											this.initializeNewTempInvoiceRuleValues();
                     }
-                    this.invoice.invoice_rules.push(res.result);
+                    this.invoice.invoice_rule_selections.push(res.result);
                     this.doVATCalculations();
                 },
                   error => {
@@ -283,17 +325,54 @@ export class InvoiceDetailsComponent {
             );
     }
 
-    private deleteInvoiceRule(id: number){
+    private deleteInvoiceRule(invoiceRule: InvoiceRule){
+
+    		// Immediately remove in frontend to increase UX
+    		let deletedInvoiceRuleSelection = this.removeInvoiceRuleFromInvoiceArray(invoiceRule);
+    		if (deletedInvoiceRuleSelection == null) {
+    			alert('NO RULE SELECTION FOUND FOR INVOICE RULE');
+    			return;
+				}
+
+				this.doVATCalculations();
+
         this.nsfo
-            .doDeleteRequest(this.nsfo.URI_INVOICE + "/" + this.invoice.id + "/invoice-rules" + "/" + id.toString(), "")
+            .doDeleteRequest(this.nsfo.URI_INVOICE + "/" + this.invoice.id + "/invoice-rule-selection" + "/" + deletedInvoiceRuleSelection.id.toString(), "")
             .subscribe(
                 res => {
                 },
                   error => {
+                		this.invoice.invoice_rule_selections.push(deletedInvoiceRuleSelection);
+                		this.doVATCalculations();
                     alert(this.nsfo.getErrorMessage(error));
-                  }
+                  },
+							() => {
+                	deletedInvoiceRuleSelection = undefined;
+							}
             );
     }
+
+    private removeInvoiceRuleFromInvoiceArray(invoiceRule: InvoiceRule): InvoiceRuleSelection {
+
+    	if (invoiceRule == null) {
+    		return null;
+			}
+
+    	for(let invoiceRuleSelection of this.invoice.invoice_rule_selections) {
+
+    		if (invoiceRuleSelection.invoice_rule
+					&& invoiceRuleSelection.invoice_rule.id === invoiceRule.id
+					&& invoiceRule.id != null)
+    		{
+						let index = this.invoice.invoice_rule_selections.indexOf(invoiceRuleSelection);
+						this.invoice.invoice_rule_selections.splice(index, 1);
+						return invoiceRuleSelection;
+    		}
+			}
+
+			return null;
+		}
+
 
     setInvoiceRecipient() {
         if (this.selectedCompany) {

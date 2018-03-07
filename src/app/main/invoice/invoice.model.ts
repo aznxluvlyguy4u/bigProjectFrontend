@@ -17,7 +17,7 @@ export class Invoice {
     public subscription_date: string;
     public status: string;
     public reminders: number;
-    public invoice_rules: InvoiceRule[] = [];
+    public invoice_rule_selections: InvoiceRuleSelection[] = [];
     public total: number;
 	  public pdf_url: string;
 	  public ledger_account_number: string;
@@ -38,6 +38,14 @@ export class InvoiceRule {
     public sort_order: number;
     public type: string;
 	  ledger_category: LedgerCategory;
+	  invoice_rule_selections: InvoiceRuleSelection[] = [];
+}
+
+export class InvoiceRuleSelection {
+    id: number;
+    invoice: Invoice;
+    invoice_rule: InvoiceRule;
+    amount: number;
 }
 
 export class InvoiceSenderDetails {
@@ -49,4 +57,11 @@ export class InvoiceSenderDetails {
     public iban: string;
     public payment_deadline_in_days: number;
     public is_deleted: boolean;
+}
+
+export class VatCalculationGroup {
+	vat_percentage_rate: number;
+	price_excl_vat_total: number;
+	price_incl_vat_total: number;
+	vat: number;
 }
