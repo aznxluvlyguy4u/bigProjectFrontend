@@ -248,8 +248,6 @@ export class InvoiceDetailsComponent {
             rule.description = this.temporaryRule.description;
         }
 
-        // TODO check if amount is used correctly for both paths
-
 				let ruleSelection = new InvoiceRuleSelection();
         ruleSelection.invoice_rule = rule;
         ruleSelection.amount = this.temporaryRuleAmount;
@@ -302,14 +300,6 @@ export class InvoiceDetailsComponent {
         this.totalInclVAT = FormatService.roundCurrency(this.totalInclVAT);
         this.invoice.total = this.totalInclVAT;
     }
-
-		private getVATpercentageCategories(): InvoiceRule[] {
-			let invoiceRules: InvoiceRule[] = [];
-			for(let invoiceRuleSelection of this.invoice.invoice_rule_selections) {
-				invoiceRules.push(invoiceRuleSelection.invoice_rule);
-			}
-			return _.uniqBy(invoiceRules, 'vat_percentage_rate');
-		}
 
     private postInvoiceRuleSelection(newRuleSelection: InvoiceRuleSelection, type: String){
         this.nsfo
