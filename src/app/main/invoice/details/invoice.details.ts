@@ -74,6 +74,7 @@ export class InvoiceDetailsComponent {
                 this.nsfo.doGetRequest(this.nsfo.URI_INVOICE + "/" + this.invoiceId)
                     .subscribe(res => {
                         this.invoice = res.result;
+                        this.selectedCompany = this.invoice.company;
 												this.updateInvoiceDataInVariables();
 												this.updateClientUbns();
                         this.doVATCalculations();
