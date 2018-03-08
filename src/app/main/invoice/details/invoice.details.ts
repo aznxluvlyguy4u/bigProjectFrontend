@@ -31,6 +31,8 @@ import { FormatService } from '../../../global/services/utils/format.service';
 })
 
 export class InvoiceDetailsComponent {
+		private urlInvoiceOverview = '/invoice';
+
     private dataSub: Subscription;
     private senderDetails: InvoiceSenderDetails = new InvoiceSenderDetails();
     private pageTitle: string;
@@ -159,6 +161,7 @@ export class InvoiceDetailsComponent {
 				},
 				error => {
 					alert(this.nsfo.getErrorMessage(error));
+					this.router.navigate([this.urlInvoiceOverview]);
 				}
 			);
   }
