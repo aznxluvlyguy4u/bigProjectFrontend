@@ -26,7 +26,7 @@ export class ClientsStorage {
 		this.nsfo.doGetRequest(this.nsfo.URI_CLIENTS)
 			.subscribe(
 				res => {
-					this.clients = <Client[]> res.result;
+					this.clients = this.cleanClientsListFormatting(<Client[]> res.result);
 					this.notifyClientsChanged();
 				}
 			);
@@ -34,5 +34,14 @@ export class ClientsStorage {
 
 	private notifyClientsChanged() {
 		this.clientsChanged.next(this.clients);
+	}
+
+	private cleanClientsListFormatting(clients: Client[]): Client[] {
+		for(let client of clients) {
+			if (client.subscription_date === '') {
+				client.subscription_date = undefined;
+			}
+		}
+		return clients;
 	}
 }
