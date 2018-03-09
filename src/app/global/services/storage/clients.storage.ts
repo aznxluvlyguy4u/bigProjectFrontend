@@ -3,6 +3,8 @@ import { NSFOService } from '../nsfo/nsfo.service';
 import { Client } from '../../../main/client/client.model';
 import { Subject } from 'rxjs/Subject';
 
+import _ = require('lodash');
+
 @Injectable()
 export class ClientsStorage {
 
@@ -12,8 +14,12 @@ export class ClientsStorage {
 
 	constructor(private nsfo: NSFOService) {}
 
+	isInitialized(): boolean {
+		return this.clients.length > 0;
+	}
+
 	initialize() {
-		if (this.clients.length === 0) {
+		if (!this.isInitialized()) {
 			this.refresh();
 		}
 	}
@@ -44,4 +50,9 @@ export class ClientsStorage {
 		}
 		return clients;
 	}
+
+	getUpdatedClient(client: Client): Client {
+		return _.find(this.clients, {company_id: client.company_id})
+	}
+
 }
