@@ -1,5 +1,6 @@
 import { Invoice } from '../invoice/invoice.model';
 import { Person } from '../../global/models/person.model';
+import { PedigreeRegisterRegistration } from '../../global/models/pedigree-register-registration.model';
 
 export class Client {
 	  public id: number;
@@ -33,6 +34,7 @@ export class Location {
     public is_active ?: boolean;
 	  public location_holder: string;
     public company ?: Client;
+    public pedigree_register_registrations: PedigreeRegisterRegistration[] = [];
 }
 
 export class User extends Person {
