@@ -197,11 +197,16 @@
                 </div>
 
                 <div class="row">
-                    <div class="large-12 columns">
-                        <select [(ngModel)]="selectedInvoiceRuleId">
-                            <option value="">--</option>
-                            <option *ngFor="let rule of standardGeneralInvoiceRuleOptions" value="{{ rule.id }}">{{ rule.description }}</option>
-                        </select>
+                    <div class="large-4 columns">
+                        <label class="middle"> {{ 'INVOICE RULE' | translate }}</label>
+                    </div>
+                    <div class="large-8 columns">
+                        <app-standard-invoice-rule-selector
+                                [selectedInvoiceRule]="selectedInvoiceRule"
+                                [disabled]="false"
+                                [displayActiveStatus]="true"
+                                (selectedInvoiceRuleChanged)="selectedInvoiceRule = $event"
+                        ></app-standard-invoice-rule-selector>
                     </div>
                 </div>
 
@@ -227,9 +232,11 @@
             <div class="large-2 columns end">
                 <div class="row">
                     <h5>&nbsp;</h5>
-                    <button (click)="addInvoiceRule('standard', 'GENERAL')" class="small primary button">
-                        <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
-                        {{ 'ADD' | translate }}
+                    <button
+                            [disabled]="selectedInvoiceRule == undefined"
+                            (click)="addInvoiceRule('standard', 'GENERAL')"
+                            class="small primary button"
+                    ><i class="fa fa-plus fa-fw" aria-hidden="true"></i> {{ 'ADD' | translate }}
                     </button>
                 </div>
             </div>

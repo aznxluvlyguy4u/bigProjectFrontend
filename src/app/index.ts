@@ -16,6 +16,7 @@ import { FormatService } from './global/services/utils/format.service';
 import { ParentsStorage } from './global/services/storage/parents.storage';
 import { ClientsStorage } from './global/services/storage/clients.storage';
 import { LedgerCategoryStorage } from './global/services/storage/ledger-category.storage';
+import { InvoiceRuleStorage } from './global/services/storage/invoice-rule.storage';
 
 require('font-awesome-loader');
 
@@ -38,6 +39,7 @@ bootstrap(IndexComponent, [
     NSFOService,
     FormatService,
     ParentsStorage,
+    InvoiceRuleStorage,
     TranslateService,
     SettingsService,
     UtilsService

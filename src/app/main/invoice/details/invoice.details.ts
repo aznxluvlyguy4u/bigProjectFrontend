@@ -15,6 +15,7 @@ import { SettingsService } from '../../../global/services/settings/settings.serv
 import { LedgerCategoryDropdownComponent } from '../../../global/components/ledgercategorydropdown/ledger-category-dropdown.component';
 import { FormatService } from '../../../global/services/utils/format.service';
 import { ClientsStorage } from '../../../global/services/storage/clients.storage';
+import { StandardInvoiceRuleSelectorComponent } from '../../../global/components/standardinvoiceruleselector/standard-invoice-rule-selector.component';
 
 @Component({
     selector: 'ng-select',
@@ -26,7 +27,7 @@ import { ClientsStorage } from '../../../global/services/storage/clients.storage
         'showSearchInputInDropdown'
     ],
     directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, CompanySelectorComponent,
-			LedgerCategoryDropdownComponent],
+			LedgerCategoryDropdownComponent, StandardInvoiceRuleSelectorComponent],
     template: require('./invoice.details.html'),
     pipes: [TranslatePipe]
 })
@@ -42,8 +43,7 @@ export class InvoiceDetailsComponent {
     private selectedUbn: string;
     private selectedCompany: Client;
     clientUbns: string[] = [];
-    private selectedInvoiceRuleId: number;
-    private standardGeneralInvoiceRuleOptions: InvoiceRule[] = [];
+    private selectedInvoiceRule: InvoiceRule;
     private temporaryRule: InvoiceRule;
     temporaryRuleAmount: number;
     minRuleAmount = 1;
@@ -67,7 +67,6 @@ export class InvoiceDetailsComponent {
 
     ngOnInit() {
     		this.initializeNewTempInvoiceRuleValues();
-        this.getGeneralInvoiceRulesOptions();
         this.dataSub = this.activatedRoute.params.subscribe(params => {
             this.pageMode = params['mode'];
             if(this.isEditMode()) {
@@ -250,17 +249,6 @@ export class InvoiceDetailsComponent {
 	static priceExclVatDecimalCountIsValid(priceExclVat: number) {
     	return FormatService.doesNotExceedMaxCurrencyDecimalCount(priceExclVat);
 	}
-    private getGeneralInvoiceRulesOptions(): void {
-        this.nsfo.doGetRequest(this.nsfo.URI_INVOICE_RULE + "?category=GENERAL&type=standard")
-            .subscribe(
-                res => {
-                    this.standardGeneralInvoiceRuleOptions = <InvoiceRule[]> res.result;
-                },
-                  error => {
-                    alert(this.nsfo.getErrorMessage(error));
-                  }
-            )
-    }
     
     private addInvoiceRule(type): void {
         let rule = new InvoiceRule();
@@ -269,18 +257,7 @@ export class InvoiceDetailsComponent {
 
         if (type == "standard") {
 						rule.type = type;
-            let selectedId = this.selectedInvoiceRuleId;
-            if (this.selectedInvoiceRuleId) {
-                let standardInvoiceRule = _.find(this.standardGeneralInvoiceRuleOptions, function (o) {
-                    return o.id == selectedId;
-                });
-
-                rule.id = selectedId;
-                rule.description = standardInvoiceRule.description;
-                rule.vat_percentage_rate = standardInvoiceRule.vat_percentage_rate;
-                rule.price_excl_vat = standardInvoiceRule.price_excl_vat;
-                rule.ledger_category = standardInvoiceRule.ledger_category;
-            }
+						rule = this.selectedInvoiceRule;
         } else {
             rule.sort_order = 1;
             rule.ledger_category = this.temporaryRule.ledger_category;
@@ -349,7 +326,9 @@ export class InvoiceDetailsComponent {
                 res => {
                     if (type !== "standard") {
 											this.initializeNewTempInvoiceRuleValues();
-                    }
+                    } else {
+											this.selectedInvoiceRule = null;
+										}
                     this.invoice.invoice_rule_selections.push(res.result);
                     this.doVATCalculations();
                 },

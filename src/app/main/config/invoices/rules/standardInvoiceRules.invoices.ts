@@ -1,6 +1,6 @@
 import _ = require("lodash");
 import {TranslatePipe} from "ng2-translate/ng2-translate";
-import { Component, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, OnDestroy } from '@angular/core';
 import {ROUTER_DIRECTIVES} from "@angular/router";
 import { LedgerCategory } from "../../../../global/models/ledger-category.model";
 import { InvoiceRule } from '../../../invoice/invoice.model';
@@ -12,6 +12,7 @@ import { PaginatePipe, PaginationService } from 'ng2-pagination';
 import { PaginationComponent } from '../../../../global/components/pagination/pagination.component';
 import { InvoiceRulePipe } from '../../../../global/pipes/invoice-rule.pipe';
 import { InvoiceDetailsComponent } from '../../../invoice/details/invoice.details';
+import { InvoiceRuleStorage } from '../../../../global/services/storage/invoice-rule.storage';
 
 @Component({
     directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, LedgerCategoryDropdownComponent,
@@ -21,7 +22,7 @@ import { InvoiceDetailsComponent } from '../../../invoice/details/invoice.detail
     pipes: [TranslatePipe, PaginatePipe, InvoiceRulePipe]
 })
 
-export class InvoicesRuleTemplatesComponent {
+export class InvoicesRuleTemplatesComponent implements OnDestroy {
     private rules: InvoiceRule[] = [];
     private selectedRule: InvoiceRule = new InvoiceRule();
     selectedLedgerCategory: LedgerCategory;
@@ -37,7 +38,8 @@ export class InvoicesRuleTemplatesComponent {
 
 	  isLoadedEvent = new EventEmitter<boolean>();
 
-    constructor(private fb: FormBuilder, private nsfo: NSFOService, private settings: SettingsService) {
+    constructor(private fb: FormBuilder, private nsfo: NSFOService, private settings: SettingsService,
+								private invoiceRuleStorage: InvoiceRuleStorage) {
         this.form = fb.group({
             description: ['', Validators.required],
             price_excl_vat: ['', Validators.required],
@@ -45,6 +47,10 @@ export class InvoicesRuleTemplatesComponent {
         });
         this.getInvoiceRules();
     }
+
+    ngOnDestroy() {
+    	this.invoiceRuleStorage.refresh();
+		}
 
     private getInvoiceRules() {
         this.nsfo

@@ -665,5 +665,7 @@
   "AMOUNT MUST BE AT LEAST": "Aantal mag niet lager zijn dan",
   "ONLY INTEGERS ARE ALLOWED": "Alleen hele getallen zijn toegestaan",
   "AMOUNT": "Aantal",
-  "UNIT COST": "Prijs per stuk"
+  "UNIT COST": "Stukprijs",
+  "SELECT INVOICE RULE": "Selecteer factuurregel",
+  "GO TO INVOICE RULES OVERVIEW": "Ga naar factuurregelsoverzicht"
 }
