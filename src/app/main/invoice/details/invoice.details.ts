@@ -14,6 +14,7 @@ import { Address, Client } from '../../client/client.model';
 import { SettingsService } from '../../../global/services/settings/settings.service';
 import { LedgerCategoryDropdownComponent } from '../../../global/components/ledgercategorydropdown/ledger-category-dropdown.component';
 import { FormatService } from '../../../global/services/utils/format.service';
+import { ClientsStorage } from '../../../global/services/storage/clients.storage';
 
 @Component({
     selector: 'ng-select',
@@ -53,7 +54,8 @@ export class InvoiceDetailsComponent {
     private totalInclVAT: number = 0;
     private vatCalculations: VatCalculationGroup[] = [];
 
-    constructor(private fb: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute, private nsfo: NSFOService, private settings: SettingsService) {
+    constructor(private fb: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute,
+								private nsfo: NSFOService, private settings: SettingsService, private clientStorage: ClientsStorage) {
         this.form = fb.group({
             description: ['', Validators.required],
             category: ['', Validators.required],
@@ -177,6 +179,44 @@ export class InvoiceDetailsComponent {
 					alert(this.nsfo.getErrorMessage(error));
 				}
 			);
+	}
+
+
+	areClientsInitialized(): boolean {
+    	return this.clientStorage.isInitialized();
+	}
+
+	refreshCustomerDetails() {
+    	if (this.areClientsInitialized()) {
+					this.invoice.company = this.clientStorage.getUpdatedClient(this.invoice.company);
+					const company = this.invoice.company;
+
+					if (!(company.locations && company.locations.indexOf(this.invoice.ubn) !== -1)) {
+							this.invoice.ubn = undefined;
+					}
+
+					this.invoice.company_name = company.company_name;
+					this.invoice.company_debtor_number = company.debtor_number;
+					this.invoice.company_vat_number = company.vat_number;
+			}
+	}
+
+	hasSelectedClientWithCompanyId(): boolean {
+    	return this.invoice.company && this.invoice.company.company_id != null;
+	}
+
+	navigateToEditSelectedClient() {
+		if(this.invoice.company == null) {
+			alert('NO COMPANY WAS SELECTED');
+			return;
+		}
+
+		if(this.invoice.company.company_id == null) {
+			alert('THE SELECTED COMPANY HAS NO COMPANY_ID');
+			return;
+		}
+
+		this.navigateTo("/client/dossier/edit/" + this.invoice.company.company_id);
 	}
 
 	isCustomInvoiceRuleCreateButtonActive(): boolean {
