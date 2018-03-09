@@ -22,7 +22,6 @@ export class Client {
     public deleted_locations: Location[] = [];
     public users: User[] = [];
     public deleted_users: User[] = [];
-    public pedigrees: Pedigree[] = [];
 	  public invoices: Invoice[] = [];
 }
 

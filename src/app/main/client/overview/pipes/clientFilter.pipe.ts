@@ -29,7 +29,6 @@ export class ClientFilterPipe implements PipeTransform {
                 client.owner.first_name.toLocaleUpperCase() +
                 client.owner.last_name.toLocaleUpperCase() +
                 client.locations +
-                client.pedigrees +
                 client.subscription_date +
                 (client.billing_address != null ? client.billing_address.street_name : '') +
                 (client.billing_address != null ? client.billing_address.address_number : '') +
