@@ -32,6 +32,7 @@ export class Animal {
     public work_number: string;
 	  public collar_color: string;
     public collar_number: string;
+    public n_ling: number;
     public name: string;
     public date_of_birth: string;
     public date_of_death: string;
