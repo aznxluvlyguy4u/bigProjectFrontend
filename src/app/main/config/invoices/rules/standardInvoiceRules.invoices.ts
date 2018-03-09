@@ -54,7 +54,7 @@ export class InvoicesRuleTemplatesComponent implements OnDestroy {
 
     private getInvoiceRules() {
         this.nsfo
-            .doGetRequest(this.nsfo.URI_INVOICE_RULE + "?type=standard")
+            .doGetRequest(this.nsfo.URI_INVOICE_RULE + "?type=standard&active_only=true")
             .subscribe(
                 res => {
                     this.rules = res.result;
