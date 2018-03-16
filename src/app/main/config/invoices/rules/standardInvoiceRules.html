@@ -32,7 +32,7 @@
                 <tr>
                     <td>{{'LEDGER CATEGORY' | translate}}</td>
                     <td>{{'DESCRIPTION' | translate}}</td>
-                    <td>{{'PRICE (EXCL. VAT)' | translate}}</td>
+                    <td style="text-align: right">{{'PRICE (EXCL. VAT)' | translate}}</td>
                     <td>{{'VAT PERCENTAGE RATE' | translate}}</td>
                     <td>
                         <button type="button" (click)="openModal(false)" class="small primary button pull-right">
@@ -64,8 +64,8 @@
                     <td>
                         {{ rule.description }}
                     </td>
-                    <td>
-                        {{ rule.price_excl_vat }}
+                    <td style="text-align: right">
+                        {{ rule.price_excl_vat | localNumberFormat:3 }}
                     </td>
                     <td>
                         {{ rule.vat_percentage_rate }}

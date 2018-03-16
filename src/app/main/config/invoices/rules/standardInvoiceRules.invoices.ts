@@ -13,13 +13,14 @@ import { PaginationComponent } from '../../../../global/components/pagination/pa
 import { InvoiceRulePipe } from '../../../../global/pipes/invoice-rule.pipe';
 import { InvoiceDetailsComponent } from '../../../invoice/details/invoice.details';
 import { InvoiceRuleStorage } from '../../../../global/services/storage/invoice-rule.storage';
+import { LocalNumberFormat } from '../../../../global/pipes/local-number-format';
 
 @Component({
     directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, LedgerCategoryDropdownComponent,
 			PaginationComponent],
     template: require('./standardInvoiceRules.html'),
 	  providers: [PaginationService],
-    pipes: [TranslatePipe, PaginatePipe, InvoiceRulePipe]
+    pipes: [TranslatePipe, PaginatePipe, InvoiceRulePipe, LocalNumberFormat]
 })
 
 export class InvoicesRuleTemplatesComponent implements OnDestroy {

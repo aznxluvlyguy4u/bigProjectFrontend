@@ -14,6 +14,7 @@ import { LedgerCategoryDropdownComponent } from '../../../global/components/ledg
 import { FormatService } from '../../../global/services/utils/format.service';
 import { ClientsStorage } from '../../../global/services/storage/clients.storage';
 import { StandardInvoiceRuleSelectorComponent } from '../../../global/components/standardinvoiceruleselector/standard-invoice-rule-selector.component';
+import { LocalNumberFormat } from '../../../global/pipes/local-number-format';
 
 @Component({
     selector: 'ng-select',
@@ -27,7 +28,7 @@ import { StandardInvoiceRuleSelectorComponent } from '../../../global/components
     directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, CompanySelectorComponent,
 			LedgerCategoryDropdownComponent, StandardInvoiceRuleSelectorComponent],
     template: require('./invoice.details.html'),
-    pipes: [TranslatePipe]
+    pipes: [TranslatePipe, LocalNumberFormat]
 })
 
 export class InvoiceDetailsComponent {

@@ -393,13 +393,13 @@
                             {{invoice_rule_selection.invoice_rule.vat_percentage_rate}}%
                         </td>
                         <td class="text-right">
-                            {{invoice_rule_selection.invoice_rule.price_excl_vat.toFixed(3)}}
+                            {{invoice_rule_selection.invoice_rule.price_excl_vat | localNumberFormat:3 }}
                         </td>
                         <td class="text-right">
                             {{invoice_rule_selection.amount}}
                         </td>
                         <td class="text-right">
-                            {{(invoice_rule_selection.invoice_rule.price_excl_vat * invoice_rule_selection.amount).toFixed(3)}}
+                            {{(invoice_rule_selection.invoice_rule.price_excl_vat * invoice_rule_selection.amount) | localNumberFormat:3}}
                         </td>
                     </tr>
                     <tr>
@@ -420,18 +420,18 @@
                         <td> {{ 'TOTAL EXCL VAT' | translate }}</td>
                         <td>
                             <span class="pull-right">
-                                {{ invoice.vat_breakdown.total_excl_vat }}
+                                {{ invoice.vat_breakdown.total_excl_vat | localNumberFormat:3 }}
                             </span>
                         </td>
                     </tr>
                     <tr *ngFor="let vatBreakdownRecord of invoice.vat_breakdown.records">
                         <td>
                             {{ vatBreakdownRecord.vat_percentage_rate }}% {{ 'VAT ON' | translate }} {{
-                            vatBreakdownRecord.price_excl_vat_total }}
+                            vatBreakdownRecord.price_excl_vat_total | localNumberFormat:3 }}
                         </td>
                         <td>
                             <span class="pull-right">
-                                {{ vatBreakdownRecord.vat }}
+                                {{ vatBreakdownRecord.vat | localNumberFormat:3 }}
                             </span>
                         </td>
                     </tr>
@@ -439,7 +439,7 @@
                         <td> {{ 'TOTAL INCL VAT' | translate }} <i class="fa fa-info-circle" aria-hidden="true" title="{{ 'ROUNDED TO THE NEAREST TWO DECIMALS' | translate }}"></i></td>
                         <td>
                             <span class="pull-right">
-                                {{ invoice.vat_breakdown.total_incl_vat }}
+                                {{ invoice.vat_breakdown.total_incl_vat | localNumberFormat:2 }}
                             </span>
                         </td>
                     </tr>
