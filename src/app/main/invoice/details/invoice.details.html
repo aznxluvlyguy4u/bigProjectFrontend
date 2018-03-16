@@ -415,22 +415,23 @@
     <div class="row">
         <div class="large-push-8 large-4 columns">
             <table>
-                <tbody>
+                <tbody *ngIf="invoice && invoice.vat_breakdown">
                     <tr>
                         <td> {{ 'TOTAL EXCL VAT' | translate }}</td>
                         <td>
                             <span class="pull-right">
-                                {{ totalExclVAT.toFixed(3) }}
+                                {{ invoice.vat_breakdown.total_excl_vat }}
                             </span>
                         </td>
                     </tr>
-                    <tr *ngFor="let vatGroup of vatCalculations">
+                    <tr *ngFor="let vatBreakdownRecord of invoice.vat_breakdown.records">
                         <td>
-                            {{ vatGroup.vat_percentage_rate }}% {{ 'VAT ON' | translate }} {{ vatGroup.price_excl_vat_total.toFixed(3) }}
+                            {{ vatBreakdownRecord.vat_percentage_rate }}% {{ 'VAT ON' | translate }} {{
+                            vatBreakdownRecord.price_excl_vat_total }}
                         </td>
                         <td>
                             <span class="pull-right">
-                                {{ vatGroup.vat.toFixed(3) }}
+                                {{ vatBreakdownRecord.vat }}
                             </span>
                         </td>
                     </tr>
@@ -438,7 +439,7 @@
                         <td> {{ 'TOTAL INCL VAT' | translate }} <i class="fa fa-info-circle" aria-hidden="true" title="{{ 'ROUNDED TO THE NEAREST TWO DECIMALS' | translate }}"></i></td>
                         <td>
                             <span class="pull-right">
-                                {{ totalInclVAT.toFixed(2) }}
+                                {{ invoice.vat_breakdown.total_incl_vat }}
                             </span>
                         </td>
                     </tr>

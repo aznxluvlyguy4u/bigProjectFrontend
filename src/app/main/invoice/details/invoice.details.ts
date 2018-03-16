@@ -1,4 +1,3 @@
-import _ = require('lodash');
 import {Component} from "@angular/core";
 import {Subscription} from "rxjs/Rx";
 import {Router, ActivatedRoute, ROUTER_DIRECTIVES} from "@angular/router";
@@ -6,8 +5,7 @@ import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {FormGroup, FormBuilder, REACTIVE_FORM_DIRECTIVES, Validators} from "@angular/forms";
 import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
 import {
-	Invoice, InvoiceSenderDetails, InvoiceRule, InvoiceRuleSelection,
-	VatCalculationGroup
+	Invoice, InvoiceSenderDetails, InvoiceRule, InvoiceRuleSelection
 } from '../invoice.model';
 import { CompanySelectorComponent } from '../../../global/components/clientselector/company-selector.component';
 import { Address, Client } from '../../client/client.model';
@@ -50,9 +48,6 @@ export class InvoiceDetailsComponent {
     private invoice: Invoice = new Invoice;
     private form: FormGroup;
     private onlyView: boolean = false;
-    private totalExclVAT: number = 0;
-    private totalInclVAT: number = 0;
-    private vatCalculations: VatCalculationGroup[] = [];
 
     constructor(private fb: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute,
 								private nsfo: NSFOService, private settings: SettingsService, private clientStorage: ClientsStorage) {
@@ -78,7 +73,6 @@ export class InvoiceDetailsComponent {
                         this.selectedCompany = this.invoice.company;
 												this.updateInvoiceDataInVariables();
 												this.updateClientUbns();
-                        this.doVATCalculations();
                     },
 											error => {
 												alert(this.nsfo.getErrorMessage(error));
@@ -100,7 +94,6 @@ export class InvoiceDetailsComponent {
                     .subscribe(res => {
                         this.invoice = res.result;
 												this.updateInvoiceDataInVariables();
-                        this.doVATCalculations();
                         },
                           error => {
                             alert(this.nsfo.getErrorMessage(error));
@@ -271,52 +264,10 @@ export class InvoiceDetailsComponent {
         ruleSelection.amount = this.temporaryRuleAmount;
 
         this.postInvoiceRuleSelection(ruleSelection, type);
-        this.doVATCalculations();
     }
 
     private removeInvoiceRule(invoiceRule: InvoiceRule): void {
         this.deleteInvoiceRule(invoiceRule);
-    }
-
-    private doVATCalculations(): void {
-        this.vatCalculations = [];
-        this.totalExclVAT = 0;
-        this.totalInclVAT = 0;
-
-        for(let invoiceRuleSelection of this.invoice.invoice_rule_selections) {
-        	if (invoiceRuleSelection.invoice_rule && invoiceRuleSelection.invoice_rule.vat_percentage_rate != 0) {
-						let vatPercentageRate = invoiceRuleSelection.invoice_rule.vat_percentage_rate;
-						let amount = invoiceRuleSelection.amount;
-						let singlePriceExclVat = invoiceRuleSelection.invoice_rule.price_excl_vat;
-
-						let priceExclVat = singlePriceExclVat * amount;
-						let vat = priceExclVat * (vatPercentageRate/100);
-						let priceInclVat = priceExclVat + vat;
-
-						let vatCalculationGroup = _.find(this.vatCalculations, {vat_percentage_rate: vatPercentageRate});
-
-						if (vatCalculationGroup != null) {
-							vatCalculationGroup.price_excl_vat_total += priceExclVat;
-							vatCalculationGroup.price_incl_vat_total += priceInclVat;
-							vatCalculationGroup.vat += vat;
-						} else {
-							vatCalculationGroup = new VatCalculationGroup();
-							vatCalculationGroup.vat_percentage_rate = vatPercentageRate;
-							vatCalculationGroup.price_excl_vat_total = priceExclVat;
-							vatCalculationGroup.price_incl_vat_total = priceInclVat;
-							vatCalculationGroup.vat = vat;
-							this.vatCalculations.push(vatCalculationGroup);
-						}
-
-						this.totalExclVAT += priceExclVat;
-						this.totalInclVAT += priceInclVat;
-					}
-				}
-
-				_.orderBy(this.vatCalculations, ['vat_percentage_rate'], ['desc']);
-
-        this.totalInclVAT = FormatService.roundCurrency(this.totalInclVAT);
-        this.invoice.total = this.totalInclVAT;
     }
 
     private postInvoiceRuleSelection(newRuleSelection: InvoiceRuleSelection, type: String){
@@ -329,8 +280,7 @@ export class InvoiceDetailsComponent {
                     } else {
 											this.selectedInvoiceRule = null;
 										}
-                    this.invoice.invoice_rule_selections.push(res.result);
-                    this.doVATCalculations();
+                    this.invoice = res.result;
                 },
                   error => {
                     alert(this.nsfo.getErrorMessage(error));
@@ -347,16 +297,14 @@ export class InvoiceDetailsComponent {
     			return;
 				}
 
-				this.doVATCalculations();
-
         this.nsfo
             .doDeleteRequest(this.nsfo.URI_INVOICE + "/" + this.invoice.id + "/invoice-rule-selection" + "/" + deletedInvoiceRuleSelection.id.toString(), "")
             .subscribe(
                 res => {
+                		this.invoice = res.result;
                 },
                   error => {
                 		this.invoice.invoice_rule_selections.push(deletedInvoiceRuleSelection);
-                		this.doVATCalculations();
                     alert(this.nsfo.getErrorMessage(error));
                   },
 							() => {
@@ -470,7 +418,7 @@ export class InvoiceDetailsComponent {
     private sendInvoiceToClient() {
         this.invoice.sender_details = this.senderDetails;
         this.invoice.status = "UNPAID";
-        this.invoice.total = this.totalInclVAT;
+
         if (this.invoice.id) {
             this.nsfo.doPutRequest(this.nsfo.URI_INVOICE + "/" + this.invoice.id ,this.invoice)
                 .subscribe(
@@ -498,7 +446,7 @@ export class InvoiceDetailsComponent {
     private saveInvoice() {
         this.invoice.sender_details = this.senderDetails;
         this.invoice.status = "NOT SEND";
-        this.invoice.total = this.totalInclVAT;
+
         if (!this.invoice.company_name) {
             this.invoice.status = "INCOMPLETE";
         }

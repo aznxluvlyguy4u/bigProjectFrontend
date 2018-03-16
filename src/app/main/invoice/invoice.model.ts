@@ -21,6 +21,8 @@ export class Invoice {
     public total: number;
 	  public pdf_url: string;
 	  public ledger_account_number: string;
+	  public vat_breakdown: VatBreakdown;
+		public mollie_id: string;
 }
 
 export class InvoiceRuleTemplate {
@@ -59,9 +61,15 @@ export class InvoiceSenderDetails {
     public is_deleted: boolean;
 }
 
-export class VatCalculationGroup {
+export class VatBreakdown {
+	total_excl_vat: number;
+	total_incl_vat: number;
+	vat: number;
+	records: VatBreakdownRecord[] = [];
+}
+
+export class VatBreakdownRecord {
 	vat_percentage_rate: number;
 	price_excl_vat_total: number;
-	price_incl_vat_total: number;
 	vat: number;
 }

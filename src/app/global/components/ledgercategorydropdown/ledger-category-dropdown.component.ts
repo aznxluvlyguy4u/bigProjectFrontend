@@ -111,12 +111,14 @@ export class LedgerCategoryDropdownComponent implements OnInit {
 
 	clickOK() {
 		this.closeModal();
-		this.initialSelectedLedgerCategory = this.selectedLedgerCategory;
 		this.notifySelectedLedgerCategoryChanged();
+		this.initialSelectedLedgerCategory = this.selectedLedgerCategory;
 	}
 
 	notifySelectedLedgerCategoryChanged() {
-		this.selectedLedgerCategoryChanged.emit(this.selectedLedgerCategory);
+		if (this.selectedLedgerCategory !== this.initialSelectedLedgerCategory) {
+			this.selectedLedgerCategoryChanged.emit(this.selectedLedgerCategory);
+		}
 	}
 
 	getFilterOptions(): any[] {
