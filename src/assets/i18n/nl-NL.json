@@ -254,7 +254,7 @@
   "SOMETHING WENT WRONG! TRY AGAIN AT LATER TIME!": "Iets ging verkeerd! Probeer het weer op een later tijdstip.",
   "CLIENT MANAGEMENT": "Klantenbeheer",
   "INVOICE MANAGEMENT": "Factuurbeheer",
-  "REPORTS": "Rapportage",
+  "REPORTS": "Rapportages",
   "REGISTERED CLIENTS": "Geregistreerde klanten",
   "VIEW CLIENTS": "Klanten bekijken",
   "ADD NEW CLIENT": "Klant toevoegen",
@@ -667,5 +667,10 @@
   "AMOUNT": "Aantal",
   "UNIT COST": "Stukprijs",
   "SELECT INVOICE RULE": "Selecteer factuurregel",
-  "GO TO INVOICE RULES OVERVIEW": "Ga naar factuurregelsoverzicht"
+  "GO TO INVOICE RULES OVERVIEW": "Ga naar factuurregelsoverzicht",
+  "INBREEDING_COEFFICIENT_REPORT": "Inteeltcoefficient rapportage",
+  "LINEAGE_PROOF_REPORT": "Afstammingsbewijs",
+  "LIVESTOCK_REPORT": "Stallijst rapportage",
+  "FILE TYPE": "Bestandstype",
+  "ANIMAL REPORTS": "Dierrapportages"
 }

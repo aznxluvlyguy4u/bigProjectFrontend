@@ -1,0 +1,58 @@
+<div id="download-modal" class="reveal-overlay" [ngStyle]="{'display': modalDisplay}">
+    <div class="reveal small" [ngStyle]="{'display': modalDisplay}">
+
+        <div class="modal-header-download">
+            {{ title | translate }}
+            <button type="button" class="pull-right" aria-label="Close modal" (click)="closeModal()">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+        </div>
+
+        <ng-template *ngIf="!areAnimalsSelected()">
+            <div class="modal-body">
+                <p>{{ 'NO ANIMALS WERE SELECTED' | translate }}</p>
+            </div>
+        </ng-template>
+
+        <ng-template *ngIf="areAnimalsSelected()">
+            <div class="modal-body">
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>{{ 'CATEGORY' | translate }}</th>
+                            <th>{{ 'AMOUNT' | translate }}</th>
+                            <th>{{ 'FILE TYPE' | translate }}</th>
+                            <th>{{ 'DOWNLOAD' | translate }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ 'LINEAGE_PROOF_REPORT' | translate }}</td>
+                            <td>
+                                {{ getAnimals() ? getAnimals().length : '-' }}
+                            </td>
+                            <td>
+                                <app-file-type-selector id="file-type-selector"
+                                                        [fileTypes]="pedigreeCertificateFileTypes()"
+                                        [selectedFileType]="pedigreeCertificateFileType"
+                                        (selectedFileTypeEvent)="pedigreeCertificateFileType = $event"
+                                ></app-file-type-selector>
+                            </td>
+                            <td>
+                                <button type="button"
+                                        class="button primary pull-left"
+                                        aria-label="Download file"
+                                        (click)="downloadPedigreeCertificatesOfFilteredAnimals()">
+                                    {{ 'DOWNLOAD' | translate }}
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </ng-template>
+
+    </div>
+</div>
