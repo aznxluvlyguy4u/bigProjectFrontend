@@ -17,6 +17,7 @@ import { ParentsStorage } from './global/services/storage/parents.storage';
 import { ClientsStorage } from './global/services/storage/clients.storage';
 import { LedgerCategoryStorage } from './global/services/storage/ledger-category.storage';
 import { InvoiceRuleStorage } from './global/services/storage/invoice-rule.storage';
+import { DownloadService } from './global/services/download/download.service';
 
 require('font-awesome-loader');
 
@@ -34,6 +35,7 @@ bootstrap(IndexComponent, [
     LocationStorage,
     ClientsStorage,
     CollarStorage,
+	  DownloadService,
     LedgerCategoryStorage,
     PedigreeRegisterStorage,
     NSFOService,

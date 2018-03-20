@@ -56,6 +56,11 @@ export class NSFOService {
 
 	  public URI_PEDIGREE_REGISTERS = '/v1/pedigreeregisters';
 
+		//REPORT
+		public URI_GET_LINEAGE_PROOF = '/v1/reports/pedigree-certificates';
+		public URI_GET_INBREEDING_COEFFICIENT = '/v1/reports/inbreeding-coefficients';
+		public URI_GET_LIVESTOCK_DOCUMENT = '/v1/reports/livestock';
+
 	  public URI_TREATMENTS = '/v1/treatments';
 	  public URI_TREATMENT_TYPES = '/v1/treatment-types';
 
