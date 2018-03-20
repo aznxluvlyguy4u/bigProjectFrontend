@@ -15,6 +15,7 @@ import { PedigreeRegisterStorage } from './global/services/storage/pedigree-regi
 import { FormatService } from './global/services/utils/format.service';
 import { ParentsStorage } from './global/services/storage/parents.storage';
 import { DownloadService } from './global/services/download/download.service';
+import { AnimalReportDownloaderService } from './global/services/download/animal-report-downloader.service';
 
 require('font-awesome-loader');
 
@@ -33,6 +34,7 @@ bootstrap(IndexComponent, [
     CollarStorage,
 	  DownloadService,
     PedigreeRegisterStorage,
+    AnimalReportDownloaderService,
     NSFOService,
     FormatService,
     ParentsStorage,

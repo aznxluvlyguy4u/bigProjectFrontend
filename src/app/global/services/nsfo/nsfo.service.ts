@@ -4,6 +4,9 @@ import { QueryParam } from '../../../main/client/client.model';
 
 import _ = require("lodash");
 
+import { Country } from '../../models/country.model';
+import { Animal } from '../../components/livestock/livestock.model';
+
 @Injectable()
 export class NSFOService {
     private API_SERVER_URL: string = NSFO_API_SERVER_URL;
@@ -154,4 +157,10 @@ export class NSFOService {
 				return "SOMETHING WENT WRONG. TRY ANOTHER TIME."
 			}
     }
+
+    static cleanAnimalsInput(animals: Animal[], variables = ['uln_country_code', 'uln_number']): Animal[] {
+			return _.map(animals, function (object: Animal) {
+				return _.pick(object, variables)
+			});
+		}
 }

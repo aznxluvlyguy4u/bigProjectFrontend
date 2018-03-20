@@ -1,6 +1,6 @@
 import { REACTIVE_FORM_DIRECTIVES, Validators } from '@angular/forms';
 import { TranslatePipe, TranslateService } from 'ng2-translate';
-import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { NSFOService } from '../../../global/services/nsfo/nsfo.service';
 import { AnimalsResult } from './animals-result.model';
 import { GetAnimalsBody } from './get-animals-body.model';
@@ -34,10 +34,12 @@ import { PedigreeRegisterStorage } from '../../../global/services/storage/pedigr
 import { PedigreeRegisterDropdownComponent } from '../../../global/components/pedigreeregisterdropdown/pedigree-register-dropdown.component';
 import { ParentSelectorComponent } from '../../../global/components/parentselector/parent-selector.component';
 import { ParentsStorage } from '../../../global/services/storage/parents.storage';
+import { AnimalReportDownloaderComponent } from '../../../global/components/animalreportdownloader/animal-report-downloader.component';
+import { AnimalReportDownloaderService } from '../../../global/services/download/animal-report-downloader.service';
 
 @Component({
 		providers: [PaginationService, AnimalsBatchEditFilterPipe],
-		directives: [REACTIVE_FORM_DIRECTIVES, UlnInputComponent, StnInputComponent,
+		directives: [REACTIVE_FORM_DIRECTIVES, UlnInputComponent, StnInputComponent, AnimalReportDownloaderComponent,
 			HttpCallButtonComponent, StartInputModalComponent, TableSpinnerComponent, CollarInputComponent,
 			BooleanInputComponent, DatepickerV2Component, UbnDropdownComponent, PaginationComponent,
 			SearchComponent, PedigreeRegisterDropdownComponent, ParentSelectorComponent],
@@ -138,6 +140,7 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 								private pedigreeRegisterStorage: PedigreeRegisterStorage,
 								private parentStorage: ParentsStorage,
 								private filterPipe: AnimalsBatchEditFilterPipe,
+								private animalReportDownloaderService: AnimalReportDownloaderService,
 								private settings: SettingsService) {}
 
 		private initializeValues() {
@@ -653,5 +656,11 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 				animal.myo_max = retrievedAnimal.myo_max;
 			}
 		}
+	}
+
+	openReportDownloadModal() {
+			this.updateFilterAnimals();
+			this.animalReportDownloaderService.animals = this.filteredAnimals;
+			this.animalReportDownloaderService.openModal();
 	}
 }

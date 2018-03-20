@@ -185,9 +185,9 @@ export class DownloadService {
 
 		doLineageProofPostRequest(animals: Animal[], fileType: string = 'PDF') {
 
-				let request = {
-						"animals": animals
-				};
+				const request = {
+						animals: NSFOService.cleanAnimalsInput(animals)
+					};
 
 				const queryParam = typeof fileType === "string" ? '?' + QUERY_PARAM_FILE_TYPE + '=' + fileType.toLowerCase() : '';
 				let download = this.getNewDownloadRequest(LINEAGE_PROOF_REPORT, fileType, animals.length, request);

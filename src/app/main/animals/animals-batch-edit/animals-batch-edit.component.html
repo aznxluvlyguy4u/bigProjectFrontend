@@ -1,6 +1,6 @@
 <div id="animals-batch-edit">
     <div class="row">
-        <div class="column large-2">
+        <div class="column large-1">
             <!--OPEN OPTIONS ACCORDION BUTTON-->
             <button class="accordion-button expanded" [ngClass]="{'toggled': openOptions}" (click)="openOptions = !openOptions">
                 <i *ngIf="!openOptions" class="fa fa-caret-right fa-fw" aria-hidden="true"></i>
@@ -8,7 +8,7 @@
                 <span> {{ 'OPTIONS' | translate }} </span>
             </button>
         </div>
-        <div class="column large-2">
+        <div class="column large-1">
             <!--OPEN FILTER ACCORION BUTTON-->
             <button class="accordion-button expanded" [ngClass]="{'toggled': openFilters}" (click)="openFilters = !openFilters">
                 <i *ngIf="!openFilters" class="fa fa-caret-right fa-fw" aria-hidden="true"></i>
@@ -64,6 +64,13 @@
                 >{{'ALL'|translate}} <i class="fa fa-fast-backward" aria-hidden="true"></i></button>
             </ng-template>
         </div>
+
+        <div class="column large-2">
+            <button type="button" class="button primary" [disabled]="!isDataLoaded()" (click)="openReportDownloadModal()">
+                {{ 'REPORTS' | translate }} <i class="fa fa-file-text-o fa-fw" aria-hidden="true"></i>
+            </button>
+        </div>
+
         <div class="column large-3">
             <!--UPDATE ANIMALS BUTTON-->
             <app-http-call-button
@@ -1162,3 +1169,5 @@
     </div>
 
 </div>
+
+<app-animal-report-downloader></app-animal-report-downloader>
