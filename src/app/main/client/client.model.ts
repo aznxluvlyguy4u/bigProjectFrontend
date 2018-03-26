@@ -1,7 +1,10 @@
-import { Company } from '../invoice/invoice.model';
+import { Invoice } from '../invoice/invoice.model';
+import { Person } from '../../global/models/person.model';
+import { PedigreeRegisterRegistration } from '../../global/models/pedigree-register-registration.model';
 
 export class Client {
-    public company_id: number;
+	  public id: number;
+    public company_id: string;
     public debtor_number: string;
     public company_name: string;
     public telephone_number: string;
@@ -20,28 +23,24 @@ export class Client {
     public deleted_locations: Location[] = [];
     public users: User[] = [];
     public deleted_users: User[] = [];
-    public pedigrees: Pedigree[] = [];
+	  public invoices: Invoice[] = [];
 }
 
 export class Location {
+	  public id: number;
     public location_id ?: string;
     public ubn: string;
     public address ?: Address = new Address();
     public is_active ?: boolean;
-    public company ?: Company;
+	  public location_holder: string;
+    public company ?: Client;
+    public pedigree_register_registrations: PedigreeRegisterRegistration[] = [];
 }
 
-export class User {
-    public person_id: number;
-    public prefix: string;
-    public last_name: string;
-    public first_name: string;
-    public email_address: string;
+export class User extends Person {
     public primary_contactperson: string | boolean;
     public relation_number_keeper: string;
-    public is_active: boolean;
-    public type: string;
-    public companies: Company[]
+    public companies: Client[]
 }
 
 export class ActionLog {
@@ -56,10 +55,11 @@ export class ActionLog {
     public is_rvo_message: boolean;
 }
 
-class Address {
+export class Address {
     public street_name: string;
     public address_number: string;
-    public suffix: string;
+    public address_number_suffix: string;
+    public suffix: string; // WARNING 'suffix' is indirectly linked to address_number_suffix in API
     public postal_code: string;
     public city: string;
     public state: string;
@@ -115,13 +115,6 @@ export class LocationHealthStatus {
 class BreederNumber {
     public code: string;
     public number: string;
-}
-
-class Invoice {
-    public invoice_number: string;
-    public invoice_date: string;
-    public status: string;
-    public pdf_url: string;
 }
 
 class AnimalHealth {

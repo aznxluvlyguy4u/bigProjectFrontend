@@ -1,0 +1,139 @@
+<button
+        class="button primary expanded"
+        [disabled]="disabled"
+        (click)="openModal()"
+        style="white-space: nowrap;"
+>
+    {{ buttonText() | translate }}
+</button>
+
+<div class="reveal-overlay" [ngStyle]="{'display': displayModal}">
+    <div class="medium reveal" [ngStyle]="{'display': displayModal}">
+        <div class="modal-header" style="background-color:silver">
+
+            <div class="row table-options-container">
+                <div class="large-10 columns">
+                    <h4>{{ 'SELECT INVOICE RULE' | translate }}</h4>
+                </div>
+                <div class="large-2 columns end">
+                    <span class="pull-right">
+                        <button style="min-height:2.5rem"
+                                class="small alert button"
+                                (click)="clickCancel();"
+                        >{{ 'CANCEL' | translate}}</button>
+                    </span>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-body">
+
+            <hr>
+
+            <button type="button" class="tiny button primary float-right"
+                    (click)="navigateToEditInvoiceRules()">
+                                    <span>
+                                        {{ 'GO TO INVOICE RULES OVERVIEW' | translate }}
+                                    </span>
+            </button>
+
+            <hr>
+
+            <div class="row table-options-container">
+                <div class="large-8 columns">
+                    <label>
+                        {{ 'SEARCH' | translate }}
+                        <input type="text" [(ngModel)]="filterSearch" (keydown)="page = 1" placeholder="{{ 'SEARCH' | translate }}" maxlength="50">
+                    </label>
+                </div>
+                <div class="large-4 columns end">
+                    <label>
+                        {{ 'DISPLAY AMOUNT' | translate }}
+                        <select [(ngModel)]="filterAmount" (change)="page = 1">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="large-12 columns">
+                    <table class="stack client-overview">
+                        <thead>
+                        <tr>
+                            <td>{{ 'LEDGER CATEGORY' | translate }} {{ 'CODE' | translate }}</td>
+                            <td>{{ 'LEDGER CATEGORY' | translate }}</td>
+                            <td>{{ 'DESCRIPTION' | translate }}</td>
+                            <td>{{ 'VAT PERCENTAGE RATE' | translate }}</td>
+                            <td>{{ 'PRICE EXCL VAT' | translate }}</td>
+                            <td *ngIf="!displayActiveStatus">{{ 'IS ACTIVE' | translate }}</td>
+                            <td></td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngIf="isInvoiceRulesEmpty()">
+                            <td colspan="10">
+                                <div class="spinner">
+                                    <div class="bounce1"></div>
+                                    <div class="bounce2"></div>
+                                    <div class="bounce3"></div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr *ngFor="let rule of getInvoiceRules() | invoiceRuleSearchPipe:getFilterOptions() | paginate: {itemsPerPage: filterAmount, currentPage: page}; let i = index">
+                            <td>
+                                <span *ngIf="rule.ledger_category">{{ rule.ledger_category.code }}</span>
+                                <span *ngIf="!rule.ledger_category">--</span>
+                            </td>
+                            <td>
+                                <span *ngIf="rule.ledger_category">{{ rule.ledger_category.description }}</span>
+                                <span *ngIf="!rule.ledger_category">--</span>
+                            </td>
+                            <td>
+                                {{ rule.description }}
+                            </td>
+                            <td>
+                                {{ rule.vat_percentage_rate }}
+                            </td>
+                            <td>
+                                {{ rule.price_excl_vat }}
+                            </td>
+                            <td *ngIf="!displayActiveStatus">
+                                <app-check-mark
+                                        *ngIf="rule.isActive != undefined"
+                                        [boolVal]="rule.isActive"
+                                ></app-check-mark>
+                            </td>
+                            <td>
+                                <button type="button" class="tiny button success float-right"
+                                        (click)="selectInvoiceRule(rule)">
+                                    <span>
+                                        {{ 'SELECT' | translate }}
+                                    </span>
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <pagination (pageChange)="page = $event" [goToFirstPage]="(isLoadedEvent)"></pagination>
+                </div>
+            </div>
+
+        </div>
+        <div *ngIf="filterAmount > 15" class="modal-footer">
+
+            <hr>
+
+            <span class="pull-right">
+                <button
+                        class="tiny alert button"
+                        (click)="clickCancel();"
+                >{{ 'CANCEL' | translate}}</button>
+            </span>
+        </div>
+    </div>
+</div>

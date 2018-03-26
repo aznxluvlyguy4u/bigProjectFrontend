@@ -50,7 +50,6 @@
                     <td>{{ 'PLACE' | translate }}</td>
                     <td>{{ 'PRIMARY CONTACTPERSON' | translate }}</td>
                     <td>{{ 'UBN' | translate }}</td>
-                    <td>{{ 'PEDIGREE' | translate }}</td>
                     <td>{{ 'SUBSCRIPTION DATE' | translate }}</td>
                     <td>{{ 'ANIMAL HEALTH' | translate }}</td>
                     <td>{{ 'STATUS' | translate }}</td>
@@ -87,15 +86,6 @@
                         <div *ngIf="client.locations.length > 0" *ngFor="let location of client.locations" >
                             {{ location }}
                             <span *ngIf="client.locations.length > 1">
-                                <br>
-                            </span>
-                        </div>
-                    </td>
-                    <td>
-                        <span *ngIf="client.pedigrees.length == 0">--</span>
-                        <div *ngIf="client.pedigrees.length > 0" *ngFor="let pedigree of client.pedigrees" >
-                            {{ pedigree }}
-                            <span *ngIf="client.pedigrees.length > 1">
                                 <br>
                             </span>
                         </div>

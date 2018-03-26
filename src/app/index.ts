@@ -14,6 +14,9 @@ import { CollarStorage } from './global/services/storage/collar.storage';
 import { PedigreeRegisterStorage } from './global/services/storage/pedigree-register.storage';
 import { FormatService } from './global/services/utils/format.service';
 import { ParentsStorage } from './global/services/storage/parents.storage';
+import { ClientsStorage } from './global/services/storage/clients.storage';
+import { LedgerCategoryStorage } from './global/services/storage/ledger-category.storage';
+import { InvoiceRuleStorage } from './global/services/storage/invoice-rule.storage';
 import { DownloadService } from './global/services/download/download.service';
 import { AnimalReportDownloaderService } from './global/services/download/animal-report-downloader.service';
 
@@ -31,13 +34,16 @@ bootstrap(IndexComponent, [
     AuthenticatedGuard,
     DeveloperGuard,
     LocationStorage,
+    ClientsStorage,
     CollarStorage,
 	  DownloadService,
+    LedgerCategoryStorage,
     PedigreeRegisterStorage,
     AnimalReportDownloaderService,
     NSFOService,
     FormatService,
     ParentsStorage,
+    InvoiceRuleStorage,
     TranslateService,
     SettingsService,
     UtilsService

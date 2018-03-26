@@ -68,4 +68,13 @@ export class SettingsService {
     public convertToModelDateTime(date) {
         return moment(date).format(this.getModelDateTimeFormat())
     }
+
+    getVatPercentages(): number[] {
+        return [
+          0,
+          6,
+          12,
+          21
+        ];
+    }
 }

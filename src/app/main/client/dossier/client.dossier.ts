@@ -12,6 +12,7 @@ import {REACTIVE_FORM_DIRECTIVES} from "@angular/forms";
 import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
 import {Datepicker} from "../../../global/components/datepicker/datepicker.component";
 import {SettingsService} from "../../../global/services/settings/settings.service";
+import { ClientsStorage } from '../../../global/services/storage/clients.storage';
 
 @Component({
     directives: [REACTIVE_FORM_DIRECTIVES, LocationsDisplay, UsersDisplay, Datepicker],
@@ -41,7 +42,8 @@ export class ClientDossierComponent {
 
     constructor(
         private router: Router,
-        private activatedRoute: ActivatedRoute, 
+        private activatedRoute: ActivatedRoute,
+				private clientsStorage: ClientsStorage,
         private utils: UtilsService, 
         private settings: SettingsService, 
         private fb: FormBuilder,
@@ -180,6 +182,7 @@ export class ClientDossierComponent {
                     .subscribe(
                         res => {
                             this.savingInProgress = false;
+                            this.clientsStorage.refresh();
 													  this.navigateTo('/client/details/' + res.result.company_id);
                         },
                         err => {
@@ -231,6 +234,7 @@ export class ClientDossierComponent {
                 this.nsfo.doPutRequest(this.nsfo.URI_CLIENTS + '/' + this.client.company_id, newClient)
                     .subscribe(
                         res => {
+													  this.clientsStorage.refresh();
                             this.navigateTo('/client/details/' + this.client.company_id);
                         },
                         err => {

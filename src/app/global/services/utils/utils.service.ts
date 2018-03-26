@@ -65,4 +65,9 @@ export class UtilsService {
 
         return boolval;
     }
+
+    static countDecimals(value) {
+        if(value == null || Math.floor(value) === value) return 0;
+        return value.toString().split(".")[1].length || 0;
+    }
 }

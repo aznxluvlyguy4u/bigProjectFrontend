@@ -1,8 +1,28 @@
 <div class="row">
-    <div class="large-12 columns sub-page-header">
+    <div class="large-3 columns sub-page-header">
         <span class="sub-page-title">
            {{ 'INVOICES VARIABLES' | translate }}
         </span>
+    </div>
+
+
+    <div class="large-3 columns" >
+        <span>
+            <select style="font-size:0.7rem" [(ngModel)]="filterAmount" (change)="page = 1">
+                <option value="5">{{ 'DISPLAY AMOUNT' | translate }} 5</option>
+                <option value="10">{{ 'DISPLAY AMOUNT' | translate }} 10</option>
+                <option value="25">{{ 'DISPLAY AMOUNT' | translate }} 25</option>
+            </select>
+        </span>
+    </div>
+
+    <div class="large-6 columns">
+        <input style="font-size:0.7rem"
+                type="text"
+               [(ngModel)]="filterSearch"
+               (keydown)="page = 1"
+               placeholder="{{ 'SEARCH' | translate }}"
+               maxlength="50">
     </div>
 </div>
 <div class="row">
@@ -10,11 +30,12 @@
         <table>
             <thead>
                 <tr>
+                    <td>{{'LEDGER CATEGORY' | translate}}</td>
                     <td>{{'DESCRIPTION' | translate}}</td>
-                    <td>{{'PRICE (EXCL. VAT)' | translate}}</td>
+                    <td style="text-align: right">{{'PRICE (EXCL. VAT)' | translate}}</td>
                     <td>{{'VAT PERCENTAGE RATE' | translate}}</td>
                     <td>
-                        <button type="button" (click)="openModal(false, 'GENERAL')" class="small primary button pull-right">
+                        <button type="button" (click)="openModal(false)" class="small primary button pull-right">
                             <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
                             {{ 'ADD INVOICE RULE' | translate }}
                         </button>
@@ -22,7 +43,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngIf="isLoading && generalRules.length == 0">
+                <tr *ngIf="isLoading && rules.length == 0">
                     <td colspan="10">
                         <div class="spinner">
                             <div class="bounce1"></div>
@@ -32,95 +53,40 @@
                     </td>
                 </tr>
 
-                <tr *ngIf="!isLoading && generalRules.length == 0">
+                <tr *ngIf="!isLoading && rules.length == 0">
                     <td colspan="4" class="text-center">{{ 'NO RULES HAVE BEEN ADDED' | translate }}</td>
                 </tr>
 
-                <tr *ngFor="let rule of generalRules">
+                <tr *ngFor="let rule of rules | invoiceRuleSearchPipe:getFilterOptions()  | paginate: {itemsPerPage: filterAmount, currentPage: page}">
+                    <td>
+                        {{ rule.ledger_category ? rule.ledger_category.description : '-' }} [{{ rule.ledger_category ? rule.ledger_category.code : '-' }}]
+                    </td>
                     <td>
                         {{ rule.description }}
                     </td>
-                    <td>
-                        {{ rule.price_excl_vat }}
+                    <td style="text-align: right">
+                        {{ rule.price_excl_vat | localNumberFormat:3 }}
                     </td>
                     <td>
                         {{ rule.vat_percentage_rate }}
                     </td>
                     <td>
                         <span class="pull-right">
-                            <a (click)="openModal(true, rule.category, rule)"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
+                            <a (click)="openModal(true, rule)"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
                             <a (click)="removeInvoiceRule(rule)" class="remove-button"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
                         </span>
                     </td>
                 </tr>
             </tbody>
         </table>
+
+        <pagination (pageChange)="page = 1" [goToFirstPage]="(isLoadedEvent)"></pagination>
     </div>
 </div>
 
-<div class="row">
-    <div class="large-12 columns sub-page-header">
-        <span class="sub-page-title">
-           {{ 'INSPECTION ANIMAL HEALTH' | translate }}
-        </span>
-    </div>
-</div>
-<div class="row">
-    <div class="large-12 columns">
-        <table>
-            <thead>
-            <tr>
-                <td>{{'DESCRIPTION' | translate}}</td>
-                <td>{{'PRICE (EXCL. VAT)' | translate}}</td>
-                <td>{{'VAT PERCENTAGE RATE' | translate}}</td>
-                <td>
-                    <button type="button" (click)="openModal(false, 'ANIMAL HEALTH')" class="small primary button pull-right">
-                        <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
-                        {{ 'ADD INVOICE RULE' | translate }}
-                    </button>
-                </td>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngIf="isLoading && animalHealthRules.length == 0">
-                <td colspan="10">
-                    <div class="spinner">
-                        <div class="bounce1"></div>
-                        <div class="bounce2"></div>
-                        <div class="bounce3"></div>
-                    </div>
-                </td>
-            </tr>
-
-            <tr *ngIf="!isLoading && animalHealthRules.length == 0">
-                <td colspan="4" class="text-center">{{ 'NO RULES HAVE BEEN ADDED' | translate }}</td>
-            </tr>
-
-            <tr *ngFor="let rule of animalHealthRules">
-                <td>
-                    {{ rule.description }}
-                </td>
-                <td>
-                    {{ rule.price_excl_vat }}
-                </td>
-                <td>
-                    {{ rule.vat_percentage_rate }}
-                </td>
-                <td>
-                    <span class="pull-right">
-                        <a (click)="openModal(true, rule.category, rule)"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
-                        <a (click)="removeInvoiceRule(rule)" class="remove-button"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
-                    </span>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-
-<!--ADD INVOICE RULE MODAL-->
+<!--ADD/EDIT INVOICE RULE MODAL-->
 <div class="reveal-overlay" [ngStyle]="{'display': displayModal}">
-    <div class="tiny reveal" [ngStyle]="{'display': displayModal}">
+    <div class="medium reveal" [ngStyle]="{'display': displayModal}">
         <div class="modal-header">
             <span *ngIf="!isModalEditMode">{{ 'NEW INVOICE RULE' | translate }}</span>
             <span *ngIf="isModalEditMode">{{ 'EDIT INVOICE RULE' | translate }}</span>
@@ -131,6 +97,20 @@
         <div [formGroup]="form" class="modal-body">
             <div class="row">
                 <div class="large-4 columns">
+                    <label class="middle"> {{ 'LEDGER CATEGORY' | translate }} * </label>
+                </div>
+                <div class="large-8 columns">
+                    <app-ledger-category-dropdown
+                            [selectedLedgerCategory]="selectedLedgerCategory"
+                            [disabled]="false"
+                            [activeOnly]="true"
+                            [displayActiveStatus]="true"
+                            (selectedLedgerCategoryChanged)="selectedLedgerCategory = $event"
+                    ></app-ledger-category-dropdown>
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-4 columns">
                     <label class="middle"> {{ 'DESCRIPTION' | translate }} * </label>
                 </div>
                 <div class="large-8 columns">
@@ -139,10 +119,15 @@
             </div>
             <div class="row">
                 <div class="large-4 columns">
-                    <label class="middle"> {{ 'PRICE (EXCL. VAT)' | translate }} * </label>
+                    <label class="middle"> {{ 'PRICE (EXCL. VAT)' | translate }} *</label>
                 </div>
                 <div class="large-8 columns">
-                    <input type="text" [(ngModel)]="selectedRule.price_excl_vat" formControlName="price_excl_vat" maxlength="20">
+                    <label *ngIf="!priceHasValidDecimalCount()" class="input-error-msg">{{'CURRENCY CANNOT EXCEED 3 DECIMAL SPACES' | translate}}</label>
+                    <input type="number"
+                           step="0.001"
+                           [(ngModel)]="selectedRule.price_excl_vat"
+                           formControlName="price_excl_vat"
+                    >
                 </div>
             </div>
             <div class="row">
@@ -151,9 +136,7 @@
                 </div>
                 <div class="large-8 columns">
                     <select [(ngModel)]="selectedRule.vat_percentage_rate" formControlName="vat_percentage_rate">
-                        <option value="0"> 0% </option>
-                        <option value="6"> 6% </option>
-                        <option value="21"> 21% </option>
+                        <option *ngFor="let percentageValue of getVatPercentages()" [value]="percentageValue"> {{percentageValue}}% </option>
                     </select>
                 </div>
             </div>
@@ -168,7 +151,13 @@
                 <label *ngIf="!isValidForm" class="error-message">{{ 'FILL IN ALL THE REQUIRED FIELDS' | translate }}</label>
             </span>
             <span class="pull-right">
-                <button *ngIf="!isModalEditMode" [disabled]="isSending" (click)="addInvoiceRule()" class="tiny primary button">
+
+                <button
+                        *ngIf="!isModalEditMode"
+                        [disabled]="disableEditOrInsertButton()"
+                        (click)="addInvoiceRule()"
+                        class="tiny primary button"
+                >
                     <span *ngIf="!isSending">
                         <i class="fa fa-floppy-o" aria-hidden="true"></i>
                         {{ 'ADD' | translate }}
@@ -177,7 +166,13 @@
                         <i class="fa fa-gear fa-spin fa-fw"></i>
                     </span>
                 </button>
-                <button *ngIf="isModalEditMode" [disabled]="isSending" (click)="editInvoiceRule()" class="tiny primary button">
+
+                <button
+                        *ngIf="isModalEditMode"
+                        [disabled]="disableEditOrInsertButton()"
+                        (click)="editInvoiceRule()"
+                        class="tiny primary button"
+                >
                     <span *ngIf="!isSending">
                         <i class="fa fa-floppy-o" aria-hidden="true"></i>
                         {{ 'EDIT' | translate }}
@@ -186,6 +181,7 @@
                         <i class="fa fa-gear fa-spin fa-fw"></i>
                     </span>
                 </button>
+
                 <button (click)="closeModal()" class="tiny alert button">{{ 'CANCEL' | translate}}</button>
             </span>
         </div>
