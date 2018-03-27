@@ -157,7 +157,12 @@ export class InvoiceDetailsComponent {
 				},
 				error => {
 					alert(this.nsfo.getErrorMessage(error));
-					this.router.navigate([this.urlInvoiceOverview]);
+
+					if (error.json().result.message === 'SENDER DETAILS ARE MISSING') {
+						this.navigateToInvoiceSenderDetailsEdit();
+					} else {
+						this.router.navigate([this.urlInvoiceOverview]);
+					}
 				}
 			);
   }
