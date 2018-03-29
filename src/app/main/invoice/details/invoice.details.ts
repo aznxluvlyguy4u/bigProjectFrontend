@@ -354,35 +354,35 @@ export class InvoiceDetailsComponent {
 
           // Remove selectedUbn if the old selectedUbn does not belong to the new selectedCompany
           if (this.selectedCompany.locations) {
-					      let hasSelectedUbn = false;
-						    for (let location of this.selectedCompany.locations) {
-						        if (typeof location === 'string') {
-						            if (location === this.selectedUbn) {
-						                hasSelectedUbn = true;
-						                break;
-                        }
-                    } else {
-						            if (location.ubn != null && location.ubn === this.selectedUbn) {
-						                hasSelectedUbn = true;
-						                break;
-                        }
-                    }
-                }
-                if (!hasSelectedUbn) {
-						        this.selectedUbn = null;
-                }
+			  let hasSelectedUbn = false;
+			  for (let location of this.selectedCompany.locations) {
+				  if (typeof location === 'string') {
+					  if (location === this.selectedUbn) {
+						  hasSelectedUbn = true;
+						  break;
+					  }
+				  } else {
+					  if (location.ubn != null && location.ubn === this.selectedUbn) {
+						  hasSelectedUbn = true;
+						  break;
+					  }
+				  }
+			  }
+			  if (!hasSelectedUbn) {
+				  this.selectedUbn = null;
+			  }
 
           } else {
-					    this.selectedUbn = null;
+				this.selectedUbn = null;
           }
 
         } else {
-					this.invoice.company = null;
-					this.invoice.company_id = null;
-					this.invoice.company_name = null;
-					this.invoice.company_vat_number = null;
-					this.invoice.company_debtor_number = null;
-					this.selectedUbn = null;
+			this.invoice.company = null;
+			this.invoice.company_id = null;
+			this.invoice.company_name = null;
+			this.invoice.company_vat_number = null;
+			this.invoice.company_debtor_number = null;
+			this.selectedUbn = null;
         }
 
         this.setInvoiceUbn();
