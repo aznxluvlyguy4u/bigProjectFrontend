@@ -7,6 +7,9 @@ import { TranslateService } from 'ng2-translate';
 import { Country } from '../../models/country.model';
 import { Animal } from '../../components/livestock/livestock.model';
 
+import { Country } from '../../models/country.model';
+import { Animal } from '../../components/livestock/livestock.model';
+
 @Injectable()
 export class NSFOService {
     private API_SERVER_URL: string = NSFO_API_SERVER_URL;

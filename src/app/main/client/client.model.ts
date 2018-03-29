@@ -66,10 +66,6 @@ export class Address {
     public country: string;
 }
 
-class Pedigree {
-    public number: string;
-}
-
 export class GhostLoginDetails {
 	public owner: User = new User();
 	public users: User[] = [];

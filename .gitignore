@@ -81,3 +81,6 @@ $RECYCLE.BIN/
 /src/app/**/*.js.map
 /dist/
 /env.json
+
+gulpfile.js
+gulpfile.js.map
