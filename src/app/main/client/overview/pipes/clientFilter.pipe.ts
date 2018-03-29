@@ -29,7 +29,6 @@ export class ClientFilterPipe implements PipeTransform {
                 client.owner.first_name.toLocaleUpperCase() +
                 client.owner.last_name.toLocaleUpperCase() +
                 client.locations +
-                client.pedigrees +
                 client.subscription_date
             ).indexOf(search_input) !== -1);
         }

@@ -20,7 +20,6 @@ export class Client {
     public deleted_locations: Location[] = [];
     public users: User[] = [];
     public deleted_users: User[] = [];
-    public pedigrees: Pedigree[] = [];
 }
 
 export class Location {
@@ -63,10 +62,6 @@ class Address {
     public city: string;
     public state: string;
     public country: string;
-}
-
-class Pedigree {
-    public number: string;
 }
 
 export class GhostLoginDetails {
