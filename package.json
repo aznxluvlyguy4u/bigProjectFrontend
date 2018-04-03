@@ -10,7 +10,10 @@
     "zip:staging": "gulp zip:staging",
     "zip:prod": "gulp zip:prod",
     "publish:staging": "npm run build:staging && gulp zip:staging && gulp publish:staging",
-    "publish:prod": "npm run build:prod && gulp zip:prod && gulp publish:prod"
+    "publish:prod": "npm run build:prod && gulp zip:prod && gulp publish:prod",
+    "publish:zip:staging": "gulp publish:zip:staging",
+    "publish:zip:prod": "gulp publish:zip:prod",
+    "clean": "gulp clean-scripts"
   },
   "license": "ISC",
   "dependencies": {
