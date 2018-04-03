@@ -50,6 +50,24 @@ gulp.task('publish:prod', function () {
         maxRetries: retry_count
     }));
 });
+gulp.task('publish:staging:maintenance', function () {
+    return gulp.src(['src/maintenance-page/*'])
+        .pipe(s3({
+        Bucket: staging_admin_frontend_bucket,
+        ACL: public_read
+    }, {
+        maxRetries: retry_count
+    }));
+});
+gulp.task('publish:prod:maintenance', function () {
+    return gulp.src(['src/maintenance-page/*'])
+        .pipe(s3({
+        Bucket: production_admin_frontend_bucket,
+        ACL: public_read
+    }, {
+        maxRetries: retry_count
+    }));
+});
 gulp.task('publish:zip:staging', function () {
     var zipname = filename + '-staging-';
     return gulp.src('dist/' + zipname + version + '.zip')

@@ -79,6 +79,32 @@ gulp.task('publish:prod', function() {
 });
 
 /**
+ * Task to deploy maintenance page directly to AWS S3 hosted website Bucket.
+ */
+
+gulp.task('publish:staging:maintenance', function() {
+	return gulp.src(['src/maintenance-page/*'])
+		.pipe(s3({
+			Bucket: staging_admin_frontend_bucket,
+			ACL:    public_read
+		}, {
+			maxRetries: retry_count
+		}))
+		;
+});
+
+gulp.task('publish:prod:maintenance', function() {
+	return gulp.src(['src/maintenance-page/*'])
+		.pipe(s3({
+			Bucket: production_admin_frontend_bucket,
+			ACL:    public_read
+		}, {
+			maxRetries: retry_count
+		}))
+		;
+});
+
+/**
  * Task to deploy the zip file to AWS S3 Bucket
  */
 
