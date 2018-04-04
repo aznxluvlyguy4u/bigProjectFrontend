@@ -39,6 +39,7 @@ import { ErrorLogOverviewComponent } from './main/errorlog/error-log-overview.co
 import { DeveloperGuard } from './global/guards/developer.guard';
 import { AnimalsComponent } from './main/animals/animals.component';
 import { AnimalsBatchEditComponent } from './main/animals/animals-batch-edit/animals-batch-edit.component';
+import { AnimalReportsComponent } from './main/report/animals-overviews/animal-reports.component';
 
 const routes: RouterConfig = [
     {
@@ -95,7 +96,11 @@ const routes: RouterConfig = [
                   {path: '', terminal: true, redirectTo: 'batch-edit'},
                   {path: 'batch-edit', component: AnimalsBatchEditComponent}
                 ]},
-            {path: 'report', terminal: true, component: ReportComponent},
+            {path: 'report', component: ReportComponent,
+                children: [
+									{path: '', terminal: true, redirectTo: 'animal-reports'},
+									{path: 'animal-reports', component: AnimalReportsComponent},
+                ]},
 					  {path: 'log', terminal: true, component: TechnicalLogOverviewComponent},
 					  {path: 'error-log', terminal: true, component: ErrorLogOverviewComponent},
             {path: 'profile', terminal: true, component: ProfileComponent},
