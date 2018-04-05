@@ -11,10 +11,11 @@ import { AnimalReportsComponent } from './animals-overviews/animal-reports.compo
 })
 export class ReportComponent {
 
+	selectedRoute = '/report/animal-reports';
 
 	constructor(private router: Router) {}
 
-	private navigateTo(url: string) {
+	navigateTo(url: string) {
 		this.router.navigate([url]);
 	}
 }

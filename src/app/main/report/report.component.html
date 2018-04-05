@@ -18,7 +18,7 @@
     <div class="row hide-for-small-only">
         <ul class="tabs">
             <li class="tabs-title">
-                <a routerLink="/report/animals_overviews" routerLinkActive="active">{{ 'ANIMAL REPORTS' | translate }}</a>
+                <a routerLink="/report/animal-reports" routerLinkActive="active">{{ 'ANIMAL REPORTS' | translate }}</a>
             </li>
         </ul>
     </div>
@@ -27,7 +27,7 @@
     <div class="row show-for-small-only">
         <label> {{ 'TAB' | translate }}
             <select [(ngModel)]="selectedRoute" (change)="navigateTo($event.target.value)">
-                <option value="/report/animals_overviews">{{ 'ANIMAL REPORTS' | translate }}</option>
+                <option value="/report/animal-reports">{{ 'ANIMAL REPORTS' | translate }}</option>
             </select>
         </label>
     </div>
