@@ -15,7 +15,7 @@ export class AnimalReportsComponent {
 
 	selectedOption: string;
 
-	private reportBaseUrl = 'report/animal-reports/';
+	private reportBaseUrl = '/report/animal-reports/';
 
 	constructor(private router: Router) {
 		this.selectedOption = ALL_ANIMALS_OVERVIEW_REPORT;
@@ -40,7 +40,6 @@ export class AnimalReportsComponent {
 			default:
 				return;
 		}
-		// console.log(url);
 		this.navigateTo(url);
 	}
 
