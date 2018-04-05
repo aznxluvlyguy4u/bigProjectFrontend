@@ -3,14 +3,17 @@ import { Subject } from 'rxjs/Subject';
 import { DownloadRequest } from './download-request.model';
 
 import _ = require("lodash");
-import { QUERY_PARAM_CONCAT_VALUE_AND_ACCURACY, QUERY_PARAM_FILE_TYPE } from '../../variables/query-param.constant';
+import {
+	QUERY_PARAM_CONCAT_VALUE_AND_ACCURACY, QUERY_PARAM_FILE_TYPE,
+	YEAR
+} from '../../variables/query-param.constant';
 import { QueryParamsService } from '../utils/query-params.service';
 import { Ewe } from '../../models/ewe.model';
 import { Ram } from '../../models/ram.model';
 import { UtilsService } from '../utils/utils.service';
 import { Animal } from '../../components/livestock/livestock.model';
 import { NSFOService } from '../nsfo/nsfo.service';
-import { ALL_ANIMALS_OVERVIEW_REPORT } from '../../constants/report-type.constant';
+import { ALL_ANIMALS_OVERVIEW_REPORT, TE100_ANNUAL_PRODUCTION } from '../../constants/report-type.constant';
 import { CSV } from '../../variables/file-type.enum';
 
 export const INBREEDING_COEFFICIENT_REPORT = 'INBREEDING_COEFFICIENT_REPORT';
@@ -243,6 +246,15 @@ export class DownloadService {
 			let download = this.getNewDownloadRequest(ALL_ANIMALS_OVERVIEW_REPORT, CSV, 0, null, queryParam);
 
 			this.doDownloadGetRequest(this.nsfo.URI_GET_ANIMALS_OVERVIEW_REPORT + queryParam, download);
+		}
+
+
+		doAnnualTe100UbnProductionReportGetRequest(year: number) {
+
+			let queryParam = '?' + YEAR + '=' + year;
+			let download = this.getNewDownloadRequest(TE100_ANNUAL_PRODUCTION, CSV, year, null, queryParam);
+
+			this.doDownloadGetRequest(this.nsfo.URI_GET_ANNUAL_TE100_UBN_PRODUCTION_REPORT + queryParam, download);
 		}
 
 
