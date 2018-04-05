@@ -10,6 +10,8 @@ import { Ram } from '../../models/ram.model';
 import { UtilsService } from '../utils/utils.service';
 import { Animal } from '../../components/livestock/livestock.model';
 import { NSFOService } from '../nsfo/nsfo.service';
+import { ALL_ANIMALS_OVERVIEW_REPORT } from '../../constants/report-type.constant';
+import { CSV } from '../../variables/file-type.enum';
 
 export const INBREEDING_COEFFICIENT_REPORT = 'INBREEDING_COEFFICIENT_REPORT';
 export const LINEAGE_PROOF_REPORT = 'LINEAGE_PROOF_REPORT';
@@ -47,8 +49,8 @@ export class DownloadService {
 				this.notifyDownloadListsChanged();
 		}
 
-		getNewDownloadRequest(downloadType: string, fileType: string, reportCount: number = 0, jsonBody: any): DownloadRequest {
-				const hash = DownloadService.generateHash(downloadType, fileType, reportCount, jsonBody);
+		getNewDownloadRequest(downloadType: string, fileType: string, reportCount: number = 0, jsonBody: any, queryParam: string): DownloadRequest {
+				const hash = DownloadService.generateHash(downloadType, fileType, reportCount, jsonBody, queryParam);
 
 				if (this.isDuplicateDownloadRequest(hash)) {
 						return null;
@@ -183,6 +185,26 @@ export class DownloadService {
 				);
 		}
 
+	private doDownloadGetRequest(uri: string, download: DownloadRequest) {
+
+		if (download == null) {
+			return;
+		}
+
+		this.addDownload(download);
+
+		this.nsfo.doGetRequest(uri)
+			.subscribe(
+				res => {
+					download.url = res.result;
+					this.completeDownloadPreparation(download);
+				},
+				error => {
+					this.failDownload(download, error);
+				}
+			);
+	}
+
 		doLineageProofPostRequest(animals: Animal[], fileType: string = 'PDF') {
 
 				const request = {
@@ -190,7 +212,7 @@ export class DownloadService {
 					};
 
 				const queryParam = typeof fileType === "string" ? '?' + QUERY_PARAM_FILE_TYPE + '=' + fileType.toLowerCase() : '';
-				let download = this.getNewDownloadRequest(LINEAGE_PROOF_REPORT, fileType, animals.length, request);
+				let download = this.getNewDownloadRequest(LINEAGE_PROOF_REPORT, fileType, animals.length, request, queryParam);
 
 				this.doDownloadPostRequest(this.nsfo.URI_GET_LINEAGE_PROOF + queryParam, request, download);
 		}
@@ -208,9 +230,19 @@ export class DownloadService {
 				let queryParam = '?' + QUERY_PARAM_CONCAT_VALUE_AND_ACCURACY + '=' + concatBooleanString;
 				queryParam += typeof fileType === "string" ? '&' + QUERY_PARAM_FILE_TYPE + '=' + fileType.toLowerCase() : '';
 
-				const download = this.getNewDownloadRequest(LIVESTOCK_REPORT, fileType, dataCount, data);
+				const download = this.getNewDownloadRequest(LIVESTOCK_REPORT, fileType, dataCount, data, queryParam);
 
 				this.doDownloadPostRequest(this.nsfo.URI_GET_LIVESTOCK_DOCUMENT + queryParam, data, download);
+		}
+
+
+		doAnimalsOverviewReportGetRequest(concatBreedValueAndAccuracyColumns: boolean = true) {
+
+			const concatBooleanString = UtilsService.getBoolValAsString(concatBreedValueAndAccuracyColumns);
+			let queryParam = '?' + QUERY_PARAM_CONCAT_VALUE_AND_ACCURACY + '=' + concatBooleanString;
+			let download = this.getNewDownloadRequest(ALL_ANIMALS_OVERVIEW_REPORT, CSV, 0, null, queryParam);
+
+			this.doDownloadGetRequest(this.nsfo.URI_GET_ANIMALS_OVERVIEW_REPORT + queryParam, download);
 		}
 
 
@@ -236,12 +268,12 @@ export class DownloadService {
 						"ewes": ewes
 				};
 
-			let download = this.getNewDownloadRequest(INBREEDING_COEFFICIENT_REPORT, fileType, ewes.length, request);
+			let download = this.getNewDownloadRequest(INBREEDING_COEFFICIENT_REPORT, fileType, ewes.length, request, null);
 
 			this.doDownloadPostRequest(this.nsfo.URI_GET_INBREEDING_COEFFICIENT + QueryParamsService.getFileTypeQueryParam(fileType), request, download);
 		}
 
-		static generateHash(downloadType: string, fileType: string, reportCount: number = 0, jsonBody: any): string {
-				return btoa(downloadType + fileType + reportCount + JSON.stringify(jsonBody));
+		static generateHash(downloadType: string, fileType: string, reportCount: number = 0, jsonBody: any, queryParam: string): string {
+				return btoa(downloadType + fileType + reportCount + queryParam + JSON.stringify(jsonBody));
 		}
 }

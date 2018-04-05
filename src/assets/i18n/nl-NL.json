@@ -672,5 +672,15 @@
   "LINEAGE_PROOF_REPORT": "Afstammingsbewijs",
   "LIVESTOCK_REPORT": "Stallijst rapportage",
   "FILE TYPE": "Bestandstype",
-  "ANIMAL REPORTS": "Dierrapportages"
+  "ANIMAL REPORTS": "Dierrapportages",
+  "ALL ANIMALS OVERVIEW REPORT": "Rapportage Overzicht Alle Dieren",
+  "TE100 ANNUAL PRODUCTION": "Productie per TE100 bedrijf per jaar",
+  "CONCATENATE VALUE AND ACCURACY": "Voeg waarde en nauwkeurigheid samen",
+  "FILE IS DOWNLOADED": "Het bestand is gedownload",
+  "THERE ARE NO DOWNLOADS READY FOR DOWNLOAD YET": "Er staan nog geen downloads klaar",
+  "TIME": "Tijd",
+  "REMOVE FAILED FILES": "Verwijder gefaalde bestanden",
+  "DOWNLOAD MODAL AMOUNT INFO TEXT": "Dit is afhankelijk per categorie. In het algemeen betekent dit het aantal geselecteerde dieren voor een rapportage.",
+  "DOWNLOAD MODAL FAILED DEFAULT INFO TEXT": "Het is niet gelukt om het bestand te genereren. Probeer het later nogmaals, misschien met minder data.",
+  "YOUR FILE IS NOW BEING GENERATED": "Uw bestand wordt nu gegenereerd"
 }

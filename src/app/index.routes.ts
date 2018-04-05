@@ -40,6 +40,8 @@ import { DeveloperGuard } from './global/guards/developer.guard';
 import { AnimalsComponent } from './main/animals/animals.component';
 import { AnimalsBatchEditComponent } from './main/animals/animals-batch-edit/animals-batch-edit.component';
 import { AnimalReportsComponent } from './main/report/animals-overviews/animal-reports.component';
+import { AllAnimalsOverviewComponent } from './main/report/animals-overviews/all-animals-overview/all-animals-overview.component';
+import { AnnualTe100ProductionComponent } from './main/report/animals-overviews/annual-te100-production/annual-te100-production.component';
 
 const routes: RouterConfig = [
     {
@@ -99,7 +101,12 @@ const routes: RouterConfig = [
             {path: 'report', component: ReportComponent,
                 children: [
 									{path: '', terminal: true, redirectTo: 'animal-reports'},
-									{path: 'animal-reports', component: AnimalReportsComponent},
+									{path: 'animal-reports', component: AnimalReportsComponent,
+										children: [
+											{path: '', terminal: true, redirectTo: 'all-animals-overview'},
+											{path: 'all-animals-overview', component: AllAnimalsOverviewComponent},
+											{path: 'annual-te100-production', component: AnnualTe100ProductionComponent},
+										]},
                 ]},
 					  {path: 'log', terminal: true, component: TechnicalLogOverviewComponent},
 					  {path: 'error-log', terminal: true, component: ErrorLogOverviewComponent},
