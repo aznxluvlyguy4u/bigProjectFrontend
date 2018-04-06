@@ -64,6 +64,8 @@ export class NSFOService {
 		public URI_GET_LINEAGE_PROOF = '/v1/reports/pedigree-certificates';
 		public URI_GET_INBREEDING_COEFFICIENT = '/v1/reports/inbreeding-coefficients';
 		public URI_GET_LIVESTOCK_DOCUMENT = '/v1/reports/livestock';
+		public URI_GET_ANIMALS_OVERVIEW_REPORT = '/v1/reports/animals-overview';
+		public URI_GET_ANNUAL_TE100_UBN_PRODUCTION_REPORT = '/v1/reports/annual-te100-ubn-production';
 
 	  public URI_TREATMENTS = '/v1/treatments';
 	  public URI_TREATMENT_TYPES = '/v1/treatment-types';
