@@ -4,7 +4,7 @@ import { DownloadRequest } from './download-request.model';
 
 import _ = require("lodash");
 import {
-	QUERY_PARAM_CONCAT_VALUE_AND_ACCURACY, QUERY_PARAM_FILE_TYPE,
+	QUERY_PARAM_CONCAT_VALUE_AND_ACCURACY, QUERY_PARAM_FILE_TYPE, REFERENCE_DATE,
 	YEAR
 } from '../../variables/query-param.constant';
 import { QueryParamsService } from '../utils/query-params.service';
@@ -52,7 +52,7 @@ export class DownloadService {
 				this.notifyDownloadListsChanged();
 		}
 
-		getNewDownloadRequest(downloadType: string, fileType: string, reportCount: number = 0, jsonBody: any, queryParam: string): DownloadRequest {
+		getNewDownloadRequest(downloadType: string, fileType: string, reportCount: number|string = 0, jsonBody: any, queryParam: string): DownloadRequest {
 				const hash = DownloadService.generateHash(downloadType, fileType, reportCount, jsonBody, queryParam);
 
 				if (this.isDuplicateDownloadRequest(hash)) {
@@ -239,11 +239,11 @@ export class DownloadService {
 		}
 
 
-		doAnimalsOverviewReportGetRequest(concatBreedValueAndAccuracyColumns: boolean = true) {
+		doAnimalsOverviewReportGetRequest(referenceDateString: string, concatBreedValueAndAccuracyColumns: boolean = true) {
 
 			const concatBooleanString = UtilsService.getBoolValAsString(concatBreedValueAndAccuracyColumns);
-			let queryParam = '?' + QUERY_PARAM_CONCAT_VALUE_AND_ACCURACY + '=' + concatBooleanString;
-			let download = this.getNewDownloadRequest(ALL_ANIMALS_OVERVIEW_REPORT, CSV, 0, null, queryParam);
+			let queryParam = '?' + REFERENCE_DATE + '=' + referenceDateString + '&' + QUERY_PARAM_CONCAT_VALUE_AND_ACCURACY + '=' + concatBooleanString;
+			let download = this.getNewDownloadRequest(ALL_ANIMALS_OVERVIEW_REPORT, CSV, referenceDateString, null, queryParam);
 
 			this.doDownloadGetRequest(this.nsfo.URI_GET_ANIMALS_OVERVIEW_REPORT + queryParam, download);
 		}
@@ -285,7 +285,7 @@ export class DownloadService {
 			this.doDownloadPostRequest(this.nsfo.URI_GET_INBREEDING_COEFFICIENT + QueryParamsService.getFileTypeQueryParam(fileType), request, download);
 		}
 
-		static generateHash(downloadType: string, fileType: string, reportCount: number = 0, jsonBody: any, queryParam: string): string {
+		static generateHash(downloadType: string, fileType: string, reportCount: number|string = 0, jsonBody: any, queryParam: string): string {
 				return btoa(downloadType + fileType + reportCount + queryParam + JSON.stringify(jsonBody));
 		}
 }

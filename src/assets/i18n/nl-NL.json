@@ -683,5 +683,6 @@
   "DOWNLOAD MODAL AMOUNT INFO TEXT": "Dit is afhankelijk per categorie. In het algemeen betekent dit het aantal geselecteerde dieren voor een rapportage.",
   "DOWNLOAD MODAL FAILED DEFAULT INFO TEXT": "Het is niet gelukt om het bestand te genereren. Probeer het later nogmaals, misschien met minder data.",
   "YOUR FILE IS NOW BEING GENERATED": "Uw bestand wordt nu gegenereerd",
-  "YEAR": "Jaar"
+  "YEAR": "Jaar",
+  "REFERENCE DATE": "Peildatum"
 }

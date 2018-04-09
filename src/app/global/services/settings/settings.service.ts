@@ -33,6 +33,10 @@ export class SettingsService {
         return this.locale;
     }
 
+    public static getDateString_YYYY_MM_DD_fromDate(date: Date = new Date()) {
+			return date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
+    }
+
     public getViewDateFormat() {
         return this.viewDateFormat;
     }
