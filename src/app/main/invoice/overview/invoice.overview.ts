@@ -40,7 +40,10 @@ export class InvoiceOverviewComponent {
         let now = moment();
         let end = moment(date);
         let duration = moment.duration(now.diff(end));
-        return Math.floor(duration.asDays());
+        if (Math.floor(duration.asDays()) !== -1) {
+            return Math.floor(duration.asDays());
+        }
+        return 0;
     }
 
     private navigateTo(url: string) {
