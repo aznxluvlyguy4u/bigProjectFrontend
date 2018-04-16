@@ -6,6 +6,8 @@ export class Invoice {
     public id: number;
     public invoice_number: string;
     public invoice_date: Date;
+    public paid_date: Date;
+    public company_address: Address;
     public company: Client;
     public company_name: string;
     public company_vat_number: string;
@@ -25,13 +27,6 @@ export class Invoice {
 		public mollie_id: string;
 }
 
-export class InvoiceRuleTemplate {
-    public id: number;
-    public description: string;
-    public price_excl_vat: number;
-    public vat_percentage_rate: number;
-}
-
 export class InvoiceRule {
     public id: number;
     public description: string;
@@ -47,6 +42,7 @@ export class InvoiceRuleSelection {
     id: number;
     invoice: Invoice;
     invoice_rule: InvoiceRule;
+    date: Date;
     amount: number;
 }
 
