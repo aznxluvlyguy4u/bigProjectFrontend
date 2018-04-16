@@ -38,7 +38,7 @@ export class ConfigVwaEmployeesComponent {
     }
 
     private getVwaEmployees(): void {
-        this.nsfo.doGetRequest(this.nsfo.URI_VWA_EMPLOYEE)
+        this.nsfo.doGetRequest(this.nsfo.URI_VWA_EMPLOYEE + '?active_only=true')
             .subscribe(
                 res => {
                     this.vwaEmployees= <VwaEmployee[]> res.result;
