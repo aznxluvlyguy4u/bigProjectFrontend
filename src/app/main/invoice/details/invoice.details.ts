@@ -58,6 +58,7 @@ export class InvoiceDetailsComponent {
     private invoice: Invoice = new Invoice;
     private form: FormGroup;
     private onlyView: boolean = false;
+    private companySelected: boolean = false;
 	private model_datetime_format;
 	private view_date_format;
 
@@ -201,6 +202,7 @@ export class InvoiceDetailsComponent {
 			.subscribe(
 				res => {
 					this.invoice = res.result;
+					this.companySelected = true;
 				},
 				error => {
 					alert(this.nsfo.getErrorMessage(error));
