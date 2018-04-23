@@ -1,5 +1,5 @@
 <div id="download-modal" class="reveal-overlay" [ngStyle]="{'display': modalDisplay}">
-    <div class="reveal small" [ngStyle]="{'display': modalDisplay}">
+    <div class="reveal medium" [ngStyle]="{'display': modalDisplay}">
 
         <div class="modal-header-download">
             {{ title | translate }}
@@ -44,6 +44,33 @@
                                         class="button primary pull-left"
                                         aria-label="Download file"
                                         (click)="downloadPedigreeCertificatesOfFilteredAnimals()">
+                                    {{ 'DOWNLOAD' | translate }}
+                                </button>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>{{ 'OFFSPRING_REPORT' | translate }}</td>
+                            <td>
+                                {{ getAnimals() ? getAnimals().length : '-' }}
+                            </td>
+                            <td style="padding-bottom: 0">
+                                <div class="small-6 columns" style="text-align: right">
+                                    {{'CONCATENATE VALUE AND ACCURACY' | translate }}
+                                </div>
+                                <div class="small-6 end columns">
+                                    <app-boolean-switch
+                                            [boolVal]="concatBreedValueAndAccuracyColumns"
+                                            [hideLabel]="true"
+                                            (boolValChanged)="concatBreedValueAndAccuracyColumns = $event"
+                                    ></app-boolean-switch>
+                                </div>
+                            </td>
+                            <td>
+                                <button type="button"
+                                        class="button primary pull-left"
+                                        aria-label="Download file"
+                                        (click)="downloadOffspringReportOfFilteredAnimals()">
                                     {{ 'DOWNLOAD' | translate }}
                                 </button>
                             </td>

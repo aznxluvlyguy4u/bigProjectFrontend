@@ -19,6 +19,7 @@ import { CSV } from '../../variables/file-type.enum';
 export const INBREEDING_COEFFICIENT_REPORT = 'INBREEDING_COEFFICIENT_REPORT';
 export const LINEAGE_PROOF_REPORT = 'LINEAGE_PROOF_REPORT';
 export const LIVESTOCK_REPORT = 'LIVESTOCK_REPORT';
+export const OFFSPRING_REPORT = 'OFFSPRING_REPORT';
 
 @Injectable()
 export class DownloadService {
@@ -220,7 +221,21 @@ export class DownloadService {
 				this.doDownloadPostRequest(this.nsfo.URI_GET_LINEAGE_PROOF + queryParam, request, download);
 		}
 
-		doLivestockReportPostRequest(animals: Animal[], fileType: string, concatBreedValueAndAccuracyColumns: boolean) {
+		doOffspringRequest(animals: Animal[], concatBreedValueAndAccuracyColumns: boolean) {
+
+			const request = {
+				parents: NSFOService.cleanAnimalsInput(animals)
+			};
+
+			const concatBooleanString = UtilsService.getBoolValAsString(concatBreedValueAndAccuracyColumns);
+			let queryParam = '?' + QUERY_PARAM_CONCAT_VALUE_AND_ACCURACY + '=' + concatBooleanString;
+
+			const download = this.getNewDownloadRequest(OFFSPRING_REPORT, CSV, animals.length, request, queryParam);
+
+			this.doDownloadPostRequest(this.nsfo.URI_GET_OFFSPRING + queryParam, request, download);
+		}
+
+	doLivestockReportPostRequest(animals: Animal[], fileType: string, concatBreedValueAndAccuracyColumns: boolean) {
 
 				let data = {};
 				let dataCount = 0;
