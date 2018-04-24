@@ -685,5 +685,12 @@
   "DOWNLOAD MODAL FAILED DEFAULT INFO TEXT": "Het is niet gelukt om het bestand te genereren. Probeer het later nogmaals, misschien met minder data.",
   "YOUR FILE IS NOW BEING GENERATED": "Uw bestand wordt nu gegenereerd",
   "YEAR": "Jaar",
-  "REFERENCE DATE": "Peildatum"
+  "REFERENCE DATE": "Peildatum",
+  "INVOICE_PDF": "Factuur pdf",
+  "BATCH INVOICE": "Automatische facturatie",
+  "BATCH INVOICE RULES": "Automatische facturatie rekenregels",
+  "BATCH INVOICES DATES": "Automatsche facturatie datums",
+  "SEND INVOICE BATCH": "Verstuur facturen",
+  "CONTROL DATE": "Peil datum",
+  "BATCH INVOICES": "Automatische facturen"
 }
