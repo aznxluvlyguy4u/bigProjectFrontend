@@ -96,6 +96,9 @@ export class InvoiceDetailsComponent {
                 this.nsfo.doGetRequest(this.nsfo.URI_INVOICE + "/" + this.invoiceId)
                     .subscribe(res => {
                         this.invoice = res.result;
+                        if (this.invoice.company != null) {
+                        	this.companySelected = true;
+						}
                         this.selectedCompany = this.invoice.company;
 												this.updateInvoiceDataInVariables();
 												this.updateClientUbns();
@@ -315,16 +318,12 @@ export class InvoiceDetailsComponent {
 
         if (type == "standard") {
 			dateString = moment(this.form1.controls["date"].value, this.settings.getViewDateFormat());
-			console.log(dateString);
 			dateFormat = dateString.format(this.settings.getModelDateTimeFormat());
-			console.log(dateFormat);
 						rule.type = type;
 						rule = this.selectedInvoiceRule;
         } else {
 			dateString = moment(this.form.controls["date"].value, this.settings.getViewDateFormat());
-			console.log(dateString);
 			dateFormat = dateString.format(this.settings.getModelDateTimeFormat());
-			console.log(dateFormat);
             rule.sort_order = 1;
             rule.ledger_category = this.temporaryRule.ledger_category;
             rule.vat_percentage_rate = this.temporaryRule.vat_percentage_rate;
@@ -332,11 +331,9 @@ export class InvoiceDetailsComponent {
             rule.description = this.temporaryRule.description;
         }
 
-				let ruleSelection = new InvoiceRuleSelection();
+		let ruleSelection = new InvoiceRuleSelection();
         ruleSelection.invoice_rule = rule;
         ruleSelection.amount = this.temporaryRuleAmount;
-
-
 		ruleSelection.date = dateFormat;
 		console.log(dateFormat);
         this.postInvoiceRuleSelection(ruleSelection, type);
