@@ -17,6 +17,8 @@ import {ROUTER_DIRECTIVES, Router} from "@angular/router";
 })
 
 export class InvoiceOverviewComponent {
+    private selectedInvoice: Invoice;
+    private displayModal: string = 'none';
     private invoices: Invoice[] = [];
     private isLoaded: boolean = false;
     private status: string = 'ALL';
@@ -34,6 +36,25 @@ export class InvoiceOverviewComponent {
                     this.isLoaded = true;
                 }
             );
+    }
+
+    openModal(invoice: Invoice) {
+        this.selectedInvoice = invoice;
+        this.displayModal = 'block';
+    }
+
+    closeModal() {
+        this.displayModal = 'none';
+    }
+
+    setInvoicePaid() {
+        this.selectedInvoice.status = "PAID";
+        this.nsfo.doPutRequest(this.nsfo.URI_INVOICE + "/" + this.selectedInvoice.id, this.selectedInvoice).subscribe(
+            res => {
+                this.closeModal();
+                this.getInvoicesList();
+            }
+        )
     }
 
     private calculateDays(date: string) {

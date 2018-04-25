@@ -136,13 +136,49 @@
                         <button type="button" (click)="navigateTo('/invoice/details/edit/' + invoice.id)" [disabled]="invoice.status != 'NOT SEND' && invoice.status != 'INCOMPLETE'" class="tiny primary button">
                             {{ 'EDIT' | translate }}
                         </button>
-                        <button type="button" (click)="navigateTo('/invoice/details/view/' + invoice.id)" class="small primary button pull-right">
+                        <button type="button" (click)="navigateTo('/invoice/details/view/' + invoice.id)" class="small primary button">
                             {{ 'VIEW' | translate }}
+                        </button>
+                        <button [disabled]="invoice.status != 'UNPAID'" (click)="openModal(invoice)" class="tiny primary button">
+                            {{ "IS_PAID" | translate }}
                         </button>
                     </td>
                 </tr>
             </tbody>
         </table>
         <pagination (pageChange)="page = $event"></pagination>
+    </div>
+</div>
+
+<div class="reveal-overlay" [ngStyle]="{'display': displayModal}">
+    <div class="medium reveal" [ngStyle]="{'display': displayModal}">
+        <div class="modal-body">
+
+            <hr>
+
+            <span style="text-align: center; width: 100%; display: block; margin: 25px 0 50px 0;">
+                {{ "ARE YOU SURE YOU WANT TO SET THIS INVOICE TO PAID" | translate }}
+            </span>
+
+            <span class="pull-left" style="width: 45%">
+                <button (click)="setInvoicePaid(selectedInvoiceId)" class="small primary button expanded">
+                    {{ "YES" | translate }}
+                </button>
+            </span>
+            <span style="width: 10%;">
+
+            </span>
+            <span class="pull-right" style="width: 45%;">
+                <button (click)="closeModal()" class="small primary button expanded">
+                    {{ "NO" | translate }}
+                </button>
+            </span>
+
+        </div>
+        <div class="modal-footer">
+
+            <hr>
+
+        </div>
     </div>
 </div>
