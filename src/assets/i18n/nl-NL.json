@@ -685,5 +685,6 @@
   "DOWNLOAD MODAL FAILED DEFAULT INFO TEXT": "Het is niet gelukt om het bestand te genereren. Probeer het later nogmaals, misschien met minder data.",
   "YOUR FILE IS NOW BEING GENERATED": "Uw bestand wordt nu gegenereerd",
   "YEAR": "Jaar",
-  "REFERENCE DATE": "Peildatum"
+  "REFERENCE DATE": "Peildatum",
+  "A TIMEOUT OCCURED. TRY AGAIN LATER, PERHAPS WHEN THE SERVER IS LESS BUSY OR TRY IT WITH LESS DATA.": "Een timeout heeft plaatsgevonden. Probeer het later nog eens, mogelijk wanneer de server minder druk is of probeer het met minder data."
 }
