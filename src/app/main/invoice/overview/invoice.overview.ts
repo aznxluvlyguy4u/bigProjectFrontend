@@ -8,6 +8,7 @@ import {Invoice} from "../invoice.model"
 import {invoiceFilterPipe} from "./pipes/invoiceFilter.pipe";
 import {SettingsService} from "../../../global/services/settings/settings.service";
 import {ROUTER_DIRECTIVES, Router} from "@angular/router";
+import {DownloadService} from "../../../global/services/download/download.service";
 
 @Component({
     providers: [PaginationService],
@@ -22,7 +23,7 @@ export class InvoiceOverviewComponent {
     private status: string = 'ALL';
     private filterAmount: number = 10;
 
-    constructor(private nsfo: NSFOService, private settings: SettingsService, private router: Router) {
+    constructor(private nsfo: NSFOService, private settings: SettingsService, private router: Router, private downloadService: DownloadService) {
         this.getInvoicesList();
     }
 
@@ -48,5 +49,9 @@ export class InvoiceOverviewComponent {
 
     private navigateTo(url: string) {
         this.router.navigate([url]);
+    }
+
+    public downloadPdf(invoice: Invoice) {
+        this.downloadService.doInvoicePdfGetRequest(invoice);
     }
 }
