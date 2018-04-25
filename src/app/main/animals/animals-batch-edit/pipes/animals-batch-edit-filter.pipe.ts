@@ -98,8 +98,16 @@ export class AnimalsBatchEditFilterPipe implements PipeTransform {
 			const needle = filterId.toString();
 
 			filtered = filtered.filter(animal => {
-				const haystack = animal.id.toLowerCase();
-				return haystack.indexOf(needle) !== -1;
+				if (typeof animal.id === 'string') {
+					const haystack = animal.id.toLowerCase();
+					return haystack.indexOf(needle) !== -1;
+
+				} else if (typeof animal.id === 'number') {
+					const haystack = animal.id;
+					return haystack.indexOf(needle) !== -1;
+				}
+
+				return false;
 			});
 		}
 
@@ -108,10 +116,16 @@ export class AnimalsBatchEditFilterPipe implements PipeTransform {
 			const needle = filterAiind.toString();
 
 			filtered = filtered.filter(animal => {
+
 				if (typeof animal.name === 'string') {
 					const haystack = animal.name.toLowerCase();
 					return haystack.indexOf(needle) !== -1;
+
+				} else if (typeof animal.name === 'number') {
+					const haystack = animal.name;
+					return haystack.indexOf(needle) !== -1;
 				}
+
 				return false;
 			});
 		}
