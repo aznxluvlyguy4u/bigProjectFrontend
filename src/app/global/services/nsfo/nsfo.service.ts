@@ -159,10 +159,15 @@ export class NSFOService {
     }
 
     public getErrorMessage(err: Response): string {
-			if (err.status !== 500) {
-				return this.translate.instant(err.json().result.message);
-			} else {
-				return this.translate.instant("SOMETHING WENT WRONG. TRY ANOTHER TIME.");
+			switch (err.status) {
+				case 500: return this.translate.instant("SOMETHING WENT WRONG. TRY ANOTHER TIME.");
+				case 524: return this.translate.instant("A TIMEOUT OCCURED. TRY AGAIN LATER, PERHAPS WHEN THE SERVER IS LESS BUSY OR TRY IT WITH LESS DATA.");
+
+				default:
+					if (err.json() && err.json().result && err.json().result.message) {
+						return this.translate.instant(err.json().result.message);
+					}
+					return this.translate.instant("SOMETHING WENT WRONG. TRY ANOTHER TIME.");
 			}
     }
 
