@@ -1,5 +1,5 @@
 import DateTimeFormat = Intl.DateTimeFormat;
-import { Address, Client } from '../client/client.model';
+import {Address, Client} from '../client/client.model';
 import { LedgerCategory } from '../../global/models/ledger-category.model';
 
 export class Invoice {
@@ -21,10 +21,10 @@ export class Invoice {
     public reminders: number;
     public invoice_rule_selections: InvoiceRuleSelection[] = [];
     public total: number;
-	  public pdf_url: string;
-	  public ledger_account_number: string;
-	  public vat_breakdown: VatBreakdown;
-		public mollie_id: string;
+    public pdf_url: string;
+    public ledger_account_number: string;
+    public vat_breakdown: VatBreakdown;
+    public mollie_id: string;
 }
 
 export class InvoiceRule {
@@ -34,8 +34,8 @@ export class InvoiceRule {
     public price_excl_vat: number;
     public sort_order: number;
     public type: string;
-	  ledger_category: LedgerCategory;
-	  invoice_rule_selections: InvoiceRuleSelection[] = [];
+    ledger_category: LedgerCategory;
+    invoice_rule_selections: InvoiceRuleSelection[] = [];
 }
 
 export class InvoiceRuleSelection {
