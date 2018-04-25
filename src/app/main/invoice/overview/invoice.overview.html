@@ -112,7 +112,7 @@
                             {{ 'UNPAID' | translate }} ({{ calculateDays(invoice.invoice_date)}} {{ 'DAYS' | translate }})
                         </span>
                         <span *ngIf="invoice.status == 'PAID'" class="success label">
-                            {{ 'PAID' | translate }}
+                            {{ 'PAID' | translate }}: {{invoice.paid_date | date : "dd-MM-yyyy"}}
                         </span>
                         <span *ngIf="invoice.status == 'INCOMPLETE'" class="primary label">
                             {{'INCOMPLETE' | translate}}

@@ -1,4 +1,5 @@
 import {Component} from "@angular/core";
+import moment = require('moment');
 import {Subscription} from "rxjs/Rx";
 import {Router, ActivatedRoute, ROUTER_DIRECTIVES} from "@angular/router";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
@@ -15,6 +16,8 @@ import { FormatService } from '../../../global/services/utils/format.service';
 import { ClientsStorage } from '../../../global/services/storage/clients.storage';
 import { StandardInvoiceRuleSelectorComponent } from '../../../global/components/standardinvoiceruleselector/standard-invoice-rule-selector.component';
 import { LocalNumberFormat } from '../../../global/pipes/local-number-format';
+import {Datepicker} from "../../../global/components/datepicker/datepicker.component";
+import {DownloadService} from "../../../global/services/download/download.service";
 
 @Component({
     selector: 'ng-select',
@@ -26,13 +29,16 @@ import { LocalNumberFormat } from '../../../global/pipes/local-number-format';
         'showSearchInputInDropdown'
     ],
     directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, CompanySelectorComponent,
-			LedgerCategoryDropdownComponent, StandardInvoiceRuleSelectorComponent],
+			LedgerCategoryDropdownComponent, Datepicker, StandardInvoiceRuleSelectorComponent],
     template: require('./invoice.details.html'),
     pipes: [TranslatePipe, LocalNumberFormat]
 })
 
+
+
 export class InvoiceDetailsComponent {
 		private urlInvoiceOverview = '/invoice';
+
 
     private dataSub: Subscription;
     private senderDetails: InvoiceSenderDetails = new InvoiceSenderDetails();
@@ -40,25 +46,44 @@ export class InvoiceDetailsComponent {
     private pageMode: string;
     private invoiceId: number;
     private selectedUbn: string;
+    private form1: FormGroup;
     private selectedCompany: Client;
     clientUbns: string[] = [];
     private selectedInvoiceRule: InvoiceRule;
     private temporaryRule: InvoiceRule;
     temporaryRuleAmount: number;
+    temporaryRuleDate: string = moment().format(this.settings.getViewDateFormat());
+	temporaryRuleDate2: string = moment().format(this.settings.getViewDateFormat());
     minRuleAmount = 1;
     private invoice: Invoice = new Invoice;
     private form: FormGroup;
     private onlyView: boolean = false;
+    private companySelected: boolean = false;
+	private model_datetime_format;
+	private view_date_format;
 
-    constructor(private fb: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute,
-								private nsfo: NSFOService, private settings: SettingsService, private clientStorage: ClientsStorage) {
+    constructor(private fb: FormBuilder,
+				private router: Router,
+				private activatedRoute: ActivatedRoute,
+				private downloadService: DownloadService,
+				private nsfo: NSFOService,
+				private settings: SettingsService,
+				private clientStorage: ClientsStorage
+	) {
         this.form = fb.group({
             description: ['', Validators.required],
             category: ['', Validators.required],
             price_excl_vat: ['', Validators.required],
             vat_percentage_rate: ['', Validators.required],
             amount: ['', Validators.required],
+			date: ['', Validators.required]
         });
+        this.form1 = fb.group({
+			amount: ['', Validators.required],
+			date: ['', Validators.required],
+		});
+		this.model_datetime_format = settings.getModelDateTimeFormat();
+		this.view_date_format = settings.getViewDateFormat();
     }
 
     ngOnInit() {
@@ -94,7 +119,7 @@ export class InvoiceDetailsComponent {
                 this.nsfo.doGetRequest(this.nsfo.URI_INVOICE + "/" + this.invoiceId)
                     .subscribe(res => {
                         this.invoice = res.result;
-												this.updateInvoiceDataInVariables();
+						this.updateInvoiceDataInVariables();
                         },
                           error => {
                             alert(this.nsfo.getErrorMessage(error));
@@ -121,6 +146,9 @@ export class InvoiceDetailsComponent {
 			this.senderDetails = this.invoice.sender_details;
 			this.selectedCompany = this.invoice.company;
 			this.selectedUbn = this.invoice.ubn;
+			if  (this.invoice.ubn != null) {
+				this.companySelected = true;
+			}
 		}
 
 	private getSenderDetailsAndInitializeNewInvoice() {
@@ -165,6 +193,30 @@ export class InvoiceDetailsComponent {
 					}
 				}
 			);
+  }
+
+  private updateInvoiceClientAndUbn() {
+    	if (this.invoice.id === null) {
+
+		}
+    	this.invoice.company = this.selectedCompany;
+    	this.invoice.ubn = this.selectedUbn;
+    	this.nsfo.doPutRequest(this.nsfo.URI_INVOICE + "/" + this.invoice.id, this.invoice)
+			.subscribe(
+				res => {
+					this.invoice = res.result;
+					this.companySelected = true;
+				},
+				error => {
+					alert(this.nsfo.getErrorMessage(error));
+
+					if (error.json().result.message === 'SENDER DETAILS ARE MISSING') {
+						this.navigateToInvoiceSenderDetailsEdit();
+					} else {
+						this.router.navigate([this.urlInvoiceOverview]);
+					}
+				}
+			)
   }
 
 	refreshSenderDetails() {
@@ -217,6 +269,11 @@ export class InvoiceDetailsComponent {
 		this.navigateTo("/client/dossier/edit/" + this.invoice.company.company_id);
 	}
 
+	hasClientAndUbn(): boolean {
+    	return this.selectedCompany != null
+				&& this.selectedUbn != null;
+	}
+
 	isCustomInvoiceRuleCreateButtonActive(): boolean {
     	return this.temporaryRule != null
 					&& this.temporaryRule.description != null
@@ -250,14 +307,24 @@ export class InvoiceDetailsComponent {
 	}
     
     private addInvoiceRule(type): void {
+		let dateString;
+		let dateFormat;
         let rule = new InvoiceRule();
         rule.type = "custom";
         rule.sort_order = 1;
 
         if (type == "standard") {
+			dateString = moment(this.form1.controls["date"].value, this.settings.getViewDateFormat());
+			console.log(dateString);
+			dateFormat = dateString.format(this.settings.getModelDateTimeFormat());
+			console.log(dateFormat);
 						rule.type = type;
 						rule = this.selectedInvoiceRule;
         } else {
+			dateString = moment(this.form.controls["date"].value, this.settings.getViewDateFormat());
+			console.log(dateString);
+			dateFormat = dateString.format(this.settings.getModelDateTimeFormat());
+			console.log(dateFormat);
             rule.sort_order = 1;
             rule.ledger_category = this.temporaryRule.ledger_category;
             rule.vat_percentage_rate = this.temporaryRule.vat_percentage_rate;
@@ -269,6 +336,9 @@ export class InvoiceDetailsComponent {
         ruleSelection.invoice_rule = rule;
         ruleSelection.amount = this.temporaryRuleAmount;
 
+
+		ruleSelection.date = dateFormat;
+		console.log(dateFormat);
         this.postInvoiceRuleSelection(ruleSelection, type);
     }
 
@@ -286,7 +356,7 @@ export class InvoiceDetailsComponent {
                     } else {
 											this.selectedInvoiceRule = null;
 										}
-                    this.invoice = res.result;
+					this.invoice = res.result;
                 },
                   error => {
                     alert(this.nsfo.getErrorMessage(error));
@@ -359,35 +429,35 @@ export class InvoiceDetailsComponent {
 
           // Remove selectedUbn if the old selectedUbn does not belong to the new selectedCompany
           if (this.selectedCompany.locations) {
-					      let hasSelectedUbn = false;
-						    for (let location of this.selectedCompany.locations) {
-						        if (typeof location === 'string') {
-						            if (location === this.selectedUbn) {
-						                hasSelectedUbn = true;
-						                break;
-                        }
-                    } else {
-						            if (location.ubn != null && location.ubn === this.selectedUbn) {
-						                hasSelectedUbn = true;
-						                break;
-                        }
-                    }
-                }
-                if (!hasSelectedUbn) {
-						        this.selectedUbn = null;
-                }
+			  let hasSelectedUbn = false;
+			  for (let location of this.selectedCompany.locations) {
+				  if (typeof location === 'string') {
+					  if (location === this.selectedUbn) {
+						  hasSelectedUbn = true;
+						  break;
+					  }
+				  } else {
+					  if (location.ubn != null && location.ubn === this.selectedUbn) {
+						  hasSelectedUbn = true;
+						  break;
+					  }
+				  }
+			  }
+			  if (!hasSelectedUbn) {
+				  this.selectedUbn = null;
+			  }
 
           } else {
-					    this.selectedUbn = null;
+				this.selectedUbn = null;
           }
 
         } else {
-					this.invoice.company = null;
-					this.invoice.company_id = null;
-					this.invoice.company_name = null;
-					this.invoice.company_vat_number = null;
-					this.invoice.company_debtor_number = null;
-					this.selectedUbn = null;
+			this.invoice.company = null;
+			this.invoice.company_id = null;
+			this.invoice.company_name = null;
+			this.invoice.company_vat_number = null;
+			this.invoice.company_debtor_number = null;
+			this.selectedUbn = null;
         }
 
         this.setInvoiceUbn();
@@ -456,7 +526,7 @@ export class InvoiceDetailsComponent {
         if (!this.invoice.company_name) {
             this.invoice.status = "INCOMPLETE";
         }
-        if (this.pageMode == 'edit') {
+        if (this.invoice.id !== null) {
             this.nsfo.doPutRequest(this.nsfo.URI_INVOICE + "/" + this.invoice.id, this.invoice)
                 .subscribe(
                     res => {
@@ -479,6 +549,10 @@ export class InvoiceDetailsComponent {
                 );
         }
     }
+
+    public downloadPdf() {
+    	this.downloadService.doInvoicePdfGetRequest(this.invoice);
+	}
 
     private deleteInvoice() {
         this.nsfo.doDeleteRequest(this.nsfo.URI_INVOICE + "/" + this.invoiceId, this.invoice)
@@ -519,4 +593,8 @@ export class InvoiceDetailsComponent {
         this.senderDetails.address.city != null
       ;
     }
+
+	private getToday() {
+		moment().format(this.settings.getViewDateFormat());
+	}
 }

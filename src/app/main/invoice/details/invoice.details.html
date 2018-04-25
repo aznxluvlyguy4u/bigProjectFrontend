@@ -31,10 +31,13 @@
                 <option [value]=null>{{'NONE' | translate}}</option>
                 <option *ngFor="let ubn of clientUbns" [value]="ubn">{{ubn}}</option>
             </select>
+            <button [disabled]="!hasClientAndUbn()" (click)="updateInvoiceClientAndUbn()" class="small primary button confirm-button pull-right">
+                {{ 'CONFIRM SELECTION' | translate }}
+            </button>
         </div>
     </div>
 <hr>
-    <div class="row information-overview">
+    <div *ngIf="companySelected" class="row information-overview">
         <div class="large-3 columns">
             <table>
                 <tr>
@@ -183,68 +186,87 @@
         </div>
     </div>
 
-    <ng-template *ngIf="!onlyView">
+    <ng-template *ngIf="!onlyView ">
 
         <hr>
 
-        <div class="row invoice-rules">
-            <div class="large-6 columns">
+        <div *ngIf="companySelected" class="row invoice-rules">
+            <form [formGroup]="form1">
+                <div class="large-6 columns">
 
-                <div class="row">
-                    <div class="large-12 columns">
-                        <h5>{{ 'GENERAL INVOICE RULE' | translate }}</h5>
+                    <div class="row">
+                        <div class="large-12 columns">
+                            <h5>{{ 'GENERAL INVOICE RULE' | translate }}</h5>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="large-4 columns">
+                            <label class="middle"> {{ 'INVOICE RULE' | translate }}</label>
+                        </div>
+                        <div class="large-8 columns">
+                            <app-standard-invoice-rule-selector
+                                    [selectedInvoiceRule]="selectedInvoiceRule"
+                                    [disabled]="false"
+                                    [displayActiveStatus]="true"
+                                    (selectedInvoiceRuleChanged)="selectedInvoiceRule = $event"
+                            ></app-standard-invoice-rule-selector>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="large-4 columns">
+                            <label class="middle">
+                                {{ "DATE" | translate }}
+                            </label>
+                        </div>
+                        <div class="large-8 columns">
+                            <datepicker
+                                    [formCtrl]="form1.controls['date']"
+                                    [initDate]="temporaryRuleDate"
+                                    [modelFormat]="settings.getViewDateFormat()"
+                                    [viewFormat]="settings.getViewDateFormat()"
+                            >
+
+                            </datepicker>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="large-4 columns">
+                            <label>
+                                {{'AMOUNT' | translate}}
+                            </label>
+                        </div>
+                        <div class="large-8 columns">
+                            <label *ngIf="!tempRuleAmountDecimalCountIsValid()" class="input-error-msg" style="text-align: left">{{'ONLY INTEGERS ARE ALLOWED'|translate}}!</label>
+                            <label *ngIf="!ruleAmountIsAboveAllowedMinimum()" class="input-error-msg" style="text-align: left">{{('AMOUNT MUST BE AT LEAST'|translate) + ' ' + minRuleAmount}}!</label>
+                            <input
+                                    name="amount"
+                                    type="number"
+                                    [(ngModel)]="temporaryRuleAmount"
+                                    step="1"
+                                    [min]="minRuleAmount"
+                            >
+                        </div>
+                    </div>
+
+                </div>
+                <div class="large-2 columns end">
+                    <div class="row">
+                        <h5>&nbsp;</h5>
+                        <button
+                                [disabled]="selectedInvoiceRule == undefined"
+                                (click)="addInvoiceRule('standard', 'GENERAL')"
+                                class="small primary button"
+                        ><i class="fa fa-plus fa-fw" aria-hidden="true"></i> {{ 'ADD' | translate }}
+                        </button>
                     </div>
                 </div>
-
-                <div class="row">
-                    <div class="large-4 columns">
-                        <label class="middle"> {{ 'INVOICE RULE' | translate }}</label>
-                    </div>
-                    <div class="large-8 columns">
-                        <app-standard-invoice-rule-selector
-                                [selectedInvoiceRule]="selectedInvoiceRule"
-                                [disabled]="false"
-                                [displayActiveStatus]="true"
-                                (selectedInvoiceRuleChanged)="selectedInvoiceRule = $event"
-                        ></app-standard-invoice-rule-selector>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="large-4 columns">
-                        <label>
-                            {{'AMOUNT' | translate}}
-                        </label>
-                    </div>
-                    <div class="large-8 columns">
-                        <label *ngIf="!tempRuleAmountDecimalCountIsValid()" class="input-error-msg" style="text-align: left">{{'ONLY INTEGERS ARE ALLOWED'|translate}}!</label>
-                        <label *ngIf="!ruleAmountIsAboveAllowedMinimum()" class="input-error-msg" style="text-align: left">{{('AMOUNT MUST BE AT LEAST'|translate) + ' ' + minRuleAmount}}!</label>
-                        <input
-                                type="number"
-                                [(ngModel)]="temporaryRuleAmount"
-                                step="1"
-                                [min]="minRuleAmount"
-                        >
-                    </div>
-                </div>
-
-            </div>
-            <div class="large-2 columns end">
-                <div class="row">
-                    <h5>&nbsp;</h5>
-                    <button
-                            [disabled]="selectedInvoiceRule == undefined"
-                            (click)="addInvoiceRule('standard', 'GENERAL')"
-                            class="small primary button"
-                    ><i class="fa fa-plus fa-fw" aria-hidden="true"></i> {{ 'ADD' | translate }}
-                    </button>
-                </div>
-            </div>
+            </form>
         </div>
 
         <hr>
 
-        <div class="row invoice-rules">
+        <div *ngIf="companySelected" class="row invoice-rules">
 
             <div [formGroup]="form" id="invoiceRule">
 
@@ -270,8 +292,29 @@
                             ></app-ledger-category-dropdown>
                         </div>
                     </div>
-
                     <div class="row">
+                        <div class="large-4 columns">
+                            <label class="middle">
+                                {{ "DATE" | translate }}
+                            </label>
+                        </div>
+                        <div class="large-8 columns">
+                            <datepicker
+                                    [formCtrl]="form.controls['date']"
+                                    [initDate]="temporaryRuleDate"
+                                    [modelFormat]="settings.getViewDateFormat()"
+                                    [viewFormat]="settings.getViewDateFormat()"
+                            >
+
+                            </datepicker>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!--<div class="large-4 columns">-->
+                            <!--<md-datepicker [(ngModel)]="temporaryRuleDate">-->
+
+                            <!--</md-datepicker>-->
+                        <!--</div>-->
                         <div class="large-4 columns">
                             <label>
                                 {{'DESCRIPTION' | translate}}
@@ -352,25 +395,28 @@
 
     </ng-template>
 
-    <div class="row invoice-table">
+    <div *ngIf="companySelected" class="row invoice-table">
         <div class="large-12 columns">
             <table>
                 <thead>
                     <tr>
                         <td width="1"></td>
                         <td>
+                            {{ "DATE" | translate}}
+                        </td>
+                        <td>
                             {{"CATEGORY" | translate }}
                         </td>
                         <td>
                             {{ 'DESCRIPTION' | translate }}
                         </td>
-                        <td class="text-right">
+                        <td class="text-left">
                             {{ 'VAT RATE' | translate }}
                         </td>
-                        <td class="text-right">
+                        <td class="text-left">
                             {{ 'UNIT COST' | translate }}
                         </td>
-                        <td class="text-right">
+                        <td class="text-left">
                             {{ 'AMOUNT' | translate }}
                         </td>
                         <td class="text-right">
@@ -379,9 +425,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let invoice_rule_selection of invoice.invoice_rule_selections" *ngIf="invoice_rule_selection != null && invoice_rule_selection.invoice_rule != null">
+                    <tr *ngFor="let invoice_rule_selection of invoice.invoice_rule_selections">
                         <td width="1">
                             <i *ngIf="!onlyView" class="fa fa-times fa-fw remove-button" (click)="removeInvoiceRule(invoice_rule_selection.invoice_rule)" aria-hidden="true"></i>
+                        </td>
+                        <td>
+                            {{ invoice_rule_selection.date ? (invoice_rule_selection.date | date : "dd-MM-yyyy") : "" }}
                         </td>
                         <td>
                             {{invoice_rule_selection.invoice_rule.ledger_category ? invoice_rule_selection.invoice_rule.ledger_category.code + ': ' + invoice_rule_selection.invoice_rule.ledger_category.description : ''}}
@@ -389,13 +438,13 @@
                         <td>
                             {{invoice_rule_selection.invoice_rule.description}}
                         </td>
-                        <td class="text-right">
+                        <td class="text-left">
                             {{invoice_rule_selection.invoice_rule.vat_percentage_rate}}%
                         </td>
-                        <td class="text-right">
+                        <td class="text-left">
                             {{invoice_rule_selection.invoice_rule.price_excl_vat | localNumberFormat:3 }}
                         </td>
-                        <td class="text-right">
+                        <td class="text-left">
                             {{invoice_rule_selection.amount}}
                         </td>
                         <td class="text-right">
@@ -412,7 +461,7 @@
         </div>
     </div>
 
-    <div class="row">
+    <div *ngIf="companySelected" class="row">
         <div class="large-push-8 large-4 columns">
             <table>
                 <tbody *ngIf="invoice && invoice.vat_breakdown">
@@ -451,10 +500,10 @@
     <div class="row">
         <div class="large-12 columns">
             <span *ngIf="!onlyView" class="pull-right">
-                <button [disabled]="!invoice.company_name" type="button" (click)="sendInvoiceToClient()" class="small primary button">
+                <button *ngIf="companySelected" [disabled]="!invoice.company_name" type="button" (click)="sendInvoiceToClient()" class="small primary button">
                     {{ 'SEND INVOICE' | translate }}
                 </button>
-                <button type="button" (click)="saveInvoice()" class="small primary button">
+                <button *ngIf="companySelected" type="button" (click)="saveInvoice()" class="small primary button">
                     {{ 'SAVE' | translate }}
                 </button>
                 <button *ngIf="!onlyView"
@@ -473,6 +522,11 @@
                     {{ 'RETURN' | translate }}
                 </button>
             </span>
+            <!--<span>-->
+                <!--<button type="button" (click)="downloadPdf()" class="small primary button">-->
+                    <!--{{ "DOWNLOAD PDF" | translate }}-->
+                <!--</button>-->
+            <!--</span>-->
         </div>
     </div>
 </div>
