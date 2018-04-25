@@ -119,9 +119,6 @@ export class InvoiceDetailsComponent {
                 this.nsfo.doGetRequest(this.nsfo.URI_INVOICE + "/" + this.invoiceId)
                     .subscribe(res => {
                         this.invoice = res.result;
-                        if (this.invoice.ubn != null) {
-                        	this.companySelected = true;
-						}
 						this.updateInvoiceDataInVariables();
                         },
                           error => {
@@ -149,6 +146,9 @@ export class InvoiceDetailsComponent {
 			this.senderDetails = this.invoice.sender_details;
 			this.selectedCompany = this.invoice.company;
 			this.selectedUbn = this.invoice.ubn;
+			if  (this.invoice.ubn != null) {
+				this.companySelected = true;
+			}
 		}
 
 	private getSenderDetailsAndInitializeNewInvoice() {
