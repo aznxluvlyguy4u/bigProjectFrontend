@@ -186,7 +186,7 @@
         </div>
     </div>
 
-    <ng-template *ngIf="!onlyView ">
+    <ng-template *ngIf="!onlyView && companySelected">
 
         <hr>
 
@@ -424,7 +424,7 @@
                         </td>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody *ngIf="invoice && invoice.invoice_rule_selections">
                     <tr *ngFor="let invoice_rule_selection of invoice.invoice_rule_selections" *ngIf="invoice_rule_selection != null && invoice_rule_selection.invoice_rule != null">
                         <td width="1">
                             <i *ngIf="!onlyView" class="fa fa-times fa-fw remove-button" (click)="removeInvoiceRule(invoice_rule_selection.invoice_rule)" aria-hidden="true"></i>
@@ -523,7 +523,7 @@
                 </button>
             </span>
             <span>
-                <button type="button" (click)="downloadPdf()" class="small primary button">
+                <button type="button" (click)="downloadPdf()" [disabled]="!companySelected" class="small primary button">
                     {{ "DOWNLOAD PDF" | translate }}
                 </button>
             </span>

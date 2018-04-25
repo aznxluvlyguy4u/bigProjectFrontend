@@ -122,9 +122,7 @@ export class InvoiceDetailsComponent {
                 this.nsfo.doGetRequest(this.nsfo.URI_INVOICE + "/" + this.invoiceId)
                     .subscribe(res => {
                         this.invoice = res.result;
-                        if (this.invoice.ubn != null) {
                         	this.companySelected = true;
-						}
 						this.updateInvoiceDataInVariables();
                         },
                           error => {
