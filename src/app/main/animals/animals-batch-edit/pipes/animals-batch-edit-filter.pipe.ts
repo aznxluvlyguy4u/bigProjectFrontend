@@ -95,7 +95,7 @@ export class AnimalsBatchEditFilterPipe implements PipeTransform {
 
 		// FILTER: ID
 		if (filterId != null && filterId != 0) {
-			const needle = filterId.toString();
+			const needle = filterId;
 
 			filtered = filtered.filter(animal => {
 				if (typeof animal.id === 'string') {
@@ -113,7 +113,7 @@ export class AnimalsBatchEditFilterPipe implements PipeTransform {
 
 		// FILTER: AIIND
 		if (filterAiind != null && filterAiind != 0) {
-			const needle = filterAiind.toString();
+			const needle = filterAiind;
 
 			filtered = filtered.filter(animal => {
 
