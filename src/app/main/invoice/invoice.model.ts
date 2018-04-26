@@ -7,7 +7,11 @@ export class Invoice {
     public invoice_number: string;
     public invoice_date: Date;
     public paid_date: Date;
-    public company_address: Address;
+    public company_address_street_name: string;
+    public company_address_street_number: number;
+    public company_address_street_number_suffix: string;
+    public company_address_postal_code: string;
+    public company_address_state: string;
     public company: Client;
     public company_name: string;
     public company_vat_number: string;
