@@ -18,6 +18,12 @@
     </div>
     <div class="large-2 columns">
         <label>
+            {{ 'SEARCH' | translate }}
+            <input type="text" [(ngModel)]="filterSearch" (keydown)="page = 1" placeholder="{{ 'SEARCH' | translate }}" maxlength="50">
+        </label>
+    </div>
+    <div class="large-2 columns">
+        <label>
             {{ 'DISPLAY AMOUNT' | translate }}
             <select [(ngModel)]="filterAmount" (change)="page = 1">
                 <option value="10">10</option>
@@ -63,7 +69,7 @@
                     </div>
                 </td>
             </tr>
-                <tr *ngFor="let invoice of invoices | invoiceFilter:[status] | paginate: {itemsPerPage: filterAmount, currentPage: page}">
+                <tr *ngFor="let invoice of invoices | invoiceFilter:[filterSearch, status] | paginate: {itemsPerPage: filterAmount, currentPage: page}">
                     <td>
                         <span *ngIf="invoice.invoice_number">
                             {{ invoice.invoice_number }}

@@ -21,6 +21,7 @@ export class InvoiceOverviewComponent {
     private displayModal: string = 'none';
     private invoices: Invoice[] = [];
     private isLoaded: boolean = false;
+    private filterSearch: string = '';
     private status: string = 'ALL';
     private filterAmount: number = 10;
 
