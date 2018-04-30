@@ -11,7 +11,7 @@ import {ROUTER_DIRECTIVES, Router} from "@angular/router";
 
 @Component({
     providers: [PaginationService],
-    directives: [PaginationComponent],
+    directives: [PaginationComponent, ROUTER_DIRECTIVES],
     template: require('./invoice.overview.html'),
     pipes: [TranslatePipe, PaginatePipe, invoiceFilterPipe]
 })
@@ -24,6 +24,7 @@ export class InvoiceOverviewComponent {
     private filterSearch: string = '';
     private status: string = 'ALL';
     private filterAmount: number = 10;
+    private showBatch: string = "no";
 
     constructor(private nsfo: NSFOService, private settings: SettingsService, private router: Router) {
         this.getInvoicesList();
@@ -34,6 +35,7 @@ export class InvoiceOverviewComponent {
             .subscribe(
                 res => {
                     this.invoices = <Invoice[]> res.result;
+                    console.log(this.invoices);
                     this.isLoaded = true;
                 }
             );
