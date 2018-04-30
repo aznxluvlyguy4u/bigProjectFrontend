@@ -42,6 +42,7 @@ import { AnimalsBatchEditComponent } from './main/animals/animals-batch-edit/ani
 import { AnimalReportsComponent } from './main/report/animals-overviews/animal-reports.component';
 import { AllAnimalsOverviewComponent } from './main/report/animals-overviews/all-animals-overview/all-animals-overview.component';
 import { AnnualTe100ProductionComponent } from './main/report/animals-overviews/annual-te100-production/annual-te100-production.component';
+import {InvoiceBatchComponent} from "./main/invoice/Batch/invoice.batch";
 
 const routes: RouterConfig = [
     {
@@ -69,6 +70,7 @@ const routes: RouterConfig = [
                     {path: 'overview', component: InvoiceOverviewComponent},
                     {path: 'details/:mode', component: InvoiceDetailsComponent},
                     {path: 'details/:mode/:id', component: InvoiceDetailsComponent},
+                    {path: "batch", component: InvoiceBatchComponent}
                 ]},
             {path: 'configuration', component: ConfigComponent,
                 children: [
