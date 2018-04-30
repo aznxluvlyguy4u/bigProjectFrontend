@@ -34,6 +34,24 @@
     </div>
     <div class="large-2 columns">
         <label>
+            {{ 'BATCH INVOICES' | translate }}
+            <select [(ngModel)]="showBatch" (change)="page = 1">
+                <option value="no">{{ "NO" | translate }}</option>
+                <option value="yes">{{ "YES" | translate }}</option>
+            </select>
+        </label>
+    </div>
+    <div class="large-2 columns">
+        <label>
+            &nbsp;
+            <button (click)="navigateTo('/invoice/batch')" class="medium primary button expanded">
+                <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
+                {{ 'BATCH INVOICE' | translate }}
+            </button>
+        </label>
+    </div>
+    <div class="large-2 columns">
+        <label>
             &nbsp;
             <button (click)="navigateTo('/invoice/details/new')" class="medium primary button expanded">
                 <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
@@ -69,7 +87,7 @@
                     </div>
                 </td>
             </tr>
-                <tr *ngFor="let invoice of invoices | invoiceFilter:[filterSearch, status] | paginate: {itemsPerPage: filterAmount, currentPage: page}">
+                <tr *ngFor="let invoice of invoices | invoiceFilter:[filterSearch, status, showBatch] | paginate: {itemsPerPage: filterAmount, currentPage: page}">
                     <td>
                         <span *ngIf="invoice.invoice_number">
                             {{ invoice.invoice_number }}
