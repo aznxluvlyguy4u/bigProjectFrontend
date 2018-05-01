@@ -700,5 +700,7 @@
   "IS_PAID": "Is betaald",
   "BATCH INVOICES SEND CONFIRMATION TEXT": "U staat op het punt om facturen voor alle actieve bedrijven te versturen. Wanneer u op 'ja' drukt, dan zullen actieve bedrijven per locatie een factuur ontvangen met alle toepasselijke regels",
   "I KNOW WHAT I AM DOING TEXT": "Ik wil graag deze facturen automatisch versturen",
-  "BACK": "Terug"
+  "BACK": "Terug",
+  "BATCH INVOICES HAVE BEEN SEND": "Uw facturen zijn verzonden.",
+  "BATCH INVOICES ARE BEING SEND": "Uw facturen worden verzonden, even geduld"
 }
