@@ -12,6 +12,7 @@ export class Invoice {
     public company_address_street_number_suffix: string;
     public company_address_postal_code: string;
     public company_address_state: string;
+    public company_address_country: string;
     public company: Client;
     public company_name: string;
     public company_vat_number: string;
