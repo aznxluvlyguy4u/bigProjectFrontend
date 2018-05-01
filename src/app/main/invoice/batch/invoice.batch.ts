@@ -1,13 +1,12 @@
 import _ = require("lodash");
 import {Component} from "@angular/core";
 import moment = require('moment');
-import {Subscription} from "rxjs/Rx";
 import {Router, ActivatedRoute, ROUTER_DIRECTIVES} from "@angular/router";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {FormGroup, FormBuilder, REACTIVE_FORM_DIRECTIVES, Validators} from "@angular/forms";
 import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
 import {
-    Invoice, InvoiceSenderDetails, InvoiceRule, InvoiceRuleSelection
+    InvoiceRule
 } from '../invoice.model';
 import { CompanySelectorComponent } from '../../../global/components/clientselector/company-selector.component';
 import { LedgerCategoryDropdownComponent } from '../../../global/components/ledgercategorydropdown/ledger-category-dropdown.component';
@@ -35,10 +34,12 @@ import {FormatService} from "../../../global/services/utils/format.service";
 })
 
 export class InvoiceBatchComponent {
+    private additionalCheck: boolean = false;
     private form: FormGroup;
     private ruleForm: FormGroup;
     private selectedRule: InvoiceRule = new InvoiceRule();
     private displayModal: string = 'none';
+    private displayConfirmationModal: string = 'none';
     selectedLedgerCategory: LedgerCategory;
     private model_datetime_format;
     private view_date_format;
@@ -156,5 +157,17 @@ export class InvoiceBatchComponent {
                     alert(this.nsfo.getErrorMessage(error));
                 }
             )
+    }
+
+    openConfirmationModal() {
+        this.displayConfirmationModal = "block";
+    }
+
+    closeConfirmationModal() {
+        this.displayConfirmationModal = "none";
+    }
+
+    private navigateTo(url: string) {
+        this.router.navigate([url]);
     }
 }
