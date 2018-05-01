@@ -27,7 +27,7 @@
         </div>
         <div class="row">
             &nbsp;
-            <button (click)="openConfirmationModal()" class="small primary button" style="margin: 40px 0 0 0;">
+            <button [disabled]="isBatchSending || isBatchSend || isError" (click)="openConfirmationModal()" class="small primary button" style="margin: 40px 0 0 0;">
                 {{ "SEND INVOICE BATCH" | translate }}
             </button>
         </div>
@@ -61,7 +61,7 @@
             <tbody>
             <tr *ngFor="let invoice_rule of invoiceRuleList" *ngIf="invoice_rule != null">
                 <td width="1">
-                    <a (click)="openModal(invoice_rule)"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
+                    <button [disabled]="isBatchSending" (click)="openModal(invoice_rule)"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></button>
                 </td>
                 <td>
                     {{invoice_rule.ledger_category ? invoice_rule.ledger_category.code + ': ' + invoice_rule.ledger_category.description : ''}}
@@ -86,8 +86,32 @@
     </div>
 </div>
 <div class="row">
+    <div *ngIf="isBatchSending">
+        <div class="large-12 columns">
+            <div class="spinner">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="isBatchSending" class="large-12 columns" style="text-align: center">
+        <span style="text-align: center; width: 100%;">
+            {{ "BATCH INVOICES ARE BEING SEND" | translate}}
+        </span>
+    </div>
+    <div *ngIf="isBatchSend" class="large-12 columns" style="text-align: center">
+        <span style="text-align: center; width: 100%;">
+            {{ "BATCH INVOICES HAVE BEEN SEND" | translate}}
+        </span>
+    </div>
+    <span style="text-align: center; width: 100%;" *ngIf="isError">
+        {{ "SOMETHING WENT WRONG. TRY ANOTHER TIME." | translate }}
+    </span>
+</div>
+<div class="row">
     &nbsp;
-    <button (click)="navigateTo('/invoice')" class="small primary button">
+    <button [disabled]="isBatchSending" (click)="navigateTo('/invoice')" class="small primary button">
         {{ "BACK" | translate }}
     </button>
 </div>
@@ -187,7 +211,6 @@
             <span style="text-align: left; width: 100%; display: block; margin: 25px 0 50px 0;">
                 {{ "BATCH INVOICES SEND CONFIRMATION TEXT" | translate }}
             </span>
-
             <input type="checkbox" [(ngModel)]="additionalCheck">
             <span>
                 {{ "I KNOW WHAT I AM DOING TEXT" | translate }}
@@ -199,7 +222,7 @@
             <hr>
             
             <span class="pull-left" style="width: 45%">
-                <button [disabled]="!additionalCheck && disableEditOrInsertButton()" (click)="sendInvoiceBatch()" class="small primary button expanded">
+                <button [disabled]="!additionalCheck || isBatchSending" (click)="sendInvoiceBatch()" class="small primary button expanded">
                     {{ "SEND INVOICE BATCH" | translate }}
                 </button>
             </span>
@@ -207,7 +230,7 @@
 
             </span>
             <span class="pull-right" style="width: 45%;">
-                <button (click)="closeConfirmationModal()" class="small primary button expanded">
+                <button [disabled]="isBatchSending" (click)="closeConfirmationModal()" class="small primary button expanded">
                     {{ "BACK" | translate }}
                 </button>
             </span>
