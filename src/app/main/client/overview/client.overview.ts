@@ -2,17 +2,18 @@ import {Component} from "@angular/core";
 import {ROUTER_DIRECTIVES, Router} from "@angular/router";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
-import {Client, User, MAEDI_VISNA_STATUS_OPTIONS, SCRAPI_STATUS_OPTIONS} from "../client.model";
+import {Client} from "../client.model";
 import {ClientFilterPipe} from "./pipes/clientFilter.pipe";
 import {PaginationService, PaginatePipe} from "ng2-pagination/index";
 import {PaginationComponent} from "../../../global/components/pagination/pagination.component";
 import {SettingsService} from "../../../global/services/settings/settings.service";
+import { CheckMarkComponent } from '../../../global/components/checkmark/check-mark.component';
 
 declare var $;
 
 @Component({
     providers: [PaginationService],
-    directives: [ROUTER_DIRECTIVES, PaginationComponent],
+    directives: [ROUTER_DIRECTIVES, PaginationComponent, CheckMarkComponent],
     template: require('./client.overview.html'),
     pipes: [TranslatePipe, ClientFilterPipe, PaginatePipe]
 })

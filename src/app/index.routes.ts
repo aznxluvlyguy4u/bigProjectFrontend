@@ -25,7 +25,7 @@ import {ScrapieAnnouncementComponent} from "./main/config/healthLetters/scrapie/
 import {ScrapieSupportComponent} from "./main/config/healthLetters/scrapie/support/scrapie.support";
 import {LoadingComponent} from "./loading/loading.component";
 import {ConfigInvoicesComponent} from "./main/config/invoices/invoices.component";
-import {InvoicesRuleTemplatesComponent} from "./main/config/invoices/rules/invoicesRuleTemplates.invoices";
+import {InvoicesRuleTemplatesComponent} from "./main/config/invoices/rules/standardInvoiceRules.invoices";
 import {InvoicesNSFODetailsComponent} from "./main/config/invoices/details/details.invoices";
 import {MaediVisnaAnnouncementComponent} from "./main/config/healthLetters/maediVisna/announcement/maediVisna.announcement";
 import {MaediVisnaSupportComponent} from "./main/config/healthLetters/maediVisna/support/maediVisna.support";
@@ -35,6 +35,13 @@ import { TreatmentMainComponent } from './main/treatment/treatment-main.componen
 import { TreatmentTemplateComponent } from './main/treatment/treatment-template/treatment-template.component';
 import { TreatmentTypeComponent } from './main/treatment/treatment-type/treatment-type.component';
 import { TreatmentPrescriptionComponent } from './main/treatment/treatment-prescription/treatment-prescription.component';
+import { ErrorLogOverviewComponent } from './main/errorlog/error-log-overview.component';
+import { DeveloperGuard } from './global/guards/developer.guard';
+import { AnimalsComponent } from './main/animals/animals.component';
+import { AnimalsBatchEditComponent } from './main/animals/animals-batch-edit/animals-batch-edit.component';
+import { AnimalReportsComponent } from './main/report/animals-overviews/animal-reports.component';
+import { AllAnimalsOverviewComponent } from './main/report/animals-overviews/all-animals-overview/all-animals-overview.component';
+import { AnnualTe100ProductionComponent } from './main/report/animals-overviews/annual-te100-production/annual-te100-production.component';
 
 const routes: RouterConfig = [
     {
@@ -67,7 +74,7 @@ const routes: RouterConfig = [
                 children: [
                     {path: '', terminal: true, redirectTo: 'admins'},
                     {path: 'admins', component: ConfigAdminsComponent},
-                    {path: 'vwa-employees', component: ConfigVwaEmployeesComponent},
+                    {path: 'third-party-users', component: ConfigVwaEmployeesComponent},
                     {path: 'cms', component: ConfigCMSComponent},
                     {path: 'invoices', component: ConfigInvoicesComponent,
                         children: [
@@ -85,8 +92,24 @@ const routes: RouterConfig = [
                         ]},
                     {path: 'choice_fields', component: ConfigChoiceFieldsComponent}
                 ]},
-            {path: 'report', terminal: true, component: ReportComponent},
+              // {path: 'animals', component: AnimalsComponent, canActivate: [DeveloperGuard],
+              {path: 'animals', component: AnimalsComponent,
+                children: [
+                  {path: '', terminal: true, redirectTo: 'batch-edit'},
+                  {path: 'batch-edit', component: AnimalsBatchEditComponent}
+                ]},
+            {path: 'report', component: ReportComponent,
+                children: [
+									{path: '', terminal: true, redirectTo: 'animal-reports'},
+									{path: 'animal-reports', component: AnimalReportsComponent,
+										children: [
+											{path: '', terminal: true, redirectTo: 'all-animals-overview'},
+											{path: 'all-animals-overview', component: AllAnimalsOverviewComponent},
+											{path: 'annual-te100-production', component: AnnualTe100ProductionComponent},
+										]},
+                ]},
 					  {path: 'log', terminal: true, component: TechnicalLogOverviewComponent},
+					  {path: 'error-log', terminal: true, component: ErrorLogOverviewComponent},
             {path: 'profile', terminal: true, component: ProfileComponent},
 					  // {path: 'treatment', terminal: true, component: TreatmentMainComponent}
 					  {path: 'treatment', component: TreatmentMainComponent,

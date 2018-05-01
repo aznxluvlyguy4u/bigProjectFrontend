@@ -85,3 +85,5 @@ npm-debug.log
 /dist/
 /env.json
 
+gulpfile.js
+gulpfile.js.map

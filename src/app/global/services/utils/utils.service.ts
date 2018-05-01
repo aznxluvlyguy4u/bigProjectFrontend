@@ -1,11 +1,13 @@
 import {Injectable} from "@angular/core";
 import {NSFOService} from "../nsfo/nsfo.service";
 import {ReplaySubject} from "rxjs/Rx";
+import { User } from '../../../main/client/client.model';
 
 @Injectable()
 export class UtilsService {
     private provinces: ReplaySubject<any> = new ReplaySubject();
     private adminDetails: ReplaySubject<any> = new ReplaySubject();
+    isDeveloper = false;
 
     constructor(private nsfo: NSFOService) {
         this.initAdminDetails();
@@ -17,6 +19,7 @@ export class UtilsService {
         this.nsfo.doGetRequest(this.nsfo.URI_MENUBAR)
             .subscribe(res => {
                 this.setAdminDetails(res.result);
+                this.isDeveloper = res.result.access_level === 'DEVELOPER';
             })
     }
 
@@ -42,5 +45,29 @@ export class UtilsService {
 
     public getProvinces() {
         return this.provinces.asObservable();
+    }
+
+    static getPersonType(user: User): string {
+			switch(user.type) {
+				case 'Client': return 'Gebruiker';
+				case 'Employee': return 'Admin';
+				case 'VwaEmployee ': return 'VWA-medewerker';
+				case 'Inspector ': return 'Inspecteur';
+				default: return user.type;
+			}
+    }
+
+
+    static getBoolValAsString(boolval: boolean) {
+        if (typeof boolval === 'boolean') {
+            return boolval ? 'true' : 'false';
+        }
+
+        return boolval;
+    }
+
+    static countDecimals(value) {
+        if(value == null || Math.floor(value) === value) return 0;
+        return value.toString().split(".")[1].length || 0;
     }
 }

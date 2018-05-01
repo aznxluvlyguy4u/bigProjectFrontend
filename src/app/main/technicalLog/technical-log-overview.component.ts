@@ -6,14 +6,14 @@ import { LogFilterPipe } from './pipes/log-filter.pipe';
 import { PaginationComponent } from '../../global/components/pagination/pagination.component';
 import { ActionLog, QueryParam, User } from '../client/client.model';
 import { SearchComponent } from '../../global/components/searchbox/seach-box.component';
-import { SearchPipe } from '../../global/pipes/search.pipe';
+import { UserSearchPipe } from '../../global/pipes/user-search.pipe';
 import { Datepicker } from '../../global/components/datepicker/datepicker.component';
 import { NSFOService } from '../../global/services/nsfo/nsfo.service';
 import { SettingsService } from '../../global/services/settings/settings.service';
 import { END_DATE, START_DATE, USER_ACCOUNT_ID, USER_ACTION_TYPE } from '../../global/constants/query-params.constant';
 import { SERVER_ERROR_MESSAGE } from '../../global/constants/messages.constant';
 import { REACTIVE_FORM_DIRECTIVES, Validators } from '@angular/forms';
-import { Control, ControlGroup, FormBuilder } from '@angular/common';
+import { Control, ControlGroup, FormBuilder, LowerCasePipe, UpperCasePipe } from '@angular/common';
 import { LoginEnvironmentPipe } from './pipes/login-environment.pipe';
 import { CheckMarkComponent } from '../../global/components/checkmark/check-mark.component';
 import { SortOrder, SortService } from '../../global/services/utils/sort.service';
@@ -21,6 +21,9 @@ import { SortSwitchComponent } from '../../global/components/sortswitch/sort-swi
 import { ADMIN, USER, VWA } from '../../global/constants/login-environments.contant';
 import { DateTimeService } from '../../global/services/utils/date-time.service';
 import { FormUtilService } from '../../global/services/utils/form-util.service';
+import { UtilsService } from '../../global/services/utils/utils.service';
+import { UcFirstPipe } from '../../global/pipes/uc-first.pipe';
+import { TranslateUserActionTypeSortPipe } from './pipes/translate-user-action-type-sort.pipe';
 
 declare var $;
 
@@ -28,7 +31,7 @@ declare var $;
     providers: [PaginationService, SortService, DateTimeService, FormUtilService],
     directives: [REACTIVE_FORM_DIRECTIVES, ROUTER_DIRECTIVES, PaginationComponent, SearchComponent, Datepicker, CheckMarkComponent, SortSwitchComponent],
     template: require('./technical-log-overview.component.html'),
-    pipes: [TranslatePipe, LogFilterPipe, PaginatePipe, SearchPipe, LoginEnvironmentPipe]
+    pipes: [TranslatePipe, LogFilterPipe, PaginatePipe, UserSearchPipe, LoginEnvironmentPipe, UpperCasePipe, LowerCasePipe, UcFirstPipe, TranslateUserActionTypeSortPipe ]
 })
 export class TechnicalLogOverviewComponent {
     private isUsersLoaded: boolean = false;
@@ -323,13 +326,7 @@ export class TechnicalLogOverviewComponent {
 		}
 
 		getPersonType(user: User): string {
-    	switch(user.type) {
-				case 'Client': return 'Gebruiker';
-				case 'Employee': return 'Admin';
-				case 'VwaEmployee ': return 'VWA-medewerker';
-				case 'Inspector ': return 'Inspecteur';
-				default: return user.type;
-			}
+    		return UtilsService.getPersonType(user);
 		}
 
 		getMaxMonthsPeriod(): number {

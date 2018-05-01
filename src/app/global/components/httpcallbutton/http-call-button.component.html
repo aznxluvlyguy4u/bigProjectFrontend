@@ -1,0 +1,15 @@
+<button
+        *ngIf="!processing"
+        type="button"
+        class="button primary"
+        [disabled]="disabled"
+        (mouseup)="onClickyClick()"
+>
+    {{ labelText | translate }}
+</button>
+<button
+        *ngIf="processing"
+        type="button"
+        class="button secondary"
+        [disabled]="true"
+> <i class="fa fa-gear fa-spin fa-fw"></i> </button>

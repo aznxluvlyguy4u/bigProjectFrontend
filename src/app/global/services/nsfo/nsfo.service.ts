@@ -1,6 +1,14 @@
-import {Injectable} from "@angular/core";
+import { Injectable } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
 import { QueryParam } from '../../../main/client/client.model';
+
+import _ = require("lodash");
+import { TranslateService } from 'ng2-translate';
+import { Country } from '../../models/country.model';
+import { Animal } from '../../components/livestock/livestock.model';
+
+import { Country } from '../../models/country.model';
+import { Animal } from '../../components/livestock/livestock.model';
 
 @Injectable()
 export class NSFOService {
@@ -11,6 +19,10 @@ export class NSFOService {
     public URI_VALIDATE_TOKEN = '/v1/auth/validate-token';
     public URI_PROVINCES = '/v1/countries/nl/provinces';
 
+    public URI_ANIMALS = '/v1/animals';
+    public URI_ANIMALS_DETAILS = '/v1/animals-details';
+    public URI_GET_COLLAR_COLORS = '/v1/collars';
+
     public URI_GHOST_LOGIN: string = '/v1/admins/ghost';
     public URI_ADMIN: string = '/v1/admins';
     public URI_ADMIN_DEACTIVATE: string = '/v1/admins-deactivate';
@@ -18,9 +30,10 @@ export class NSFOService {
     public URI_ADMIN_PROFILE: string = '/v1/profiles-admin';
     public URI_INVOICE = '/v1/invoices';
     public URI_INVOICE_RULE = '/v1/invoice-rules';
-    public URI_INVOICE_RULE_TEMPLATE = '/v1/invoice-rule-templates';
     public URI_INVOICE_SENDER_DETAILS = '/v1/invoice-sender-details';
+		public URI_LEDGER_CATEGORIES = '/v1/ledger-categories';
 
+	  public URI_GET_COUNTRY_CODES = '/v1/countries?continent=europe';
     public URI_CMS: string = '/v1/cms';
     public URI_DASHBOARD: string = '/v1/admin/dashboard';
     public URI_MENUBAR: string = '/v1/components/admin-menu-bar';
@@ -54,12 +67,25 @@ export class NSFOService {
     public URI_INSPECTIONS_LETTERS = '/v1/inspections/letters';
     public URI_BARCODES = '/v1/lab-results/barcodes';
 
+    public URI_ERRORS: string = '/v1/errors';
+    public URI_ERRORS_DECLARE_TYPES: string = '/v1/errors-declare-types';
+    public URI_ERRORS_HIDDEN_STATUS: string = '/v1/errors-hidden-status';
+    public URI_ERRORS_NON_IR: string = '/v1/errors/non-ir';
+
 	  public URI_TECHNICAL_LOG = '/v1/log/action';
+
+	  public URI_PEDIGREE_REGISTERS = '/v1/pedigreeregisters';
+
+		//REPORT
+		public URI_GET_LINEAGE_PROOF = '/v1/reports/pedigree-certificates';
+		public URI_GET_INBREEDING_COEFFICIENT = '/v1/reports/inbreeding-coefficients';
+		public URI_GET_LIVESTOCK_DOCUMENT = '/v1/reports/livestock';
+		public URI_GET_OFFSPRING = '/v1/reports/offspring';
+		public URI_GET_ANIMALS_OVERVIEW_REPORT = '/v1/reports/animals-overview';
+		public URI_GET_ANNUAL_TE100_UBN_PRODUCTION_REPORT = '/v1/reports/annual-te100-ubn-production';
 
 	  public URI_TREATMENTS = '/v1/treatments';
 	  public URI_TREATMENT_TYPES = '/v1/treatment-types';
-
-	  public URI_UBNS = '/v1/ubns';
 
     public URI_VWA_EMPLOYEE: string = '/v1/vwa-employee';
 
@@ -69,7 +95,25 @@ export class NSFOService {
 
     private ACCESS_TOKEN_NAMESPACE: string = 'access_token';
 
-    constructor(private http:Http) {}
+		countryCodeList: Country[] = [];
+		countries: Country[] = [];
+
+    constructor(private http:Http, private translate: TranslateService) {
+				this.doGetCountryCodeList(); // if in OnInit it is loaded too late
+		}
+
+		private doGetCountryCodeList() {
+			this.doGetRequest(this.URI_GET_COUNTRY_CODES)
+				.subscribe(
+					res => {
+						this.countryCodeList = _.sortBy(res.result, ['code']);
+						this.countries = _.sortBy(res.result, ['name']);
+					},
+					error => {
+						alert(this.getErrorMessage(error));
+					}
+				);
+		}
 
     public doLoginRequest(username:string, password:string) {
         let headers = new Headers();
@@ -149,10 +193,21 @@ export class NSFOService {
     }
 
     public getErrorMessage(err: Response): string {
-			if (err.status !== 500) {
-				return err.json().result.message;
-			} else {
-				return "SOMETHING WENT WRONG. TRY ANOTHER TIME."
+			switch (err.status) {
+				case 500: return this.translate.instant("SOMETHING WENT WRONG. TRY ANOTHER TIME.");
+				case 524: return this.translate.instant("A TIMEOUT OCCURED. TRY AGAIN LATER, PERHAPS WHEN THE SERVER IS LESS BUSY OR TRY IT WITH LESS DATA.");
+
+				default:
+					if (err.json() && err.json().result && err.json().result.message) {
+						return this.translate.instant(err.json().result.message);
+					}
+					return this.translate.instant("SOMETHING WENT WRONG. TRY ANOTHER TIME.");
 			}
     }
+
+    static cleanAnimalsInput(animals: Animal[], variables = ['uln_country_code', 'uln_number']): Animal[] {
+			return _.map(animals, function (object: Animal) {
+				return _.pick(object, variables)
+			});
+		}
 }

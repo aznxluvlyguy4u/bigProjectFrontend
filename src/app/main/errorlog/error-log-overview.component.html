@@ -1,0 +1,855 @@
+<div id="errorlog">
+
+    <div class="page-header">
+        <div class="page-title">{{ 'ERROR LOG' | translate }}</div>
+    </div>
+
+
+    <div class="row table-options-container">
+
+    <ng-template *ngIf="isDataLoaded()">
+
+        <div class="row">
+            <div class="large-1 medium-12 columns">
+                <h5>{{ 'FILTERS' | translate  | ucFirstPipe }}</h5>
+            </div>
+        </div>
+
+        <!-- DATE FILTER -->
+        <div class="row table-options-container">
+
+            <div class="large-2 medium-3 columns">
+                <label>{{ 'LOG DATE' | translate | ucFirstPipe }} {{ 'START' | translate | ucFirstPipe }}
+                    <input
+                            [(ngModel)]="filterLogDateStart"
+                            type="text"
+                            #startDateField (keyup)="0"
+                            id="filter_log_date_start"
+                            placeholder="{{ 'VIEW_DATE_FORMAT' | translate }}"
+                    >
+                </label>
+            </div>
+
+            <div class="large-2 medium-3 columns">
+                <label>{{ 'LOG DATE' | translate | ucFirstPipe }} {{ 'END' | translate  | ucFirstPipe }}
+                    <input
+                            [(ngModel)]="filterLogDateEnd"
+                            type="text"
+                            #startDateField (keyup)="0"
+                            id="filter_log_date_end"
+                            placeholder="{{ 'VIEW_DATE_FORMAT' | translate }}"
+                    >
+                </label>
+            </div>
+
+            <div class="large-2 medium-3 columns">
+                <label>{{ 'EVENT DATE' | translate | ucFirstPipe }} {{ 'START' | translate  | ucFirstPipe }}
+                    <input
+                            [(ngModel)]="filterEventDateStart"
+                            type="text"
+                            #startDateField (keyup)="0"
+                            id="filter_log_event_start"
+                            placeholder="{{ 'VIEW_DATE_FORMAT' | translate }}"
+                    >
+                </label>
+            </div>
+
+            <div class="large-2 medium-3 columns">
+                <label>{{ 'EVENT DATE' | translate | ucFirstPipe }} {{ 'END' | translate | ucFirstPipe }}
+                    <input
+                            [(ngModel)]="filterEventDateEnd"
+                            type="text"
+                            #startDateField (keyup)="0"
+                            id="filter_log_event_end"
+                            placeholder="{{ 'VIEW_DATE_FORMAT' | translate }}"
+                    >
+                </label>
+            </div>
+
+            <div class="large-2 columns">
+                <label>
+                    {{'DISPLAY' | translate }} {{'HIDDEN FOR ADMINS' | translate | lowercase}} <i class="fa fa-info-circle" aria-hidden="true" title="{{ 'ERROR MESSAGE IS HIDDEN FOR ADMINS' | translate }}"></i>
+                    <select [(ngModel)]="filterIsHiddenForAdmin" (change)="page = 1">
+                        <option *ngFor="let option of filterIsHiddenForAdminOptions" [value]="option">
+                            {{getBoolDrowDownText(option) | translate}}
+                        </option>
+                    </select>
+                </label>
+            </div>
+
+            <div class="large-2 columns end">
+                <label>
+                    {{'DISPLAY' | translate | ucFirstPipe }} {{'HIDDEN FOR USERS' | translate | lowercase}}
+                    <select [(ngModel)]="filterIsHiddenForUser" (change)="page = 1">
+                        <option *ngFor="let option of filterIsHiddenForUserOptions" [value]="option">
+                            {{getBoolDrowDownText(option) | translate}}
+                        </option>
+                    </select>
+                </label>
+            </div>
+
+        </div>
+
+        <hr style="margin-top: 0">
+
+        <!-- NON-DATE FILTER -->
+        <div class="row table-options-container"  style="margin: 1rem auto 1rem auto">
+
+            <div class="large-3 columns">
+                <label>
+                    {{ 'SEARCH' | translate | ucFirstPipe }} <i class="fa fa-info-circle" aria-hidden="true" title="{{ 'ERROR LOG SEARCH INFO' | translate}}"></i>
+                    <input type="text" [(ngModel)]="filterSearch" (keydown)="page = 1" placeholder="{{ 'SEARCH' | translate }}" maxlength="50">
+                </label>
+            </div>
+
+            <div class="large-2 columns">
+                <label>
+                    {{'DECLARE TYPE' | translate | ucFirstPipe }}
+                    <select [(ngModel)]="filterType" (change)="page = 1">
+                        <option *ngFor="let actionByTypes of getDeclareTypes()" [value]="actionByTypes">{{actionByTypes == undefined ? ('ALL'|translate) : actionByTypes}}</option>
+                    </select>
+                </label>
+            </div>
+
+            <!-- DISABLED BECAUSE PAGINATION IS A BIT BROKEN -->
+            <!--<div class="large-1 columns">-->
+                <!--<label>-->
+                    <!--{{ 'PER PAGE' | translate | ucFirstPipe }}-->
+                    <!--<select [(ngModel)]="filterAmount" (change)="page = 1">-->
+                        <!--<option *ngFor="let option of filterAmountOptions" [value]="option">{{option}}</option>-->
+                    <!--</select>-->
+                <!--</label>-->
+            <!--</div>-->
+
+            <div class="large-2 columns">
+                <label>
+                    {{ 'UBN' | translate }}
+                    <input type="text" [(ngModel)]="filterUbn" (keydown)="page = 1" placeholder="{{ 'UBN' | translate }}" maxlength="15">
+                </label>
+            </div>
+
+            <div class="large-2 columns">
+                <label>
+                    {{ 'RELATED' | translate | ucFirstPipe }} {{ 'UBN' | translate }}
+                    <input type="text" [(ngModel)]="filterRelatedUbn" (keydown)="page = 1" placeholder="{{ 'RELATED' | translate }} {{ 'UBN' | translate }}" maxlength="15">
+                </label>
+            </div>
+
+            <div class="large-2 columns">
+                <label>
+                    {{ 'ACTION BY TYPE' | translate | ucFirstPipe }}
+                    <select [(ngModel)]="filterActionByType" (change)="page = 1">
+                        <option value="ALL">{{ 'ALL' | translate }}</option>
+                        <option *ngFor="let typeOption of getActionByTypeOptions()" value="{{typeOption}}">{{ typeOption |
+                            translate }}</option>
+                    </select>
+                </label>
+            </div>
+
+            <ng-template *ngIf="errors && errors.length > 0">
+                <div class="large-1 columns end">
+                    <app-hide-button
+                            [title]="'HIDE ALL FILTERED ERRORS IN THE CURRENT LIST INCLUDING THOSE ON OTHER PAGES'"
+                            [labelText]="'HIDE ALL'"
+                            [isActive]="!isUpdatingHiddenStatus"
+                            [showSpinner]="isUpdatingHiddenStatus"
+                            [includeDelayedSpinnerAnimation]="false"
+                            (click)="openModal()"
+                    ></app-hide-button>
+                </div>
+            </ng-template>
+
+        </div>
+
+    </ng-template>
+
+    <!-- Full width table -->
+    <div class="row" style="width: 100%; margin-left: auto; margin-right: auto; max-width: initial;">
+        <div class="large-12 columns">
+            <table class="stack client-overview">
+                <thead>
+                <tr>
+                    <td>{{ 'LOG DATE' | translate | ucFirstPipe }}
+                        <app-sort-switch
+                                [pointsUp]="isLogDateSortAscending"
+                                [neutral]="isLogDateSortNeutral"
+                                (sortSwitchToggled)="onSortByLogDateToggle(); page = 1">
+                        </app-sort-switch>
+                    </td>
+                    <td>{{ 'EVENT DATE' | translate | ucFirstPipe }}
+                        <app-sort-switch
+                                [pointsUp]="isEventDateSortAscending"
+                                [neutral]="isEventDateSortNeutral"
+                                (sortSwitchToggled)="onSortByEventDateToggle(); page = 1">
+                        </app-sort-switch>
+                    </td>
+                    <td>{{ 'DECLARE TYPE' | translate | ucFirstPipe }}</td>
+                    <td>{{ 'UBN' | translate }}</td>
+                    <td>{{ 'RELATED' | translate | ucFirstPipe }} {{ 'UBN' | translate }}</td>
+                    <td>{{ 'ACTION BY' | translate | ucFirstPipe }}</td>
+                    <td>{{ 'ACTION BY TYPE' | translate | ucFirstPipe }}</td>
+                    <td>{{ 'DESCRIPTION' | translate | ucFirstPipe }}</td>
+                    <td>{{ 'HIDDEN FOR ADMINS' | translate | ucFirstPipe}}</td>
+                    <td>{{ 'HIDDEN FOR USERS' | translate  | ucFirstPipe}}</td>
+                    <td>{{ 'HIDE FOR ADMINS' | translate | ucFirstPipe }}</td>
+                    <td>{{ 'LOGIN' |  translate | ucFirstPipe}}</td>
+                    <td>{{ 'INFO' |  translate | ucFirstPipe}}</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngIf="!isErrorsLoaded">
+                    <td colspan="10">
+                        <p class="text-center">{{'LOGS ARE BEING RETRIEVED'|translate}}</p>
+                        <div class="spinner">
+                            <div class="bounce1"></div>
+                            <div class="bounce2"></div>
+                            <div class="bounce3"></div>
+                        </div>
+                    </td>
+                </tr>
+                <ng-container *ngIf="isErrorsLoaded && errors.length > 0">
+                    <tr *ngFor="let error of errors | errorLogFilter:getFilterOptions() | paginate: {itemsPerPage: filterAmount, currentPage: page}; let i = index">
+                        <td>
+                            {{ error.log_date | date: 'dd-MM-yyyy @HH:mm:ss' }}
+                        </td>
+                        <td>
+                            {{ error.event_date | date: 'dd-MM-yyyy @HH:mm:ss' }}
+                        </td>
+                        <td>
+                            {{ error.dutch_type }}
+                        </td>
+                        <td>
+                            {{ error.ubn }}
+                        </td>
+                        <td>
+                            {{ error.related_ubn }}
+                        </td>
+                        <td>
+                            {{ error.action_by }}
+                        </td>
+                        <td>
+                            {{ error.action_by_type | translate }}
+                        </td>
+                        <td>
+                            {{ error.declare_info }}
+                        </td>
+                        <td>
+                            <app-check-mark [boolVal]="error.hide_for_admin"></app-check-mark>
+                        </td>
+                        <td>
+                            <app-check-mark [boolVal]="error.hide_failed_message"></app-check-mark>
+                        </td>
+                        <td>
+                            <app-hide-button
+                                    [isActive]="!isUpdatingHiddenStatus && updatedSingleHiddenStatusMessageId !== error.request_id && !error.hide_for_admin"
+                                    [includeDelayedSpinnerAnimation]="true"
+                                    [isTiny]="false"
+                                    (click)="hideSingleErrorForAdminStatus(error)"
+                            ></app-hide-button>
+                        </td>
+                        <td>
+                            <span class="pull-right" *ngIf="error.has_ghost_login">
+                                <button
+                                     type="button"
+                                     (click)="loginAsGhost(error.ubn); openInfoModal(error)"
+                                     class="small primary button"
+                                ><i class="fa fa-sign-in fa-fw" aria-hidden="true"></i>
+                                </button>
+                            </span>
+                            <span class="pull-right" *ngIf="!error.has_ghost_login">
+                                <button
+                                    type="button"
+                                    [disabled]="true"
+                                    class="small disabled secondary button"
+                                     ><i class="fa fa-sign-in fa-fw" aria-hidden="true"></i>
+                                </button>
+                            </span>
+                        </td>
+                        <td>
+                            <app-info-button
+                                    [isTiny]="true"
+                                    (click)="openInfoModal(error)"
+                            ></app-info-button>
+                        </td>
+                    </tr>
+                </ng-container>
+                </tbody>
+            </table>
+
+            <pagination (pageChange)="page = $event"></pagination>
+        </div>
+    </div>
+
+    </div>
+
+    <!--HIDE ALL WARNING MODAL-->
+    <div class="reveal-overlay" [ngStyle]="{'display': modalDisplay}">
+        <div class="tiny reveal" [ngStyle]="{'display': modalDisplay}">
+            <div class="modal-header" *ngIf="toHideCount > 0">
+                {{ 'CONFIRMATION NOTIFICATION' | translate }}
+                <button type="button" class="pull-right" aria-label="Close modal" (click)="closeModal()">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <ng-template *ngIf="toHideCount > 0">
+                <div class="modal-body">
+                    <hr>
+                    <div class="row">
+                        {{ 'SELECTED ERROR MESSAGES COUNT' | translate}}: {{toHideCount}}
+                    </div>
+                    <div class="row">
+                        {{ 'HIDE ALL FILTERED ERRORS IN THE CURRENT LIST INCLUDING THOSE ON OTHER PAGES' | translate }}?
+                    </div>
+                </div>
+                <hr>
+                <div class="modal-footer">
+                    <button class="tiny primary button pull-left" (click)="hideShownErrorsForAdmin()">{{ 'OK' | translate}}</button>
+                    <button class="tiny alert button pull-right" (click)="closeModal()">{{ 'NO' | translate}}</button>
+                </div>
+            </ng-template>
+
+            <ng-template *ngIf="toHideCount === 0">
+                <div class="modal-body">
+                    {{ 'NO ERROR MESSAGES SELECTED' | translate}}
+                </div>
+                <div class="modal-footer">
+                    <button class="tiny alert button pull-right" (click)="closeModal()">{{ 'CLOSE' | translate}}</button>
+                </div>
+            </ng-template>
+
+        </div>
+    </div>
+
+    <!--INFO MODAL-->
+    <div class="reveal-overlay" [ngStyle]="{'display': infoModalDisplay}">
+        <div class="medium reveal" [ngStyle]="{'display': infoModalDisplay}" *ngIf="selectedError">
+            <div class="modal-header">
+                {{ 'DECLARE TYPE' | translate }}: {{ selectedError.dutch_type }}
+                <button type="button" class="pull-right" aria-label="Close modal" (click)="closeInfoModal()">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <hr>
+                <div class="row">
+                    <div class="small-6 column pull-right">{{ 'LOG DATE' | translate }}</div><div class="small-6 column">{{ selectedError.log_date | date: 'dd-MM-yyyy @HH:mm:ss' }}</div>
+                </div>
+                <div class="row">
+                    <div class="small-6 column pull-right">{{ 'EVENT DATE' | translate }}</div><div class="small-6 column">{{ selectedError.event_date | date: 'dd-MM-yyyy @HH:mm:ss' }}</div>
+                </div>
+                <div class="row">
+                    <div class="small-6 column pull-right">{{ 'UBN' | translate }}</div><div class="small-6 column">{{ selectedError.ubn }}</div>
+                </div>
+                <div class="row">
+                    <div class="small-6 column pull-right">{{ 'RELATED' | translate }} {{ 'UBN' | translate }}</div><div class="small-6 column">{{ selectedError.related_ubn }}</div>
+                </div>
+                <div class="row">
+                    <div class="small-6 column pull-right">{{ 'ACTION BY' | translate }}</div><div class="small-6 column">{{ selectedError.action_by }}</div>
+                </div>
+                <div class="row">
+                    <div class="small-6 column pull-right">{{ 'ACTION BY TYPE' | translate }}</div><div class="small-6 column">{{ selectedError.action_by_type | translate }}</div>
+                </div>
+                <div class="row">
+                    <div class="small-6 column pull-right">{{ 'DESCRIPTION' | translate }}</div><div class="small-6 column">{{ selectedError.declare_info }}</div>
+                </div>
+                <div class="row">
+                    <div class="small-6 column pull-right">{{ 'HIDDEN FOR USERS' | translate }}</div><div class="small-1 column end"><app-check-mark [boolVal]="selectedError.hide_failed_message"></app-check-mark></div>
+                </div>
+
+                <hr>
+
+                <div class="row" *ngIf="selectedError.hide_for_admin">
+                    <div class="small-12 column text-center">{{ 'HIDDEN FOR ADMINS' | translate | lowercase}}</div>
+                </div>
+                <div class="row" *ngIf="!selectedError.hide_for_admin">
+                    <div class="small-12 column text-center">
+                        <app-hide-button
+                                [isActive]="!isUpdatingHiddenStatus && updatedSingleHiddenStatusMessageId !== selectedError.request_id && !selectedError.hide_for_admin"
+                                [includeDelayedSpinnerAnimation]="true"
+                                [labelText]="'HIDE FOR ADMINS'"
+                                [isTiny]="false"
+                                (click)="hideSingleErrorForAdminStatus(selectedError)"
+                        ></app-hide-button>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <ng-template *ngIf="selectedMessage != null && selectedMessage.responses != null && selectedMessage.responses.length > 0">
+
+                <div class="row">
+                    <div class="large-12 columns">
+                        <label class="modal-subheader middle"> {{ 'RVO RESPONSE RESULTS' | translate }} </label>
+                    </div>
+                </div>
+
+                <div *ngFor="let response of selectedMessage.responses">
+                    <div class="row">
+                        <div class="small-6 column pull-right">{{ 'LOG DATE' | translate }}</div><div class="small-6 column">{{ response.log_date | date: 'dd-MM-yyyy @HH:mm:ss' }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="small-6 column pull-right">{{ 'ERROR CODE' | translate }}</div><div class="small-6 column">{{ response.error_code }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="small-6 column pull-right">{{ 'ERROR MESSAGE' | translate }}</div><div class="small-6 column">{{ response.error_message }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="small-6 column pull-right">{{ 'ERROR KIND INDICATOR' | translate }}</div><div class="small-6 column">{{ response.error_kind_indicator }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="small-6 column pull-right">{{ 'SUCCESS INDICATOR' | translate }}</div><div class="small-6 column">{{ response.success_indicator }}</div>
+                    </div>
+
+                    <hr>
+                </div>
+
+            </ng-template>
+
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="small-6 column">
+                        <span class="pull-left" *ngIf="selectedError.has_ghost_login">
+                                <button
+                                        type="button"
+                                        (click)="loginAsGhost(selectedError.ubn)"
+                                        class="small primary button"
+                                ><i class="fa fa-sign-in fa-fw" aria-hidden="true"></i>
+                                </button>
+                            </span>
+                        <span class="pull-left" *ngIf="!selectedError.has_ghost_login">
+                                <button
+                                        type="button"
+                                        [disabled]="true"
+                                        class="small disabled secondary button"
+                                ><i class="fa fa-sign-in fa-fw" aria-hidden="true"></i>
+                                </button>
+                        </span>
+                    </div>
+                    <div class="small-6 column">
+                        <button class="small alert button pull-right" (click)="closeInfoModal()">{{ 'CLOSE' | translate}}</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!--TAG TRANSFER INFO MODAL-->
+    <div class="reveal-overlay" [ngStyle]="{'display': tagTransferInfoModalDisplay}">
+        <div class="large reveal" [ngStyle]="{'display': tagTransferInfoModalDisplay}" *ngIf="selectedTagTransferError && selectedTagTransfer">
+            <div class="modal-header">
+                {{ 'DECLARE TYPE' | translate }}: {{ selectedTagTransferError.dutch_type }}
+                <button type="button" class="pull-right" aria-label="Close modal" (click)="closeInfoModal()">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <hr>
+                <div class="row">
+                    <div class="small-6 column pull-right">{{ 'LOG DATE' | translate }}</div><div class="small-6 column">{{ selectedTagTransferError.log_date | date: 'dd-MM-yyyy @HH:mm:ss' }}</div>
+                </div>
+                <div class="row">
+                    <div class="small-6 column pull-right">{{ 'EVENT DATE' | translate }}</div><div class="small-6 column">{{ selectedTagTransferError.event_date | date: 'dd-MM-yyyy @HH:mm:ss' }}</div>
+                </div>
+                <div class="row">
+                    <div class="small-6 column pull-right">{{ 'UBN' | translate }}</div><div class="small-6 column">{{ selectedTagTransferError.ubn }}</div>
+                </div>
+                <div class="row">
+                    <div class="small-6 column pull-right">{{ 'RELATED' | translate }} {{ 'UBN' | translate }}</div><div class="small-6 column">{{ selectedTagTransferError.related_ubn }}</div>
+                </div>
+                <div class="row">
+                    <div class="small-6 column pull-right">{{ 'ACTION BY' | translate }}</div><div class="small-6 column">{{ selectedTagTransferError.action_by }}</div>
+                </div>
+                <div class="row">
+                    <div class="small-6 column pull-right">{{ 'ACTION BY TYPE' | translate }}</div><div class="small-6 column">{{ selectedTagTransferError.action_by_type | translate }}</div>
+                </div>
+                <div class="row">
+                    <div class="small-6 column pull-right">{{ 'DESCRIPTION' | translate }}</div><div class="small-6 column">{{ selectedTagTransferError.declare_info }}</div>
+                </div>
+                <div class="row">
+                    <div class="small-6 column pull-right">{{ 'HIDDEN FOR USERS' | translate }}</div><div class="small-1 column end"><app-check-mark [boolVal]="selectedTagTransferError.hide_failed_message"></app-check-mark></div>
+                </div>
+
+                <hr>
+
+                <div class="row" *ngIf="selectedTagTransferError.hide_for_admin">
+                    <div class="small-12 column text-center">{{ 'HIDDEN FOR ADMINS' | translate | lowercase}}</div>
+                </div>
+                <div class="row" *ngIf="!selectedTagTransferError.hide_for_admin">
+                    <div class="small-12 column text-center">
+                        <app-hide-button
+                                [isActive]="!isUpdatingHiddenStatus && updatedSingleHiddenStatusMessageId !== selectedTagTransferError.request_id && !selectedTagTransferError.hide_for_admin"
+                                [includeDelayedSpinnerAnimation]="true"
+                                [labelText]="'HIDE FOR ADMINS'"
+                                [isTiny]="false"
+                                (click)="hideSingleErrorForAdminStatus(selectedTagTransferError)"
+                        ></app-hide-button>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <!--TABLE SEARCH-->
+            <div class="large-12 table-search">
+                <div class="large-2 large-push-10">
+                    <input type="text" [(ngModel)]="tagTransferUlnSearchValue" maxlength="20" placeholder="{{ 'SEARCH' | translate }}">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="large-12 columns">
+                    <label class="modal-subheader middle"> {{ 'RVO RESPONSE RESULTS' | translate }} </label>
+                </div>
+            </div>
+
+
+            <table>
+                <thead>
+                    <tr class="tr">
+                        <td class="td">{{ 'ULN' | translate }}</td>
+                        <td class="td">{{ 'STATUS' | translate }}</td>
+                        <td class="td">{{ 'LOG DATE' | translate }}</td>
+                        <td class="td">{{ 'ERROR CODE' | translate }}</td>
+                        <td class="td">{{ 'ERROR MESSAGE' | translate }}</td>
+                        <td class="td">{{ 'ERROR KIND INDICATOR' | translate }}</td>
+                        <td class="td">{{ 'SUCCESS INDICATOR' | translate }}</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let tagTransferItemRequest of selectedTagTransfer.tag_transfer_requests | declareTagTransferFilter:[tagTransferUlnSearchValue]">
+                        <td class="td"><span style="white-space:nowrap;">{{ tagTransferItemRequest.uln_country_code && tagTransferItemRequest.uln_number ?
+                            tagTransferItemRequest.uln_country_code + ' ' + tagTransferItemRequest.uln_number : null }}</span></td>
+                        <td class="td">{{ tagTransferItemRequest.request_state }}</td>
+
+                        <td class="td">{{ getLastTagTransferResponse(tagTransferItemRequest.responses) ? (getLastTagTransferResponse(tagTransferItemRequest.responses).log_date | date: 'dd-MM-yyyy @HH:mm:ss') : '-' }}</td>
+                        <td class="td">{{ getLastTagTransferResponse(tagTransferItemRequest.responses) ? getLastTagTransferResponse(tagTransferItemRequest.responses).error_code : '-' }}</td>
+                        <td class="td">{{ getLastTagTransferResponse(tagTransferItemRequest.responses) ? getLastTagTransferResponse(tagTransferItemRequest.responses).error_message : '-' }}</td>
+                        <td class="td">{{ getLastTagTransferResponse(tagTransferItemRequest.responses) ? getLastTagTransferResponse(tagTransferItemRequest.responses).error_kind_indicator : '-' }}</td>
+                        <td class="td">{{ getLastTagTransferResponse(tagTransferItemRequest.responses) ? getLastTagTransferResponse(tagTransferItemRequest.responses).success_indicator : '-' }}</td>
+
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="small-6 column">
+                        <span class="pull-left" *ngIf="selectedTagTransferError.has_ghost_login">
+                                <button
+                                        type="button"
+                                        (click)="loginAsGhost(selectedTagTransferError.ubn)"
+                                        class="small primary button"
+                                ><i class="fa fa-sign-in fa-fw" aria-hidden="true"></i>
+                                </button>
+                            </span>
+                        <span class="pull-left" *ngIf="!selectedTagTransferError.has_ghost_login">
+                                <button
+                                        type="button"
+                                        [disabled]="true"
+                                        class="small disabled secondary button"
+                                ><i class="fa fa-sign-in fa-fw" aria-hidden="true"></i>
+                                </button>
+                        </span>
+                    </div>
+                    <div class="small-6 column">
+                        <button class="small alert button pull-right" (click)="closeInfoModal()">{{ 'CLOSE' | translate}}</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!--BIRTH INFO MODAL-->
+    <div class="reveal-overlay" [ngStyle]="{'display': birthInfoModalDisplay}">
+        <div class="large reveal" [ngStyle]="{'display': birthInfoModalDisplay}" *ngIf="selectedBirthError && selectedLitterDetails">
+            <hr class="row show-for-small-only">
+            <div class="modal-header">
+
+                <div class="row">
+                    <div class="large-12 columns">
+                        <label class="modal-subheader2 middle"> {{ 'LITTER OVERVIEW' | translate }}</label>
+                    </div>
+                </div>
+
+                <div class="">
+                    <div class="column large-4 pull-left">
+                        {{ 'DECLARE TYPE' | translate }}: {{ selectedBirthError.dutch_type }}
+                    </div>
+                    <div class="column large-6">
+                        {{ 'UBN' | translate }}: {{ selectedBirthError.ubn }}
+                    </div>
+                    <div class="column large-1">
+                        <span class="pull-left" *ngIf="selectedBirthError.has_ghost_login">
+                                <button
+                                        type="button"
+                                        (click)="loginAsGhost(selectedBirthError.ubn)"
+                                        class="small primary button"
+                                ><i class="fa fa-sign-in fa-fw" aria-hidden="true"></i>
+                                </button>
+                            </span>
+                        <span class="pull-left" *ngIf="!selectedBirthError.has_ghost_login">
+                                <button
+                                        type="button"
+                                        [disabled]="true"
+                                        class="small disabled secondary button"
+                                ><i class="fa fa-sign-in fa-fw" aria-hidden="true"></i>
+                                </button>
+                        </span>
+                    </div>
+                    <div class="column large-1">
+                        <button class="small alert button pull-right" (click)="closeInfoModal()">{{ 'CLOSE' | translate}}</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <hr>
+
+                <table>
+                    <thead>
+                    <tr>
+                        <td>{{ 'LITTER STATUS' | translate }}</td>
+                        <td>{{ 'LOG DATE' | translate }}</td>
+                        <td>{{ 'ACTION BY' | translate }}</td>
+                        <td>{{ 'RELATION NUMBER KEEPER' | translate }}</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{{ selectedLitterDetails.status | translate }}</td>
+                        <td>{{ selectedLitterDetails.log_date | date: 'dd-MM-yyyy @HH:mm:ss' }}</td>
+                        <td>{{ selectedBirthError.action_by }} ({{ selectedBirthError.action_by_type | translate }})</td>
+                        <td>{{ selectedLitterDetails.relation_number_keeper }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <hr>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <td>{{ 'DATE OF BIRTH' | translate }}</td>
+                            <td>{{ 'LITTER SIZE' | translate }}</td>
+                            <td>{{ 'BORN ALIVE COUNT' | translate }}</td>
+                            <td>{{ 'ABORTED' | translate }}</td>
+                            <td>{{ 'PSEUDO PREGNANCY' | translate }}</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ selectedLitterDetails.litter_date | date: 'dd-MM-yyyy @HH:mm:ss' }}</td>
+                            <td>{{ selectedLitterDetails.born_alive_count + selectedLitterDetails.stillborn_count }}</td>
+                            <td>{{ selectedLitterDetails.born_alive_count }}</td>
+                            <td class="text-center"><app-check-mark [boolVal]="selectedLitterDetails.is_abortion"></app-check-mark></td>
+                            <td class="text-center"><app-check-mark [boolVal]="selectedLitterDetails.is_pseudo_pregnancy"></app-check-mark></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table>
+                    <thead>
+                        <tr class="tr">
+                            <td class="td">{{ 'PARENTS' | translate }}</td>
+                            <td class="td" style="white-space:nowrap;">{{ 'ULN' | translate}}</td>
+                            <td class="td" style="white-space:nowrap;">{{ 'STN'| translate }}</td>
+                            <td class="td">{{ 'DATE OF BIRTH' | translate }}</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="tr">
+                            <td>{{ 'MOTHER' | translate }}</td>
+                            <td class="td" style="white-space:nowrap;">{{ getMotherUln() }}</td>
+                            <td class="td" style="white-space:nowrap;">{{ getMotherStn() }}</td>
+                            <td class="td">{{ getMotherDateOfBirth() | date: 'dd-MM-yyyy @HH:mm:ss' }}</td>
+                        </tr>
+                        <tr class="tr">
+                            <td>{{ 'FATHER' | translate }}</td>
+                            <td class="td">{{ getFatherUln() }}</td>
+                            <td class="td">{{ getFatherStn() }}</td>
+                            <td class="td">{{ getFatherDateOfBirth() | date: 'dd-MM-yyyy @HH:mm:ss' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <hr>
+
+            <ng-template *ngIf="selectedLitterDetails.declare_births != null && selectedLitterDetails.declare_births.length > 0">
+
+                <div class="row">
+                    <div class="large-12 columns">
+                        <label class="modal-subheader2 middle"> {{ 'DECLARE BIRTHS' | translate }} </label>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div *ngFor="let declareBirth of selectedLitterDetails.declare_births; let i = index">
+
+                <div class="row">
+                    <div class="large-12 columns">
+                        <label class="modal-subheader middle"> {{ 'DECLARE BIRTH' | translate }} #{{i + 1}}
+                            <span *ngIf="declareBirth.message_id === selectedBirthError.request_id"> ({{ 'CURRENTLY SELECTED' | translate }})</span>
+                        </label>
+                    </div>
+                </div>
+
+                <table>
+                    <thead>
+                    <tr class="tr">
+                        <td class="td">{{ 'STATUS' | translate}}</td>
+                        <td class="td">{{ 'HIDDEN FOR ADMINS' | translate }}</td>
+                        <td class="td">{{ 'HIDDEN FOR USERS' | translate }}</td>
+                        <td class="td">{{ 'ULN' | translate }}</td>
+                        <td class="td">{{ 'BIRTH PROGRESS' |translate }}</td>
+                        <td class="td">{{ 'GENDER' | translate }}</td>
+                        <td class="td">{{ 'BIRTH WEIGHT SPLIT' | translate }}</td>
+                        <td class="td">{{ 'TAIL LENGTH SPLIT' |translate }}</td>
+                        <td class="td">{{'SURROGATE MOTHER' | translate}} ({{'ULN'|translate}}) / {{ 'LAMBAR' | translate }}</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="tr">
+                        <td class="td">{{ declareBirth.request_state | translate }}</td>
+                        <td class="td" *ngIf="!declareBirth.hide_for_admin && declareBirth.request_state === 'FAILED'">
+                            <app-hide-button
+                                    [isActive]="!isUpdatingHiddenStatus && updatedSingleHiddenStatusMessageId !== declareBirth.message_id && !declareBirth.hide_for_admin"
+                                    [includeDelayedSpinnerAnimation]="true"
+                                    [labelText]="'HIDE FOR ADMINS'"
+                                    [isTiny]="false"
+                                    (click)="hideBirthForAdmin(declareBirth)"
+                            ></app-hide-button>
+                        </td>
+                        <td class="td" *ngIf="declareBirth.hide_for_admin || declareBirth.request_state !== 'FAILED'">
+                            <app-check-mark [boolVal]="declareBirth.hide_for_admin"></app-check-mark>
+                        </td>
+                        <td class="td"><app-check-mark [boolVal]="declareBirth.is_hidden"></app-check-mark></td>
+                        <td class="td" style="white-space:nowrap;">{{ declareBirth.uln_country_code }} {{ declareBirth.uln_number }}</td>
+                        <td class="td">{{ declareBirth.animal ? declareBirth.animal.birth_progress : null }}</td>
+                        <td class="td">{{ declareBirth.gender | translate }}</td>
+                        <td class="td">{{ declareBirth.birth_weight }}</td>
+                        <td class="td">{{ declareBirth.birth_tail_length }}</td>
+                        <td class="td" style="white-space:nowrap;" *ngIf="declareBirth.uln_country_code_surrogate && declareBirth.uln_surrogate">{{declareBirth.uln_country_code_surrogate + ' ' +  declareBirth.uln_surrogate}}</td>
+                        <td class="td" *ngIf="!declareBirth.uln_country_code_surrogate || !declareBirth.uln_surrogate"><app-check-mark [boolVal]="declareBirth.has_lambar"></app-check-mark></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <ng-template *ngIf="declareBirth.responses != null && declareBirth.responses.length > 0">
+
+                    <div class="text-center">
+                        <h5>{{ 'RVO RESPONSE RESULTS' | translate }}</h5>
+                    </div>
+
+                    <table>
+                        <thead>
+                        <tr class="tr">
+                            <td class="td">{{ 'LOG DATE' | translate}}</td>
+                            <td class="td">{{ 'ERROR CODE' | translate }}</td>
+                            <td class="td">{{ 'ERROR MESSAGE' | translate }}</td>
+                            <td class="td">{{ 'ERROR KIND INDICATOR' | translate }}</td>
+                            <td class="td">{{ 'SUCCESS INDICATOR' |translate }}</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="tr" *ngFor="let response of declareBirth.responses">
+                                <td class="td">{{ response.log_date | date: 'dd-MM-yyyy @HH:mm:ss' }}</td>
+                                <td class="td">{{ response.error_code }}</td>
+                                <td class="td">{{ response.error_message }}</td>
+                                <td class="td">{{ response.error_kind_indicator }}</td>
+                                <td class="td">{{ response.success_indicator }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <hr>
+
+                </ng-template>
+            </div>
+
+            </ng-template>
+
+            <ng-template *ngIf="selectedLitterDetails.stillborns != null && selectedLitterDetails.stillborns.length > 0">
+
+                <div class="row">
+                    <div class="large-12 columns">
+                        <label class="modal-subheader2 middle"> {{ 'STILLBORNS' | translate }} </label>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div *ngFor="let stillborn of selectedLitterDetails.stillborns; let j = index">
+                    <div class="row">
+                        <div class="large-12 columns">
+                            <label class="modal-subheader middle"> {{ 'STILLBORN' | translate }} #{{j + 1}}</label>
+                        </div>
+                    </div>
+
+                    <table>
+                        <thead>
+                        <tr class="tr">
+                            <td class="td">{{ 'BIRTH PROGRESS' |translate }}</td>
+                            <td class="td">{{ 'GENDER' | translate }}</td>
+                            <td class="td">{{ 'BIRTH WEIGHT' | translate }}</td>
+                            <td class="td">{{ 'TAIL LENGTH' |translate }}</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="tr">
+                            <td class="td">{{ stillborn.birth_progress ? stillborn.birth_progress : null }}</td>
+                            <td class="td">{{ stillborn.gender | translate }}</td>
+                            <td class="td">{{ stillborn.weight }}</td>
+                            <td class="td">{{ stillborn.tail_length }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <hr>
+                </div>
+
+            </ng-template>
+
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="small-6 column">
+                        <span class="pull-left" *ngIf="selectedBirthError.has_ghost_login">
+                                <button
+                                        type="button"
+                                        (click)="loginAsGhost(selectedBirthError.ubn)"
+                                        class="small primary button"
+                                ><i class="fa fa-sign-in fa-fw" aria-hidden="true"></i>
+                                </button>
+                            </span>
+                        <span class="pull-left" *ngIf="!selectedBirthError.has_ghost_login">
+                                <button
+                                        type="button"
+                                        [disabled]="true"
+                                        class="small disabled secondary button"
+                                ><i class="fa fa-sign-in fa-fw" aria-hidden="true"></i>
+                                </button>
+                        </span>
+                    </div>
+                    <div class="small-6 column">
+                        <button class="small alert button pull-right" (click)="closeInfoModal()">{{ 'CLOSE' | translate}}</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <app-ghostlogin-modal
+            [userModalDisplay]="ghostLoginModalDisplay"
+            [ghostLoginDetails]="selectedGhostLoginDetails"
+            (click)="afterGhostLogin()"
+    ></app-ghostlogin-modal>
+
+</div>

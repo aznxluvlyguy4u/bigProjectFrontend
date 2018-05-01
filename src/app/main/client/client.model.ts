@@ -1,5 +1,10 @@
+import { Invoice } from '../invoice/invoice.model';
+import { Person } from '../../global/models/person.model';
+import { PedigreeRegisterRegistration } from '../../global/models/pedigree-register-registration.model';
+
 export class Client {
-    public company_id: number;
+	  public id: number;
+    public company_id: string;
     public debtor_number: string;
     public company_name: string;
     public telephone_number: string;
@@ -18,26 +23,24 @@ export class Client {
     public deleted_locations: Location[] = [];
     public users: User[] = [];
     public deleted_users: User[] = [];
-    public pedigrees: Pedigree[] = [];
+	  public invoices: Invoice[] = [];
 }
 
 export class Location {
+	  public id: number;
     public location_id ?: string;
     public ubn: string;
     public address ?: Address = new Address();
     public is_active ?: boolean;
+	  public location_holder: string;
+    public company ?: Client;
+    public pedigree_register_registrations: PedigreeRegisterRegistration[] = [];
 }
 
-export class User {
-    public person_id: number;
-    public prefix: string;
-    public last_name: string;
-    public first_name: string;
-    public email_address: string;
+export class User extends Person {
     public primary_contactperson: string | boolean;
     public relation_number_keeper: string;
-    public is_active: boolean;
-    public type: string;
+    public companies: Client[]
 }
 
 export class ActionLog {
@@ -52,25 +55,32 @@ export class ActionLog {
     public is_rvo_message: boolean;
 }
 
-class Address {
+export class Address {
     public street_name: string;
     public address_number: string;
-    public suffix: string;
+    public address_number_suffix: string;
+    public suffix: string; // WARNING 'suffix' is indirectly linked to address_number_suffix in API
     public postal_code: string;
     public city: string;
     public state: string;
     public country: string;
 }
 
-class Pedigree {
-    public number: string;
+export class GhostLoginDetails {
+	public owner: User = new User();
+	public users: User[] = [];
 }
 
-export class ClientDetails {
+export class GhostLoginDetailsWithUbn extends GhostLoginDetails {
+	public ubn: string;
+	public is_active: boolean;
+	public has_ghost_login: boolean;
+}
+
+export class ClientDetails extends GhostLoginDetails {
     public company_id: number;
     public company_name: string;
     public telephone_number: string;
-    public owner: User = new User();
     public status: string;
     public subscription_date: string;
     public livestock: LivestockStats = new LivestockStats();
@@ -78,7 +88,6 @@ export class ClientDetails {
     public breeder_numbers: BreederNumber[] = [];
     public invoices: Invoice[] = [];
     public animal_health: AnimalHealth[] = [];
-    public users: User[] = [];
     public health_statusses: LocationHealthStatus[] = [];
 }
 
@@ -92,19 +101,16 @@ export class LocationHealthStatus {
     public cae_check_date: string;
     public cl_status: string;
     public cl_check_date: string;
-    public reason_of_change: string;
+    public scrapie_reason_of_edit: string;
+    public maedi_visna_reason_of_edit: string;
+	  public cl_reason_of_edit: string;
+	  public cae_reason_of_edit: string;
+	  public animal_health_subscription: boolean;
 }
 
 class BreederNumber {
     public code: string;
     public number: string;
-}
-
-class Invoice {
-    public invoice_number: string;
-    public invoice_date: string;
-    public status: string;
-    public pdf_url: string;
 }
 
 class AnimalHealth {
@@ -147,16 +153,18 @@ export class QueryParam {
 }
 
 export const MAEDI_VISNA_STATUS_OPTIONS = [
+    "BLANK",
     "FREE",
     "FREE 1 YEAR",
     "FREE 2 YEAR",
     "UNDER OBSERVATION",
     "UNDER INVESTIGATION",
-    "STATUS KNOWN BY ANIMAL HEALTH DEPARTMENT"
+    "STATUS KNOWN BY ANIMAL HEALTH DEPARTMENT",
+    "STATUS KNOWN BY AHD"
 ];
 
 export const SCRAPIE_STATUS_OPTIONS = [
-    "FREE",
+    "BLANK",
     "RESISTANT",
     "UNDER OBSERVATION",
     "UNDER INVESTIGATION"

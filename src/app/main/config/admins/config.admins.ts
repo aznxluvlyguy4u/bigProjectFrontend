@@ -1,12 +1,12 @@
 import _ = require("lodash");
 import {Component} from "@angular/core";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
-import {Admin} from "../config.model";
 import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
 import {Validators} from "@angular/common";
 import {FormGroup, FormBuilder, REACTIVE_FORM_DIRECTIVES} from "@angular/forms";
 import {UtilsService} from "../../../global/services/utils/utils.service";
 import {Observable} from "rxjs/Rx";
+import { Admin } from '../../../global/models/admin.model';
 
 @Component({
     directives: [REACTIVE_FORM_DIRECTIVES],

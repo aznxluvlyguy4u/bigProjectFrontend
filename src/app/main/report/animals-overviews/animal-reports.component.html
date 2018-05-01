@@ -1,0 +1,19 @@
+<div id="report">
+    <select
+            id="component-animal-report-input-dropdown"
+            class="animal-report-input-dropdown"
+            [(ngModel)]="selectedOption"
+            title="reportOption" [disabled]="disabled"
+            (click)="loadAnimalReportComponent()"
+    >
+        <option
+                *ngFor="let option of getAnimalReportOptions()"
+                [value]="option"
+        >{{ option | translate }}</option>
+    </select>
+
+    <hr>
+
+    <!--PAGE CONTENT-->
+    <router-outlet></router-outlet>
+</div>

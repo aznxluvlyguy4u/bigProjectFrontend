@@ -6,6 +6,11 @@
     <a routerLink="/dashboard" class="brand-name"> NSFO <span>Online</span></a>
     <span class="subtitle">{{'ADMIN'}}</span>
     <div class="empty-block"></div>
+    <ng-template *ngIf="!isDownloadModalEmpty()">
+        <button type="button" (click)="toggleDownloadModal()" [class.active]="isActiveDownloadModal" class="download-toggle">
+            <i class="fa fa-download"><span *ngIf="downloadCount() > 0"> {{ downloadCount() }}</span></i>
+        </button>
+    </ng-template>
     <button type="button" (click)="toggleUserMenu()" [class.active]="isActiveUserMenu" class="profile-toggle">
         <i class="fa fa-user"><span class="show-for-large"> {{ admin.first_name }} {{ admin.last_name }} </span></i>
     </button>
@@ -27,17 +32,23 @@
             </a>
         </li>
         <li>
+            <a routerLink="/report" routerLinkActive="active">
+                <i class="fa fa-bar-chart fa-fw" aria-hidden="true"></i>
+                {{ 'REPORTS' | translate }}
+            </a>
+        </li>
+        <li>
             <a routerLink="/invoice" routerLinkActive="active">
                 <i class="fa fa-file-text-o fa-fw" aria-hidden="true"></i>
                 {{ 'INVOICES' | translate }}
             </a>
         </li>
-        <li>
-            <a routerLink="/health" routerLinkActive="active">
-                <i class="fa fa-flask fa-fw" aria-hidden="true"></i>
-                {{ 'ANIMAL HEALTH' | translate }}
-            </a>
-        </li>
+        <!--<li>-->
+            <!--<a routerLink="/health" routerLinkActive="active">-->
+                <!--<i class="fa fa-flask fa-fw" aria-hidden="true"></i>-->
+                <!--{{ 'ANIMAL HEALTH' | translate }}-->
+            <!--</a>-->
+        <!--</li>-->
         <li>
             <a routerLink="/treatment" routerLinkActive="active">
                 <i class="fa fa-medkit fa-fw" aria-hidden="true"></i>
@@ -54,6 +65,19 @@
             <a routerLink="/log" routerLinkActive="active">
                 <i class="fa fa-history fa-fw" aria-hidden="true"></i>
                 {{ 'TECHNICAL LOG' | translate }}
+            </a>
+        </li>
+        <li>
+            <a routerLink="/error-log" routerLinkActive="active">
+                <i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i>
+                {{ 'ERROR LOG' | translate }}
+            </a>
+        </li>
+        <!--<li *ngIf="isDeveloper()">-->
+        <li>
+            <a routerLink="/animals" routerLinkActive="active">
+                <i class="fa fa-table fa-fw" aria-hidden="true"></i>
+                {{ 'ANIMAL DATA' | translate }}
             </a>
         </li>
         <li>
@@ -75,3 +99,5 @@
 <div class="content-container">
     <router-outlet></router-outlet>
 </div>
+
+<app-download-modal></app-download-modal>

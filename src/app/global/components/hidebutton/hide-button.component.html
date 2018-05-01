@@ -1,0 +1,20 @@
+<button
+        type="button"
+        *ngIf="!isUpdatingHiddenStatus"
+        class="button"
+        [ngClass]="{
+            'tiny': isTiny,
+            'expanded': isExpanded,
+            'disabled': !active(),
+            'alert': active() && !showSuccess && !showSpinner,
+            'primary': showSpinner,
+            'success': showSuccess
+        }"
+        title="{{ title | translate }}"
+        [disabled]="!active()"
+        (click)="onClickyClick()"
+>
+    <span *ngIf="!showSpinner && !showSuccess">{{labelText | translate}}</span>
+    <span *ngIf="!showSpinner && showSuccess"> <i class="fa fa-check" aria-hidden="true"></i> </span>
+    <span *ngIf="showSpinner"><i class="fa fa-gear fa-spin fa-fw"></i> </span>
+</button>

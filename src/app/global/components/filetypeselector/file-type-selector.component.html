@@ -1,0 +1,3 @@
+<select [(ngModel)]="selectedFileType" (click)="onClickyClick()">
+    <option *ngFor="let type of fileTypes" [value]="type">{{ type }}</option>
+</select>

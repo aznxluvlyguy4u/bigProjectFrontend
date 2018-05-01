@@ -1,0 +1,45 @@
+<label *ngIf="labelText == null || labelText == ''">
+    {{ labelText | translate }} <span *ngIf="isOptional">({{ 'OPTIONAL' | translate }})</span>
+</label>
+
+<div class="row">
+    <div class="column small-8" style="background-color: transparent">
+        <select *ngIf="!isLocationsLoading()"
+                [(ngModel)]="selectedUbn"
+                (click)="onClickyClick()"
+                [disabled]="!isActive"
+                [ngClass]="{'ng-dirty': isDirty}"
+        >
+            <option
+                    *ngFor="let location of getLocations()"
+                    [value]="location.ubn"
+            >{{ location.ubn }}</option>
+        </select>
+
+        <app-spinner
+                *ngIf="isLocationsLoading() && isActive"
+                [showLoadingText]="true"
+        ></app-spinner>
+    </div>
+    <div class="column small-4 end">
+        <div class="switch large">
+            <input class="switch-input"
+                   id="yes-no-for-create-edit"
+                   type="checkbox"
+                   name="allUbnSwitch"
+                   [(ngModel)]="isActive"
+                   [disabled]="isProcessing"
+                   (click)="setEmptyLocation()"
+            >
+            <label class="switch-paddle" for="yes-no-for-create-edit">
+                <span class="show-for-sr">{{ 'INCLUDE SHEEP OF CURRENT UBNS' | translate }}</span>
+                <span class="switch-active" aria-hidden="true"
+                      value="true"
+                >{{ 'YES' | translate }}</span>
+                <span class="switch-inactive" aria-hidden="true"
+                      value="false"
+                >{{ 'NO' | translate }}</span>
+            </label>
+        </div>
+    </div>
+</div>

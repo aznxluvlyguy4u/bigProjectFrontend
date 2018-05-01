@@ -1,0 +1,33 @@
+<span id="component-collar-input" class="collar-input-group">
+    <select
+            class="collar-colar"
+            [(ngModel)]="collarColor"
+            title="collarColar" [disabled]="disabled"
+            (click)="changeColor()"
+            [ngClass]="{'ng-dirty': isColorDirty}"
+    >
+        <option [value]=""> </option>
+        <option
+                *ngFor="let collarColor of getCollars()"
+                value="{{ collarColor }}"
+        >{{ collarColor }}</option>
+    </select>
+    <input
+           class="collar-number"
+           type="text"
+           title="{{ 'NUMBER' | translate }}"
+           [(ngModel)]="collarNumber"
+           [disabled]="disabled"
+           maxlength="4"
+           (keyup)="changeNumber()"
+           (mouseleave)="changeNumber()"
+           [ngClass]="{'ng-dirty': isNumberDirty}"
+    >
+    <button *ngIf="!disabled"
+            type="submit"
+            (click)="reset()"
+            class="button secondary"
+            [disabled]="disabled || hasOriginalValues()"
+            title="{{'RESET TO ORIGINAL VALUE' | translate}}"
+    ><i class="fa fa-fast-backward" aria-hidden="true"></i></button>
+</span>

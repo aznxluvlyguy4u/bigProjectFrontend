@@ -8,6 +8,14 @@ export class SettingsService {
     private viewDateFormat: string = 'DD-MM-YYYY';
     private viewDateTimeFormat: string = 'DD-MM-YYYY HH:mm';
     private modelDateTimeFormat: string = 'YYYY-MM-DDThh:mm:ssZ';
+    private modelDateFormat: string = 'YYYY-MM-DD';
+
+    private ENV: string = ENVIRONMENT;
+
+
+    public isDevEnv() {
+        return this.ENV === 'LOCAL';
+    }
 
     public setLanguage(language: string) {
         this.language = language;
@@ -23,6 +31,10 @@ export class SettingsService {
 
     public getLocale() {
         return this.locale;
+    }
+
+    public static getDateString_YYYY_MM_DD_fromDate(date: Date = new Date()) {
+			return date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
     }
 
     public getViewDateFormat() {
@@ -59,5 +71,14 @@ export class SettingsService {
 
     public convertToModelDateTime(date) {
         return moment(date).format(this.getModelDateTimeFormat())
+    }
+
+    getVatPercentages(): number[] {
+        return [
+          0,
+          6,
+          12,
+          21
+        ];
     }
 }

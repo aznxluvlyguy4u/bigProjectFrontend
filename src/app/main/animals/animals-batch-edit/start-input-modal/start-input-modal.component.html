@@ -1,0 +1,82 @@
+<ng-template *ngIf="displayModal === 'block'">
+
+    <div class="reveal-overlay" [ngStyle]="{'display': displayModal}">
+        <div class="large reveal" [ngStyle]="{'display': displayModal}">
+            <div class="modal-header">
+                {{ 'RETRIEVE ANIMALS' | translate }}
+                <button type="button" (click)="closeModal()" class="pull-right" aria-label="Close modal">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="large-2 column">
+                        <label> {{ 'SEPARATOR SYMBOL' | translate }} </label>
+                    </div>
+                    <div class="large-1 column end">
+                        <input
+                                [(ngModel)]="separator"
+                                type="text"
+                                maxlength="1"
+                                [title]="'SEPARATOR SYMBOL CANNOT BE EMPTY' | translate"
+                                [placeholder]="'CANNOT BE EMPTY' | translate"
+                        >
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="large-2 column">
+                        <label> {{ 'CURRENT UBN' | translate }} </label>
+                    </div>
+                    <div class="large-3 column end">
+                        <app-ubn-dropdown
+                                [labelText]="'CURRENT UBN'"
+                                (selectedLocationChange)="selectedLocation = $event"
+                        ></app-ubn-dropdown>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="large-2 column">
+                        <label> {{ 'PLAIN TEXT INPUT' | translate }} </label>
+                    </div>
+                    <div class="large-10 columns">
+                        <textarea
+                                [(ngModel)]="plainTextInputString"
+                                [required]="true"
+                                [placeholder]="'LIST OF ULNS AND PEDIGREE NUMBERS SEPARATED BY THE SEPARATOR SYMBOL' | translate"
+                        ></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                    <span class="pull-left">
+                        <label
+                                *ngIf="errorMessage"
+                                class="input-error-msg"
+                        >{{ errorMessage | translate }}</label>
+                    </span>
+                <span class="pull-right">
+                    <button
+                            class="tiny primary button"
+                            [disabled]="disableGetAnimalsButton()"
+                            (click)="sentInputData()"
+                    >
+                        <span *ngIf="!isProcessing">
+                            {{ 'RETRIEVE ANIMALS' | translate}}
+                        </span>
+                        <span *ngIf="isProcessing">
+                             <i class="fa fa-gear fa-spin fa-fw"></i>
+                        </span>
+                    </button>
+                    <button
+                            class="tiny alert button"
+                            [disabled]="isProcessing"
+                            (click)="closeModal()"
+                    >{{ 'CANCEL' | translate}}</button>
+                </span>
+            </div>
+        </div>
+    </div>
+
+</ng-template>
