@@ -35,6 +35,7 @@ import {FormatService} from "../../../global/services/utils/format.service";
 
 export class InvoiceBatchComponent {
     private additionalCheck: boolean = false;
+    private isError: boolean = false;
     private form: FormGroup;
     private ruleForm: FormGroup;
     private selectedRule: InvoiceRule = new InvoiceRule();
@@ -46,6 +47,9 @@ export class InvoiceBatchComponent {
     private invoiceRuleList: InvoiceRule[];
     private isValidForm: boolean = true;
     private isSending: boolean = false;
+    private isBatchSending: boolean = false;
+    private isBatchSend: boolean = false;
+
 
     constructor(private fb: FormBuilder,
                 private router: Router,
@@ -144,16 +148,21 @@ export class InvoiceBatchComponent {
     }
 
     sendInvoiceBatch() {
+        this.isBatchSending = true;
         let dateString;
         let dateFormat;
+        this.closeConfirmationModal();
         dateString = moment(this.form.controls["controlDate"].value, this.settings.getViewDateFormat());
         dateFormat = dateString.format(this.settings.getModelDateTimeFormat());
         this.nsfo.doPostRequest(this.nsfo.URI_INVOICE + "/batch",{"controlDate": dateFormat})
             .subscribe(
                 res => {
-
+                    this.isBatchSending = false;
+                    this.isBatchSend = true;
                 },
                 error => {
+                    this.isBatchSending = false;
+                    this.isError = true;
                     alert(this.nsfo.getErrorMessage(error));
                 }
             )
