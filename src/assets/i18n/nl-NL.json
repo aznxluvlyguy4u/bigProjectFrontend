@@ -690,12 +690,15 @@
   "BATCH INVOICE": "Automatische facturatie",
   "BATCH INVOICE RULES": "Automatische facturatie rekenregels",
   "DOWNLOAD PDF": "Download Pdf",
-  "BATCH INVOICES DATES": "Automatsche facturatie datums",
+  "BATCH INVOICES DATE": "Automatsche facturatie peil datum",
   "SEND INVOICE BATCH": "Verstuur facturen",
   "CONTROL DATE": "Peil datum",
   "BATCH INVOICES": "Automatische facturen",
   "A TIMEOUT OCCURED. TRY AGAIN LATER, PERHAPS WHEN THE SERVER IS LESS BUSY OR TRY IT WITH LESS DATA.": "Een timeout heeft plaatsgevonden. Probeer het later nog eens, mogelijk wanneer de server minder druk is of probeer het met minder data.",
   "SETTING AN INVOICE IS PAID": "Factuur betaald zetten",
   "ARE YOU SURE YOU WANT TO SET THIS INVOICE TO PAID": "Weet u zeker dat deze factuur betaald is?",
-  "IS_PAID": "Is betaald"
+  "IS_PAID": "Is betaald",
+  "BATCH INVOICES SEND CONFIRMATION TEXT": "U staat op het punt om facturen voor alle actieve bedrijven te versturen. Wanneer u op 'ja' drukt, dan zullen actieve bedrijven per locatie een factuur ontvangen met alle toepasselijke regels",
+  "I KNOW WHAT I AM DOING TEXT": "Ik wil graag deze facturen automatisch versturen",
+  "BACK": "Terug"
 }
