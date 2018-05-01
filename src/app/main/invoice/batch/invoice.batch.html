@@ -4,7 +4,7 @@
 
             <div class="row">
                 <div class="large-12 columns">
-                    <h5>{{ 'BATCH INVOICES DATES' | translate }}</h5>
+                    <h5>{{ 'BATCH INVOICES DATE' | translate }}</h5>
                 </div>
             </div>
             <div class="row">
@@ -25,9 +25,12 @@
                 </div>
             </div>
         </div>
-        <button (click)="sendInvoiceBatch()" class="small primary button">
-            {{ "SEND INVOICE BATCH" | translate }}
-        </button>
+        <div class="row">
+            &nbsp;
+            <button (click)="openConfirmationModal()" class="small primary button" style="margin: 40px 0 0 0;">
+                {{ "SEND INVOICE BATCH" | translate }}
+            </button>
+        </div>
     </form>
 </div>
 <div class="row">
@@ -82,7 +85,12 @@
         </table>
     </div>
 </div>
-
+<div class="row">
+    &nbsp;
+    <button (click)="navigateTo('/invoice')" class="small primary button">
+        {{ "BACK" | translate }}
+    </button>
+</div>
 <!--ADD/EDIT INVOICE RULE MODAL-->
 <div class="reveal-overlay" [ngStyle]="{'display': displayModal}">
     <div class="medium reveal" [ngStyle]="{'display': displayModal}">
@@ -164,6 +172,44 @@
                 </button>
 
                 <button (click)="closeModal()" class="tiny alert button">{{ 'CANCEL' | translate}}</button>
+            </span>
+        </div>
+    </div>
+</div>
+
+<!--Batch invoices confirmation modal-->
+<div class="reveal-overlay" [ngStyle]="{'display': displayConfirmationModal}">
+    <div class="medium reveal" [ngStyle]="{'display': displayConfirmationModal}">
+        <div class="modal-body">
+
+            <hr>
+
+            <span style="text-align: left; width: 100%; display: block; margin: 25px 0 50px 0;">
+                {{ "BATCH INVOICES SEND CONFIRMATION TEXT" | translate }}
+            </span>
+
+            <input type="checkbox" [(ngModel)]="additionalCheck">
+            <span>
+                {{ "I KNOW WHAT I AM DOING TEXT" | translate }}
+            </span>
+
+        </div>
+        <div class="modal-footer">
+
+            <hr>
+            
+            <span class="pull-left" style="width: 45%">
+                <button [disabled]="!additionalCheck && disableEditOrInsertButton()" (click)="sendInvoiceBatch()" class="small primary button expanded">
+                    {{ "SEND INVOICE BATCH" | translate }}
+                </button>
+            </span>
+            <span style="width: 10%;">
+
+            </span>
+            <span class="pull-right" style="width: 45%;">
+                <button (click)="closeConfirmationModal()" class="small primary button expanded">
+                    {{ "BACK" | translate }}
+                </button>
             </span>
         </div>
     </div>
