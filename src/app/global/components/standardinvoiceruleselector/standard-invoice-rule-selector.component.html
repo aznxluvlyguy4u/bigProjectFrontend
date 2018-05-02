@@ -75,12 +75,10 @@
                         </thead>
                         <tbody>
                         <tr *ngIf="isInvoiceRulesEmpty()">
-                            <td colspan="10">
-                                <div class="spinner">
-                                    <div class="bounce1"></div>
-                                    <div class="bounce2"></div>
-                                    <div class="bounce3"></div>
-                                </div>
+                            <td colspan="10" class="align-center" style="text-align: center;">
+                                <span class="align-center full-width">
+                                    Er zijn nog geen standaard factuurregels in het systeem ingevoerd.
+                                </span>
                             </td>
                         </tr>
                         <tr *ngFor="let rule of getInvoiceRules() | invoiceRuleSearchPipe:getFilterOptions() | paginate: {itemsPerPage: filterAmount, currentPage: page}; let i = index">
