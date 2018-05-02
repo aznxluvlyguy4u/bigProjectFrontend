@@ -14,6 +14,8 @@ import {UtilsService} from "../../../global/services/utils/utils.service";
 import {Datepicker} from "../../../global/components/datepicker/datepicker.component";
 import {REACTIVE_FORM_DIRECTIVES} from "@angular/forms";
 import {ControlGroup, FormBuilder} from "@angular/common";
+import {DownloadService} from "../../../global/services/download/download.service";
+import {Invoice} from "../../invoice/invoice.model";
 
 @Component({
     directives: [REACTIVE_FORM_DIRECTIVES, Datepicker],
@@ -47,6 +49,7 @@ export class ClientDetailsComponent {
 
 
     constructor(
+        private downloadService: DownloadService,
         private router: Router,
         private nsfo: NSFOService,
         private activatedRoute: ActivatedRoute,
@@ -284,6 +287,10 @@ export class ClientDetailsComponent {
 
     updateScrapieInput() {
 				this.showScrapieDatePicker = this.selectedLocation.scrapie_status !== 'BLANK';
+    }
+
+    public downloadPdf(invoice: Invoice) {
+        this.downloadService.doInvoicePdfGetRequest(invoice);
     }
 }
 

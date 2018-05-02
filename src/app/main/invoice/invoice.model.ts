@@ -1,5 +1,5 @@
 import DateTimeFormat = Intl.DateTimeFormat;
-import { Address, Client } from '../client/client.model';
+import {Address, Client} from '../client/client.model';
 import { LedgerCategory } from '../../global/models/ledger-category.model';
 
 export class Invoice {
@@ -7,7 +7,12 @@ export class Invoice {
     public invoice_number: string;
     public invoice_date: Date;
     public paid_date: Date;
-    public company_address: Address;
+    public company_address_street_name: string;
+    public company_address_street_number: number;
+    public company_address_street_number_suffix: string;
+    public company_address_postal_code: string;
+    public company_address_state: string;
+    public company_address_country: string;
     public company: Client;
     public company_name: string;
     public company_vat_number: string;
@@ -21,10 +26,10 @@ export class Invoice {
     public reminders: number;
     public invoice_rule_selections: InvoiceRuleSelection[] = [];
     public total: number;
-	  public pdf_url: string;
-	  public ledger_account_number: string;
-	  public vat_breakdown: VatBreakdown;
-		public mollie_id: string;
+    public pdf_url: string;
+    public ledger_account_number: string;
+    public vat_breakdown: VatBreakdown;
+    public mollie_id: string;
 }
 
 export class InvoiceRule {
@@ -34,8 +39,8 @@ export class InvoiceRule {
     public price_excl_vat: number;
     public sort_order: number;
     public type: string;
-	  ledger_category: LedgerCategory;
-	  invoice_rule_selections: InvoiceRuleSelection[] = [];
+    ledger_category: LedgerCategory;
+    invoice_rule_selections: InvoiceRuleSelection[] = [];
 }
 
 export class InvoiceRuleSelection {
