@@ -1,119 +1,123 @@
-<div class="row">
-    <form [formGroup]="form">
-        <div class="large-6 columns">
+<div id="batch-container" class="content-container">
+    <div class="row">
+        <form [formGroup]="form">
+            <div class="large-6 columns">
 
-            <div class="row">
-                <div class="large-12 columns">
-                    <h5>{{ 'BATCH INVOICES DATE' | translate }}</h5>
+                <div class="row">
+                    <div class="large-12 columns">
+                        <h5>{{ 'BATCH INVOICES DATE' | translate }}</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="large-3 columns">
+                        <label class="middle">
+                            {{ "CONTROL DATE" | translate }} :
+                        </label>
+                    </div>
+                    <div class="large-4 columns end">
+                        <datepicker
+                                [formCtrl]="form.controls['controlDate']"
+                                [initDate]="temporaryRuleDate"
+                                [modelFormat]="settings.getViewDateFormat()"
+                                [viewFormat]="settings.getViewDateFormat()"
+                        >
+
+                        </datepicker>
+                    </div>
                 </div>
             </div>
             <div class="row">
-                <div class="large-3 columns">
-                    <label class="middle">
-                        {{ "CONTROL DATE" | translate }} :
-                    </label>
-                </div>
-                <div class="large-4 columns end">
-                    <datepicker
-                            [formCtrl]="form.controls['controlDate']"
-                            [initDate]="temporaryRuleDate"
-                            [modelFormat]="settings.getViewDateFormat()"
-                            [viewFormat]="settings.getViewDateFormat()"
-                    >
-
-                    </datepicker>
-                </div>
+                &nbsp;
+                <button [disabled]="isBatchSending || isBatchSend || isError" (click)="openConfirmationModal()" class="small primary button send-button-margins">
+                    {{ "SEND INVOICE BATCH" | translate }}
+                </button>
             </div>
-        </div>
-        <div class="row">
-            &nbsp;
-            <button [disabled]="isBatchSending || isBatchSend || isError" (click)="openConfirmationModal()" class="small primary button" style="margin: 40px 0 0 0;">
-                {{ "SEND INVOICE BATCH" | translate }}
-            </button>
-        </div>
-    </form>
-</div>
-<div class="row">
-    <div class="large-12 columns">
-        <div class="large-4">
-            <h4>
-                {{ "BATCH INVOICE RULES" | translate }}
-            </h4>
-        </div>
-        <table>
-            <thead>
-            <tr>
-                <td width="1"></td>
-                <td>
-                    {{"CATEGORY" | translate }}
-                </td>
-                <td>
-                    {{ 'DESCRIPTION' | translate }}
-                </td>
-                <td class="text-left">
-                    {{ 'VAT RATE' | translate }}
-                </td>
-                <td class="text-left">
-                    {{ 'UNIT COST' | translate }}
-                </td>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let invoice_rule of invoiceRuleList" *ngIf="invoice_rule != null">
-                <td width="1">
-                    <button [disabled]="isBatchSending" (click)="openModal(invoice_rule)"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></button>
-                </td>
-                <td>
-                    {{invoice_rule.ledger_category ? invoice_rule.ledger_category.code + ': ' + invoice_rule.ledger_category.description : ''}}
-                </td>
-                <td>
-                    {{invoice_rule.description}}
-                </td>
-                <td class="text-left">
-                    {{invoice_rule.vat_percentage_rate}}%
-                </td>
-                <td class="text-left">
-                    {{ invoice_rule.price_excl_vat | localNumberFormat:3 }}
-                </td>
-            </tr>
-            <tr>
-                <td *ngIf="invoiceRuleList == null || invoiceRuleList.length == 0" colspan="4" class="text-center">
-                    {{ 'ADD A INVOICE RULE' | translate }}
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        </form>
     </div>
-</div>
-<div class="row">
-    <div *ngIf="isBatchSending">
+    <div class="row">
         <div class="large-12 columns">
-            <div class="spinner">
-                <div class="bounce1"></div>
-                <div class="bounce2"></div>
-                <div class="bounce3"></div>
+            <div class="large-4">
+                <h4>
+                    {{ "BATCH INVOICE RULES" | translate }}
+                </h4>
             </div>
+            <table>
+                <thead>
+                <tr>
+                    <td width="1"></td>
+                    <td>
+                        {{"CATEGORY" | translate }}
+                    </td>
+                    <td>
+                        {{ 'DESCRIPTION' | translate }}
+                    </td>
+                    <td class="text-left">
+                        {{ 'VAT RATE' | translate }}
+                    </td>
+                    <td class="text-left">
+                        {{ 'UNIT COST' | translate }}
+                    </td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let invoice_rule of invoiceRuleList" *ngIf="invoice_rule != null">
+                    <td width="1">
+                        <button [disabled]="isBatchSending" (click)="openModal(invoice_rule)"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></button>
+                    </td>
+                    <td>
+                        {{invoice_rule.ledger_category ? invoice_rule.ledger_category.code + ': ' + invoice_rule.ledger_category.description : ''}}
+                    </td>
+                    <td>
+                        {{invoice_rule.description}}
+                    </td>
+                    <td class="text-left">
+                        {{invoice_rule.vat_percentage_rate}}%
+                    </td>
+                    <td class="text-left">
+                        {{ invoice_rule.price_excl_vat | localNumberFormat:3 }}
+                    </td>
+                </tr>
+                <tr>
+                    <td *ngIf="invoiceRuleList == null || invoiceRuleList.length == 0" colspan="4" class="text-center">
+                        {{ 'ADD A INVOICE RULE' | translate }}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
-    <div *ngIf="isBatchSending" class="large-12 columns" style="text-align: center">
-        <span style="text-align: center; width: 100%;">
+    <div class="row">
+        <div *ngIf="isBatchSending">
+            <div class="large-12 columns">
+                <div class="spinner">
+                    <div class="bounce1"></div>
+                    <div class="bounce2"></div>
+                    <div class="bounce3"></div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="isBatchSending" class="large-12 columns align-center">
+        <span>
             {{ "BATCH INVOICES ARE BEING SEND" | translate}}
         </span>
-    </div>
-    <div *ngIf="isBatchSend" class="large-12 columns" style="text-align: center">
-        <span style="text-align: center; width: 100%;">
+        </div>
+        <div *ngIf="isBatchSend" class="large-12 columns align-center">
+        <span>
             {{ "BATCH INVOICES HAVE BEEN SEND" | translate}}
         </span>
-    </div>
-    <span style="text-align: center; width: 100%;" *ngIf="isError">
+        </div>
+        <div>
+            <span *ngIf="isError" class="large-12 columns align-center">
         {{ "SOMETHING WENT WRONG. TRY ANOTHER TIME." | translate }}
-    </span>
-</div>
-<div class="row">
-    &nbsp;
-    <button [disabled]="isBatchSending" (click)="navigateTo('/invoice')" class="small primary button">
-        {{ "BACK" | translate }}
-    </button>
+        </span>
+        </div>
+    </div>
+    <div class="row">
+        &nbsp;
+        <button [disabled]="isBatchSending" (click)="navigateTo('/invoice')" class="small primary button back-button-margins">
+            {{ "BACK" | translate }}
+        </button>
+    </div>
 </div>
 <!--ADD/EDIT INVOICE RULE MODAL-->
 <div class="reveal-overlay" [ngStyle]="{'display': displayModal}">
@@ -207,10 +211,12 @@
         <div class="modal-body">
 
             <hr>
-
-            <span style="text-align: left; width: 100%; display: block; margin: 25px 0 50px 0;">
-                {{ "BATCH INVOICES SEND CONFIRMATION TEXT" | translate }}
-            </span>
+            <div class="display-block">
+                <span class="send-batch-text">
+                    {{ "BATCH INVOICES SEND CONFIRMATION TEXT" | translate }}
+                </span>
+            </div>
+            <br>
             <input type="checkbox" [(ngModel)]="additionalCheck">
             <span>
                 {{ "I KNOW WHAT I AM DOING TEXT" | translate }}
@@ -221,15 +227,15 @@
 
             <hr>
             
-            <span class="pull-left" style="width: 45%">
+            <span class="pull-left width-45">
                 <button [disabled]="!additionalCheck || isBatchSending" (click)="sendInvoiceBatch()" class="small primary button expanded">
                     {{ "SEND INVOICE BATCH" | translate }}
                 </button>
             </span>
-            <span style="width: 10%;">
+            <span class="width-10">
 
             </span>
-            <span class="pull-right" style="width: 45%;">
+            <span class="pull-right width-45">
                 <button [disabled]="isBatchSending" (click)="closeConfirmationModal()" class="small primary button expanded">
                     {{ "BACK" | translate }}
                 </button>
