@@ -55,7 +55,7 @@ export class InvoiceBatchComponent {
                 private router: Router,
                 private activatedRoute: ActivatedRoute,
                 private nsfo: NSFOService,
-                private settings: SettingsService,
+                private settings: SettingsService
     ) {
         this.form = fb.group({
             controlDate: ['', Validators.required]
