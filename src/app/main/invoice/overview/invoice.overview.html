@@ -177,25 +177,25 @@
     </div>
 </div>
 
-<div class="reveal-overlay" [ngStyle]="{'display': displayModal}">
+<div id="confirmation-modal" class="reveal-overlay" [ngStyle]="{'display': displayModal}">
     <div class="medium reveal" [ngStyle]="{'display': displayModal}">
         <div class="modal-body">
 
             <hr>
 
-            <span style="text-align: center; width: 100%; display: block; margin: 25px 0 50px 0;">
+            <span class="align-center are-you-sure-text">
                 {{ "ARE YOU SURE YOU WANT TO SET THIS INVOICE TO PAID" | translate }}
             </span>
 
-            <span class="pull-left" style="width: 45%">
+            <span class="pull-left width-45">
                 <button (click)="setInvoicePaid(selectedInvoiceId)" class="small primary button expanded">
                     {{ "YES" | translate }}
                 </button>
             </span>
-            <span style="width: 10%;">
+            <span class="width-10">
 
             </span>
-            <span class="pull-right" style="width: 45%;">
+            <span class="pull-right width-45">
                 <button (click)="closeModal()" class="small primary button expanded">
                     {{ "NO" | translate }}
                 </button>
