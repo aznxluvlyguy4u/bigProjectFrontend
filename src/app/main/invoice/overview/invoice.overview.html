@@ -136,8 +136,11 @@
                         <button type="button" (click)="navigateTo('/invoice/details/edit/' + invoice.id)" [disabled]="invoice.status != 'NOT SEND' && invoice.status != 'INCOMPLETE'" class="tiny primary button">
                             {{ 'EDIT' | translate }}
                         </button>
-                        <button type="button" (click)="navigateTo('/invoice/details/view/' + invoice.id)" class="small primary button pull-right">
+                        <button type="button" (click)="navigateTo('/invoice/details/view/' + invoice.id)" class="small primary button">
                             {{ 'VIEW' | translate }}
+                        </button>
+                        <button type="button" (click)="downloadPdf(invoice)" class="small primary button">
+                            {{ "DOWNLOAD PDF" | translate }}
                         </button>
                     </td>
                 </tr>

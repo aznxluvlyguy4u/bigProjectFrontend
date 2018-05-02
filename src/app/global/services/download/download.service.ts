@@ -14,9 +14,11 @@ import { UtilsService } from '../utils/utils.service';
 import { Animal } from '../../components/livestock/livestock.model';
 import { NSFOService } from '../nsfo/nsfo.service';
 import { ALL_ANIMALS_OVERVIEW_REPORT, TE100_ANNUAL_PRODUCTION } from '../../constants/report-type.constant';
-import { CSV } from '../../variables/file-type.enum';
+import {CSV, PDF} from '../../variables/file-type.enum';
+import {Invoice} from "../../../main/invoice/invoice.model";
 
 export const INBREEDING_COEFFICIENT_REPORT = 'INBREEDING_COEFFICIENT_REPORT';
+export const INVOICE_PDF = "INVOICE_PDF";
 export const LINEAGE_PROOF_REPORT = 'LINEAGE_PROOF_REPORT';
 export const LIVESTOCK_REPORT = 'LIVESTOCK_REPORT';
 export const OFFSPRING_REPORT = 'OFFSPRING_REPORT';
@@ -302,5 +304,11 @@ export class DownloadService {
 
 		static generateHash(downloadType: string, fileType: string, reportCount: number|string = 0, jsonBody: any, queryParam: string): string {
 				return btoa(downloadType + fileType + reportCount + queryParam + JSON.stringify(jsonBody));
+		}
+
+		doInvoicePdfGetRequest(invoice: Invoice) {
+			let download = this.getNewDownloadRequest(INVOICE_PDF,PDF, 0, null, null);
+			let uri = this.nsfo.URI_INVOICE + "/" + invoice.id + "/pdf";
+			this.doDownloadGetRequest(uri, download);
 		}
 }
