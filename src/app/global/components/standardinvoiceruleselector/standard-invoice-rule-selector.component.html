@@ -7,7 +7,7 @@
     {{ buttonText() | translate }}
 </button>
 
-<div class="reveal-overlay" [ngStyle]="{'display': displayModal}">
+<div id="selector" class="reveal-overlay" [ngStyle]="{'display': displayModal}">
     <div class="medium reveal" [ngStyle]="{'display': displayModal}">
         <div class="modal-header" style="background-color:silver">
 
@@ -75,7 +75,7 @@
                         </thead>
                         <tbody>
                         <tr *ngIf="isInvoiceRulesEmpty()">
-                            <td colspan="10" class="align-center" style="text-align: center;">
+                            <td colspan="10" class="align-center">
                                 <span class="align-center full-width">
                                     Er zijn nog geen standaard factuurregels in het systeem ingevoerd.
                                 </span>
