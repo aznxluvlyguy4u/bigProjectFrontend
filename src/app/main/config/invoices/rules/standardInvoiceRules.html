@@ -72,7 +72,7 @@
                     </td>
                     <td>
                         <span class="pull-right">
-                            <a (click)="openModal(true, rule)"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
+                            <a (click)="setModalInput(rule)"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
                             <a (click)="removeInvoiceRule(rule)" class="remove-button"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
                         </span>
                     </td>
@@ -85,108 +85,17 @@
 </div>
 
 <!--ADD/EDIT INVOICE RULE MODAL-->
-<div class="reveal-overlay" [ngStyle]="{'display': displayModal}">
-    <div class="medium reveal" [ngStyle]="{'display': displayModal}">
-        <div class="modal-header">
-            <span *ngIf="!isModalEditMode">{{ 'NEW INVOICE RULE' | translate }}</span>
-            <span *ngIf="isModalEditMode">{{ 'EDIT INVOICE RULE' | translate }}</span>
-            <button type="button" class="pull-right" aria-label="Close modal" (click)="closeModal()">
-                <i class="fa fa-times" aria-hidden="true"></i>
-            </button>
-        </div>
-        <div [formGroup]="form" class="modal-body">
-            <div class="row">
-                <div class="large-4 columns">
-                    <label class="middle"> {{ 'LEDGER CATEGORY' | translate }} * </label>
-                </div>
-                <div class="large-8 columns">
-                    <app-ledger-category-dropdown
-                            [selectedLedgerCategory]="selectedLedgerCategory"
-                            [disabled]="false"
-                            [activeOnly]="true"
-                            [displayActiveStatus]="true"
-                            (selectedLedgerCategoryChanged)="selectedLedgerCategory = $event"
-                    ></app-ledger-category-dropdown>
-                </div>
-            </div>
-            <div class="row">
-                <div class="large-4 columns">
-                    <label class="middle"> {{ 'DESCRIPTION' | translate }} * </label>
-                </div>
-                <div class="large-8 columns">
-                    <input type="text" [(ngModel)]="selectedRule.description" formControlName="description" maxlength="20">
-                </div>
-            </div>
-            <div class="row">
-                <div class="large-4 columns">
-                    <label class="middle"> {{ 'PRICE (EXCL. VAT)' | translate }} *</label>
-                </div>
-                <div class="large-8 columns">
-                    <label *ngIf="!priceHasValidDecimalCount()" class="input-error-msg">{{'CURRENCY CANNOT EXCEED 3 DECIMAL SPACES' | translate}}</label>
-                    <input type="number"
-                           step="0.001"
-                           [(ngModel)]="selectedRule.price_excl_vat"
-                           formControlName="price_excl_vat"
-                    >
-                </div>
-            </div>
-            <div class="row">
-                <div class="large-4 columns">
-                    <label class="middle"> {{ 'VAT PERCENTAGE RATE' | translate }} * </label>
-                </div>
-                <div class="large-8 columns">
-                    <select [(ngModel)]="selectedRule.vat_percentage_rate" formControlName="vat_percentage_rate">
-                        <option *ngFor="let percentageValue of getVatPercentages()" [value]="percentageValue"> {{percentageValue}}% </option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <div class="row">
-                <div class="large-12 columns">
-                    <span class="pull-right required-description"> * {{ 'IS A REQUIRED FIELD' | translate }} </span>
-                </div>
-            </div>
-             <span class="pull-left">
-                <label *ngIf="!isValidForm" class="error-message">{{ 'FILL IN ALL THE REQUIRED FIELDS' | translate }}</label>
-            </span>
-            <span class="pull-right">
+<invoice-rule-edit-component
+        [selectedRule]="selectedModalRule"
+        [selectedLedgerCategory]="selectedModalRule.ledger_category"
+        [isModalEditMode]="isModalEditMode"
+        [displayModal]="displayModal"
+        (close)="closeModal()"
+        (newRule)="addInvoiceRule($event)"
+        (sendRule)="editInvoiceRule($event)"
+>
 
-                <button
-                        *ngIf="!isModalEditMode"
-                        [disabled]="disableEditOrInsertButton()"
-                        (click)="addInvoiceRule()"
-                        class="tiny primary button"
-                >
-                    <span *ngIf="!isSending">
-                        <i class="fa fa-floppy-o" aria-hidden="true"></i>
-                        {{ 'ADD' | translate }}
-                    </span>
-                    <span *ngIf="isSending">
-                        <i class="fa fa-gear fa-spin fa-fw"></i>
-                    </span>
-                </button>
-
-                <button
-                        *ngIf="isModalEditMode"
-                        [disabled]="disableEditOrInsertButton()"
-                        (click)="editInvoiceRule()"
-                        class="tiny primary button"
-                >
-                    <span *ngIf="!isSending">
-                        <i class="fa fa-floppy-o" aria-hidden="true"></i>
-                        {{ 'EDIT' | translate }}
-                    </span>
-                    <span *ngIf="isSending">
-                        <i class="fa fa-gear fa-spin fa-fw"></i>
-                    </span>
-                </button>
-
-                <button (click)="closeModal()" class="tiny alert button">{{ 'CANCEL' | translate}}</button>
-            </span>
-        </div>
-    </div>
-</div>
+</invoice-rule-edit-component>
 
 <!--ERROR MODAL-->
 <div class="reveal-overlay" [ngStyle]="{'display': modalDisplay}">

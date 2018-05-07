@@ -14,10 +14,11 @@ import { InvoiceRulePipe } from '../../../../global/pipes/invoice-rule.pipe';
 import { InvoiceDetailsComponent } from '../../../invoice/details/invoice.details';
 import { InvoiceRuleStorage } from '../../../../global/services/storage/invoice-rule.storage';
 import { LocalNumberFormat } from '../../../../global/pipes/local-number-format';
+import {InvoiceRuleEditComponent} from "../../../../global/components/InvoiceRuleEditComponent/InvoiceRuleEditComponent";
 
 @Component({
     directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, LedgerCategoryDropdownComponent,
-			PaginationComponent],
+			PaginationComponent, InvoiceRuleEditComponent],
     template: require('./standardInvoiceRules.html'),
 	  providers: [PaginationService],
     pipes: [TranslatePipe, PaginatePipe, InvoiceRulePipe, LocalNumberFormat]
@@ -26,6 +27,7 @@ import { LocalNumberFormat } from '../../../../global/pipes/local-number-format'
 export class InvoicesRuleTemplatesComponent implements OnDestroy {
     private rules: InvoiceRule[] = [];
     private selectedRule: InvoiceRule = new InvoiceRule();
+    private selectedModalRule: InvoiceRule = new InvoiceRule();
     selectedLedgerCategory: LedgerCategory;
     private displayModal: string = 'none';
     private isModalEditMode: boolean = false;
@@ -77,96 +79,37 @@ export class InvoicesRuleTemplatesComponent implements OnDestroy {
         }
     }
 
-    private addInvoiceRule() {
-        this.isValidForm = true;
-        this.isSending = true;
-        this.selectedRule.type = "standard";
-        this.setSelectedLedgerCategoryOnSelectedRule();
-
-        if(this.form.valid) {
-            this.selectedRule.sort_order = this.rules.length;
-
-            this.nsfo
-                .doPostRequest(this.nsfo.URI_INVOICE_RULE , this.selectedRule)
-                .subscribe(
-                    res => {
-                        let rule = res.result;
-                        this.rules.push(rule);
-											  this.selectedRule = new InvoiceRule();
-
-                        this.isSending = false;
-                        this.closeModal();
-                    },
-                  error => {
-										this.isSending = false;
-										this.closeModal();
-										alert(this.nsfo.getErrorMessage(error));
-                  }
-                )
-        } else {
-            this.isValidForm = false;
-            this.isSending = false;
+    private setModalInput(rule: InvoiceRule = null) {
+        if (rule === null) {
+            this.selectedModalRule = new InvoiceRule();
+            this.isModalEditMode = false;
         }
+        this.selectedModalRule = rule;
+        this.isModalEditMode = true;
+        this.displayModal = "block";
     }
 
-    private editInvoiceRule() {
+    private addInvoiceRule(rule: InvoiceRule) {
+        this.displayModal = "none";
+        this.rules.push(rule);
+    }
+
+    private editInvoiceRule(rule: InvoiceRule) {
+        this.displayModal = "none";
         this.isValidForm = true;
         this.isSending = true;
-			  this.setSelectedLedgerCategoryOnSelectedRule();
-
-        if(this.form.valid) {
-            this.nsfo
-                .doPutRequest(this.nsfo.URI_INVOICE_RULE, this.selectedRule)
-                .subscribe(
-                    res => {
-                        const invoice = res.result;
-                        const index = _.findIndex(this.rules, {id: invoice.id});
-                        this.rules.splice(index, 1, invoice);
-                        this.selectedRule = new InvoiceRule();
-                        this.isSending = false;
-                        this.closeModal();
-                    },
-                  error => {
-										this.isSending = false;
-										this.closeModal();
-										alert(this.nsfo.getErrorMessage(error));
-                  }
-                );
-        } else {
-            this.isValidForm = false;
-        }
+        const index = _.findIndex(this.rules, {id: rule.id});
+        this.rules.splice(index, 1, rule);
+        this.isSending = false;
+        this.closeModal();
     }
 
     removeInvoiceRule(rule: InvoiceRule) {
-        this.nsfo.doDeleteRequest(this.nsfo.URI_INVOICE_RULE + "/" + rule.id, rule)
-            .subscribe(
-              res => {
-                  _.remove(this.rules, {id: rule.id});
-              },
-							error => {
-								alert(this.nsfo.getErrorMessage(error));
-							}
-            );
-    }
-    
-    openModal(isEditMode: boolean = false, rule: InvoiceRule): void {
-        this.isModalEditMode = isEditMode;
-        this.displayModal = 'block';
-
-        if(!isEditMode) {
-            this.selectedLedgerCategory = null;
-        }
-
-        if(isEditMode) {
-            this.selectedRule = _.cloneDeep(rule);
-            this.selectedLedgerCategory = _.cloneDeep(rule.ledger_category);
-        }
+        _.remove(this.rules, {id: rule.id});
     }
 
     private closeModal(): void {
         this.displayModal = 'none';
-        this.selectedRule = new InvoiceRule();
-        this.resetValidation();
     }
 
     disableEditOrInsertButton(): boolean {
