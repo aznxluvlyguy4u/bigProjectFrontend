@@ -35,7 +35,7 @@
                     <td style="text-align: right">{{'PRICE (EXCL. VAT)' | translate}}</td>
                     <td>{{'VAT PERCENTAGE RATE' | translate}}</td>
                     <td>
-                        <button type="button" (click)="openModal(false)" class="small primary button pull-right">
+                        <button type="button" (click)="setModalInput(null)" class="small primary button pull-right">
                             <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
                             {{ 'ADD INVOICE RULE' | translate }}
                         </button>
@@ -87,7 +87,7 @@
 <!--ADD/EDIT INVOICE RULE MODAL-->
 <invoice-rule-edit-component
         [selectedRule]="selectedModalRule"
-        [selectedLedgerCategory]="selectedModalRule.ledger_category"
+        [selectedLedgerCategory]="selectedLedgerCategory"
         [isModalEditMode]="isModalEditMode"
         [displayModal]="displayModal"
         (close)="closeModal()"

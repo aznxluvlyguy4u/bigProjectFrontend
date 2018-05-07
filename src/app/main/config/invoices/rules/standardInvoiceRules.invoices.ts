@@ -73,19 +73,17 @@ export class InvoicesRuleTemplatesComponent implements OnDestroy {
 
     }
 
-    private setSelectedLedgerCategoryOnSelectedRule() {
-        if(this.selectedRule) {
-            this.selectedRule.ledger_category = this.selectedLedgerCategory;
-        }
-    }
-
     private setModalInput(rule: InvoiceRule = null) {
         if (rule === null) {
             this.selectedModalRule = new InvoiceRule();
             this.isModalEditMode = false;
+            this.selectedLedgerCategory = null;
         }
-        this.selectedModalRule = rule;
-        this.isModalEditMode = true;
+        else {
+            this.selectedModalRule = rule;
+            this.selectedLedgerCategory = rule.ledger_category;
+            this.isModalEditMode = true;
+        }
         this.displayModal = "block";
     }
 
