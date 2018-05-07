@@ -16,6 +16,8 @@ import {Datepicker} from "../../../global/components/datepicker/datepicker.compo
 import {SettingsService} from "../../../global/services/settings/settings.service";
 import {LedgerCategory} from "../../../global/models/ledger-category.model";
 import {FormatService} from "../../../global/services/utils/format.service";
+import {ConfirmationComponent} from "../../../global/components/confirmation/confirmationComponent";
+import {InvoiceRuleEditComponent} from "../../../global/components/InvoiceRuleEditComponent/InvoiceRuleEditComponent";
 
 
 @Component({
@@ -28,7 +30,7 @@ import {FormatService} from "../../../global/services/utils/format.service";
         'showSearchInputInDropdown'
     ],
     directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, CompanySelectorComponent,
-        LedgerCategoryDropdownComponent, Datepicker, StandardInvoiceRuleSelectorComponent],
+        LedgerCategoryDropdownComponent, Datepicker, StandardInvoiceRuleSelectorComponent, ConfirmationComponent, InvoiceRuleEditComponent],
     template: require('./invoice.batch.html'),
     pipes: [TranslatePipe, LocalNumberFormat]
 })
@@ -90,7 +92,6 @@ export class InvoiceBatchComponent {
 
     private closeModal(): void {
         this.displayModal = 'none';
-        this.selectedRule = new InvoiceRule();
     }
 
     private setSelectedLedgerCategoryOnSelectedRule() {
@@ -99,29 +100,19 @@ export class InvoiceBatchComponent {
         }
     }
 
-    private editInvoiceRule() {
+    private editInvoiceRule(rule: InvoiceRule) {
+        this.displayModal = "none";
         this.isValidForm = true;
         this.isSending = true;
-        this.setSelectedLedgerCategoryOnSelectedRule();
+        const index = _.findIndex(this.invoiceRuleList, {id: rule.id});
+        this.invoiceRuleList.splice(index, 1, rule);
+        this.isSending = false;
+        this.closeModal();
+    }
 
-
-        this.nsfo
-            .doPutRequest(this.nsfo.URI_INVOICE_RULE, this.selectedRule)
-            .subscribe(
-                res => {
-                    const invoice = res.result;
-                    const index = _.findIndex(this.invoiceRuleList, {id: invoice.id});
-                    this.invoiceRuleList.splice(index, 1, invoice);
-                    this.selectedRule = new InvoiceRule();
-                    this.isSending = false;
-                    this.closeModal();
-                },
-                error => {
-                    this.isSending = false;
-                    this.closeModal();
-                    alert(this.nsfo.getErrorMessage(error));
-                }
-            );
+    private setModalInput(rule: InvoiceRule = null) {
+        this.selectedRule = rule;
+        this.displayModal = "block";
     }
 
     disableEditOrInsertButton(): boolean {
@@ -151,7 +142,6 @@ export class InvoiceBatchComponent {
         this.isBatchSending = true;
         let dateString;
         let dateFormat;
-        this.closeConfirmationModal();
         dateString = moment(this.form.controls["controlDate"].value, this.settings.getViewDateFormat());
         dateFormat = dateString.format(this.settings.getModelDateTimeFormat());
         this.nsfo.doPostRequest(this.nsfo.URI_INVOICE + "/batch",{"controlDate": dateFormat})
@@ -168,12 +158,10 @@ export class InvoiceBatchComponent {
             )
     }
 
-    openConfirmationModal() {
-        this.displayConfirmationModal = "block";
-    }
-
-    closeConfirmationModal() {
-        this.displayConfirmationModal = "none";
+    checkResult(input: boolean) {
+        if (input) {
+            this.sendInvoiceBatch();
+        }
     }
 
     private navigateTo(url: string) {
