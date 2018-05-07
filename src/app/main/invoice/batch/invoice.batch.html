@@ -82,9 +82,13 @@
                         {{ invoice_rule.price_excl_vat | localNumberFormat:3 }}
                     </td>
                 </tr>
-                <tr>
-                    <td *ngIf="invoiceRuleList == null || invoiceRuleList.length == 0" colspan="4" class="text-center">
-                        {{ 'ADD A INVOICE RULE' | translate }}
+                <tr *ngIf="isLoading">
+                    <td colspan="5">
+                        <div class="spinner">
+                            <div class="bounce1"></div>
+                            <div class="bounce2"></div>
+                            <div class="bounce3"></div>
+                        </div>
                     </td>
                 </tr>
                 </tbody>

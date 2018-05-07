@@ -36,13 +36,12 @@ import {InvoiceRuleEditComponent} from "../../../global/components/InvoiceRuleEd
 })
 
 export class InvoiceBatchComponent {
-    private additionalCheck: boolean = false;
     private isError: boolean = false;
+    private isLoading: boolean = true;
     private form: FormGroup;
     private ruleForm: FormGroup;
     private selectedRule: InvoiceRule = new InvoiceRule();
     private displayModal: string = 'none';
-    private displayConfirmationModal: string = 'none';
     selectedLedgerCategory: LedgerCategory;
     private model_datetime_format;
     private view_date_format;
@@ -76,6 +75,7 @@ export class InvoiceBatchComponent {
             .subscribe(
                 res => {
                     this.invoiceRuleList = res.result;
+                    this.isLoading = false;
                 },
                 error => {
                     alert(this.nsfo.getErrorMessage(error));
