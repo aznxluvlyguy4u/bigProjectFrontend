@@ -23,7 +23,8 @@ export class Client {
     public deleted_locations: Location[] = [];
     public users: User[] = [];
     public deleted_users: User[] = [];
-	  public invoices: Invoice[] = [];
+    public twinfield_code: number;
+    public invoices: Invoice[] = [];
 }
 
 export class Location {
