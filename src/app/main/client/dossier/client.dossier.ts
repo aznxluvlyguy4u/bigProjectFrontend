@@ -70,6 +70,7 @@ export class ClientDossierComponent {
             billing_address_state: ['', Validators.required],
             animal_health_subscription: ['NO'],
             subscription_date: [''],
+            twinfield_code: [0, Validators.required]
         });
     }
 
@@ -110,7 +111,7 @@ export class ClientDossierComponent {
                     this.client = res.result;
                     this.client.deleted_users = [];
                     this.client.deleted_locations = [];
-
+                    this.client.users = res.result.company_users;
                     if(this.client.animal_health_subscription) {
                         this.form.controls['animal_health_subscription'].updateValue('YES');
                         this.client.subscription_date = this.settings.convertToViewDate(this.client.subscription_date);
