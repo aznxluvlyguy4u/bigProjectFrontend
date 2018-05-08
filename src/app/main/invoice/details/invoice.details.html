@@ -506,9 +506,14 @@
     </div>
 
     <div class="row">
+        <div *ngIf="companyTwinfieldError" class="large-12 columns">
+            <span>
+                {{ "INVOICE COULD NOT BE SEND; NO TWINFIELD CODE" | translate }}
+            </span>
+        </div>
         <div class="large-12 columns">
             <span *ngIf="!onlyView" class="pull-right">
-                <button *ngIf="companySelected" [disabled]="!invoice.company_name" type="button" (click)="sendInvoiceToClient()" class="small primary button">
+                <button *ngIf="companySelected" [disabled]="!invoice.ubn && invoice.invoice_rule_selections.length < 1" type="button" (click)="sendInvoiceToClient()" class="small primary button">
                     {{ 'SEND INVOICE' | translate }}
                 </button>
                 <button *ngIf="companySelected" type="button" (click)="saveInvoice()" class="small primary button">

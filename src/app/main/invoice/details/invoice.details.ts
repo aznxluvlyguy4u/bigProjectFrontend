@@ -46,6 +46,7 @@ export class InvoiceDetailsComponent {
     private pageMode: string;
     private invoiceId: number;
     private selectedUbn: string;
+    private companyTwinfieldError: boolean = false;
     private form1: FormGroup;
     private selectedCompany: Client;
     clientUbns: string[] = [];
@@ -489,6 +490,11 @@ export class InvoiceDetailsComponent {
     }
 
     private sendInvoiceToClient() {
+    	if (!this.selectedCompany.twinfield_code){
+			this.companyTwinfieldError = true;
+			return false;
+		}
+		this.invoice.company_twinfield_code = this.selectedCompany.twinfield_code;
         this.invoice.sender_details = this.senderDetails;
         this.invoice.status = "UNPAID";
 
