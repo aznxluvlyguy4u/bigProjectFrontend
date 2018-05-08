@@ -266,6 +266,16 @@
                 </span>
             </div>
         </div>
+        <div class="row">
+            <div class="large-6 columns">
+                <label class="middle"> {{ 'TWINFIELD CODE' | translate }} *</label>
+            </div>
+            <div class="large-6 columns">
+                <span>
+                    <input type="number" formControlName="twinfield_code" [(ngModel)]="client.twinfield_code"  [disabled]="savingInProgress">
+                </span>
+            </div>
+        </div>
     </div>
 </div>
 
