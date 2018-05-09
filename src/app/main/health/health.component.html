@@ -15,29 +15,19 @@
     </div>
 
     <!--TABS MEDIUM/LARGE SCREENS-->
-    <div class="row hide-for-small-only">
-        <ul class="tabs">
-            <li class="tabs-title">
-                <a routerLink="/health/inspections" routerLinkActive="active">{{ 'INSPECTIONS' | translate }}</a>
-            </li>
-            <li class="tabs-title">
-                <a routerLink="/health/failed_imports" routerLinkActive="active">{{ 'FAILED IMPORTS' | translate }}</a>
-            </li>
-        </ul>
-    </div>
-
-    <!--TABS SMALL SCREENS-->
-    <div class="row show-for-small-only">
-        <label> {{ 'TAB' | translate }}
-            <select [(ngModel)]="selectedRoute" (change)="navigateTo($event.target.value)">
-                <option value="/health/inspections">{{ 'INSPECTIONS' | translate }}</option>
-                <option value="/health/failed_imports-csv">{{ 'FAILED IMPORTS' | translate }}</option>
-            </select>
-        </label>
-    </div>
-
-    <!--PAGE CONTENT-->
     <div class="row">
-        <router-outlet></router-outlet>
+        <select
+                [(ngModel)]="selectedIllness"
+                title="illness"
+                (click)="goToSelectedIllness()"
+        >
+            <option
+                    *ngFor="let illness of getIllnesses()"
+                    [value]="illness"
+            >{{ illness | translate }}</option>
+        </select>
     </div>
+
+    <router-outlet></router-outlet>
+
 </div>

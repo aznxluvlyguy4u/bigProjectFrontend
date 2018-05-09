@@ -704,5 +704,12 @@
   "SEND INVOICE BATCH": "Verstuur facturen",
   "CONTROL DATE": "Peil datum",
   "BATCH INVOICES": "Automatische facturen",
-  "A TIMEOUT OCCURED. TRY AGAIN LATER, PERHAPS WHEN THE SERVER IS LESS BUSY OR TRY IT WITH LESS DATA.": "Een timeout heeft plaatsgevonden. Probeer het later nog eens, mogelijk wanneer de server minder druk is of probeer het met minder data."
+  "A TIMEOUT OCCURED. TRY AGAIN LATER, PERHAPS WHEN THE SERVER IS LESS BUSY OR TRY IT WITH LESS DATA.": "Een timeout heeft plaatsgevonden. Probeer het later nog eens, mogelijk wanneer de server minder druk is of probeer het met minder data.",
+  "ORDER NUMBER": "Aanvraagnummer",
+  "MINIMUM AMOUNT OF ANIMALS": "Minimum aantal dieren",
+  "CURRENT LIVESTOCK COUNT": "Huidig stallijstaantal",
+  "ROT": "Voetrot",
+  "CAE": "Cae",
+  "CL": "Cl",
+  "SELECT AN ILLNESS": "Selecteer een ziekte"
 }

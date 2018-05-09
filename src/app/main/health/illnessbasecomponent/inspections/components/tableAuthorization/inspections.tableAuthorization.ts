@@ -1,11 +1,11 @@
-import {Component, Input, Output, OnInit} from "@angular/core";
+import {Component, Input, OnInit} from "@angular/core";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
-import {SettingsService} from "../../../../../global/services/settings/settings.service";
-import {LocationHealthInspection, LabResultScrapie, LabResultMaediVisna, LabResult} from "../../../health.model";
+import {SettingsService} from "../../../../../../global/services/settings/settings.service";
+import {LocationHealthInspection, LabResultScrapie, LabResultMaediVisna, LabResult} from "../../../../health.model";
 import { Router } from "@angular/router";
 import { AuthorizationComponent } from "./authorization/tableAuthorization.authorization";
-import { NSFOService } from "../../../../../global/services/nsfo/nsfo.service";
-import { HealthService } from '../../../health.service';
+import { NSFOService } from "../../../../../../global/services/nsfo/nsfo.service";
+import { HealthService } from '../../../../health.service';
 
 @Component({
     selector: 'health-table-authorization',

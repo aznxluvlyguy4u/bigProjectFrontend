@@ -119,6 +119,7 @@
                         <label class="middle"> {{ 'STATUS' | translate }} </label>
                     </div>
                     <div class="large-8 columns">
+                        <!-- TODO get this data from the API -->
                         <select *ngIf="_inspection?.illness_type == 'SCRAPIE'" [(ngModel)]="suggestedHealthStatus" [disabled]="foundHealthStatusSuggestion" formControlName="health_status">
                             <option value="FREE"> {{ 'FREE' | translate }} </option>
                             <option value="RESISTANT"> {{ 'RESISTANT' | translate }} </option>
@@ -133,17 +134,10 @@
                         </select>
                     </div>
                 </div>
-                <div *ngIf="_inspection?.illness_type == 'SCRAPIE'" class="row">
+
+                <div class="row">
                     <div class="large-4 columns">
-                        <label class="middle"> {{ 'DATE SINCE' | translate }} </label>
-                    </div>
-                    <div class="large-8 columns">
-                        <datepicker [formCtrl]="form.controls['check_date']" [viewFormat]="settings.getViewDateFormat()" [modelFormat]="settings.getModelDateTimeFormat()"></datepicker>
-                    </div>
-                </div>
-                <div *ngIf="_inspection?.illness_type == 'MAEDI VISNA'" class="row">
-                    <div class="large-4 columns">
-                        <label class="middle"> {{ 'DATE TILL' | translate }} </label>
+                        <label class="middle"> {{ (useDateUntil() ? 'DATE TILL' : 'DATE SINCE') | translate }} </label>
                     </div>
                     <div class="large-8 columns">
                         <datepicker [formCtrl]="form.controls['check_date']" [viewFormat]="settings.getViewDateFormat()" [modelFormat]="settings.getModelDateTimeFormat()"></datepicker>

@@ -7,9 +7,6 @@ import { TranslateService } from 'ng2-translate';
 import { Country } from '../../models/country.model';
 import { Animal } from '../../components/livestock/livestock.model';
 
-import { Country } from '../../models/country.model';
-import { Animal } from '../../components/livestock/livestock.model';
-
 @Injectable()
 export class NSFOService {
     private API_SERVER_URL: string = NSFO_API_SERVER_URL;
@@ -51,10 +48,10 @@ export class NSFOService {
     public URI_SETTINGS: string = '/v1/settings';
     public URI_LAB_RESULTS: string = '/v1/lab-results';
 
-    public URI_UBNS: string = 'v1/ubns';
+    public URI_UBNS: string = '/v1/ubns';
 
-    public URI_LOCATIONS_TO_ANNOUNCE:string = '/v1/ubns?inspectionStatus=to_announce';
-    public URI_LOCATIONS_ANNOUNCED:string = '/v1/ubns?inspectionStatus=announced';
+    public URI_LOCATIONS_TO_ANNOUNCE:string = '/v1/ubns?inspection_status=to_announce';
+    public URI_LOCATIONS_ANNOUNCED:string = '/v1/ubns?inspection_status=announced';
     public URI_INSPECTIONS_TO_RECEIVE_LAB_RESULTS:string = '/v1/inspections?status=to_receive_lab_results';
     public URI_INSPECTIONS_TO_AUTHORIZE:string = '/v1/inspections?status=to_authorize';
     public URI_INSPECTIONS_FINISHED:string = '/v1/inspections?status=finished';

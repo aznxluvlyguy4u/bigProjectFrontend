@@ -37,6 +37,13 @@ export class Location {
     public pedigree_register_registrations: PedigreeRegisterRegistration[] = [];
 }
 
+
+export class NestedAnnouncementLocationOutput extends Location {
+    first_name: string;
+    last_name: string;
+    livestock_count: number;
+}
+
 export class User extends Person {
     public primary_contactperson: string | boolean;
     public relation_number_keeper: string;

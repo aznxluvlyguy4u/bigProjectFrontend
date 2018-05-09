@@ -1,6 +1,6 @@
-import {User} from "../client/client.model";
-import {Person} from "../config/config.model";
+import { Location, NestedAnnouncementLocationOutput, User } from '../client/client.model';
 import {Animal} from "../../global/components/livestock/livestock.model";
+import { Person } from '../../global/models/person.model';
 
 export class LocationHealthInspection {
     public request_id: string;
@@ -22,6 +22,7 @@ export class LocationHealthInspection {
     public order_number: string;
     public is_canceled: boolean;
     public inspection_id: string;
+    public illness_type: string;
     public animals: Animal[] = []
 }
 
@@ -39,7 +40,19 @@ export class ActionLog {
 export class Announcement {
     public id: number;
     public actionLog: ActionLog;
-    public logDate: string;
+    public request_date: string;
+    action_taken_by: Person;
+}
+
+export class InspectionAnnouncement extends Announcement {
+	  location: NestedAnnouncementLocationOutput;
+	  status: string;
+	  isInspectionInitiated: boolean;
+	  orderNumber: string;
+    ubn: string;
+    illness_type: string;
+	  first_name: string;
+	  inspection: string;
 }
 
 export class Address {
@@ -103,4 +116,15 @@ export class HealthStatus {
     check_date:string;
     reason_of_edit:string;
     illness:string;
+}
+
+
+export class AnnouncementLocationOutput {
+    first_name: string;
+    last_name: string;
+    location_id: string;
+    ubn: string;
+    is_active: boolean;
+    status: string;
+    illness_type: string;
 }

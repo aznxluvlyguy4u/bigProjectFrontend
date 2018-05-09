@@ -3,38 +3,38 @@
         <ul class="tabs">
             <li class="tabs-title">
                 <a (click)="selectTab('ALL REQUESTS')" [class.active]="selectedTab == 'ALL REQUESTS'">
-                    {{ 'TO ANNOUNCE' | translate }} {{ toAnnounceCount }}
-                    <span *ngIf="toAnnounceCount > 0" class="badge">{{ toAnnounceCount }}</span>
+                    {{ 'TO ANNOUNCE' | translate }}
+                    <span class="badge" [ngClass]="{'badge-is-empty': toAnnounceCount === 0}">{{ toAnnounceCount }}</span>
                 </a>
             </li>
             <li class="tabs-title">
                 <a (click)="selectTab('ANNOUNCED INSPECTIONS')" [class.active]="selectedTab == 'ANNOUNCED INSPECTIONS'">
-                    {{ 'BARCODE + FORM' | translate }} {{ announcedCount }}
-                    <span *ngIf="announcedCount > 0" class="badge">{{ announcedCount }}</span>
+                    {{ 'BARCODE + FORM' | translate }}
+                    <span class="badge" [ngClass]="{'badge-is-empty': announcedCount === 0}">{{ announcedCount }}</span>
                 </a>
             </li>
             <li class="tabs-title">
                 <a (click)="selectTab('ONGOING INSPECTIONS')" [class.active]="selectedTab == 'ONGOING INSPECTIONS'">
-                    {{ 'ONGOING INSPECTIONS' | translate }} {{ ongoingCount }}
-                    <span *ngIf="ongoingCount > 0" class="badge">{{ ongoingCount }}</span>
+                    {{ 'ONGOING INSPECTIONS' | translate }}
+                    <span class="badge" [ngClass]="{'badge-is-empty': ongoingCount === 0}">{{ ongoingCount }}</span>
                 </a>
             </li>
             <li class="tabs-title">
                 <a (click)="selectTab('TO BE AUTHORIZED INSPECTIONS')" [class.active]="selectedTab == 'TO BE AUTHORIZED INSPECTIONS'">
-                    {{ 'TO BE AUTHORIZED INSPECTIONS' | translate }} {{ toAuthorizeCount }}
-                    <span *ngIf="toAuthorize > 0" class="badge">{{ toAuthorizeCount }}</span>
+                    {{ 'TO BE AUTHORIZED INSPECTIONS' | translate }}
+                    <span class="badge" [ngClass]="{'badge-is-empty': toAuthorizeCount === 0}">{{ toAuthorizeCount }}</span>
                 </a>
             </li>
             <li class="tabs-title">
                 <a (click)="selectTab('FINISHED INSPECTIONS')" [class.active]="selectedTab == 'FINISHED INSPECTIONS'">
-                    {{ 'FINISHED INSPECTIONS' | translate }} {{ finishedCount }}
-                    <span *ngIf="finishedCount > 0" class="badge">{{ finishedCount }}</span>
+                    {{ 'FINISHED INSPECTIONS' | translate }}
+                    <span class="badge" [ngClass]="{'badge-is-empty': finishedCount === 0}">{{ finishedCount }}</span>
                 </a>
             </li>
             <li class="tabs-title">
                 <a (click)="selectTab('EXPIRED TERM')" [class.active]="selectedTab == 'EXPIRED TERM'">
-                    {{ 'EXPIRED TERM' | translate }} {{ expiredCount }}
-                    <span *ngIf="expiredCount > 0" class="alert badge">{{ expiredCount }}</span>
+                    {{ 'EXPIRED TERM' | translate }}
+                    <span class="badge" [ngClass]="{'badge-is-empty': expiredCount === 0}">{{ expiredCount }}</span>
                 </a>
             </li>
         </ul>

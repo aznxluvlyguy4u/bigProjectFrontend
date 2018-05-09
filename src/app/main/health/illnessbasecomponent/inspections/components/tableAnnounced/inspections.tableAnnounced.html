@@ -1,3 +1,10 @@
+<div class="large-12 table-search">
+    <div class="large-2 large-push-10">
+        <input type="text" [(ngModel)]="searchValue" maxlength="20" placeholder="{{ 'SEARCH' | translate }}">
+    </div>
+</div>
+
+
 <table>
     <thead>
         <tr>
@@ -7,6 +14,7 @@
             <td> {{ 'REQUEST DATE' | translate }} </td>
             <td> {{ 'NEXT ACTION' | translate }} </td>
             <td> {{ 'LAST ACTION TAKEN BY' | translate }} </td>
+            <td> {{ 'CURRENT LIVESTOCK COUNT' | translate }} </td>
             <td>
                 <!--<span class="pull-right">
                     <button type="button" (click)="openModal()" class="small primary button">
@@ -17,12 +25,12 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let request of _announced">
-            <td>{{ request?.ubn }}</td>
+        <tr *ngFor="let request of _announced | inspectionAnnouncementPipe: searchValue">
+            <td>{{ request?.location?.ubn }}</td>
 
-            <td>{{ request?.first_name }} {{ request?.last_name }}</td>
-            <td>TYPE EVENTUEEL SCHEIDEN</td>
-            <td>DATUM NOG </td>
+            <td>{{ request?.location?.first_name }} {{ request?.location?.last_name }}</td>
+            <td>{{ request?.illness_type | translate }}</td>
+            <td>{{ request?.request_date | date: 'dd-MM-yyyy @HH:mm:ss' }} </td>
             <td>{{ 'Barcode + Begeleidende brief' | translate }}</td>
             <!--<td>{{ request?.inspection | translate }}</td>-->
             <!--<td>
@@ -38,10 +46,11 @@
                 {{ request?.action_taken_by?.first_name + " " + request?.action_taken_by?.last_name }}
                 <!--({{ settings.convertToViewDateTime(request.direction_date) }})-->
             </td>
+            <td>{{ request.location.livestock_count }}</td>
             <td>
                 <span class="pull-right">
                     <label>{{ 'MINIMUM AMOUNT OF ANIMALS' | translate }}</label>
-                    <input type="number" [(ngModel)]="request.animal_count">
+                    <input type="number" [(ngModel)]="request.location.livestock_count">
                     <button [disabled]="_isLoading" type="button" (click)="createInspection(request)" class="small primary button">
                         <i *ngIf="_isLoading" class="fa fa-gear fa-spin fa-fw"></i>
                         <span *ngIf="!_isLoading" >

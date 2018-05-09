@@ -1,20 +1,21 @@
 import _ = require("lodash");
 import {Component, Input, Output, OnInit, EventEmitter} from "@angular/core";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
-import {LocationHealthInspection} from "../../../health.model";
-import {SettingsService} from "../../../../../global/services/settings/settings.service";
-import {NSFOService} from "../../../../../global/services/nsfo/nsfo.service";
-import {LocationHealthStatus} from "../../../../client/client.model";
-import {LivestockComponent} from "../../../../../global/components/livestock/livestock.component";
-import {Animal} from "../../../../../global/components/livestock/livestock.model";
-import { HealthService } from '../../../health.service';
-import { Announcement } from '../../../health.model';
+import {LocationHealthInspection} from "../../../../health.model";
+import {SettingsService} from "../../../../../../global/services/settings/settings.service";
+import {NSFOService} from "../../../../../../global/services/nsfo/nsfo.service";
+import {LocationHealthStatus} from "../../../../../client/client.model";
+import {LivestockComponent} from "../../../../../../global/components/livestock/livestock.component";
+import {Animal} from "../../../../../../global/components/livestock/livestock.model";
+import { HealthService } from '../../../../health.service';
+import { Announcement } from '../../../../health.model';
+import { InspectionAnnouncementPipe } from '../../../../pipes/inspection-announcement.pipe';
 
 @Component({
     selector: 'health-table-announced',
     directives: [LivestockComponent],
     template: require('./inspections.tableAnnounced.html'),
-    pipes: [TranslatePipe]
+    pipes: [InspectionAnnouncementPipe, TranslatePipe]
 })
 
 export class HealthTableAnnounced implements OnInit{
@@ -25,6 +26,8 @@ export class HealthTableAnnounced implements OnInit{
     @Output() inspectionsUpdate = new EventEmitter();
     @Output() _createInspection = new EventEmitter();
     @Output() _cancelAnnouncement = new EventEmitter();
+
+	  searchValue: string;
 
     @Input()
     set announced(announced: Array<Announcement>) {

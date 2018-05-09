@@ -1,8 +1,8 @@
 import _ = require("lodash");
 import {Component, Input, Output, EventEmitter} from "@angular/core";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
-import {LocationHealthInspection} from "../../../health.model";
-import {SettingsService} from "../../../../../global/services/settings/settings.service";
+import {LocationHealthInspection} from "../../../../health.model";
+import {SettingsService} from "../../../../../../global/services/settings/settings.service";
 
 @Component({
     selector: 'health-table-to-receive-lab-results',

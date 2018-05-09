@@ -1,3 +1,10 @@
+<div class="large-12 table-search">
+    <div class="large-2 large-push-10">
+        <input type="text" [(ngModel)]="searchValue" maxlength="20" placeholder="{{ 'SEARCH' | translate }}">
+    </div>
+</div>
+
+
 <table>
     <thead>
         <tr>
@@ -17,7 +24,7 @@
     </thead>
 
     <tbody>
-        <tr *ngFor="let to_announce of _toAnnounce">
+        <tr *ngFor="let to_announce of _toAnnounce | inspectionLocationPipe: searchValue | paginate: {itemsPerPage: 10, currentPage: page}; let i = index">
             <td>{{ to_announce.ubn }}</td>
             <td>{{ to_announce.last_name }}</td>
             <td>{{ to_announce.inspection | translate }}</td>
@@ -71,3 +78,5 @@
         </tr>-->
     </tbody>
 </table>
+
+<pagination (pageChange)="page = $event"></pagination>

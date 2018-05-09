@@ -2,14 +2,15 @@ import _ = require("lodash");
 import {Component, OnInit, Input, Output} from "@angular/core";
 import {EventEmitter} from "@angular/platform-browser-dynamic/src/facade/async";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
-import {SettingsService} from "../../../../../../global/services/settings/settings.service";
-import {Datepicker} from "../../../../../../global/components/datepicker/datepicker.component";
 import {REACTIVE_FORM_DIRECTIVES} from "@angular/forms";
 import {ControlGroup, FormBuilder} from "@angular/common";
-import {LabResult, HealthStatus, LocationHealthInspection} from "../../../../health.model";
-import {NSFOService} from "../../../../../../global/services/nsfo/nsfo.service";
-import {HealthService} from '../../../../health.service';
-import {EditableComponent} from '../../../../../../global/components/editable/editable.component';
+import {LabResult, HealthStatus, LocationHealthInspection} from "../../../../../health.model";
+import { _MAEDI_VISNA, _SCRAPIE } from '../../../../../../../global/constants/illness-type.constant';
+import { Datepicker } from '../../../../../../../global/components/datepicker/datepicker.component';
+import { SettingsService } from '../../../../../../../global/services/settings/settings.service';
+import { EditableComponent } from '../../../../../../../global/components/editable/editable.component';
+import { HealthService } from '../../../../../health.service';
+import { NSFOService } from '../../../../../../../global/services/nsfo/nsfo.service';
 
 @Component({
     selector: 'request-auth',
@@ -30,7 +31,7 @@ export class AuthorizationComponent implements OnInit{
     private currentHStatus:any;
     private newHealthStatus:HealthStatus;
 
-    private _inspection: LocationHealthInspection
+    private _inspection: LocationHealthInspection;
 
     @Input() labResult:LabResult = new LabResult();
     @Output() showOverviewPage: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -65,6 +66,14 @@ export class AuthorizationComponent implements OnInit{
 
                 }
             )
+    }
+
+    useDateUntil(): boolean {
+        switch (this.healthService.selectedIllness) {
+          case _MAEDI_VISNA: return true;
+          case _SCRAPIE: return false;
+          default: return true;
+        }
     }
 
     private getCurrentHealthStatus(): void {
@@ -206,8 +215,8 @@ export class AuthorizationComponent implements OnInit{
       this.healthService.finishInspection(this._inspection)
         .subscribe(
               res => {
-                this.healthService.loadToAuthorize('maedi_visna');
-                this.healthService.loadFinished('maedi_visna');
+                this.healthService.loadToAuthorize();
+                this.healthService.loadFinished();
                 this.goToOverviewPage();
               },
               err => {

@@ -7,8 +7,8 @@ import {HealthTableAuthorization} from "./components/tableAuthorization/inspecti
 import {HealthTableExpired} from "./components/tableExpired/inspections.tableExpired";
 import {HealthTableFinished} from "./components/tableFinished/inspections.tableFinished";
 import {HealthTableAnnounced} from "./components/tableAnnounced/inspections.tableAnnounced";
-import {LocationHealthInspection} from "../health.model";
-import { HealthService } from "../health.service";
+import {LocationHealthInspection} from "../../health.model";
+import { HealthService } from "../../health.service";
 
 @Component({
     directives: [
@@ -19,7 +19,6 @@ import { HealthService } from "../health.service";
         HealthTableExpired,
         HealthTableFinished
     ],
-    providers: [ HealthService ],
     template: require('./health.inspections.html'),
     pipes: [TranslatePipe]
 })
@@ -82,7 +81,7 @@ export class HealthInspectionsComponent implements OnInit {
                     this.toAnnounce = locations;
                 }
             });
-        this.healthService.loadToAnnounce('maedi_visna');
+        this.healthService.loadToAnnounce();
 
 
         // // Suscribe and Load Announced inspections
@@ -93,7 +92,7 @@ export class HealthInspectionsComponent implements OnInit {
                     this.announced = inspections;
                 }
             });
-        this.healthService.loadAnnounced('maedi_visna');
+        this.healthService.loadAnnounced();
 
         // Suscribe and Load To Ongoing inspections
         this.healthService.toReceiveLabResults$
@@ -103,7 +102,7 @@ export class HealthInspectionsComponent implements OnInit {
                     this.toReceiveLabResults = inspections;
                 }
             });
-        this.healthService.loadToReceiveLabResults('maedi_visna');
+        this.healthService.loadToReceiveLabResults();
 
         // // Suscribe and Load To Authorize inspections
         this.healthService.toAuthorize$
@@ -115,7 +114,7 @@ export class HealthInspectionsComponent implements OnInit {
                     this.toAuthorize = inspections;
                 }
           });
-        this.healthService.loadToAuthorize('maedi_visna');
+        this.healthService.loadToAuthorize();
 
         // Suscribe and Load To Finished inspections
         this.healthService.finished$.subscribe(inspections => {
@@ -125,7 +124,7 @@ export class HealthInspectionsComponent implements OnInit {
                 this.finished = inspections;
             }
         });
-        this.healthService.loadFinished('maedi_visna');
+        this.healthService.loadFinished();
 
         // Suscribe and Load To Expired inspections
         this.healthService.expired$.subscribe(inspections => {
@@ -134,7 +133,7 @@ export class HealthInspectionsComponent implements OnInit {
                 this.expired = inspections;
             }
         });
-        this.healthService.loadExpired('maedi_visna');
+        this.healthService.loadExpired();
     }
 
     private selectTab(selectedTab: string): void {
@@ -142,11 +141,11 @@ export class HealthInspectionsComponent implements OnInit {
     }
 
     private createAnnouncement(location){
-        this.healthService.createAnnouncement(location, "MAEDI VISNA");
+        this.healthService.createAnnouncement(location);
     }
 
     private createAnnouncements(locations){
-        this.healthService.createAnnouncements(locations, "MAEDI VISNA");
+        this.healthService.createAnnouncements(locations);
     }
 
     private cancelAnnouncement(announcement) {
@@ -154,7 +153,7 @@ export class HealthInspectionsComponent implements OnInit {
     }
 
     private createInspection(announcement) {
-      this.healthService.createInspection(announcement, "MAEDI VISNA");
+      this.healthService.createInspection(announcement);
     }
 
     private cancelInspection(inspection) {

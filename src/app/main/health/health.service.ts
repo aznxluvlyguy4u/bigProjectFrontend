@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import { NSFOService } from '../../global/services/nsfo/nsfo.service';
-import { LocationHealthInspection } from './health.model';
+import { AnnouncementLocationOutput, LocationHealthInspection } from './health.model';
+import { _CAE, _CL, _MAEDI_VISNA, _ROT, _SCRAPIE } from '../../global/constants/illness-type.constant';
+import { CAE, CL, MAEDI_VISNA, ROT, SCRAPIE } from '../../global/constants/illness-type-query-param-value.constant';
 
 @Injectable()
 export class HealthService {
@@ -46,8 +48,12 @@ export class HealthService {
     public expired$ = this.expired.asObservable();
     public loadingState$ = this.loadingState.asObservable();
 
+    orderNumber: string;
+
+    selectedIllness: string;
+
     private _dataStore: {
-        toAnnounce:Array<Location>,
+        toAnnounce:Array<AnnouncementLocationOutput>,
         announced:Array<LocationHealthInspection>,
         toReceiveLabResults:Array<LocationHealthInspection>,
         ongoing:Array<LocationHealthInspection>,
@@ -86,9 +92,9 @@ export class HealthService {
     }
 
     /** Load Locations that need to be inspected soon and need to be Announced. and pass the latest result set in to the observable stream */
-    public loadToAnnounce(illnessType: string){
+    public loadToAnnounce(){
         this.toAnnounceIsLoading.next(true);
-        this.nsfoService.doGetRequest(this.nsfoService.URI_LOCATIONS_TO_ANNOUNCE + '&illnessType=' + illnessType)
+        this.nsfoService.doGetRequest(this.nsfoService.URI_LOCATIONS_TO_ANNOUNCE + '&illness_type=' + this.getIllnessTypeQueryParam())
             .subscribe(res => {
                 this._dataStore.toAnnounce = res.result;
                 this.toAnnounce.next(this._dataStore.toAnnounce);
@@ -100,9 +106,9 @@ export class HealthService {
         this.toAnnounce.next(this._dataStore.toAnnounce);
     }
 
-    public loadAnnounced(illnessType: string){
+    public loadAnnounced(){
         this.announcedIsLoading.next(true);
-        this.nsfoService.doGetRequest(this.nsfoService.URI_LOCATIONS_ANNOUNCED + '&illnessType=' + illnessType)
+        this.nsfoService.doGetRequest(this.nsfoService.URI_LOCATIONS_ANNOUNCED + '&illness_type=' + this.getIllnessTypeQueryParam())
             .subscribe(res => {
                 this._dataStore.announced = res.result;
                 this.announced.next(this._dataStore.announced);
@@ -115,9 +121,9 @@ export class HealthService {
     }
 
     /** Load inspections waiting for the labresults coming in. and pass the latest result set in to the observable stream */
-    public loadToReceiveLabResults(illnessType: string){
+    public loadToReceiveLabResults(){
         this.toReceiveLabResultsIsLoading.next(true);
-        this.nsfoService.doGetRequest(this.nsfoService.URI_INSPECTIONS_TO_RECEIVE_LAB_RESULTS + '&illnessType=' + illnessType)
+        this.nsfoService.doGetRequest(this.nsfoService.URI_INSPECTIONS_TO_RECEIVE_LAB_RESULTS + '&illness_type=' + this.getIllnessTypeQueryParam())
             .subscribe(res => {
                 this._dataStore.toReceiveLabResults = res.result;
                 this.toReceiveLabResults.next(this._dataStore.toReceiveLabResults);
@@ -130,8 +136,8 @@ export class HealthService {
     }
 
     /** Load Inspectiones in need of Authorization and pass the latest result set in to the observable stream */
-    public loadToAuthorize(illnessType: string){
-        this.nsfoService.doGetRequest(this.nsfoService.URI_INSPECTIONS_TO_AUTHORIZE + '&illnessType=' + illnessType)
+    public loadToAuthorize(){
+        this.nsfoService.doGetRequest(this.nsfoService.URI_INSPECTIONS_TO_AUTHORIZE + '&illness_type=' + this.getIllnessTypeQueryParam())
             .subscribe(res => {
                 this._dataStore.toAuthorize = res.result;
                 this.toAuthorize.next(this._dataStore.toAuthorize);
@@ -143,8 +149,8 @@ export class HealthService {
     }
 
     /** Load Finished inspections and pass the latest result set in to the observable stream */
-    public loadFinished(illnessType: string){
-        this.nsfoService.doGetRequest(this.nsfoService.URI_INSPECTIONS_FINISHED + '&illnessType=' + illnessType)
+    public loadFinished(){
+        this.nsfoService.doGetRequest(this.nsfoService.URI_INSPECTIONS_FINISHED + '&illness_type=' + this.getIllnessTypeQueryParam())
             .subscribe(res => {
                 this._dataStore.finished = res.result;
                 this.finished.next(this._dataStore.finished);
@@ -152,8 +158,8 @@ export class HealthService {
     }
 
     /** Load Expired inspections and pass the latest result set in to the observable stream */
-    public loadExpired(illnessType: string){
-        this.nsfoService.doGetRequest(this.nsfoService.URI_INSPECTIONS_EXPIRED + '&illnessType=' + illnessType)
+    public loadExpired(){
+        this.nsfoService.doGetRequest(this.nsfoService.URI_INSPECTIONS_EXPIRED + '&illness_type=' + this.getIllnessTypeQueryParam())
             .subscribe(res => {
                 this._dataStore.expired = res.result;
                 this.expired.next(this._dataStore.expired);
@@ -165,14 +171,16 @@ export class HealthService {
     }
 
     /** Create a single LocationHealthInspection */
-    public createInspection(announcement, illness: string){
+    public createInspection(announcement){
+
+      const illness = this.selectedIllness;
 
       let inspection = {
           ubn: announcement.ubn,
           inspection_subject: illness,
           announcement_id: announcement.id,
           animal_count: announcement.animal_count
-      }
+      };
 
       this.nsfoService.doPostRequest(this.nsfoService.URI_INSPECTIONS, inspection)
         .subscribe(
@@ -183,12 +191,12 @@ export class HealthService {
                     order_number: result.order_number,
                     illness: illness,
                     announcement_id: announcement.id
-                }
+                };
 
                 this.getBarcodes(body, illness);
                 this.getInspectionLetter(body, illness);
-                this.loadAnnounced(illness);
-                this.loadToReceiveLabResults(illness);
+                this.loadAnnounced();
+                this.loadToReceiveLabResults();
             },
             err => {
                 console.log(err);
@@ -238,6 +246,7 @@ export class HealthService {
     public cancelInspection(inspection) {
       console.log(inspection);
       console.log('CANCELING INSPECTION');
+
       // return
       let body = {
           new_status : "CANCELLED"
@@ -245,9 +254,9 @@ export class HealthService {
       return this.nsfoService.doPutRequest(this.nsfoService.URI_INSPECTIONS + '/' + inspection.inspection_id , body)
           .subscribe(
               res => {
-                this.loadToAuthorize('maedi_visna');
-                this.loadFinished('maedi_visna');
-                this.loadToReceiveLabResults('maedi_visna');
+                this.loadToAuthorize();
+                this.loadFinished();
+                this.loadToReceiveLabResults();
               },
               err => {
                 // handle error
@@ -264,7 +273,11 @@ export class HealthService {
     }
 
     /** Create a single Announcement */
-    public createAnnouncement(location, illness: string){
+    public createAnnouncement(location){
+
+      const illness = this.selectedIllness;
+
+      this.orderNumber = undefined;
       console.log(location);
         this.toAnnounceIsLoading.next(true);
         let body = {
@@ -276,15 +289,30 @@ export class HealthService {
                 res => {
                     // TODO: result should come back as an object
                     // TODO: failed should come back as an object
-                    console.log(' RES  = ')
+                    console.log(' RES  = ');
                     console.log(res);
-                    this.loadToAnnounce(illness);
-                    this.loadAnnounced(illness);
-                    let body = {
-                        ubn: res.result.ubn,
-                        illness: illness,
-                        order_number: res.result.order_number
+
+                    this.loadToAnnounce();
+                    this.loadAnnounced();
+
+                    if (res.result.result == "null") {
+
+                        if (res.result.failed.order_number != null) {
+                          this.orderNumber = res.result.failed.order_number;
+                        }
+
+                        //Failed
+                        alert(res.result.failed.message);
+											  return;
                     }
+
+                    let body = {
+                      ubn: res.result.result.ubn,
+                      illness: illness,
+                      order_number: res.result.result.order_number
+                    };
+
+                    console.log(res, body);
                     this.getAnnouncementLetter(body);
                 },
                 err => {
@@ -294,15 +322,18 @@ export class HealthService {
     }
 
     /** create Multiple Announcements */
-    public createAnnouncements(locations: Array<any>, illness: string){
+    public createAnnouncements(locations: Array<any>){
         this.toAnnounceIsLoading.next(true);
+
+        const illness = this.selectedIllness;
+
         let testBatch = [
           locations[0],
           locations[1],
           locations[2],
           locations[3],
           locations[4]
-        ]
+        ];
 
         let toSend = [];
         for(let item of testBatch)
@@ -310,15 +341,15 @@ export class HealthService {
             let body = {
               illness: illness,
               ubn: item.ubn
-            }
+            };
             toSend.push(body);
         }
 
         this.nsfoService.doPostRequest(this.nsfoService.URI_ANNOUNCEMENTS, toSend)
             .subscribe(
                 res => {
-                    this.loadToAnnounce(illness);
-                    this.loadAnnounced(illness);
+                    this.loadToAnnounce();
+                    this.loadAnnounced();
 
                     let succesfull = res.result;
                     let failed = res.failed;
@@ -330,13 +361,15 @@ export class HealthService {
                             ubn: item.ubn,
                             illness: illness,
                             order_number: item.order_number
-                        }
+                        };
                         lettersRequest.push(body);
                     };
                     this.getAnnouncementLetters(lettersRequest);
                 },
                 err => {
                   // handle error
+                  alert(this.nsfoService.getErrorMessage(err));
+									this.toAnnounceIsLoading.next(false);
                 }
             );
     }
@@ -380,5 +413,23 @@ export class HealthService {
 
     public getLabResults(inspection: LocationHealthInspection){
         return this.nsfoService.doGetRequest(this.nsfoService.URI_LAB_RESULTS + '?inspectionId=' + inspection.inspection_id);
+    }
+
+
+    private getIllnessTypeQueryParam() {
+      return HealthService.getIllnessTypeQueryParameterByIllnessType(this.selectedIllness);
+    }
+
+
+    public static getIllnessTypeQueryParameterByIllnessType(illnessType: string): string {
+        switch (illnessType) {
+          case _MAEDI_VISNA: return MAEDI_VISNA;
+          case _SCRAPIE: return SCRAPIE;
+          case _CAE: return CAE;
+          case _CL: return CL;
+          case _ROT: return ROT;
+          default: console.error('INVALID ILLNESS TYPE INPUT');
+        }
+        return null;
     }
 }

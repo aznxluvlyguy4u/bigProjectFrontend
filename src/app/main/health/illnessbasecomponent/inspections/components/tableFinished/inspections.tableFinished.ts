@@ -1,7 +1,7 @@
 import {Component, Input} from "@angular/core";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
-import {SettingsService} from "../../../../../global/services/settings/settings.service";
-import {LocationHealthInspection} from "../../../health.model";
+import {SettingsService} from "../../../../../../global/services/settings/settings.service";
+import {LocationHealthInspection} from "../../../../health.model";
 
 @Component({
     selector: 'health-table-finished',

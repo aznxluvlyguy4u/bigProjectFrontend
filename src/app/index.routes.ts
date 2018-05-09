@@ -13,8 +13,6 @@ import {ConfigCMSComponent} from "./main/config/cms/cms.component";
 import {ProfileComponent} from "./main/profile/profile.component";
 import {LoginComponent} from "./login/login.component";
 import {ConfigChoiceFieldsComponent} from "./main/config/choiceFields/config.choiceFields";
-import {HealthInspectionsComponent} from "./main/health/inspections/health.inspections";
-import {HealthFailedImportsComponent} from "./main/health/failedImports/health.failedImports";
 import {InvoiceOverviewComponent} from "./main/invoice/overview/invoice.overview";
 import {AuthenticatedGuard} from "./global/guards/authenticated.guard";
 import {ConfigAdminsComponent} from "./main/config/admins/config.admins";
@@ -42,6 +40,10 @@ import { AnimalsBatchEditComponent } from './main/animals/animals-batch-edit/ani
 import { AnimalReportsComponent } from './main/report/animals-overviews/animal-reports.component';
 import { AllAnimalsOverviewComponent } from './main/report/animals-overviews/all-animals-overview/all-animals-overview.component';
 import { AnnualTe100ProductionComponent } from './main/report/animals-overviews/annual-te100-production/annual-te100-production.component';
+import { MaediVisnaComponent } from './main/health/illnesses/maedivisna/maedi-visna.component';
+import { ScrapieComponent } from './main/health/illnesses/scrapie/scrapie.component';
+import { HealthInspectionsComponent } from './main/health/illnessbasecomponent/inspections/health.inspections';
+import { HealthFailedImportsComponent } from './main/health/illnessbasecomponent/failedImports/health.failedImports';
 
 const routes: RouterConfig = [
     {
@@ -51,10 +53,27 @@ const routes: RouterConfig = [
             {path: 'dashboard', terminal: true, component: DashboardComponent},
             {path: 'health', component: HealthComponent,
                 children: [
-                    {path: '', terminal: true, redirectTo: 'inspections'},
-                    {path: 'inspections', component: HealthInspectionsComponent},
-                    {path: 'failed_imports', component: HealthFailedImportsComponent},
+                		// Make sure these child paths matches the format of the illness type query parameters
+                    {path: '', terminal: true, redirectTo: 'maedi_visna'},
+                    {path: 'maedi_visna', component: MaediVisnaComponent,
+											children: [
+												{path: '', terminal: true, redirectTo: 'inspections'},
+												{path: 'inspections', component: HealthInspectionsComponent},
+												{path: 'failed_imports', component: HealthFailedImportsComponent},
+											]},
+                    {path: 'scrapie', component: ScrapieComponent,
+											children: [
+												{path: '', terminal: true, redirectTo: 'inspections'},
+												{path: 'inspections', component: HealthInspectionsComponent},
+												{path: 'failed_imports', component: HealthFailedImportsComponent},
+											]},
                 ]},
+					// {path: 'health', component: HealthComponent,
+					// 	children: [
+					// 		{path: '', terminal: true, redirectTo: 'inspections'},
+					// 		{path: 'inspections', component: HealthInspectionsComponent},
+					// 		{path: 'failed_imports', component: HealthFailedImportsComponent},
+					// 	]},
             {path: 'client', component: ClientComponent,
                 children: [
                     {path: '', terminal: true, redirectTo: 'overview'},

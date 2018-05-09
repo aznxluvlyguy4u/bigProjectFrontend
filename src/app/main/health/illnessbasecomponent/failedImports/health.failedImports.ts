@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
-import {SettingsService} from "../../../global/services/settings/settings.service";
-import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
+import {SettingsService} from "../../../../global/services/settings/settings.service";
+import {NSFOService} from "../../../../global/services/nsfo/nsfo.service";
 
 @Component({
     template: require('./health.failedImports.html'),
@@ -21,7 +21,7 @@ export class HealthFailedImportsComponent {
 
     private getFailedImports(): void {
         this.isLoading = true;
-        this.nsfo.doGetRequest(this.nsfo.URI_HEALTH_INSPECTIONS + '/failed-results')
+        this.nsfo.doGetRequest(this.nsfo.URI_HEALTH_INSPECTIONS + '?status=failed')
             .subscribe(
                 res => {
                     this.failedImports = res.result;
@@ -55,6 +55,7 @@ export class HealthFailedImportsComponent {
                 "illness": failedImport.illness
             };
 
+            // TODO call is incorrect / outdated?
             self.nsfo.doPutRequest(self.nsfo.URI_HEALTH_INSPECTIONS + '/failed-results', request)
                 .subscribe(
                     res => {

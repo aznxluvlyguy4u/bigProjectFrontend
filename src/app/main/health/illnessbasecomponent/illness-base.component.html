@@ -1,0 +1,25 @@
+<div class="row hide-for-small-only">
+    <ul class="tabs">
+        <li class="tabs-title">
+            <a [routerLink]="getInspectionsPath()" routerLinkActive="active">{{ 'INSPECTIONS' | translate }}</a>
+        </li>
+        <li class="tabs-title">
+            <a [routerLink]="getFailedImportsPath()" routerLinkActive="active">{{ 'FAILED IMPORTS' | translate }}</a>
+        </li>
+    </ul>
+</div>
+
+<!--TABS SMALL SCREENS-->
+<div class="row show-for-small-only">
+    <label> {{ 'TAB' | translate }}
+        <select [(ngModel)]="selectedRoute" (change)="navigateTo($event.target.value)">
+            <option [value]="getInspectionsPath()">{{ 'INSPECTIONS' | translate }}</option>
+            <option [value]="getFailedImportsPath()">{{ 'FAILED IMPORTS' | translate }}</option>
+        </select>
+    </label>
+</div>
+
+<!--PAGE CONTENT-->
+<div class="row">
+    <router-outlet></router-outlet>
+</div>
