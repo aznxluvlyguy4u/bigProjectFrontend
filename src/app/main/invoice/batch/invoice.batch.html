@@ -1,5 +1,12 @@
 <div id="batch-container" class="content-container">
     <div class="row">
+        &nbsp;
+        <button [disabled]="isBatchSending" (click)="navigateTo('/invoice')" class="small primary button back-button-margins">
+            {{ "BACK" | translate }}
+        </button>
+    </div>
+    <hr>
+    <div class="row">
         <form [formGroup]="form">
             <div class="large-6 columns">
 
@@ -120,12 +127,6 @@
         {{ "SOMETHING WENT WRONG. TRY ANOTHER TIME." | translate }}
         </span>
         </div>
-    </div>
-    <div class="row">
-        &nbsp;
-        <button [disabled]="isBatchSending" (click)="navigateTo('/invoice')" class="small primary button back-button-margins">
-            {{ "BACK" | translate }}
-        </button>
     </div>
 </div>
 <invoice-rule-edit-component
