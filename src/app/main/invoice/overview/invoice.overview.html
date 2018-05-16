@@ -73,7 +73,6 @@
                     <td>{{ 'INVOICE DATE' | translate }}</td>
                     <td>{{ 'STATUS' | translate }}</td>
                     <td>{{ 'REMINDER(S)' | translate }}</td>
-                    <td></td>
                     <td>{{ 'ACTIONS' | translate}}</td>
                 </tr>
             </thead>
@@ -152,9 +151,6 @@
                         <span *ngIf="!invoice.reminders > 0" class="alert label">
                             --
                         </span>
-                    </td>
-                    <td>
-
                     </td>
                     <td>
                         <button type="button" (click)="navigateTo('/invoice/details/edit/' + invoice.id)" [disabled]="invoice.status != 'NOT SEND' && invoice.status != 'INCOMPLETE'" class="tiny primary button">
