@@ -4,7 +4,7 @@
     </div>
     <div class="row">
         <div class="large-12 columns">
-            <span class="pull-right">
+            <span class="pull-left">
                 <button *ngIf="!onlyView" [disabled]="!companySelected" type="button" (click)="sendInvoiceToClient()" class="small primary button">
                     {{ 'SEND INVOICE' | translate }}
                 </button>
@@ -60,8 +60,8 @@
                 {{ 'CONFIRM SELECTION' | translate }}
             </button>
         </div>
+        <hr>
     </div>
-<hr>
     <div *ngIf="companySelected" class="row information-overview">
         <div class="large-3 columns">
             <table>
