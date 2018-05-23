@@ -7,9 +7,6 @@ import { TranslateService } from 'ng2-translate';
 import { Country } from '../../models/country.model';
 import { Animal } from '../../components/livestock/livestock.model';
 
-import { Country } from '../../models/country.model';
-import { Animal } from '../../components/livestock/livestock.model';
-
 @Injectable()
 export class NSFOService {
     private API_SERVER_URL: string = NSFO_API_SERVER_URL;
@@ -67,6 +64,8 @@ export class NSFOService {
 		public URI_GET_OFFSPRING = '/v1/reports/offspring';
 		public URI_GET_ANIMALS_OVERVIEW_REPORT = '/v1/reports/animals-overview';
 		public URI_GET_ANNUAL_TE100_UBN_PRODUCTION_REPORT = '/v1/reports/annual-te100-ubn-production';
+		public URI_GET_ANNUAL_ACTIVE_LIVESTOCK_REPORT = '/v1/reports/annual-active-livestock';
+		public URI_GET_ANNUAL_ACTIVE_LIVESTOCK_RAM_MATES_REPORT = '/v1/reports/annual-active-livestock-ram-mates';
 
 	  public URI_TREATMENTS = '/v1/treatments';
 	  public URI_TREATMENT_TYPES = '/v1/treatment-types';
