@@ -694,5 +694,8 @@
   "SEND INVOICE BATCH": "Verstuur facturen",
   "CONTROL DATE": "Peil datum",
   "BATCH INVOICES": "Automatische facturen",
-  "A TIMEOUT OCCURED. TRY AGAIN LATER, PERHAPS WHEN THE SERVER IS LESS BUSY OR TRY IT WITH LESS DATA.": "Een timeout heeft plaatsgevonden. Probeer het later nog eens, mogelijk wanneer de server minder druk is of probeer het met minder data."
+  "A TIMEOUT OCCURED. TRY AGAIN LATER, PERHAPS WHEN THE SERVER IS LESS BUSY OR TRY IT WITH LESS DATA.": "Een timeout heeft plaatsgevonden. Probeer het later nog eens, mogelijk wanneer de server minder druk is of probeer het met minder data.",
+  "ANNUAL ACTIVE LIVESTOCK REPORT": "Jaarlijkse actieve stallijst rapportage",
+  "ANNUAL ACTIVE LIVESTOCK RAM MATES REPORT": "Jaarlijkse actieve stallijst ram dekkingen rapportage",
+  "THE REFERENCE DATE IS ON DECEMBER 31ST OF THE GIVEN REFERENCE YEAR": "De referentiedatum is op 31 december van het referentiejaar"
 }

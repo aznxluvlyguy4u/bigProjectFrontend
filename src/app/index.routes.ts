@@ -42,6 +42,8 @@ import { AnimalsBatchEditComponent } from './main/animals/animals-batch-edit/ani
 import { AnimalReportsComponent } from './main/report/animals-overviews/animal-reports.component';
 import { AllAnimalsOverviewComponent } from './main/report/animals-overviews/all-animals-overview/all-animals-overview.component';
 import { AnnualTe100ProductionComponent } from './main/report/animals-overviews/annual-te100-production/annual-te100-production.component';
+import { AnnualActiveLivestockComponent } from './main/report/animals-overviews/annual-active-livestock/annual-active-livestock.component';
+import { AnnualActiveLivestockRamMatesComponent } from './main/report/animals-overviews/annual-active-livestock-ram-mates/annual-active-livestock-ram-mates.component';
 
 const routes: RouterConfig = [
     {
@@ -106,6 +108,8 @@ const routes: RouterConfig = [
 											{path: '', terminal: true, redirectTo: 'all-animals-overview'},
 											{path: 'all-animals-overview', component: AllAnimalsOverviewComponent},
 											{path: 'annual-te100-production', component: AnnualTe100ProductionComponent},
+											{path: 'annual-active-livestock', component: AnnualActiveLivestockComponent},
+											{path: 'annual-active-livestock-ram-mates', component: AnnualActiveLivestockRamMatesComponent},
 										]},
                 ]},
 					  {path: 'log', terminal: true, component: TechnicalLogOverviewComponent},
