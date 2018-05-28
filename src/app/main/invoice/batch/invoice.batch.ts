@@ -18,6 +18,7 @@ import {LedgerCategory} from "../../../global/models/ledger-category.model";
 import {FormatService} from "../../../global/services/utils/format.service";
 import {ConfirmationComponent} from "../../../global/components/confirmation/confirmationComponent";
 import {InvoiceRuleEditComponent} from "../../../global/components/InvoiceRuleEditComponent/InvoiceRuleEditComponent";
+import {FeedbackComponent} from "../../../global/components/feedback/feedback-component";
 
 
 @Component({
@@ -30,7 +31,7 @@ import {InvoiceRuleEditComponent} from "../../../global/components/InvoiceRuleEd
         'showSearchInputInDropdown'
     ],
     directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, CompanySelectorComponent,
-        LedgerCategoryDropdownComponent, Datepicker, StandardInvoiceRuleSelectorComponent, ConfirmationComponent, InvoiceRuleEditComponent],
+        LedgerCategoryDropdownComponent, Datepicker, StandardInvoiceRuleSelectorComponent, ConfirmationComponent, InvoiceRuleEditComponent, FeedbackComponent],
     template: require('./invoice.batch.html'),
     pipes: [TranslatePipe, LocalNumberFormat]
 })
@@ -48,6 +49,9 @@ export class InvoiceBatchComponent {
     private invoiceRuleList: InvoiceRule[];
     private isValidForm: boolean = true;
     private isSending: boolean = false;
+    private showFeedback: boolean = false;
+    private showSpinners: boolean = false;
+    private feedbackText: string = "BATCH INVOICES ARE BEING SEND";
     private isBatchSending: boolean = false;
     private isBatchSend: boolean = false;
 
@@ -139,7 +143,8 @@ export class InvoiceBatchComponent {
     }
 
     sendInvoiceBatch() {
-        this.isBatchSending = true;
+        this.showFeedback = true;
+        this.showSpinners = true;
         let dateString;
         let dateFormat;
         dateString = moment(this.form.controls["controlDate"].value, this.settings.getViewDateFormat());
@@ -147,12 +152,12 @@ export class InvoiceBatchComponent {
         this.nsfo.doPostRequest(this.nsfo.URI_INVOICE + "/batch",{"controlDate": dateFormat})
             .subscribe(
                 res => {
-                    this.isBatchSending = false;
-                    this.isBatchSend = true;
+                    this.showSpinners = false;
+                    this.feedbackText = "BATCH INVOICES HAVE BEEN SEND";
                 },
                 error => {
-                    this.isBatchSending = false;
-                    this.isError = true;
+                    this.showSpinners = false;
+                    this.feedbackText = "SOMETHING WENT WRONG. TRY ANOTHER TIME.";
                     alert(this.nsfo.getErrorMessage(error));
                 }
             )
