@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from "@angular/core";
+import {Component, Input} from "@angular/core";
 import {CheckMarkComponent} from "../checkmark/check-mark.component";
 import {TranslatePipe} from "ng2-translate";
 @Component({
@@ -8,14 +8,8 @@ import {TranslatePipe} from "ng2-translate";
     pipes: [TranslatePipe]
 })
 
-export class FeedbackComponent implements OnInit {
+export class FeedbackComponent {
 
     @Input() messageText: string;
     @Input() showSpinners: boolean;
-
-    ngOnInit() {
-
-    }
-
-
 }
