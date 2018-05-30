@@ -162,6 +162,7 @@
                         <button [disabled]="invoice.status != 'UNPAID'" (click)="openModal(invoice)" class="tiny primary button">
                             {{ "IS_PAID" | translate }}
                         </button>
+
                         <button type="button" (click)="downloadPdf(invoice)" class="small primary button">
                             {{ "DOWNLOAD PDF" | translate }}
                         </button>
