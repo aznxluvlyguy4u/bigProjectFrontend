@@ -32,9 +32,9 @@
 
             <button type="button" class="tiny button primary float-right"
                     (click)="navigateToEditInvoiceRules()">
-                                    <span>
-                                        {{ 'GO TO INVOICE RULES OVERVIEW' | translate }}
-                                    </span>
+                <span>
+                    {{ 'GO TO INVOICE RULES OVERVIEW' | translate }}
+                </span>
             </button>
 
             <hr>
@@ -77,7 +77,7 @@
                         <tr *ngIf="isInvoiceRulesEmpty()">
                             <td colspan="10" class="align-center">
                                 <span class="align-center full-width">
-                                    Er zijn nog geen standaard factuurregels in het systeem ingevoerd.
+                                    {{ "THERE ARE NO STANDARD INVOICE RULES YET" | translate}}
                                 </span>
                             </td>
                         </tr>
