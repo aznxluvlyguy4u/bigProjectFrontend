@@ -8,6 +8,7 @@ import {ClientDossierComponent} from "./main/client/dossier/client.dossier";
 import {ClientDetailsComponent} from "./main/client/details/client.details";
 import {InvoiceDetailsComponent} from "./main/invoice/details/invoice.details";
 import {InvoiceComponent} from "./main/invoice/invoice.component";
+import {InvoiceBatchComponent} from "./main/invoice/batch/invoice.batch";
 import {ConfigComponent} from "./main/config/config.component";
 import {ConfigCMSComponent} from "./main/config/cms/cms.component";
 import {ProfileComponent} from "./main/profile/profile.component";
@@ -45,6 +46,7 @@ import { AnnualTe100ProductionComponent } from './main/report/animals-overviews/
 import { AnnualActiveLivestockComponent } from './main/report/animals-overviews/annual-active-livestock/annual-active-livestock.component';
 import { AnnualActiveLivestockRamMatesComponent } from './main/report/animals-overviews/annual-active-livestock-ram-mates/annual-active-livestock-ram-mates.component';
 
+
 const routes: RouterConfig = [
     {
         path: '', component: MainComponent, canActivate: [AuthenticatedGuard],
@@ -71,6 +73,7 @@ const routes: RouterConfig = [
                     {path: 'overview', component: InvoiceOverviewComponent},
                     {path: 'details/:mode', component: InvoiceDetailsComponent},
                     {path: 'details/:mode/:id', component: InvoiceDetailsComponent},
+                    {path: 'batch', component: InvoiceBatchComponent}
                 ]},
             {path: 'configuration', component: ConfigComponent,
                 children: [

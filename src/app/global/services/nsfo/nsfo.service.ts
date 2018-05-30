@@ -28,9 +28,11 @@ export class NSFOService {
     public URI_INVOICE = '/v1/invoices';
     public URI_INVOICE_RULE = '/v1/invoice-rules';
     public URI_INVOICE_SENDER_DETAILS = '/v1/invoice-sender-details';
-		public URI_LEDGER_CATEGORIES = '/v1/ledger-categories';
+    public URI_LEDGER_CATEGORIES = '/v1/ledger-categories';
 
-	  public URI_GET_COUNTRY_CODES = '/v1/countries?continent=europe';
+    public URI_TWINFIELD = '/v1/twinfield';
+
+    public URI_GET_COUNTRY_CODES = '/v1/countries?continent=europe';
     public URI_CMS: string = '/v1/cms';
     public URI_DASHBOARD: string = '/v1/admin/dashboard';
     public URI_MENUBAR: string = '/v1/components/admin-menu-bar';

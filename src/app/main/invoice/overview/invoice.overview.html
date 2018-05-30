@@ -18,12 +18,36 @@
     </div>
     <div class="large-2 columns">
         <label>
+            {{ 'SEARCH' | translate }}
+            <input type="text" [(ngModel)]="filterSearch" (keydown)="page = 1" placeholder="{{ 'SEARCH' | translate }}" maxlength="50">
+        </label>
+    </div>
+    <div class="large-2 columns">
+        <label>
             {{ 'DISPLAY AMOUNT' | translate }}
             <select [(ngModel)]="filterAmount" (change)="page = 1">
                 <option value="10">10</option>
                 <option value="25">25</option>
                 <option value="50">50</option>
             </select>
+        </label>
+    </div>
+    <div class="large-2 columns">
+        <label>
+            {{ 'BATCH INVOICES' | translate }}
+            <select [(ngModel)]="showBatch" (change)="page = 1">
+                <option value="no">{{ "NO" | translate }}</option>
+                <option value="yes">{{ "YES" | translate }}</option>
+            </select>
+        </label>
+    </div>
+    <div class="large-2 columns">
+        <label>
+            &nbsp;
+            <button (click)="navigateTo('/invoice/batch')" class="medium primary button expanded">
+                <i class="fa fa-file-text-o fa-fw" aria-hidden="true"></i>
+                {{ 'BATCH INVOICE' | translate }}
+            </button>
         </label>
     </div>
     <div class="large-2 columns">
@@ -49,7 +73,6 @@
                     <td>{{ 'INVOICE DATE' | translate }}</td>
                     <td>{{ 'STATUS' | translate }}</td>
                     <td>{{ 'REMINDER(S)' | translate }}</td>
-                    <td></td>
                     <td>{{ 'ACTIONS' | translate}}</td>
                 </tr>
             </thead>
@@ -63,7 +86,7 @@
                     </div>
                 </td>
             </tr>
-                <tr *ngFor="let invoice of invoices | invoiceFilter:[status] | paginate: {itemsPerPage: filterAmount, currentPage: page}">
+                <tr *ngFor="let invoice of invoices | invoiceFilter:[filterSearch, status, showBatch] | paginate: {itemsPerPage: filterAmount, currentPage: page}">
                     <td>
                         <span *ngIf="invoice.invoice_number">
                             {{ invoice.invoice_number }}
@@ -130,14 +153,14 @@
                         </span>
                     </td>
                     <td>
-
-                    </td>
-                    <td>
                         <button type="button" (click)="navigateTo('/invoice/details/edit/' + invoice.id)" [disabled]="invoice.status != 'NOT SEND' && invoice.status != 'INCOMPLETE'" class="tiny primary button">
                             {{ 'EDIT' | translate }}
                         </button>
                         <button type="button" (click)="navigateTo('/invoice/details/view/' + invoice.id)" class="small primary button">
                             {{ 'VIEW' | translate }}
+                        </button>
+                        <button [disabled]="invoice.status != 'UNPAID'" (click)="openModal(invoice)" class="tiny primary button">
+                            {{ "IS_PAID" | translate }}
                         </button>
                         <button type="button" (click)="downloadPdf(invoice)" class="small primary button">
                             {{ "DOWNLOAD PDF" | translate }}
@@ -147,5 +170,38 @@
             </tbody>
         </table>
         <pagination (pageChange)="page = $event"></pagination>
+    </div>
+</div>
+
+<div id="confirmation-modal" class="reveal-overlay" [ngStyle]="{'display': displayModal}">
+    <div class="medium reveal" [ngStyle]="{'display': displayModal}">
+        <div class="modal-body">
+
+            <hr>
+
+            <span class="align-center are-you-sure-text">
+                {{ "ARE YOU SURE YOU WANT TO SET THIS INVOICE TO PAID" | translate }}
+            </span>
+
+            <span class="pull-left width-45">
+                <button (click)="setInvoicePaid(selectedInvoiceId)" class="small primary button expanded">
+                    {{ "YES" | translate }}
+                </button>
+            </span>
+            <span class="width-10">
+
+            </span>
+            <span class="pull-right width-45">
+                <button (click)="closeModal()" class="small primary button expanded">
+                    {{ "NO" | translate }}
+                </button>
+            </span>
+
+        </div>
+        <div class="modal-footer">
+
+            <hr>
+
+        </div>
     </div>
 </div>

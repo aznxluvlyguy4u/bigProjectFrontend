@@ -30,6 +30,7 @@ export class Invoice {
     public ledger_account_number: string;
     public vat_breakdown: VatBreakdown;
     public mollie_id: string;
+    public is_batch: boolean;
 }
 
 export class InvoiceRule {
