@@ -690,7 +690,7 @@
   "BATCH INVOICE": "Automatische facturatie",
   "BATCH INVOICE RULES": "Automatische facturatie rekenregels",
   "DOWNLOAD PDF": "Download Pdf",
-  "BATCH INVOICES DATES": "Automatsche facturatie datums",
+  "BATCH INVOICES DATE": "Automatsche facturatie peil datum",
   "SEND INVOICE BATCH": "Verstuur facturen",
   "CONTROL DATE": "Peil datum",
   "BATCH INVOICES": "Automatische facturen",
@@ -698,5 +698,13 @@
   "SETTING AN INVOICE IS PAID": "Factuur betaald zetten",
   "ARE YOU SURE YOU WANT TO SET THIS INVOICE TO PAID": "Weet u zeker dat deze factuur betaald is?",
   "IS_PAID": "Is betaald",
-  "PRICE EXCL VAT": "Prijs zonder BTW"
+  "PRICE EXCL VAT": "Prijs zonder BTW",
+  "BATCH INVOICES SEND CONFIRMATION TEXT": "U staat op het punt om facturen voor alle actieve bedrijven te versturen. Wanneer u op 'ja' drukt, dan zullen actieve bedrijven per locatie een factuur ontvangen met alle toepasselijke regels",
+  "I KNOW WHAT I AM DOING TEXT": "Ik wil graag deze facturen automatisch versturen",
+  "BACK": "Terug",
+  "BATCH INVOICES HAVE BEEN SEND": "Uw facturen zijn verzonden.",
+  "BATCH INVOICES ARE BEING SEND": "Uw facturen worden verzonden, even geduld",
+  "ANNUAL ACTIVE LIVESTOCK REPORT": "Jaarlijkse actieve stallijst rapportage",
+  "ANNUAL ACTIVE LIVESTOCK RAM MATES REPORT": "Jaarlijkse actieve stallijst ram dekkingen rapportage",
+  "THE REFERENCE DATE IS ON DECEMBER 31ST OF THE GIVEN REFERENCE YEAR": "De referentiedatum is op 31 december van het referentiejaar"
 }

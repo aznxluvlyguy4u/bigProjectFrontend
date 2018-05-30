@@ -2,7 +2,32 @@
     <div class="page-header">
         <div class="page-title">{{ pageTitle | translate }}</div>
     </div>
-
+    <div class="row">
+        <div class="large-12 columns">
+            <span class="pull-left">
+                <button type="button" (click)="navigateTo('/invoice')" class="small primary button">
+                    {{ 'RETURN' | translate }}
+                </button>
+                <button *ngIf="!onlyView" [disabled]="!companySelected" type="button" (click)="sendInvoiceToClient()" class="small primary button">
+                    {{ 'SEND INVOICE' | translate }}
+                </button>
+                <button *ngIf="!onlyView" [disabled]="!companySelected" type="button" (click)="saveInvoice()" class="small primary button">
+                    {{ 'SAVE' | translate }}
+                </button>
+                <button type="button" (click)="downloadPdf()" [disabled]="!companySelected" class="small primary button">
+                    {{ "DOWNLOAD PDF" | translate }}
+                </button>
+                <button *ngIf="!onlyView"
+                        [disabled]="(invoice.status != 'NOT SEND' && invoice.status != 'INCOMPLETE') || invoiceId == null"
+                        type="button"
+                        (click)="deleteInvoice()"
+                        class="small alert button">
+                    {{'DELETE' | translate}}
+                </button>
+            </span>
+        </div>
+    </div>
+    <hr>
     <div *ngIf="!onlyView" class="row client-selection">
         <div class="large-6 columns">
             <label>
@@ -35,8 +60,8 @@
                 {{ 'CONFIRM SELECTION' | translate }}
             </button>
         </div>
+        <hr>
     </div>
-<hr>
     <div *ngIf="companySelected" class="row information-overview">
         <div class="large-4 columns">
             <table>
@@ -494,39 +519,6 @@
                     </tr>
                 </tbody>
             </table>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="large-12 columns">
-            <span *ngIf="!onlyView" class="pull-right">
-                <button *ngIf="companySelected" [disabled]="!invoice.company_name" type="button" (click)="sendInvoiceToClient()" class="small primary button">
-                    {{ 'SEND INVOICE' | translate }}
-                </button>
-                <button *ngIf="companySelected" type="button" (click)="saveInvoice()" class="small primary button">
-                    {{ 'SAVE' | translate }}
-                </button>
-                <button *ngIf="!onlyView"
-                        [disabled]="(invoice.status != 'NOT SEND' && invoice.status != 'INCOMPLETE') || invoiceId == null"
-                        type="button"
-                        (click)="deleteInvoice()"
-                        class="small alert button">
-                    {{'DELETE' | translate}}
-                </button>
-                <button type="button" (click)="navigateTo('/invoice')" class="small primary button">
-                    {{ 'RETURN' | translate }}
-                </button>
-            </span>
-            <span *ngIf="onlyView" class="pull-right">
-                <button type="button" (click)="navigateTo('/invoice')" class="small primary button">
-                    {{ 'RETURN' | translate }}
-                </button>
-            </span>
-            <span>
-                <button type="button" (click)="downloadPdf()" [disabled]="!companySelected" class="small primary button">
-                    {{ "DOWNLOAD PDF" | translate }}
-                </button>
-            </span>
         </div>
     </div>
 </div>
