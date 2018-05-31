@@ -96,7 +96,9 @@ export class InvoicesNSFODetailsComponent {
     }
 
     private removeSaveConfirmationText() {
-			this.editText.removeChild(this.editText.firstChild);
+      if (this.editText) {
+				  this.editText.removeChild(this.editText.firstChild);
+      }
 			this.displayingSaveConfirmation = false;
     }
 

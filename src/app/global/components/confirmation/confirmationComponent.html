@@ -1,0 +1,46 @@
+<button
+        class="button primary expanded confirmation-button"
+        [disabled]="disabled"
+        (click)="openModal()"
+        style="white-space: nowrap;"
+>
+    {{ buttonText | translate }}
+</button>
+
+<div class="reveal-overlay" [ngStyle]="{'display': displayModal}">
+    <div class="medium reveal" [ngStyle]="{'display': displayModal}">
+        <div class="modal-body">
+
+            <hr>
+            <div class="display-block">
+                <span class="send-batch-text">
+                    {{ modalDetailText | translate }}
+                </span>
+            </div>
+            <br>
+            <input type="checkbox" [(ngModel)]="additionalCheck">
+            <span>
+                {{ checkBoxText | translate }}
+            </span>
+
+        </div>
+        <div class="modal-footer">
+
+            <hr>
+
+            <span class="pull-left width-45">
+                <button [disabled]="!additionalCheck" (click)="closeModal(); sendConfirmation();" class="small primary button expanded">
+                    {{ confirmButtonText | translate }}
+                </button>
+            </span>
+            <span class="width-10">
+
+            </span>
+            <span class="pull-right width-45">
+                <button [disabled]="isBatchSending" (click)="closeModal()" class="small primary button expanded">
+                    {{ "BACK" | translate }}
+                </button>
+            </span>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,147 @@
+<div id="batch-container" class="content-container">
+    <div class="row">
+        &nbsp;
+        <button [disabled]="isBatchSending" (click)="navigateTo('/invoice')" class="small primary button back-button-margins">
+            {{ "BACK" | translate }}
+        </button>
+    </div>
+    <hr>
+    <div class="row">
+        <form [formGroup]="form">
+            <div class="large-6 columns">
+
+                <div class="row">
+                    <div class="large-12 columns">
+                        <h5>{{ 'BATCH INVOICES DATE' | translate }}</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="large-3 columns">
+                        <label class="middle">
+                            {{ "CONTROL DATE" | translate }} :
+                        </label>
+                    </div>
+                    <div class="large-4 columns end">
+                        <datepicker
+                                [formCtrl]="form.controls['controlDate']"
+                                [initDate]="temporaryRuleDate"
+                                [modelFormat]="settings.getViewDateFormat()"
+                                [viewFormat]="settings.getViewDateFormat()"
+                        >
+
+                        </datepicker>
+                    </div>
+                </div>
+            </div>
+            <div class="large-6">
+                <div id="batch-confirm-button" class="large-7 columns">
+                    <confirmation-modal
+                            [buttonText]="'SEND INVOICE BATCH'"
+                            [confirmButtonText]="'SEND INVOICE BATCH'"
+                            [modalDetailText]="'BATCH INVOICES SEND CONFIRMATION TEXT'"
+                            [checkBoxText]="'I KNOW WHAT I AM DOING TEXT'"
+                            (result)="checkResult($event)"
+                    ></confirmation-modal>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="large-12 columns">
+            <div class="large-4">
+                <h4>
+                    {{ "BATCH INVOICE RULES" | translate }}
+                </h4>
+            </div>
+            <table>
+                <thead>
+                <tr>
+                    <td width="1"></td>
+                    <td>
+                        {{"CATEGORY" | translate }}
+                    </td>
+                    <td>
+                        {{ 'DESCRIPTION' | translate }}
+                    </td>
+                    <td class="text-left">
+                        {{ 'VAT RATE' | translate }}
+                    </td>
+                    <td class="text-left">
+                        {{ 'UNIT COST' | translate }}
+                    </td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let invoice_rule of invoiceRuleList" *ngIf="invoice_rule != null">
+                    <td width="1">
+                        <button [disabled]="isBatchSending" (click)="setModalInput(invoice_rule)"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></button>
+                    </td>
+                    <td>
+                        {{invoice_rule.ledger_category ? invoice_rule.ledger_category.code + ': ' + invoice_rule.ledger_category.description : ''}}
+                    </td>
+                    <td>
+                        {{invoice_rule.description}}
+                    </td>
+                    <td class="text-left">
+                        {{invoice_rule.vat_percentage_rate}}%
+                    </td>
+                    <td class="text-left">
+                        {{ invoice_rule.price_excl_vat | localNumberFormat:3 }}
+                    </td>
+                </tr>
+                <tr *ngIf="isLoading">
+                    <td colspan="5">
+                        <div class="spinner">
+                            <div class="bounce1"></div>
+                            <div class="bounce2"></div>
+                            <div class="bounce3"></div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div *ngIf="showFeedback" class="row">
+        <feedback-component
+            [messageText]="feedbackText"
+            [showSpinners]="showSpinners"
+        >
+
+        </feedback-component>
+        <div *ngIf="isBatchSending">
+            <div class="large-12 columns">
+                <div class="spinner">
+                    <div class="bounce1"></div>
+                    <div class="bounce2"></div>
+                    <div class="bounce3"></div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="isBatchSending" class="large-12 columns align-center">
+        <span>
+            {{ "BATCH INVOICES ARE BEING SEND" | translate}}
+        </span>
+        </div>
+        <div *ngIf="isBatchSend" class="large-12 columns align-center">
+        <span>
+            {{ "BATCH INVOICES HAVE BEEN SEND" | translate}}
+        </span>
+        </div>
+        <div>
+            <span *ngIf="isError" class="large-12 columns align-center">
+                {{ "SOMETHING WENT WRONG. TRY ANOTHER TIME." | translate }}
+            </span>
+        </div>
+    </div>
+</div>
+<invoice-rule-edit-component
+    [selectedRule]="selectedRule"
+    [selectedLedgerCategory]="selectedRule.ledger_category"
+    [isModalEditMode]="true"
+    [displayModal]="displayModal"
+    (close)="closeModal()"
+    (sendRule)="editInvoiceRule($event)"
+>
+
+</invoice-rule-edit-component>

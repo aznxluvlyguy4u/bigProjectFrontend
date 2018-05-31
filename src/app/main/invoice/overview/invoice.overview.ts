@@ -12,16 +12,20 @@ import {DownloadService} from "../../../global/services/download/download.servic
 
 @Component({
     providers: [PaginationService],
-    directives: [PaginationComponent],
+    directives: [PaginationComponent, ROUTER_DIRECTIVES],
     template: require('./invoice.overview.html'),
     pipes: [TranslatePipe, PaginatePipe, invoiceFilterPipe]
 })
 
 export class InvoiceOverviewComponent {
+    private selectedInvoice: Invoice;
+    private displayModal: string = 'none';
     private invoices: Invoice[] = [];
     private isLoaded: boolean = false;
+    private filterSearch: string = '';
     private status: string = 'ALL';
     private filterAmount: number = 10;
+    private showBatch: string = "no";
 
     constructor(private nsfo: NSFOService, private settings: SettingsService, private router: Router, private downloadService: DownloadService) {
         this.getInvoicesList();
@@ -35,6 +39,25 @@ export class InvoiceOverviewComponent {
                     this.isLoaded = true;
                 }
             );
+    }
+
+    openModal(invoice: Invoice) {
+        this.selectedInvoice = invoice;
+        this.displayModal = 'block';
+    }
+
+    closeModal() {
+        this.displayModal = 'none';
+    }
+
+    setInvoicePaid() {
+        this.selectedInvoice.status = "PAID";
+        this.nsfo.doPutRequest(this.nsfo.URI_INVOICE + "/" + this.selectedInvoice.id, this.selectedInvoice).subscribe(
+            res => {
+                this.closeModal();
+                this.getInvoicesList();
+            }
+        )
     }
 
     private calculateDays(date: string) {

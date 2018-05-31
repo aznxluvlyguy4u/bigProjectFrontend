@@ -28,9 +28,11 @@ export class NSFOService {
     public URI_INVOICE = '/v1/invoices';
     public URI_INVOICE_RULE = '/v1/invoice-rules';
     public URI_INVOICE_SENDER_DETAILS = '/v1/invoice-sender-details';
-		public URI_LEDGER_CATEGORIES = '/v1/ledger-categories';
+    public URI_LEDGER_CATEGORIES = '/v1/ledger-categories';
 
-	  public URI_GET_COUNTRY_CODES = '/v1/countries?continent=europe';
+    public URI_TWINFIELD = '/v1/twinfield';
+
+    public URI_GET_COUNTRY_CODES = '/v1/countries?continent=europe';
     public URI_CMS: string = '/v1/cms';
     public URI_DASHBOARD: string = '/v1/admin/dashboard';
     public URI_MENUBAR: string = '/v1/components/admin-menu-bar';
@@ -80,6 +82,8 @@ export class NSFOService {
 		public URI_GET_OFFSPRING = '/v1/reports/offspring';
 		public URI_GET_ANIMALS_OVERVIEW_REPORT = '/v1/reports/animals-overview';
 		public URI_GET_ANNUAL_TE100_UBN_PRODUCTION_REPORT = '/v1/reports/annual-te100-ubn-production';
+		public URI_GET_ANNUAL_ACTIVE_LIVESTOCK_REPORT = '/v1/reports/annual-active-livestock';
+		public URI_GET_ANNUAL_ACTIVE_LIVESTOCK_RAM_MATES_REPORT = '/v1/reports/annual-active-livestock-ram-mates';
 
 	  public URI_TREATMENTS = '/v1/treatments';
 	  public URI_TREATMENT_TYPES = '/v1/treatment-types';
