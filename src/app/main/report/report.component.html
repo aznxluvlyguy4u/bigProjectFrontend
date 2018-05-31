@@ -18,7 +18,11 @@
     <div class="row hide-for-small-only">
         <ul class="tabs">
             <li class="tabs-title">
-                <a routerLink="/report/animal-reports" routerLinkActive="active">{{ 'ANIMAL REPORTS' | translate }}</a>
+                <a routerLink="/report/animal-reports" routerLinkActive="active">{{ 'ANIMAL REPORTS' | translate }}
+                    <i class="fa fa-info-circle" aria-hidden="true"
+                       title="{{'ANIMAL REPORTS TAB INFO TEXT' | translate}}">
+                    </i>
+                </a>
             </li>
         </ul>
     </div>
@@ -29,6 +33,11 @@
             <select [(ngModel)]="selectedRoute" (change)="navigateTo($event.target.value)">
                 <option value="/report/animal-reports">{{ 'ANIMAL REPORTS' | translate }}</option>
             </select>
+            <div *ngIf="selectedRoute === '/report/animal-reports'" class="centered-tab-tooltip">
+                <i class="fa fa-info-circle" aria-hidden="true"
+                   title="{{'ANIMAL REPORTS TAB INFO TEXT' | translate}}">
+                </i>
+            </div>
         </label>
     </div>
 
