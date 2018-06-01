@@ -33,6 +33,7 @@ export class Animal {
 	  collar_color?: string;
     collar_number?: string;
     n_ling?: number;
+	  merged_n_ling?: number;
     name?: string;
     date_of_birth?: string;
     date_of_death?: string;

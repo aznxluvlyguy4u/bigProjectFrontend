@@ -886,7 +886,7 @@
                         ></app-parent-selector>
                     </td>
 
-                    <td *ngIf="showPedigreeData || showPedigreeRegisterData">{{ animal.litter ? animal.litter.born_alive_count + animal.litter.stillborn_count : '-' }}</td>
+                    <td *ngIf="showPedigreeData || showPedigreeRegisterData">{{ animal.merged_n_ling ? animal.merged_n_ling : '-' }}</td>
                     <td *ngIf="showPedigreeData"><input title="ubnOfBirth" class="table-input" type="number" [(ngModel)]="animal.ubn_of_birth" [disabled]="isSaving"></td>
                     <td *ngIf="showPedigreeData" style="white-space: nowrap">
                         {{ animal.location_of_birth ? animal.location_of_birth.ubn : '-' }}  <i class="fa fa-info-circle" aria-hidden="true"
