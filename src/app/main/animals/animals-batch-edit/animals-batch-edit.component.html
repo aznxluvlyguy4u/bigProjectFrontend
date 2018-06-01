@@ -787,7 +787,7 @@
                 <tr *ngFor="let animal of editedAnimals | animalBatchEditFilter:getFilterOptions() | paginate: {itemsPerPage: filterAmount, currentPage: page}">
                     <td *ngIf="showIds || showDates" title="{{ animal.creation_date  | date: 'dd-MM-yyyy @HH:mm:ss' }}">{{ animal.creation_date  | date: 'dd-MM-yyyy' }}</td>
                     <td *ngIf="showIds">{{ animal.id }}</td>
-                    <td *ngIf="showIds"><input title="aiind" class="table-input" type="number" [(ngModel)]="animal.name" [disabled]="isSaving"></td>
+                    <td *ngIf="showIds">{{ animal.name }}</td>
                     <td *ngIf="showIds"><input title="nickname" class="table-input" type="text" [(ngModel)]="animal.nickname" [disabled]="isSaving"></td>
 
                     <td *ngIf="showIds">
