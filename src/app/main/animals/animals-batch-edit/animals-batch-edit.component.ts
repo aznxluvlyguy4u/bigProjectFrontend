@@ -67,7 +67,7 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 		genderTypes: string[] = GENDER_TYPES;
 
 		showIds: boolean;
-		showBreedData: boolean;
+		showPedigreeRegisterData: boolean;
 		showPedigreeData: boolean;
 		showNote: boolean;
 		showDates: boolean;
@@ -160,7 +160,7 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 
 				// TODO edit later
 				this.showIds = true;
-				this.showBreedData = true;
+				this.showPedigreeRegisterData = true;
 				this.showPedigreeData = true;
 				this.showNote = true;
 				this.showDates = true;
