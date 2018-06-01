@@ -158,7 +158,6 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 				this.retrievingAnimals = false;
 				this.loadingLocations = false;
 
-				// TODO edit later
 				this.showIds = true;
 				this.showPedigreeRegisterData = true;
 				this.showPedigreeData = true;
