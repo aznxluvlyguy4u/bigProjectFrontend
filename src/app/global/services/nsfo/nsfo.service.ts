@@ -6,6 +6,7 @@ import _ = require("lodash");
 import { TranslateService } from 'ng2-translate';
 import { Country } from '../../models/country.model';
 import { Animal } from '../../components/livestock/livestock.model';
+import { SortService } from '../utils/sort.service';
 
 @Injectable()
 export class NSFOService {
@@ -85,7 +86,7 @@ export class NSFOService {
 		countryCodeList: Country[] = [];
 		countries: Country[] = [];
 
-    constructor(private http:Http, private translate: TranslateService) {
+    constructor(private http:Http, private translate: TranslateService, private sort: SortService) {
 				this.doGetCountryCodeList(); // if in OnInit it is loaded too late
 		}
 
@@ -93,8 +94,8 @@ export class NSFOService {
 			this.doGetRequest(this.URI_GET_COUNTRY_CODES)
 				.subscribe(
 					res => {
-						this.countryCodeList = _.sortBy(res.result, ['code']);
-						this.countries = _.sortBy(res.result, ['name']);
+						this.countryCodeList = this.sort.sortCountries(res.result, 'code');
+						this.countries = this.sort.sortCountries(res.result, 'name');
 					},
 					error => {
 						alert(this.getErrorMessage(error));
