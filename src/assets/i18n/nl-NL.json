@@ -710,5 +710,7 @@
   "THERE ARE NO STANDARD INVOICE RULES YET": "Er zijn nog geen standaard factuurregels in het systeem ingevoerd.",
   "ANIMAL REPORTS TAB INFO TEXT": "Hier staan alleen de globale dierrapportages. Dierrapportages die bij specifieke dieren horen, zitten in het Diergegevens>Batchbewerking scherm na het ophalen van de dieren.",
   "PREDICATES": "Predicaten",
-  "DNA FEATURES": "DNA Kenmerken"
+  "DNA FEATURES": "DNA Kenmerken",
+  "N-LING BACKUP VALUE": "N-ling backup waarde",
+  "N-LING BACKUP VALUE EXPLANATION": "Wanneer het dier zelf in een worp zit, dan wordt de N-ling waarde gehaald uit de worpgegevens. Anders wordt de N-ling waarde gelijk gezet als deze N-ling backup waarde."
 }
