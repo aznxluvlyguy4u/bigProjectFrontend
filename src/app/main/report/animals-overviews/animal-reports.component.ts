@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { TranslatePipe, TranslateService } from 'ng2-translate';
-import { ALL_ANIMALS_OVERVIEW_REPORT, TE100_ANNUAL_PRODUCTION } from '../../../global/constants/report-type.constant';
+import {
+	ALL_ANIMALS_OVERVIEW_REPORT, ANNUAL_ACTIVE_LIVESTOCK_RAM_MATES_REPORT, ANNUAL_ACTIVE_LIVESTOCK_REPORT,
+	TE100_ANNUAL_PRODUCTION
+} from '../../../global/constants/report-type.constant';
 import { Router, ROUTER_DIRECTIVES } from '@angular/router';
 import { AllAnimalsOverviewComponent } from './all-animals-overview/all-animals-overview.component';
 import { AnnualTe100ProductionComponent } from './annual-te100-production/annual-te100-production.component';
@@ -25,20 +28,19 @@ export class AnimalReportsComponent {
 		return [
 			ALL_ANIMALS_OVERVIEW_REPORT,
 			TE100_ANNUAL_PRODUCTION,
+			ANNUAL_ACTIVE_LIVESTOCK_REPORT,
+			ANNUAL_ACTIVE_LIVESTOCK_RAM_MATES_REPORT
 		];
 	}
 
 	loadAnimalReportComponent() {
 		let url = this.reportBaseUrl;
 		switch (this.selectedOption) {
-			case ALL_ANIMALS_OVERVIEW_REPORT:
-				url = this.reportBaseUrl+'all-animals-overview';
-				break;
-			case TE100_ANNUAL_PRODUCTION:
-				url = this.reportBaseUrl+'annual-te100-production';
-				break;
-			default:
-				return;
+			case ALL_ANIMALS_OVERVIEW_REPORT: url += 'all-animals-overview'; break;
+			case TE100_ANNUAL_PRODUCTION: url += 'annual-te100-production'; break;
+			case ANNUAL_ACTIVE_LIVESTOCK_REPORT: url += 'annual-active-livestock'; break;
+			case ANNUAL_ACTIVE_LIVESTOCK_RAM_MATES_REPORT: url += 'annual-active-livestock-ram-mates'; break;
+			default: return;
 		}
 		this.navigateTo(url);
 	}

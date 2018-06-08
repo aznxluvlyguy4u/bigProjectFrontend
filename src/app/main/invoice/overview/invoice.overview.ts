@@ -36,7 +36,6 @@ export class InvoiceOverviewComponent {
             .subscribe(
                 res => {
                     this.invoices = <Invoice[]> res.result;
-                    console.log(this.invoices);
                     this.isLoaded = true;
                 }
             );

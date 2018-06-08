@@ -1,5 +1,12 @@
 <div id="batch-container" class="content-container">
     <div class="row">
+        &nbsp;
+        <button [disabled]="isBatchSending" (click)="navigateTo('/invoice')" class="small primary button back-button-margins">
+            {{ "BACK" | translate }}
+        </button>
+    </div>
+    <hr>
+    <div class="row">
         <form [formGroup]="form">
             <div class="large-6 columns">
 
@@ -95,7 +102,13 @@
             </table>
         </div>
     </div>
-    <div class="row">
+    <div *ngIf="showFeedback" class="row">
+        <feedback-component
+            [messageText]="feedbackText"
+            [showSpinners]="showSpinners"
+        >
+
+        </feedback-component>
         <div *ngIf="isBatchSending">
             <div class="large-12 columns">
                 <div class="spinner">
@@ -117,15 +130,9 @@
         </div>
         <div>
             <span *ngIf="isError" class="large-12 columns align-center">
-        {{ "SOMETHING WENT WRONG. TRY ANOTHER TIME." | translate }}
-        </span>
+                {{ "SOMETHING WENT WRONG. TRY ANOTHER TIME." | translate }}
+            </span>
         </div>
-    </div>
-    <div class="row">
-        &nbsp;
-        <button [disabled]="isBatchSending" (click)="navigateTo('/invoice')" class="small primary button back-button-margins">
-            {{ "BACK" | translate }}
-        </button>
     </div>
 </div>
 <invoice-rule-edit-component

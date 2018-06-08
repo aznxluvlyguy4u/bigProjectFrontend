@@ -13,7 +13,10 @@ import { Ram } from '../../models/ram.model';
 import { UtilsService } from '../utils/utils.service';
 import { Animal } from '../../components/livestock/livestock.model';
 import { NSFOService } from '../nsfo/nsfo.service';
-import { ALL_ANIMALS_OVERVIEW_REPORT, TE100_ANNUAL_PRODUCTION } from '../../constants/report-type.constant';
+import {
+	ALL_ANIMALS_OVERVIEW_REPORT, ANNUAL_ACTIVE_LIVESTOCK_RAM_MATES_REPORT, ANNUAL_ACTIVE_LIVESTOCK_REPORT,
+	TE100_ANNUAL_PRODUCTION
+} from '../../constants/report-type.constant';
 import {CSV, PDF} from '../../variables/file-type.enum';
 import {Invoice} from "../../../main/invoice/invoice.model";
 
@@ -272,6 +275,24 @@ export class DownloadService {
 			let download = this.getNewDownloadRequest(TE100_ANNUAL_PRODUCTION, CSV, year, null, queryParam);
 
 			this.doDownloadGetRequest(this.nsfo.URI_GET_ANNUAL_TE100_UBN_PRODUCTION_REPORT + queryParam, download);
+		}
+
+
+		doAnnualActiveLivestockReportGetRequest(year: number) {
+
+			let queryParam = '?' + YEAR + '=' + year;
+			let download = this.getNewDownloadRequest(ANNUAL_ACTIVE_LIVESTOCK_REPORT, CSV, year, null, queryParam);
+
+			this.doDownloadGetRequest(this.nsfo.URI_GET_ANNUAL_ACTIVE_LIVESTOCK_REPORT + queryParam, download);
+		}
+
+
+		doAnnualActiveLivestockRamMatesReportGetRequest(year: number) {
+
+			let queryParam = '?' + YEAR + '=' + year;
+			let download = this.getNewDownloadRequest(ANNUAL_ACTIVE_LIVESTOCK_RAM_MATES_REPORT, CSV, year, null, queryParam);
+
+			this.doDownloadGetRequest(this.nsfo.URI_GET_ANNUAL_ACTIVE_LIVESTOCK_RAM_MATES_REPORT + queryParam, download);
 		}
 
 
