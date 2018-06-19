@@ -24,12 +24,15 @@ export class InvoiceRuleEditComponent {
             description: ['', Validators.required],
             price_excl_vat: ['', Validators.required],
             vat_percentage_rate: ['', Validators.required],
+            article_code: ['', Validators.required],
+            sub_article_code: ['']
         });
     }
 
     @Input() selectedRule: InvoiceRule;
     @Input() selectedLedgerCategory: LedgerCategory;
     @Input() isModalEditMode: boolean;
+    @Input() disableSubArticle: boolean;
     @Input() displayModal: string = "none";
     @Output() sendRule = new EventEmitter<InvoiceRule>();
     @Output() newRule = new EventEmitter<InvoiceRule>();
@@ -38,6 +41,7 @@ export class InvoiceRuleEditComponent {
     private isValidForm: boolean = true;
     private isSending: boolean = false;
     private form: FormGroup;
+
 
     getVatPercentages(): number[] {
         return this.settings.getVatPercentages();
