@@ -56,6 +56,7 @@ export class invoiceFilterPipe implements PipeTransform{
                 (invoice.paid_date != null ? invoice.paid_date : "") +
                 (invoice.company_name != null ? invoice.company_name.toLocaleUpperCase() : "") +
                 (invoice.company_vat_number != null ? invoice.company_vat_number : "") +
+                (invoice.company_debtor_number != null ? invoice.company_debtor_number : "") +
                 invoice.ubn +
                 invoice.status
             ).indexOf(filterInput) !== -1);
