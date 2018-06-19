@@ -3,7 +3,7 @@ import {Component} from "@angular/core";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {Router, ActivatedRoute} from "@angular/router";
 import {Subscription} from "rxjs/Rx";
-import {Client, User} from "../client.model";
+import {Client, TwinfieldCustomer, TwinfieldOffice, User} from "../client.model";
 import {ControlGroup, FormBuilder, Validators} from "@angular/common";
 import {UsersDisplay} from "./component/users/users.component";
 import {LocationsDisplay} from "./component/locations/locations.component";
@@ -30,6 +30,11 @@ export class ClientDossierComponent {
 
     private client: Client = new Client();
     private clientTemp: Client;
+
+    private twinfieldOffices: TwinfieldOffice[] = [];
+    private twinfieldCodes: TwinfieldCustomer[] = [];
+
+    private selectedOffice: string;
 
     private form: ControlGroup;
     private isValidForm: boolean = true;
@@ -70,7 +75,8 @@ export class ClientDossierComponent {
             billing_address_state: ['', Validators.required],
             animal_health_subscription: ['NO'],
             subscription_date: [''],
-            twinfield_code: [0, Validators.required]
+            twinfield_code: [0, Validators.required],
+            twinfield_administration_code: ['', Validators.required]
         });
     }
 
@@ -89,6 +95,7 @@ export class ClientDossierComponent {
                 this.pageTitle = 'NEW CLIENT';
                 this.clientTemp = _.cloneDeep(this.client);
             }
+            this.getTwinfieldAdministrations();
         });
     }
 
@@ -127,10 +134,38 @@ export class ClientDossierComponent {
                     user.primary_contactperson = true;
                     this.client.users.push(user);
 
+                    if (this.client.twinfield_administration_code) {
+                        this.getTwinfieldCustomersDirect(this.client.twinfield_administration_code);
+                    }
+
                     this.clientTemp = _.cloneDeep(this.client);
                 }
             )
     };
+
+    private getTwinfieldAdministrations() {
+        this.nsfo.doGetRequest(this.nsfo.URI_TWINFIELD).subscribe(
+            res => {
+                this.twinfieldOffices = res.result;
+            }
+        );
+    }
+
+    private getTwinfieldCustomersDirect(office) {
+        this.nsfo.doGetRequest(this.nsfo.URI_TWINFIELD + '/' + office).subscribe(
+            res => {
+                this.twinfieldCodes = res.result;
+            }
+        );
+    }
+
+    private getTwinfieldCustomers(office) {
+        this.nsfo.doGetRequest(this.nsfo.URI_TWINFIELD + '/' + office.value).subscribe(
+            res => {
+                this.twinfieldCodes = res.result;
+            }
+        );
+    }
     
     private updateLocations(locations: Location[]): void {
         this.client.locations = locations;
@@ -151,6 +186,9 @@ export class ClientDossierComponent {
     private saveClient(): void {
         this.isValidForm = true;
         this.errorMessage = '';
+
+        console.log(this.form.controls['twinfield_administration_code'].value);
+        console.log(this.form.controls['twinfield_code'].value);
 
         if (this.client.users.length == 0) {
             this.isValidForm = false;
@@ -206,6 +244,7 @@ export class ClientDossierComponent {
         this.isValidForm = true;
         this.errorMessage = '';
 
+
         let owner = _.find(this.client.users, ['primary_contactperson', true]);
         if (!owner) {
             this.isValidForm = false;
@@ -218,6 +257,11 @@ export class ClientDossierComponent {
                 this.savingInProgress = true;
 
                 let newClient = _.cloneDeep(this.client);
+
+                if (this.form.controls['twinfield_administration_code'].value && this.form.controls['twinfield_code'].value) {
+                    newClient.twinfield_administration_code = this.form.controls['twinfield_administration_code'].value;
+                    newClient.twinfield_code = this.form.controls['twinfield_code'].value;
+                }
 
                 if(this.form.controls['animal_health_subscription'].value == 'YES') {
                     newClient.animal_health_subscription = true;
