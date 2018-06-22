@@ -176,10 +176,10 @@ export class HealthService {
       const illness = this.selectedIllness;
 
       let inspection = {
-          ubn: announcement.ubn,
+          ubn: announcement.location.ubn,
           inspection_subject: illness,
           announcement_id: announcement.id,
-          animal_count: announcement.animal_count
+          animal_count: announcement.location.livestock_count
       };
 
       this.nsfoService.doPostRequest(this.nsfoService.URI_INSPECTIONS, inspection)
@@ -187,8 +187,8 @@ export class HealthService {
             res => {
                 let result = res.result;
                 let body = {
-                    ubn: announcement.ubn,
-                    order_number: result.order_number,
+                    ubn: announcement.location.ubn,
+                    order_number: announcement.order_number,
                     illness: illness,
                     announcement_id: announcement.id
                 };
