@@ -307,7 +307,7 @@ export class HealthService {
                     }
 
                     let body = {
-                      ubn: res.result.result.ubn,
+                      ubn: res.result.result.location.ubn,
                       illness: illness,
                       order_number: res.result.result.order_number
                     };
