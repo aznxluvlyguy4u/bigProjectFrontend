@@ -19,23 +19,21 @@
         <td>{{ inspection?.order_number }}</td>
         <td>{{ inspection?.illness_type | translate }}</td>
         <td>
-            <span *ngIf="request?.request_date">
-                {{ settings.convertToViewDate(request?.request_date) }}
+            <span *ngIf="inspection?.request_date">
+                {{ settings.convertToViewDate(inspection?.request_date) }}
             </span>
-            <span *ngIf="!request?.request_date">
+            <span *ngIf="!inspection?.request_date">
                 --
             </span>
         </td>
         <td>
-            {{ settings.convertToViewDate(request?.date_started) }}
+            {{ settings.convertToViewDate(inspection?.date_started) }}
         </td>
         <td>
             {{ 'RECEIVE LABRESULTS' | translate }}
         </td>
         <td>
-            PROPERTY MISSING
-            <!--{{ request?.action_taken_by?.first_name + " " + request?.action_taken_by?.last_name }}
-            ({{ settings.convertToViewDateTime(request.direction_date) }})-->
+            {{ inspection.action_log.action_by.first_name }} {{ inspection.action_log.action_by.last_name }}
         </td>
         <td>
             <span class="pull-right">
