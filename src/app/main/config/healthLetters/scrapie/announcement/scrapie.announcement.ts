@@ -43,7 +43,7 @@ export class ScrapieAnnouncementComponent {
 
     private getHTMLData(): void {
         this.isSaving = true;
-        this.nsfo.doGetRequest(this.nsfo.URI_HEALTH_LOCATION_LETTERS + '/' + this.illness + '/'+ this.letter_type)
+        this.nsfo.doGetRequest(this.nsfo.URI_ANNOUNCEMENTS_LETTER_TEMPLATES + '?illness_type=' + this.illness)
             .subscribe(
                 res => {
                     this.letter = res.result;
@@ -53,6 +53,17 @@ export class ScrapieAnnouncementComponent {
                         this.isLoaded = true;
                     }
                     CKEDITOR.instances.scrapie_announcement_editor.setData(res.result.html);
+                    this.loadCSS();
+
+                    this.isSaving = false;
+                },
+                error => {
+                    if (!this.isLoaded) {
+                        CKEDITOR.replace('scrapie_announcement_editor', this.editorConfig);
+                        CKEDITOR.instances.scrapie_announcement_editor.on('instanceReady', this.loadCSS);
+                        this.isLoaded = true;
+                    }
+                    CKEDITOR.instances.scrapie_announcement_editor.setData("");
                     this.loadCSS();
 
                     this.isSaving = false;
@@ -70,12 +81,12 @@ export class ScrapieAnnouncementComponent {
     private save(): void {
         this.isSaving = true;
         let request = {
-            "illness": this.illness,
+            "illness_type": this.illness.toLocaleUpperCase(),
             "letter_type": this.letter_type,
             "html": CKEDITOR.instances.scrapie_announcement_editor.getData()
         };
 
-        this.nsfo.doPostRequest(this.nsfo.URI_HEALTH_LOCATION_LETTERS, request)
+        this.nsfo.doPostRequest(this.nsfo.URI_ANNOUNCEMENTS_LETTER_TEMPLATES, request)
             .subscribe(
                 res => {
                     this.getHTMLData();
