@@ -11,6 +11,11 @@
             <i class="fa fa-download"><span *ngIf="downloadCount() > 0"> {{ downloadCount() }}</span></i>
         </button>
     </ng-template>
+    <ng-template *ngIf="!isReportModalEmpty()">
+        <button type="button" (click)="toggleReportModal()" [class.active]="isActiveReportModal" class="download-toggle">
+            <i class="fa fa-file"><span *ngIf="reportCount() > 0"> {{ reportCount() }}</span></i>
+        </button>
+    </ng-template>
     <button type="button" (click)="toggleUserMenu()" [class.active]="isActiveUserMenu" class="profile-toggle">
         <i class="fa fa-user"><span class="show-for-large"> {{ admin.first_name }} {{ admin.last_name }} </span></i>
     </button>
@@ -101,3 +106,4 @@
 </div>
 
 <app-download-modal></app-download-modal>
+<app-report-modal></app-report-modal>
