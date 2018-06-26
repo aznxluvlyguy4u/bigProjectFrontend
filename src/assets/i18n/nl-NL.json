@@ -725,5 +725,6 @@
   "ANNUAL ACTIVE LIVESTOCK RAM MATES REPORT": "Jaarlijkse actieve stallijst ram dekkingen rapportage",
   "THE REFERENCE DATE IS ON DECEMBER 31ST OF THE GIVEN REFERENCE YEAR": "De referentiedatum is op 31 december van het referentiejaar",
   "THERE ARE NO STANDARD INVOICE RULES YET": "Er zijn nog geen standaard factuurregels in het systeem ingevoerd.",
-  "ANIMAL REPORTS TAB INFO TEXT": "Hier staan alleen de globale dierrapportages. Dierrapportages die bij specifieke dieren horen, zitten in het Diergegevens>Batchbewerking scherm na het ophalen van de dieren."
+  "ANIMAL REPORTS TAB INFO TEXT": "Hier staan alleen de globale dierrapportages. Dierrapportages die bij specifieke dieren horen, zitten in het Diergegevens>Batchbewerking scherm na het ophalen van de dieren.",
+  "RECEIVE LABRESULTS": "Lab resultaten afwachten"
 }
