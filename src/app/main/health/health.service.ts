@@ -230,11 +230,12 @@ export class HealthService {
     public cancelAnnouncement(announcement){
         let body = {
           new_status : "CANCELLED"
-        }
-        this.nsfoService.doPutRequest(this.nsfoService.URI_ANNOUNCEMENTS + '/' + announcement.ubn , body)
+        };
+        this.nsfoService.doDeleteRequest(this.nsfoService.URI_ANNOUNCEMENTS + '/' + announcement.id , body)
             .subscribe(
                 res => {
-
+                    this.loadAnnounced();
+                    this.loadToAnnounce();
                 },
                 err => {
                   // handle error
