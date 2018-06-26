@@ -63,7 +63,9 @@ export class NSFOService {
     public URI_INSPECTIONS = '/v1/inspections';
 
     public URI_ANNOUNCEMENTS_LETTERS = '/v1/announcements/letters';
+    public URI_ANNOUNCEMENTS_LETTER_TEMPLATES = '/v1/announcements/letter-templates';
     public URI_INSPECTIONS_LETTERS = '/v1/inspections/letters';
+    public URI_INSPECTIONS_LETTER_TEMPLATES = '/v1/inspections/letter-templates';
     public URI_BARCODES = '/v1/lab-results/barcodes';
 
     public URI_ERRORS: string = '/v1/errors';
