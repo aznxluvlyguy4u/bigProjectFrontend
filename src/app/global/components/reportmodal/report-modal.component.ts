@@ -5,11 +5,15 @@ import { Subscription } from 'rxjs/Subscription';
 import {ReportRequest, ReportType} from '../../services/report/report-request.model';
 import {ReportService} from '../../services/report/report.service';
 import {TranslatePipe, TranslateService} from "ng2-translate";
+import {PaginatePipe, PaginationService} from "ng2-pagination";
+import {PaginationComponent} from "../pagination/pagination.component";
 
 @Component({
     selector: 'app-report-modal',
     template: require('./report-modal.component.html'),
-    pipes: [TranslatePipe]
+    directives: [PaginationComponent],
+    providers: [PaginationService],
+    pipes: [PaginatePipe, TranslatePipe]
 })
 export class ReportModalComponent implements OnInit, OnDestroy {
   public reportRequestsShownInModal: ReportRequest[];
@@ -17,6 +21,8 @@ export class ReportModalComponent implements OnInit, OnDestroy {
   private reportRequestSubscription: Subscription;
   private isModalActiveSubscription: Subscription;
   private toggleModalSubscription: Subscription;
+    public filterAmount: number = 5;
+    public page: number =1;
 
   constructor(
       private translate: TranslateService,

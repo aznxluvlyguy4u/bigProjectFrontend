@@ -127,7 +127,7 @@ export class NSFOService {
     public doGetRequest(uri:string) {
         return this.http.get(this.API_SERVER_URL + uri, {headers: this.getHeadersWithToken()})
             .map(res => res.json());
-    }v 
+    }
 
     public doPutRequest(uri:string, data) {
         return this.http.put(this.API_SERVER_URL + uri, JSON.stringify(data), {headers: this.getHeadersWithToken()})
