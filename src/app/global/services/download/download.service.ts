@@ -183,11 +183,12 @@ export class DownloadService {
         this.nsfo.doPostRequest(uri, request)
             .subscribe(
                 res => {
-                    download.url = res.result;
+                    //download.url = res.result;
                     //this.completeDownloadPreparation(download);
                     this.reportService.fetchReports();
                 },
                 error => {
+									alert(this.nsfo.getErrorMessage(error));
                 }
             );
     }
@@ -200,6 +201,7 @@ export class DownloadService {
                     this.reportService.fetchReports();
                 },
                 error => {
+									alert(this.nsfo.getErrorMessage(error));
                 }
             );
     }
