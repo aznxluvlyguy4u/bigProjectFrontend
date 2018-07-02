@@ -38,6 +38,10 @@ export class ReportService implements OnInit {
             setTimeout(() => {
                 this.fetchReports();
             }, 2000);
+        } else {
+            if (this.reportRequestShownInModal.length > 0) {
+                this.updateModalNotificationStatus(true);
+            }
         }
     });
   }

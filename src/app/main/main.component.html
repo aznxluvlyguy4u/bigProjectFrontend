@@ -13,7 +13,7 @@
     </ng-template>
     <ng-template *ngIf="!isReportModalEmpty()">
         <button type="button" (click)="toggleReportModal()" [class.active]="isActiveReportModal" class="download-toggle">
-            <i class="fa fa-file"><span *ngIf="reportCount() > 0"> {{ reportCount() }}</span></i>
+            <i class="fa fa-cloud-download"><span *ngIf="reportCount() > 0"> {{ reportCount() }}</span></i>
         </button>
     </ng-template>
     <button type="button" (click)="toggleUserMenu()" [class.active]="isActiveUserMenu" class="profile-toggle">
