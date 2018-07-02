@@ -144,7 +144,7 @@ export class ClientDossierComponent {
     };
 
     private getTwinfieldAdministrations() {
-        this.nsfo.doGetRequest(this.nsfo.URI_TWINFIELD).subscribe(
+        this.nsfo.doGetRequest(this.nsfo.URI_EXTERNAL_PROVIDER).subscribe(
             res => {
                 this.twinfieldOffices = res.result;
             }
@@ -152,7 +152,7 @@ export class ClientDossierComponent {
     }
 
     private getTwinfieldCustomersDirect(office) {
-        this.nsfo.doGetRequest(this.nsfo.URI_TWINFIELD + '/' + office).subscribe(
+        this.nsfo.doGetRequest(this.nsfo.URI_EXTERNAL_PROVIDER + '/' + office).subscribe(
             res => {
                 this.twinfieldCodes = res.result;
             }
@@ -160,7 +160,7 @@ export class ClientDossierComponent {
     }
 
     private getTwinfieldCustomers(office) {
-        this.nsfo.doGetRequest(this.nsfo.URI_TWINFIELD + '/' + office.value).subscribe(
+        this.nsfo.doGetRequest(this.nsfo.URI_EXTERNAL_PROVIDER + '/' + office.value).subscribe(
             res => {
                 this.twinfieldCodes = res.result;
             }

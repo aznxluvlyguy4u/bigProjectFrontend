@@ -30,7 +30,7 @@ export class NSFOService {
     public URI_INVOICE_SENDER_DETAILS = '/v1/invoice-sender-details';
     public URI_LEDGER_CATEGORIES = '/v1/ledger-categories';
 
-    public URI_TWINFIELD = '/v1/twinfield';
+    public URI_EXTERNAL_PROVIDER = '/v1/external-provider';
 
     public URI_GET_COUNTRY_CODES = '/v1/countries?continent=europe';
     public URI_CMS: string = '/v1/cms';
