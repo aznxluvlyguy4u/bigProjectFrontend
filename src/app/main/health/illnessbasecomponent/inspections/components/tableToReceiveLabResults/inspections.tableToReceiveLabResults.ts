@@ -30,4 +30,8 @@ export class HealthTableToReceiveLabResults {
     cancelInspection(event){
       this._cancelInspection.emit(event);
     }
+
+    uploadLabResults(inspection: LocationHealthInspection) {
+
+    }
 }

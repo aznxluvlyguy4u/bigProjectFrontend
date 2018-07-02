@@ -33,10 +33,16 @@
             {{ 'RECEIVE LABRESULTS' | translate }}
         </td>
         <td>
-            {{ inspection.action_log.action_by.first_name }} {{ inspection.action_log.action_by.last_name }}
+            {{ inspection.action_log ? (inspection.action_log.action_by ? inspection.action_log.action_by.first_name : '') : ''}} {{  inspection.action_log ? (inspection.action_log.action_by ? inspection.action_log.action_by.last_name : '') : '' }}
         </td>
         <td>
             <span class="pull-right">
+                <button type="button" (click)="uploadLabResults(inspection)">
+                    <i *ngIf="_isLoading" class="fa fa-gear fa-spin fa-fw"></i>
+                    <span *ngIf="!_isLoading">
+                        {{ 'UPLOAD LAB RESULTS' | translate }}
+                    </span>
+                </button>
                 <button type="button" (click)="cancelInspection(inspection)" class="small alert button">
                     <i *ngIf="_isLoading" class="fa fa-gear fa-spin fa-fw"></i>
                     <span *ngIf="!_isLoading">
