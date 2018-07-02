@@ -1,4 +1,4 @@
-<div class="reveal-overlay" [ngStyle]="{'display': modalDisplay}">
+<div id="download-modal" class="reveal-overlay" [ngStyle]="{'display': modalDisplay}">
   <div class="reveal large" [ngStyle]="{'display': modalDisplay}">
 
     <!--<div class="modal-header" style="min-height: 2em; background: #48A770" >-->
@@ -17,6 +17,8 @@
 
     <ng-template *ngIf="!isModalEmpty()">
       <div class="modal-body">
+
+        <p>{{ 'ALL REPORTS ARE AVAILABLE FOR 1 DAY' | translate }}. {{ 'THE NEWEST REPORTS ARE AT THE TOP' | translate }}.</p>
 
         <table>
           <thead>

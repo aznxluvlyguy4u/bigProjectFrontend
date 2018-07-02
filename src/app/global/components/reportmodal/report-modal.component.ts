@@ -23,6 +23,7 @@ export class ReportModalComponent implements OnInit, OnDestroy {
   private toggleModalSubscription: Subscription;
     public filterAmount: number = 5;
     public page: number =1;
+	public title = 'REPORT OVERVIEW';
 
   constructor(
       private translate: TranslateService,
