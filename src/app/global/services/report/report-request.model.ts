@@ -1,11 +1,17 @@
-export class ReportRequest {
-  public id: number;
-  started_at: string;
-  finished_at: string;
-  report_worker: ReportWorker;
-  worker_type: number;
-  public error_code: number;
-  public error_message: string;
+abstract class Worker {
+	public id: number;
+	started_at: string;
+	finished_at: string;
+	worker_type: number;
+	public error_code: number;
+	public error_message: string;
+}
+
+export class ReportRequest extends Worker {
+	download_url: string;
+	hash: string;
+	report_type: ReportType;
+	file_type: string;
 }
 
 export enum ReportType {
@@ -19,12 +25,4 @@ export enum ReportType {
   OFF_SPRING = 8,
   PEDIGREE_REGISTER_OVERVIEW = 9,
   LIVE_STOCK = 10
-}
-
-export class ReportWorker {
-  id: number;
-  download_url: string;
-  hash: string;
-  report_type: ReportType;
-  file_type: string;
 }
