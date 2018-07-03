@@ -45,6 +45,7 @@ import { AllAnimalsOverviewComponent } from './main/report/animals-overviews/all
 import { AnnualTe100ProductionComponent } from './main/report/animals-overviews/annual-te100-production/annual-te100-production.component';
 import { AnnualActiveLivestockComponent } from './main/report/animals-overviews/annual-active-livestock/annual-active-livestock.component';
 import { AnnualActiveLivestockRamMatesComponent } from './main/report/animals-overviews/annual-active-livestock-ram-mates/annual-active-livestock-ram-mates.component';
+import { DownloadLandingPageComponent } from './download/download-landing-page.component';
 
 
 const routes: RouterConfig = [
@@ -130,7 +131,8 @@ const routes: RouterConfig = [
     },
     {path: 'ghostlogin/:person', component: GhostLoginComponent, canActivate: [AuthenticatedGuard]},
     {path: 'login', component: LoginComponent},
-    {path: 'loading', terminal: true, component: LoadingComponent}
+    {path: 'loading', terminal: true, component: LoadingComponent},
+    {path: 'downloaded', terminal: true, component: DownloadLandingPageComponent}
 ];
 
 export const APP_ROUTER_PROVIDERS = [
