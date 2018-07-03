@@ -7,21 +7,28 @@ import {Admin} from "./main.model";
 import {UtilsService} from "../global/services/utils/utils.service";
 import { DownloadService } from '../global/services/download/download.service';
 import { DownloadModalComponent } from '../global/components/downloadmodal/download-modal.component';
+import {ReportModalComponent} from "../global/components/reportmodal/report-modal.component";
+import {ReportService} from "../global/services/report/report.service";
 
 @Component({
-    directives: [ROUTER_DIRECTIVES, DownloadModalComponent],
+    directives: [ROUTER_DIRECTIVES, DownloadModalComponent, ReportModalComponent],
     template: require('./main.component.html'),
     pipes: [TranslatePipe]
 })
 
 export class MainComponent {
 	  isActiveDownloadModal: boolean = false;
+
+	  public isActiveReportModal: boolean = false;
     private isActiveSideMenu: boolean = false;
     private isActiveUserMenu: boolean = false;
     private admin: Admin = new Admin();
     private adminDetails$: Observable;
 
-    constructor(private nsfo: NSFOService, private router: Router, private utils: UtilsService,
+    constructor(private nsfo: NSFOService,
+                private reportService: ReportService,
+                private router: Router,
+                private utils: UtilsService,
                 private downloadService: DownloadService) {
         this.getAdminDetails();
         this.validateToken();
@@ -84,6 +91,20 @@ export class MainComponent {
 
     isDownloadModalEmpty(): boolean {
         return this.downloadService.isModalEmpty();
+    }
+
+    toggleReportModal() {
+        this.reportService.toggleReportModal();
+        this.isActiveUserMenu = false;
+        this.isActiveSideMenu = false;
+    }
+
+    reportCount(): number {
+        return this.reportService.getReportsInModalCount();
+    }
+
+    isReportModalEmpty(): boolean {
+        return this.reportService.isModalEmpty();
     }
 
     private logout() {
