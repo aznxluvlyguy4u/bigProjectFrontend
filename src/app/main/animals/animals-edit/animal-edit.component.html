@@ -1,0 +1,136 @@
+<div id="animals-batch-edit">
+    <div class="row">
+        <div class="large-6 columns">
+            <h3> Maak een nieuw dier aan</h3>
+            <form *ngIf="!isCreating" [formGroup]="form">
+                <div class="row">
+                    <div class="large-5 columns">
+                        <label>{{ 'ULN' | translate }}
+                            <input type="text" placeholder="{{ 'ULN' | translate }}" formControlName="uln"/>
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="large-5 columns">
+                        <label>{{ 'DATE OF BIRTH' | translate }}
+                        <app-datepicker-v2
+                                [dateString]="dateOfBirth"
+                                [modelFormat]="settings.getModelDateTimeFormat()"
+                                [disabled]="isSaving"
+                                [updateInitialValues]="(initialValuesChanged)"
+                                (isDateStringChanged)="dateOfBirth = $event"
+                        ></app-datepicker-v2>
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="large-5 columns">
+                        <label>{{ 'GENDER' | translate}}
+                            <select formControlName="gender">
+                                <option value="FEMALE">{{ 'Ewe' | translate }}</option>
+                                <option value="MALE">{{ 'Ram' | translate }}</option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="large-5 columns">
+                        <label>{{ 'ALIVE' | translate}}
+                            <input type="checkbox" formControlName="is_alive">
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="large-5 columns">
+                        <label>{{ 'BREED CODE' | translate}}
+                            <input type="text" placeholder="{{ 'BREED CODE' | translate }}" formControlName="breed_code"/>
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="large-5 columns">
+                        <label>{{ 'BREED TYPE' | translate}}
+                            <select formControlName="breed_type">
+                                <option *ngFor="let breedType of breedTypes" value="{{ breedType }}"
+                                >{{ breedType | translate }}</option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="large-6 columns">
+                        <button (click)="createAnimal()" class="button">{{ 'SAVE' | translate }}</button>
+                    </div>
+                </div>
+            </form>
+            <div *ngIf="isCreating" class="row">
+                <div class="large-5 columns">
+                    <div class="loader-spinner">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="large-6 columns">
+            <div class="row">
+                <div class="large-5 columns">
+                    <h3>Wijzig geslacht</h3>
+                    <form [formGroup]="findForm">
+                        <label>{{ 'ULN' | translate}}
+                            <input type="text" placeholder="Zoek op ULN" formControlName="uln">
+                        </label>
+                        <button (click)="findAnimal()" class="button">{{ 'SEARCH' | translate}}</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="large-5 columns">
+                    <div *ngIf="isSearching" class="loader-spinner">
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="!!editAnimal">
+                <form [formGroup]="editForm">
+                    <div class="row">
+                        <div class="large-5 columns">
+                            <label>{{ 'ULN' | translate }}
+                                <input type="text" placeholder="{{ 'ULN' | translate }}" value="{{ editAnimal.uln_country_code }}{{ editAnimal.uln_number }}" disabled/>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="large-5 columns">
+                            <label>{{ 'STN' | translate }}
+                                <input type="text" placeholder="{{ 'STN' | translate }}" value="{{ editAnimal.pedigree_country_code }}{{ editAnimal.pedigree_number }}" disabled/>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="large-5 columns">
+                            <label>{{ 'DATE OF BIRTH' | translate }}
+                                <input type="text" placeholder="{{ 'DATE OF BIRTH' | translate }}" value="{{ editAnimal.date_of_birth | date: 'dd-MM-yyyy'}}" disabled/>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="large-5 columns">
+                            <label>{{ 'GENDER' | translate}}
+                                <select formControlName="gender">
+                                    <option value="FEMALE">{{ 'Ewe' | translate }}</option>
+                                    <option value="MALE">{{ 'Ram' | translate }}</option>
+                                    <option value="NEUTER">{{ 'Neuter' | translate }}</option>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="large-6 columns">
+                            <button (click)="updateAnimal()" class="button">{{ 'EDIT' | translate }}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
