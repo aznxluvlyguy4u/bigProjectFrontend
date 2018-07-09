@@ -6,7 +6,14 @@
                 <div class="row">
                     <div class="large-5 columns">
                         <label>{{ 'ULN' | translate }}
-                            <input type="text" placeholder="{{ 'ULN' | translate }}" formControlName="uln"/>
+                            <app-uln-input
+                                    [ulnCountryCode]="ulnCountryCodeNewAnimal"
+                                    (ulnCountryCodeChange)="ulnCountryCodeNewAnimal=$event"
+                                    [ulnNumber]="ulnNumberNewAnimal"
+                                    (ulnNumberChange)="ulnNumberNewAnimal=$event"
+                                    [disabled]="isCreating"
+                            ></app-uln-input>
+
                         </label>
                     </div>
                 </div>
@@ -117,8 +124,8 @@
                         <div class="large-5 columns">
                             <label>{{ 'GENDER' | translate}}
                                 <select formControlName="gender">
-                                    <option value="FEMALE">{{ 'Ewe' | translate }}</option>
-                                    <option value="MALE">{{ 'Ram' | translate }}</option>
+                                    <option value="EWE">{{ 'Ewe' | translate }}</option>
+                                    <option value="RAM">{{ 'Ram' | translate }}</option>
                                     <option value="NEUTER">{{ 'Neuter' | translate }}</option>
                                 </select>
                             </label>

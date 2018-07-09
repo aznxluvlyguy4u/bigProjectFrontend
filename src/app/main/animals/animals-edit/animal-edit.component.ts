@@ -8,10 +8,11 @@ import {SettingsService} from "../../../global/services/settings/settings.servic
 import {BREED_TYPES} from "../../../global/constants/breed-type.constant";
 import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
 import {Animal} from "../../../global/components/livestock/livestock.model";
+import { UlnInputComponent } from '../../../global/components/ulninput/uln-input.component';
 
 @Component({
 		providers: [PaginationService],
-		directives: [REACTIVE_FORM_DIRECTIVES, DatepickerV2Component],
+		directives: [REACTIVE_FORM_DIRECTIVES, DatepickerV2Component, UlnInputComponent],
 		template: require('./animal-edit.component.html'),
 		pipes: [TranslatePipe, PaginatePipe]
 })
@@ -25,13 +26,16 @@ export class AnimalEditComponent implements OnInit {
     public isCreating: boolean = false;
     public isSearching: boolean = false;
 
+    public ulnCountryCodeNewAnimal: string;
+    public ulnNumberNewAnimal: string;
+
     constructor(
-    	private fb: FormBuilder,
-		private settings: SettingsService,
-        private nsfo: NSFOService
+    		private fb: FormBuilder,
+				private settings: SettingsService,
+        private nsfo: NSFOService,
+				private translate: TranslateService,
 	) {
         this.form = fb.group({
-            uln: ['', Validators.required],
             gender: ['', Validators.required],
             is_alive: ['', Validators.required],
             breed_code: ['', Validators.required],
@@ -53,28 +57,33 @@ export class AnimalEditComponent implements OnInit {
 	}
 
 	public createAnimal(): void {
-        if(this.form.valid) {
+        if(this.form.valid && !!this.ulnCountryCodeNewAnimal && !!this.ulnNumberNewAnimal) {
             this.isCreating = true;
             const createBody = {
-                uln: this.form.controls['uln'].value,
                 date_of_birth: this.dateOfBirth,
                 gender: this.form.controls['gender'].value,
                 is_alive: this.form.controls['is_alive'].value,
                 breed_code: this.form.controls['breed_code'].value,
-                breed_type: this.form.controls['breed_type'].value
+                breed_type: this.form.controls['breed_type'].value,
+								uln: this.ulnCountryCodeNewAnimal + this.ulnNumberNewAnimal,
+								uln_country_code: this.ulnCountryCodeNewAnimal,
+								uln_number: this.ulnNumberNewAnimal
             };
             this.nsfo.doPostRequest(this.nsfo.URI_ANIMALS_CREATE, createBody)
+							.finally(()=>{
+								this.isCreating = false;
+							})
                 .subscribe(
                     res => {
                         alert(res.result);
                         this.resetCreateForm();
                     }, error => {
                         alert(this.nsfo.getErrorMessage(error));
-                    }, () => {
-                        this.isCreating = false;
                     }
                 );
-		}
+				} else {
+        	alert(this.translate.instant('ALL FORM FIELDS MUST BE FILLED'));
+				}
 	}
 
 	public findAnimal(): void {
@@ -84,18 +93,23 @@ export class AnimalEditComponent implements OnInit {
             };
             this.isSearching = true;
             this.nsfo.doPostRequest(this.nsfo.URI_ANIMALS_FIND, body)
+              .finally(()=>{
+								this.isSearching = false;
+              })
                 .subscribe(
                     res => {
-                        this.editAnimal = res.result;
-                        (<FormControl>this.editForm.controls['gender']).updateValue(this.editAnimal.gender);
+                        this.setEditAnimal(res.result);
                         this.resetFindForm();
                     }, error => {
                         alert(this.nsfo.getErrorMessage(error));
-                    }, () => {
-                        this.isSearching = false;
                     }
                 );
         }
+    }
+
+    private setEditAnimal(animal: Animal) {
+			this.editAnimal = animal;
+			(<FormControl>this.editForm.controls['gender']).updateValue(this.editAnimal.type.toUpperCase());
     }
 
     public updateAnimal(): void {
@@ -105,11 +119,15 @@ export class AnimalEditComponent implements OnInit {
                 uln_country_code: this.editAnimal.uln_country_code,
                 gender: this.editForm.controls['gender'].value,
             };
+					  this.isSearching = true;
             this.nsfo.doPostRequest(this.nsfo.URI_ANIMALS_UPDATE_GENDER, body)
+							.finally(()=>{
+								this.isSearching = false;
+							})
                 .subscribe(
                     res => {
-                        alert(res.result);
-                    }, error => {
+											this.setEditAnimal(res);
+                        }, error => {
                         alert(this.nsfo.getErrorMessage(error));
                     }
                 );
@@ -117,7 +135,6 @@ export class AnimalEditComponent implements OnInit {
     }
 
     private resetCreateForm() {
-        (<FormControl>this.form.controls['uln']).updateValue('');
         (<FormControl>this.form.controls['gender']).updateValue('');
         (<FormControl>this.form.controls['is_alive']).updateValue('');
         (<FormControl>this.form.controls['breed_code']).updateValue('');
