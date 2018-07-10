@@ -47,6 +47,8 @@ import { HealthInspectionsComponent } from './main/health/illnessbasecomponent/i
 import { HealthFailedImportsComponent } from './main/health/illnessbasecomponent/failedImports/health.failedImports';
 import { AnnualActiveLivestockComponent } from './main/report/animals-overviews/annual-active-livestock/annual-active-livestock.component';
 import { AnnualActiveLivestockRamMatesComponent } from './main/report/animals-overviews/annual-active-livestock-ram-mates/annual-active-livestock-ram-mates.component';
+import { DownloadLandingPageComponent } from './download/download-landing-page.component';
+import {AnimalEditComponent} from "./main/animals/animals-edit/animal-edit.component";
 
 const routes: RouterConfig = [
     {
@@ -119,7 +121,8 @@ const routes: RouterConfig = [
               {path: 'animals', component: AnimalsComponent,
                 children: [
                   {path: '', terminal: true, redirectTo: 'batch-edit'},
-                  {path: 'batch-edit', component: AnimalsBatchEditComponent}
+                  {path: 'batch-edit', component: AnimalsBatchEditComponent},
+                  {path: 'animal-edit', component: AnimalEditComponent}
                 ]},
             {path: 'report', component: ReportComponent,
                 children: [
@@ -148,7 +151,8 @@ const routes: RouterConfig = [
     },
     {path: 'ghostlogin/:person', component: GhostLoginComponent, canActivate: [AuthenticatedGuard]},
     {path: 'login', component: LoginComponent},
-    {path: 'loading', terminal: true, component: LoadingComponent}
+    {path: 'loading', terminal: true, component: LoadingComponent},
+    {path: 'downloaded', terminal: true, component: DownloadLandingPageComponent}
 ];
 
 export const APP_ROUTER_PROVIDERS = [

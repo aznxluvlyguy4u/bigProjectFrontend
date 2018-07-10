@@ -19,6 +19,9 @@ export class NSFOService {
 
     public URI_ANIMALS = '/v1/animals';
     public URI_ANIMALS_DETAILS = '/v1/animals-details';
+    public URI_ANIMALS_CREATE = '/v1/animals/create';
+    public URI_ANIMALS_FIND = '/v1/animals/find';
+    public URI_ANIMALS_UPDATE_GENDER = '/v1/animals-gender';
     public URI_GET_COLLAR_COLORS = '/v1/collars';
 
     public URI_GHOST_LOGIN: string = '/v1/admins/ghost';
@@ -77,6 +80,7 @@ export class NSFOService {
 	  public URI_TECHNICAL_LOG = '/v1/log/action';
 
 	  public URI_PEDIGREE_REGISTERS = '/v1/pedigreeregisters';
+    public API_URI_GET_REPORTS = '/v1/reports';
 
 		//REPORT
 		public URI_GET_LINEAGE_PROOF = '/v1/reports/pedigree-certificates';
@@ -118,7 +122,6 @@ export class NSFOService {
 					}
 				);
 		}
-
     public doLoginRequest(username:string, password:string) {
         let headers = new Headers();
         headers.append(this.content_type, "application/json");
