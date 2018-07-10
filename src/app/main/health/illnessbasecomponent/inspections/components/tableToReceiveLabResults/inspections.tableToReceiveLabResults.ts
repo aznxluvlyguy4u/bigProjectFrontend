@@ -1,13 +1,15 @@
-import _ = require("lodash");
-import {Component, Input, Output, EventEmitter} from "@angular/core";
-import {TranslatePipe} from "ng2-translate/ng2-translate";
-import {LocationHealthInspection} from "../../../../health.model";
-import {SettingsService} from "../../../../../../global/services/settings/settings.service";
+import _ = require('lodash');
+import {Component, Input, Output, EventEmitter} from '@angular/core';
+import {TranslatePipe} from 'ng2-translate/ng2-translate';
+import {LocationHealthInspection} from '../../../../health.model';
+import {SettingsService} from '../../../../../../global/services/settings/settings.service';
+import {LabResultsUploaderComponent} from '../../../../../../global/components/labresultsuploader/lab-results-uploader.component';
 
 @Component({
     selector: 'health-table-to-receive-lab-results',
     template: require('./inspections.tableToReceiveLabResults.html'),
-    pipes: [TranslatePipe]
+    pipes: [TranslatePipe],
+    directives: [LabResultsUploaderComponent]
 })
 
 export class HealthTableToReceiveLabResults {
@@ -16,6 +18,8 @@ export class HealthTableToReceiveLabResults {
     private editMode: boolean = false;
 
     @Output() _cancelInspection = new EventEmitter();
+    @Output() _uploadLabResults = new EventEmitter();
+
 
     @Input()
     set toReceiveLabResults(toReceiveLabResults: Array<LocationHealthInspection>) {
@@ -32,6 +36,6 @@ export class HealthTableToReceiveLabResults {
     }
 
     uploadLabResults(inspection: LocationHealthInspection) {
-
+        this._uploadLabResults.emit(inspection);
     }
 }
