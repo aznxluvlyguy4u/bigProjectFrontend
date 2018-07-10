@@ -1,10 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+<button
+        class="button primary expanded confirmation-button"
+        [disabled]=""
+        (click)="openModal()"
+>
+    {{ "UPLOAD LAB RESULTS" | translate }}
+</button>
+
+<div class="reveal-overlay" [ngStyle]="{'display': displayModal}">
+    <div class="medium reveal" [ngStyle]="{'display': displayModal}">
+        <div class="modal-body">
+            <hr>
+            <form [formGroup]="form">
+                <label class="pull-left">
+                    {{'LAB FILE' | translate}} *
+                </label>
+                <input formControlName="lab_file" name="uploadFile[]" type="file" (change)="setFile($event)" placeholder="Upload file" accept=".csv, .xls">
+                <label>
+                    {{'NSFO REFERENCE NUMBER' | translate}} *
+                </label>
+                <input formControlName="nsfo_reference_number" name="nsfo_reference_number" type="text">
+                <label>
+                    {{'LAB REFERENCE NUMBER' | translate}} *
+                </label>
+                <input formControlName="lab_reference_number" name="lab_reference_number" type="text">
+            </form>
+            <div *ngIf="displayErrorText">
+                <span>
+                    {{(errorText) | translate}}
+                </span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <hr>
+            <button class="button medium primary" (click)="uploadFile()">
+                {{'UPLOAD FILES' |translate}}
+            </button>
+            <button class="button medium alert" (click)="closeModal()">
+                {{'CANCEL' | translate}}
+            </button>
+        </div>
+    </div>
+</div>
