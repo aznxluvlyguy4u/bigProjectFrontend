@@ -50,4 +50,5 @@ export class Animal {
     selected?: boolean;
     filtered?: boolean;
     type?: string;
+    merged_n_ling: number;
 }

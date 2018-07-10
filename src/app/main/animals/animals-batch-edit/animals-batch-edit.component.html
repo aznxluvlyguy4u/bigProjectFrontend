@@ -143,6 +143,9 @@
                     <td *ngIf="showPedigreeData">{{ 'FATHER' | translate}}</td>
                     <td *ngIf="showPedigreeData">{{ 'MOTHER' | translate}}</td>
                     <td *ngIf="showBreedData || showPedigreeData">{{ 'N-LING' | translate}}</td>
+                    <td *ngIf="showBreedData || showPedigreeData">{{ 'N-LING-MANUAL' | translate}}
+                        <i class="fa fa-info-circle" aria-hidden="true" title="{{'N-LING-MANUAL-TOOLTIP' | translate}}"></i>
+                    </td>
                     <td *ngIf="showPedigreeData">{{ 'BREEDER UBN' | translate}}</td>
                     <td *ngIf="showPedigreeData">{{ 'BREEDER UBN' | translate}}({{ 'LOCATION' | translate}})</td>
                     <td *ngIf="showPedigreeData">{{ 'SURROGATE MOTHER' | translate}}</td>
@@ -886,7 +889,8 @@
                         ></app-parent-selector>
                     </td>
 
-                    <td *ngIf="showPedigreeData || showBreedData">{{ animal.litter ? animal.litter.born_alive_count + animal.litter.stillborn_count : '-' }}</td>
+                    <td *ngIf="showPedigreeData || showBreedData">{{ animal.merged_n_ling }}</td>
+                    <td *ngIf="showPedigreeData || showBreedData"><input title="manualNLing" class="table-input" type="number" [(ngModel)]="animal.n_ling" [disabled]="isSaving"></td>
                     <td *ngIf="showPedigreeData"><input title="ubnOfBirth" class="table-input" type="number" [(ngModel)]="animal.ubn_of_birth" [disabled]="isSaving"></td>
                     <td *ngIf="showPedigreeData" style="white-space: nowrap">
                         {{ animal.location_of_birth ? animal.location_of_birth.ubn : '-' }}  <i class="fa fa-info-circle" aria-hidden="true"
