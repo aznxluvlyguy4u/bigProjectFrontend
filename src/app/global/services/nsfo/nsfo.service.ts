@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, Response } from '@angular/http';
+import {Http, Headers, Response, RequestOptions} from '@angular/http';
 import { QueryParam } from '../../../main/client/client.model';
 
 import _ = require("lodash");
 import { TranslateService } from 'ng2-translate';
 import { Country } from '../../models/country.model';
 import { Animal } from '../../components/livestock/livestock.model';
+
 
 @Injectable()
 export class NSFOService {
@@ -137,6 +138,16 @@ export class NSFOService {
     public doPostRequest(uri:string, data) {
         return this.http.post(this.API_SERVER_URL + uri, JSON.stringify(data), {headers: this.getHeadersWithToken()})
             .map(res => res.json());
+    }
+
+    public doUploadRequest(uri:string, file) {
+        let headers = new Headers();
+        headers.append(this.access_token, localStorage[this.ACCESS_TOKEN_NAMESPACE]);
+        let options = new RequestOptions({headers: headers});
+        console.log(file);
+        let formData = new FormData();
+        formData.append('uploadFile', file);
+        return this.http.post(this.API_SERVER_URL + uri, formData, options)
     }
 
     public doGetRequest(uri:string) {
