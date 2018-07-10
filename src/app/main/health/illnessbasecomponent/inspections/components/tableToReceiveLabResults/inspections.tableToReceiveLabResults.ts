@@ -18,7 +18,6 @@ export class HealthTableToReceiveLabResults {
     private editMode: boolean = false;
 
     @Output() _cancelInspection = new EventEmitter();
-    @Output() _uploadLabResults = new EventEmitter();
 
 
     @Input()
@@ -34,8 +33,5 @@ export class HealthTableToReceiveLabResults {
     cancelInspection(event){
       this._cancelInspection.emit(event);
     }
-
-    uploadLabResults(inspection: LocationHealthInspection) {
-        this._uploadLabResults.emit(inspection);
-    }
+    
 }
