@@ -726,5 +726,14 @@
   "THE REFERENCE DATE IS ON DECEMBER 31ST OF THE GIVEN REFERENCE YEAR": "De referentiedatum is op 31 december van het referentiejaar",
   "THERE ARE NO STANDARD INVOICE RULES YET": "Er zijn nog geen standaard factuurregels in het systeem ingevoerd.",
   "ANIMAL REPORTS TAB INFO TEXT": "Hier staan alleen de globale dierrapportages. Dierrapportages die bij specifieke dieren horen, zitten in het Diergegevens>Batchbewerking scherm na het ophalen van de dieren.",
-  "RECEIVE LABRESULTS": "Lab resultaten afwachten"
+  "RECEIVE LABRESULTS": "Lab resultaten afwachten",
+  "NO LAB REFERENCE": "Geen lab referentie nummer gegeven",
+  " NO NSFO REFERENCE": "Geen nsfo referentie nummer gegeven",
+  " NO FILE": "Geen bestand geselecteerd",
+  "NO LAB REFERENCE NO NSFO REFERENCE": "Geen lab & nsfo referentie nummer gegeven",
+  "NO LAB REFERENCE NO FILE": "Geen lab referentie nummer gegeven en geen bestand geselecteerd",
+  " NO NSFO REFERENCE NO FILE": "Geen nsfo referentie nummer gegeven en geen bestand geselecteerd",
+  "NO LAB REFERENCE NO NSFO REFERENCE NO FILE": "Geen lab & nsfo referentie nummer gegeven en geen bestand geselecteerd",
+  "UPLOAD FILES": "Bestand uploaden",
+  "UPLOAD LAB RESULTS": "Upload lab resultaten"
 }
