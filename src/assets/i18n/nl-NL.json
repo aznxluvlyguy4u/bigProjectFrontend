@@ -503,6 +503,8 @@
   "Neuter": "Onbekend",
   "PEDIGREE REGISTER": "Stamboek",
   "N-LING": "n-ling",
+  "N-LING-MANUAL": "n-ling backup",
+  "N-LING-MANUAL-TOOLTIP": "Deze waarde(handmatige invoer) wordt gebruikt indien het dier geen berekende worp heeft.",
   "NOTE": "Notitie",
   "PEDIGREE NUMBER FORMAT DESCRIPTION": "Format: [5 hoofdletters en/of nummers]-[5letters en/of nummers]",
   "ULN NUMBER FORMAT DESCRIPTION": "Format: [8 tot 12 nummers]",
