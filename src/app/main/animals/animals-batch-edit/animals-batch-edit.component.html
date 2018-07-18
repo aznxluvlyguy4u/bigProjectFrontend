@@ -90,12 +90,12 @@
                 <div class="filler-block">{{ 'SHOW DATA OPTIONS' | translate }}</div>
 
                 <label>{{ 'IDENTITY' | translate }} <input   [(ngModel)]="showIds" type="checkbox"></label>
-                <label>{{ 'BREED' | translate }} <input      [(ngModel)]="showBreedData" type="checkbox"></label>
+                <label>{{ 'PEDIGREE REGISTER' | translate }} <input [(ngModel)]="showPedigreeRegisterData" type="checkbox"></label>
                 <label>{{ 'BLOODLINE' | translate }} <input  [(ngModel)]="showPedigreeData" type="checkbox"></label>
                 <label>{{ 'NOTE' | translate }} <input       [(ngModel)]="showNote" type="checkbox"></label>
                 <label>{{ 'DATES' | translate }} <input      [(ngModel)]="showDates" type="checkbox"></label>
-                <label>{{ 'EXAMINATION' | translate }} <input [(ngModel)]="showExaminationData" type="checkbox"></label>
-                <label>{{ 'HEALTH' | translate }} <input     [(ngModel)]="showHealthData" type="checkbox"></label>
+                <label>{{ 'PREDICATES' | translate }} <input [(ngModel)]="showExaminationData" type="checkbox"></label>
+                <label>{{ 'DNA FEATURES' | translate }} <input     [(ngModel)]="showHealthData" type="checkbox"></label>
 
             </div>
         </div>
@@ -127,7 +127,7 @@
                     <td *ngIf="showIds">{{ 'NAME' | translate}}</td>
                     <td *ngIf="showIds">{{ 'COLLAR NUMBER' | translate}}</td>
                     <td>{{ 'ULN' | translate}}</td>
-                    <td>{{ 'STN' | translate}}</td>
+                    <td *ngIf="showPedigreeRegisterData">{{ 'STN' | translate}}</td>
                     <td>{{ 'GENDER' | translate}}</td>
                     <td>{{ 'CURRENT UBN' | translate}}</td>
                     <td>{{ 'ALIVE' | translate}}
@@ -139,10 +139,11 @@
                     <td *ngIf="showPedigreeData || showDates">{{ 'DATE OF BIRTH' | translate}}</td>
                     <td *ngIf="showDates">{{ 'DATE OF DEATH' | translate}}</td>
 
-                    <td *ngIf="showPedigreeData">{{ 'PEDIGREE REGISTER' | translate}}</td>
+                    <td *ngIf="showPedigreeRegisterData">{{ 'PEDIGREE REGISTER' | translate}}</td>
                     <td *ngIf="showPedigreeData">{{ 'FATHER' | translate}}</td>
                     <td *ngIf="showPedigreeData">{{ 'MOTHER' | translate}}</td>
-                    <td *ngIf="showBreedData || showPedigreeData">{{ 'N-LING' | translate}}</td>
+                    <td *ngIf="showPedigreeRegisterData || showPedigreeData">{{ 'N-LING' | translate}}</td>
+                    <td *ngIf="showPedigreeRegisterData || showPedigreeData">{{ 'N-LING BACKUP VALUE' | translate}} <i class="fa fa-info-circle" aria-hidden="true" title="{{'N-LING BACKUP VALUE EXPLANATION' | translate}}"></i></td>
                     <td *ngIf="showPedigreeData">{{ 'BREEDER UBN' | translate}}</td>
                     <td *ngIf="showPedigreeData">{{ 'BREEDER UBN' | translate}}({{ 'LOCATION' | translate}})</td>
                     <td *ngIf="showPedigreeData">{{ 'SURROGATE MOTHER' | translate}}</td>
@@ -151,8 +152,8 @@
                     </td>
                     <td *ngIf="showPedigreeData">{{ 'BIRTH PROGRESS' | translate}}</td>
 
-                    <td *ngIf="showBreedData">{{ 'BREED TYPE' | translate}}</td>
-                    <td *ngIf="showBreedData">{{ 'BREED CODE' | translate}}</td>
+                    <td *ngIf="showPedigreeRegisterData">{{ 'BREED TYPE' | translate}}</td>
+                    <td *ngIf="showPedigreeRegisterData">{{ 'BREED CODE' | translate}}</td>
                     <td *ngIf="showExaminationData">{{ 'PREDICATE' | translate}}</td>
                     <td *ngIf="showExaminationData">{{ 'PREDICATE SCORE' | translate}}
                         <i class="fa fa-info-circle" aria-hidden="true" title="{{'SET TO ZERO TO REMOVE VALUE' | translate}}"></i>
@@ -218,7 +219,7 @@
                                 [updateInitialValues]="(initialValuesChanged)"
                         ></app-uln-input>
                     </td>
-                    <td> <!-- stn -->
+                    <td *ngIf="showPedigreeRegisterData"> <!-- stn -->
                         <app-stn-input
                                 [pedigreeCountryCode]="filterPedigreeCountryCode"
                                 (pedigreeCountryCodeChange)="filterPedigreeCountryCode=$event; page = 1; updateFilterAnimals()"
@@ -273,10 +274,11 @@
                     <td *ngIf="showPedigreeData || showDates"></td><!-- date of birth column -->
                     <td *ngIf="showDates" class="date-input"></td> <!-- date of death column -->
 
-                    <td *ngIf="showPedigreeData"></td> <!-- pedigree register column -->
+                    <td *ngIf="showPedigreeRegisterData"></td> <!-- pedigree register column -->
                     <td *ngIf="showPedigreeData"></td> <!-- father column -->
                     <td *ngIf="showPedigreeData"></td> <!-- mother column -->
-                    <td *ngIf="showPedigreeData || showBreedData"></td> <!-- nLing column -->
+                    <td *ngIf="showPedigreeData || showPedigreeRegisterData"></td> <!-- nLing column -->
+                    <td *ngIf="showPedigreeData || showPedigreeRegisterData"></td> <!-- nLing backup value column -->
 
                     <td *ngIf="showPedigreeData">
                         <input
@@ -304,7 +306,7 @@
 
                     <td *ngIf="showPedigreeData"></td> <!-- BirthProgress -->
 
-                    <td *ngIf="showBreedData">
+                    <td *ngIf="showPedigreeRegisterData">
                         <select
                                 type="breedTypeFilter"
                                 class="table-input breed-type-input"
@@ -318,7 +320,7 @@
                         </select>
                     </td>
 
-                    <td *ngIf="showBreedData">
+                    <td *ngIf="showPedigreeRegisterData">
                         <input
                                 title="breedCodeFilter"
                                 class="table-input"
@@ -370,7 +372,7 @@
                     <td *ngIf="showIds"></td> <!-- nickname column -->
                     <td *ngIf="showIds"></td> <!-- collar column -->
                     <td><h6>{{ 'ACTIVATE BATCH EDIT OPTIONS' | translate }}</h6></td> <!-- uln column -->
-                    <td>
+                    <td *ngIf="showPedigreeRegisterData">
                         <button
                                 class="button alert"
                                 (click)="resetBatchEditOptions()"
@@ -405,7 +407,7 @@
                     <td *ngIf="showPedigreeData || showDates"></td><!-- date of birth column -->
                     <td *ngIf="showDates" class="date-input"></td> <!-- date of death column -->
 
-                    <td *ngIf="showPedigreeData">
+                    <td *ngIf="showPedigreeRegisterData">
                         <app-boolean-input
                                 [allowNull]="false"
                                 [boolVal]="batchPedigreeRegisterIsActive"
@@ -415,7 +417,8 @@
                     </td>
                     <td *ngIf="showPedigreeData"></td> <!-- father column -->
                     <td *ngIf="showPedigreeData"></td> <!-- mother column -->
-                    <td *ngIf="showPedigreeData || showBreedData"></td> <!-- nLing column -->
+                    <td *ngIf="showPedigreeData || showPedigreeRegisterData"></td> <!-- nLing column -->
+                    <td *ngIf="showPedigreeData || showPedigreeRegisterData"></td> <!-- nLing backup value column -->
 
                     <td *ngIf="showPedigreeData">
                         <app-boolean-input
@@ -453,7 +456,7 @@
                         ></app-boolean-input>
                     </td>
 
-                    <td *ngIf="showBreedData">
+                    <td *ngIf="showPedigreeRegisterData">
                         <app-boolean-input
                                 [allowNull]="false"
                                 [boolVal]="batchBreedTypeIsActive"
@@ -462,7 +465,7 @@
                         ></app-boolean-input>
                     </td>
 
-                    <td *ngIf="showBreedData">
+                    <td *ngIf="showPedigreeRegisterData">
                         <app-boolean-input
                                 [allowNull]="false"
                                 [boolVal]="batchBreedCodeIsActive"
@@ -526,7 +529,7 @@
                     <td *ngIf="showIds"></td> <!-- nickname column -->
                     <td *ngIf="showIds"></td> <!-- collar column -->
                     <td></td> <!-- uln column -->
-                    <td></td> <!-- stn -->
+                    <td *ngIf="showPedigreeRegisterData"></td> <!-- stn -->
                     <td></td> <!-- type/gender column -->
                     <td>
                         <ng-template *ngIf="!batchCurrentLocationIsActive">
@@ -572,7 +575,7 @@
                     <td *ngIf="showPedigreeData || showDates"></td><!-- date of birth column -->
                     <td *ngIf="showDates" class="date-input"></td> <!-- date of death column -->
 
-                    <td *ngIf="showPedigreeData">
+                    <td *ngIf="showPedigreeRegisterData">
                         <ng-template *ngIf="!batchPedigreeRegisterIsActive">
                             <i class="fa fa-ban" aria-hidden="true"></i>
                         </ng-template>
@@ -587,7 +590,8 @@
                     </td>
                     <td *ngIf="showPedigreeData"></td> <!-- father column -->
                     <td *ngIf="showPedigreeData"></td> <!-- mother column -->
-                    <td *ngIf="showPedigreeData || showBreedData"></td> <!-- nLing column -->
+                    <td *ngIf="showPedigreeData || showPedigreeRegisterData"></td> <!-- nLing column -->
+                    <td *ngIf="showPedigreeData || showPedigreeRegisterData"></td> <!-- nLing backup value column -->
 
                     <td *ngIf="showPedigreeData">
                         <ng-template *ngIf="!batchUbnOfBirthIsActive">
@@ -651,7 +655,7 @@
                         </ng-template>
                     </td>
 
-                    <td *ngIf="showBreedData">
+                    <td *ngIf="showPedigreeRegisterData">
                         <ng-template *ngIf="!batchBreedTypeIsActive">
                             <i class="fa fa-ban" aria-hidden="true"></i>
                         </ng-template>
@@ -670,7 +674,7 @@
                         </ng-template>
                     </td>
 
-                    <td *ngIf="showBreedData">
+                    <td *ngIf="showPedigreeRegisterData">
                         <ng-template *ngIf="!batchBreedCodeIsActive">
                             <i class="fa fa-ban" aria-hidden="true"></i>
                         </ng-template>
@@ -787,7 +791,7 @@
                 <tr *ngFor="let animal of editedAnimals | animalBatchEditFilter:getFilterOptions() | paginate: {itemsPerPage: filterAmount, currentPage: page}">
                     <td *ngIf="showIds || showDates" title="{{ animal.creation_date  | date: 'dd-MM-yyyy @HH:mm:ss' }}">{{ animal.creation_date  | date: 'dd-MM-yyyy' }}</td>
                     <td *ngIf="showIds">{{ animal.id }}</td>
-                    <td *ngIf="showIds"><input title="aiind" class="table-input" type="number" [(ngModel)]="animal.name" [disabled]="isSaving"></td>
+                    <td *ngIf="showIds">{{ animal.name }}</td>
                     <td *ngIf="showIds"><input title="nickname" class="table-input" type="text" [(ngModel)]="animal.nickname" [disabled]="isSaving"></td>
 
                     <td *ngIf="showIds">
@@ -812,7 +816,7 @@
                         ></app-uln-input>
                     </td>
 
-                    <td>
+                    <td *ngIf="showPedigreeRegisterData">
                         <app-stn-input
                                 [pedigreeCountryCode]="animal.pedigree_country_code"
                                 (pedigreeCountryCodeChange)="animal.pedigree_country_code=$event"
@@ -858,7 +862,7 @@
                         ></app-datepicker-v2>
                     </td>
 
-                    <td *ngIf="showPedigreeData">
+                    <td *ngIf="showPedigreeRegisterData">
                         <app-pedigree-register-dropdown
                                 [selectedPedigreeRegisterId]="animal.pedigree_register ? animal.pedigree_register.id : null"
                                 [disabled]="isSaving"
@@ -886,7 +890,8 @@
                         ></app-parent-selector>
                     </td>
 
-                    <td *ngIf="showPedigreeData || showBreedData">{{ animal.litter ? animal.litter.born_alive_count + animal.litter.stillborn_count : '-' }}</td>
+                    <td *ngIf="showPedigreeData || showPedigreeRegisterData">{{ animal.merged_n_ling ? animal.merged_n_ling : '-' }}</td>
+                    <td *ngIf="showPedigreeData || showPedigreeRegisterData"><input title="n_ling_backup_value" class="table-input" type="number" [(ngModel)]="animal.n_ling" [disabled]="isSaving"></td>
                     <td *ngIf="showPedigreeData"><input title="ubnOfBirth" class="table-input" type="number" [(ngModel)]="animal.ubn_of_birth" [disabled]="isSaving"></td>
                     <td *ngIf="showPedigreeData" style="white-space: nowrap">
                         {{ animal.location_of_birth ? animal.location_of_birth.ubn : '-' }}  <i class="fa fa-info-circle" aria-hidden="true"
@@ -923,7 +928,7 @@
                         </select>
                     </td>
 
-                    <td *ngIf="showBreedData">
+                    <td *ngIf="showPedigreeRegisterData">
                         <select
                                 type="breedType"
                                 class="table-input breed-type-input"
@@ -935,7 +940,7 @@
                         </select>
                     </td>
 
-                    <td *ngIf="showBreedData"><input title="breedCode" class="table-input" type="text" [(ngModel)]="animal.breed_code" [disabled]="isSaving"></td>
+                    <td *ngIf="showPedigreeRegisterData"><input title="breedCode" class="table-input" type="text" [(ngModel)]="animal.breed_code" [disabled]="isSaving"></td>
 
                     <td *ngIf="showExaminationData">
                         <select

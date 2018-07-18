@@ -5,21 +5,19 @@
             <form *ngIf="!isCreating" [formGroup]="form">
                 <div class="row">
                     <div class="large-5 columns">
-                        <label>{{ 'ULN' | translate }}
-                            <app-uln-input
-                                    [ulnCountryCode]="ulnCountryCodeNewAnimal"
-                                    (ulnCountryCodeChange)="ulnCountryCodeNewAnimal=$event"
-                                    [ulnNumber]="ulnNumberNewAnimal"
-                                    (ulnNumberChange)="ulnNumberNewAnimal=$event"
-                                    [disabled]="isCreating"
-                            ></app-uln-input>
-
-                        </label>
+                        <label>{{ 'ULN' | translate }}</label>
+                        <app-uln-input
+                                [ulnCountryCode]="ulnCountryCodeNewAnimal"
+                                (ulnCountryCodeChange)="ulnCountryCodeNewAnimal=$event"
+                                [ulnNumber]="ulnNumberNewAnimal"
+                                (ulnNumberChange)="ulnNumberNewAnimal=$event"
+                                [disabled]="isCreating"
+                        ></app-uln-input>
                     </div>
                 </div>
                 <div class="row">
                     <div class="large-5 columns">
-                        <label>{{ 'DATE OF BIRTH' | translate }}
+                        <label>{{ 'DATE OF BIRTH' | translate }}</label>
                         <app-datepicker-v2
                                 [dateString]="dateOfBirth"
                                 [modelFormat]="settings.getModelDateTimeFormat()"
@@ -27,7 +25,6 @@
                                 [updateInitialValues]="(initialValuesChanged)"
                                 (isDateStringChanged)="dateOfBirth = $event"
                         ></app-datepicker-v2>
-                        </label>
                     </div>
                 </div>
                 <div class="row">
