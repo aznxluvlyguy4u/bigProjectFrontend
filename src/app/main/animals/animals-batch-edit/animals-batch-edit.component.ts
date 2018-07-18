@@ -67,7 +67,7 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 		genderTypes: string[] = GENDER_TYPES;
 
 		showIds: boolean;
-		showBreedData: boolean;
+		showPedigreeRegisterData: boolean;
 		showPedigreeData: boolean;
 		showNote: boolean;
 		showDates: boolean;
@@ -158,9 +158,8 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 				this.retrievingAnimals = false;
 				this.loadingLocations = false;
 
-				// TODO edit later
 				this.showIds = true;
-				this.showBreedData = true;
+				this.showPedigreeRegisterData = true;
 				this.showPedigreeData = true;
 				this.showNote = true;
 				this.showDates = true;
@@ -295,9 +294,7 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 								this.updateAnimals(res.result.animals.updated);
 								this.updateAnimals(res.result.animals.not_updated);
 
-								if(!res.result.successful_update_secondary_values) {
-										alert(this.translate.instant('UPDATE ANIMALS SECONDARY VALUES WARNING'));
-								}
+								this.updateAnimalsAlertMessageCheck(res);
 
 								this.displayUpdateResults(res);
 
@@ -309,6 +306,24 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 										this.isSaving = false;
 								}
 					);
+		}
+
+
+		private updateAnimalsAlertMessageCheck(res): void {
+			let alertMessage = '';
+			let prefix = '';
+			if (!res.result.successful_update_secondary_values) {
+				alertMessage += prefix + this.translate.instant('UPDATE ANIMALS SECONDARY VALUES WARNING');
+				prefix = '. ';
+			}
+			if (!res.result.successful_update_result_table_values) {
+				alertMessage += prefix + this.translate.instant('UPDATE ANIMALS RESULT TABLE VALUES WARNING');
+				prefix = '. ';
+			}
+			if (alertMessage !== '') {
+				alertMessage += '.';
+				alert(alertMessage);
+			}
 		}
 
 

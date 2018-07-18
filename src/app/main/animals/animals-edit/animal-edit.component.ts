@@ -25,6 +25,7 @@ export class AnimalEditComponent implements OnInit {
     public editAnimal: Animal;
     public isCreating: boolean = false;
     public isSearching: boolean = false;
+    private defaultIsAliveValue = true;
 
     public ulnCountryCodeNewAnimal: string;
     public ulnNumberNewAnimal: string;
@@ -37,7 +38,7 @@ export class AnimalEditComponent implements OnInit {
 	) {
         this.form = fb.group({
             gender: ['', Validators.required],
-            is_alive: ['', Validators.required],
+            is_alive: [this.defaultIsAliveValue, Validators.required],
             breed_code: ['', Validators.required],
             breed_type: ['', Validators.required],
         });
@@ -136,7 +137,7 @@ export class AnimalEditComponent implements OnInit {
 
     private resetCreateForm() {
         (<FormControl>this.form.controls['gender']).updateValue('');
-        (<FormControl>this.form.controls['is_alive']).updateValue('');
+        (<FormControl>this.form.controls['is_alive']).updateValue(this.defaultIsAliveValue);
         (<FormControl>this.form.controls['breed_code']).updateValue('');
         (<FormControl>this.form.controls['breed_type']).updateValue('');
     }

@@ -19,6 +19,7 @@ import { LedgerCategoryStorage } from './global/services/storage/ledger-category
 import { InvoiceRuleStorage } from './global/services/storage/invoice-rule.storage';
 import { DownloadService } from './global/services/download/download.service';
 import { AnimalReportDownloaderService } from './global/services/download/animal-report-downloader.service';
+import { SortService } from './global/services/utils/sort.service';
 import {ReportService} from "./global/services/report/report.service";
 
 require('font-awesome-loader');
@@ -48,5 +49,6 @@ bootstrap(IndexComponent, [
     InvoiceRuleStorage,
     TranslateService,
     SettingsService,
+	  SortService,
     UtilsService
 ]);
