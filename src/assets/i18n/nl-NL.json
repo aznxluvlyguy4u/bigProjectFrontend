@@ -517,6 +517,7 @@
   "EDIT OPTIONS": "Edit opties",
   "EDIT ULNS": "Pas ULNs aan",
   "UPDATE ANIMALS SECONDARY VALUES WARNING": "Dier waarden waren successvol geupdatet, maar indirect gerelateerde waarden waren niet goed geupdatet",
+  "UPDATE ANIMALS RESULT TABLE VALUES WARNING": "Dier waarden waren successvol geupdatet, maar cache gerelateerde waarden waren niet goed geupdatet. Hierdoor kunnen waarden mogelijk niet goed worden getoond aan de gebruiker",
   "UPDATE ALL FILTERED ANIMALS": "Update alle gefilterde dieren",
   "EDIT ULNS WARNING": "Pas op! Dit is geen omnummering maar alleen een aanpassing van de ULN direct in de database!",
   "SENT ANIMALS UPDATED": "Verstuurde dieren geupdatet",

@@ -294,9 +294,7 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 								this.updateAnimals(res.result.animals.updated);
 								this.updateAnimals(res.result.animals.not_updated);
 
-								if(!res.result.successful_update_secondary_values) {
-										alert(this.translate.instant('UPDATE ANIMALS SECONDARY VALUES WARNING'));
-								}
+								this.updateAnimalsAlertMessageCheck(res);
 
 								this.displayUpdateResults(res);
 
@@ -308,6 +306,24 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 										this.isSaving = false;
 								}
 					);
+		}
+
+
+		private updateAnimalsAlertMessageCheck(res): void {
+			let alertMessage = '';
+			let prefix = '';
+			if (!res.result.successful_update_secondary_values) {
+				alertMessage += prefix + this.translate.instant('UPDATE ANIMALS SECONDARY VALUES WARNING');
+				prefix = '. ';
+			}
+			if (!res.result.successful_update_result_table_values) {
+				alertMessage += prefix + this.translate.instant('UPDATE ANIMALS RESULT TABLE VALUES WARNING');
+				prefix = '. ';
+			}
+			if (alertMessage !== '') {
+				alertMessage += '.';
+				alert(alertMessage);
+			}
 		}
 
 
