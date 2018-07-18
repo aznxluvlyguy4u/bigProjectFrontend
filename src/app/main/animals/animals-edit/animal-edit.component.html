@@ -6,14 +6,13 @@
                 <div class="row">
                     <div class="large-5 columns">
                         <label>{{ 'ULN' | translate }}
-                            <app-uln-input
-                                    [ulnCountryCode]="ulnCountryCodeNewAnimal"
-                                    (ulnCountryCodeChange)="ulnCountryCodeNewAnimal=$event"
-                                    [ulnNumber]="ulnNumberNewAnimal"
-                                    (ulnNumberChange)="ulnNumberNewAnimal=$event"
-                                    [disabled]="isCreating"
-                            ></app-uln-input>
-
+                        <app-uln-input
+                                [ulnCountryCode]="ulnCountryCodeNewAnimal"
+                                (ulnCountryCodeChange)="ulnCountryCodeNewAnimal=$event"
+                                [ulnNumber]="ulnNumberNewAnimal"
+                                (ulnNumberChange)="ulnNumberNewAnimal=$event"
+                                [disabled]="isCreating"
+                        ></app-uln-input>
                         </label>
                     </div>
                 </div>
