@@ -714,7 +714,7 @@
   "PREDICATES": "Predicaten",
   "DNA FEATURES": "DNA Kenmerken",
   "N-LING BACKUP VALUE": "N-ling backup waarde",
-  "N-LING BACKUP VALUE EXPLANATION": "Wanneer het dier zelf in een worp zit, dan wordt de N-ling waarde gehaald uit de worpgegevens. Anders wordt de N-ling waarde gelijk gezet als deze N-ling backup waarde.",
+  "N-LING BACKUP VALUE EXPLANATION": "Wanneer het dier zelf in een worp zit die niet is ingetrokken en waarvan de moeder van de worp bekend is, dan wordt de N-ling waarde gehaald uit de worpgegevens. Anders wordt de N-ling waarde gelijk gezet als deze N-ling backup waarde.",
   "REPORT_ANNUAL_ACTIVE_LIVE_STOCK": "Jaarlijkse actieve stallijst rapportage",
   "REPORT_ANNUAL_TE_100": "Productie per TE100 bedrijf per jaar",
   "REPORT_FERTILIZER_ACCOUNTING": "Mestboekhouding",
