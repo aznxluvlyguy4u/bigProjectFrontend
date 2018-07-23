@@ -102,9 +102,9 @@ const routes: RouterConfig = [
               // {path: 'animals', component: AnimalsComponent, canActivate: [DeveloperGuard],
               {path: 'animals', component: AnimalsComponent,
                 children: [
-                  {path: '', terminal: true, redirectTo: 'batch-edit'},
-                  {path: 'batch-edit', component: AnimalsBatchEditComponent},
-                  {path: 'animal-edit', component: AnimalEditComponent}
+                  {path: '', terminal: true, redirectTo: 'animal-edit'},
+									{path: 'animal-edit', component: AnimalEditComponent},
+                  {path: 'batch-edit', component: AnimalsBatchEditComponent}
                 ]},
             {path: 'report', component: ReportComponent,
                 children: [
