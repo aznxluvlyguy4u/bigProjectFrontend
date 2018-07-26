@@ -732,5 +732,7 @@
   "ALL REPORTS ARE AVAILABLE FOR 1 DAY": "Alle rapportages zijn 1 dag beschikbaar",
   "THE NEWEST REPORTS ARE AT THE TOP": "De nieuwste rapportages staan bovenaan",
   "REPORT OVERVIEW": "Rapportage overzicht",
-  "ALL FORM FIELDS MUST BE FILLED": "Alle formulier velden moeten ingevuld zijn"
+  "THESE FORM FIELDS MUST BE FILLED": "Deze formulier velden moeten ingevuld zijn",
+  "ULN COUNTRY CODE": "ULN-landcode",
+  "ULN NUMBER": "ULN-nummer"
 }
