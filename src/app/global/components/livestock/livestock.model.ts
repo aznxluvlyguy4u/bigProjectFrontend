@@ -2,6 +2,7 @@ import { Litter } from '../../models/litter.model';
 import { Ewe } from '../../models/ewe.model';
 import { Ram } from '../../models/ram.model';
 import { PedigreeRegister } from '../../models/pedigree-register.model';
+import { Location } from '../../../main/client/client.model';
 
 export class Animal {
     id?: number;
@@ -51,5 +52,4 @@ export class Animal {
     selected?: boolean;
     filtered?: boolean;
     type?: string;
-    merged_n_ling: number;
 }
