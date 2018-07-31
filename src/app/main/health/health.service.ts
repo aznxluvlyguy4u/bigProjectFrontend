@@ -199,7 +199,10 @@ export class HealthService {
                 this.loadToReceiveLabResults();
             },
             err => {
-                console.log(err);
+                alert(err.json().result.message);
+                this.loadAnnounced();
+                this.loadToReceiveLabResults();
+                return;
             }
         )
     }
@@ -245,16 +248,17 @@ export class HealthService {
 
     /** Cancel an Inspection the Inspection will revert to the ... swim lane */
     public cancelInspection(inspection) {
-      console.log(inspection);
-      console.log('CANCELING INSPECTION');
+        console.log(inspection);
+        console.log('CANCELING INSPECTION');
 
-      // return
-      let body = {
-          new_status : "CANCELLED"
-      }
-      return this.nsfoService.doPutRequest(this.nsfoService.URI_INSPECTIONS + '/' + inspection.inspection_id , body)
-          .subscribe(
-              res => {
+        // return
+        let body = {
+            new_status : "CANCELLED"
+        }
+        return this.nsfoService.doPutRequest(this.nsfoService.URI_INSPECTIONS + '/' + inspection.inspection_id , body)
+            .subscribe(
+                res => {
+                this.loadAnnounced();
                 this.loadToAuthorize();
                 this.loadFinished();
                 this.loadToReceiveLabResults();
@@ -262,7 +266,7 @@ export class HealthService {
               err => {
                 // handle error
               }
-          );
+            );
     }
 
     /** Finish (Authorize) an Inspection the Inspection will be shown in the the finished swim lane */
@@ -290,8 +294,6 @@ export class HealthService {
                 res => {
                     // TODO: result should come back as an object
                     // TODO: failed should come back as an object
-                    console.log(' RES  = ');
-                    console.log(res);
 
                     this.loadToAnnounce();
                     this.loadAnnounced();
@@ -313,7 +315,6 @@ export class HealthService {
                       order_number: res.result.result.order_number
                     };
 
-                    console.log(res, body);
                     this.getAnnouncementLetter(body);
                 },
                 err => {
@@ -397,7 +398,6 @@ export class HealthService {
         this.nsfoService.doPostRequest(this.nsfoService.URI_ANNOUNCEMENTS_LETTERS + '/' + request.ubn , request)
             .subscribe(
                 res => {
-                    // TODO: Check if failed
                     this.toAnnounceIsLoading.next(false);
                     win.location.href = res.result.download_url;
                 }
