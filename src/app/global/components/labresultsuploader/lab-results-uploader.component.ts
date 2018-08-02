@@ -57,8 +57,8 @@ export class LabResultsUploaderComponent {
         }
 
         if (this.file.type !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-            || this.file.type !== 'application/vnd.ms-excel'
-            || this.file.type !== 'text/csv') {
+            && this.file.type !== 'application/vnd.ms-excel'
+            && this.file.type !== 'text/csv') {
             errorText += ' UNSUPPORTED FILE FORMAT ';
         }
 
