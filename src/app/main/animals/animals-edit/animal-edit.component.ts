@@ -1,6 +1,6 @@
 import {FormBuilder, FormControl, FormGroup, REACTIVE_FORM_DIRECTIVES, Validators} from '@angular/forms';
 import { TranslatePipe, TranslateService } from 'ng2-translate';
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 
 import {DatepickerV2Component} from "../../../global/components/datepickerV2/datepicker-v2.component";
 import {SettingsService} from "../../../global/services/settings/settings.service";
@@ -30,7 +30,6 @@ export class AnimalEditComponent implements OnInit, OnDestroy {
     public findForm: FormGroup;
 
     public isSearching: boolean = false;
-    public foundAnimal: Animal;
 
     @Input()
     public displayNewAnimalModal = 'none';
@@ -77,7 +76,7 @@ export class AnimalEditComponent implements OnInit, OnDestroy {
               })
                 .subscribe(
                     res => {
-                        this.foundAnimal = res.result;
+                        this.animalEditService.foundAnimal = res.result;
                         this.resetFindForm();
                     }, error => {
                         alert(this.nsfo.getErrorMessage(error));
@@ -85,6 +84,10 @@ export class AnimalEditComponent implements OnInit, OnDestroy {
                 );
         }
     }
+
+    getAnimal(): Animal {
+    	return this.animalEditService.foundAnimal;
+		}
 
     private resetFindForm() {
         (<FormControl>this.findForm.controls['uln']).updateValue('');

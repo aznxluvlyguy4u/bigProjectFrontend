@@ -34,33 +34,37 @@
                 </div>
             </div>
 
-            <div *ngIf="!!foundAnimal">
+            <div *ngIf="!getAnimal()">
+                <p>{{ 'FIND AN ANIMAL FIRST BEFORE YOU CAN EDIT IT' | translate }}</p>
+            </div>
+
+            <div *ngIf="!!getAnimal()">
 
                 <h3>{{ 'ANIMAL DETAILS' | translate }}</h3>
 
                 <div class="row">
                     <div class="large-5 columns">
                         <label>{{ 'ULN' | translate }}</label>
-                        <p>{{ foundAnimal.uln_country_code }} {{ foundAnimal.uln_number }}</p>
+                        <p>{{ getAnimal().uln_country_code }} {{ getAnimal().uln_number }}</p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="large-5 columns">
                         <label>{{ 'STN' | translate }}</label>
-                        <p>{{ getStnOutput(foundAnimal) }}</p>
+                        <p>{{ getStnOutput(getAnimal()) }}</p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="large-5 columns">
                         <label>{{ 'DATE OF BIRTH' | translate }}</label>
-                        <p>{{ foundAnimal.date_of_birth ? (foundAnimal.date_of_birth | date: 'dd-MM-yyyy') : ('DATE OF BIRTH' | translate) }}</p>
+                        <p>{{ getAnimal().date_of_birth ? (getAnimal().date_of_birth | date: 'dd-MM-yyyy') : ('DATE OF BIRTH' | translate) }}</p>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="large-5 columns">
                         <label>{{ 'GENDER' | translate}}</label>
-                        <p>{{foundAnimal.type | translate}}</p>
+                        <p>{{ getAnimal().type ? (getAnimal().type | translate) : '-'}}</p>
                     </div>
                 </div>
 
@@ -77,6 +81,6 @@
     </div>
 
     <app-create-animal-modal></app-create-animal-modal>
-    <!--<app-edit-gender-modal *ngIf="openGenderEdit" [setAnimal]="foundAnimal"></app-edit-gender-modal>-->
+    <app-edit-gender-modal></app-edit-gender-modal>
 
 </div>

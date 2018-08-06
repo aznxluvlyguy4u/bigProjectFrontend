@@ -1,47 +1,82 @@
-<h3>{{ 'EDIT GENDER' | translate }}</h3>
+<ng-template *ngIf="displayModal()">
 
-<form [formGroup]="editForm">
+    <div class="reveal-overlay" [ngStyle]="{'display': animalEditService.genderEditModalStatus}">
+        <div class="large reveal" [ngStyle]="{'display': animalEditService.genderEditModalStatus}">
+            <div class="modal-header">
+                {{ 'EDIT GENDER' | translate }}
+                <button type="button" (click)="closeModal()" class="pull-right" aria-label="Close modal">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="modal-body">
 
-    <div class="row">
-        <div class="large-5 columns">
-            <label>{{ 'ULN' | translate }}
-                <input type="text" placeholder="{{ 'ULN' | translate }}" value="{{ editAnimal.uln_country_code }}{{ editAnimal.uln_number }}" disabled/>
-            </label>
+                <form [formGroup]="editForm">
+
+                    <div class="row">
+                        <div class="large-5 columns">
+                            <label>{{ 'ULN' | translate }}
+                                <input type="text" placeholder="{{ 'ULN' | translate }}" value="{{ editAnimal.uln_country_code }}{{ editAnimal.uln_number }}" disabled/>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="large-5 columns">
+                            <label>{{ 'STN' | translate }}
+                                <input type="text" placeholder="{{ 'STN' | translate }}" value="{{ editAnimal.pedigree_country_code }}{{ editAnimal.pedigree_number }}" disabled/>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="large-5 columns">
+                            <label>{{ 'DATE OF BIRTH' | translate }}
+                                <input type="text" placeholder="{{ 'DATE OF BIRTH' | translate }}" value="{{ editAnimal.date_of_birth | date: 'dd-MM-yyyy'}}" disabled/>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="large-5 columns">
+                            <label>{{ 'GENDER' | translate}}
+                                <select formControlName="gender">
+                                    <option value="EWE">{{ 'Ewe' | translate }}</option>
+                                    <option value="RAM">{{ 'Ram' | translate }}</option>
+                                    <option value="NEUTER">{{ 'Neuter' | translate }}</option>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <span class="pull-left">
+                    <label
+                            *ngIf="errorMessage"
+                            class="input-error-msg"
+                    >{{ errorMessage | translate }}</label>
+                </span>
+
+                <span class="pull-right">
+                    <button
+                            (click)="updateAnimal()"
+                            class="button"
+                            type="button"
+                    >{{ 'EDIT' | translate }}
+                    <span *ngIf="isUpdating">
+                             <i class="fa fa-gear fa-spin fa-fw"></i>
+                        </span>
+                    </button>
+                    <button
+                            class="alert button"
+                            [disabled]="isUpdating"
+                            (click)="closeModal()"
+                    >{{ 'CANCEL' | translate}}</button>
+                </span>
+            </div>
         </div>
     </div>
 
-    <div class="row">
-        <div class="large-5 columns">
-            <label>{{ 'STN' | translate }}
-                <input type="text" placeholder="{{ 'STN' | translate }}" value="{{ editAnimal.pedigree_country_code }}{{ editAnimal.pedigree_number }}" disabled/>
-            </label>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="large-5 columns">
-            <label>{{ 'DATE OF BIRTH' | translate }}
-                <input type="text" placeholder="{{ 'DATE OF BIRTH' | translate }}" value="{{ editAnimal.date_of_birth | date: 'dd-MM-yyyy'}}" disabled/>
-            </label>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="large-5 columns">
-            <label>{{ 'GENDER' | translate}}
-                <select formControlName="gender">
-                    <option value="EWE">{{ 'Ewe' | translate }}</option>
-                    <option value="RAM">{{ 'Ram' | translate }}</option>
-                    <option value="NEUTER">{{ 'Neuter' | translate }}</option>
-                </select>
-            </label>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="large-6 columns">
-            <button (click)="updateAnimal()" class="button">{{ 'EDIT' | translate }}</button>
-        </div>
-    </div>
-
-</form>
+</ng-template>

@@ -1,5 +1,5 @@
 import { PedigreeRegisterDropdownComponent } from '../../../../global/components/pedigreeregisterdropdown/pedigree-register-dropdown.component';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { StnInputComponent } from '../../../../global/components/stninput/stn-input.component';
 import { DatepickerV2Component } from '../../../../global/components/datepickerV2/datepicker-v2.component';
 import { UbnDropdownComponent } from '../../../../global/components/ubndropdown/ubn-dropdown.component';
@@ -14,8 +14,6 @@ import { BREED_TYPES } from '../../../../global/constants/breed-type.constant';
 import { Animal } from '../../../../global/components/livestock/livestock.model';
 import { Location } from '../../../client/client.model';
 import { AnimalEditService } from '../animal-edit.service';
-import { AnimalEditComponent } from '../animal-edit.component';
-import { UbnDropdownCloneComponent } from '../../../../global/components/ubndropdownclone/ubn-dropdown-clone.component';
 
 @Component({
 	selector: 'app-create-animal-modal',
