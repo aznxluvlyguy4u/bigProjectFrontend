@@ -734,5 +734,14 @@
   "REPORT OVERVIEW": "Rapportage overzicht",
   "THESE FORM FIELDS MUST BE FILLED": "Deze formulier velden moeten ingevuld zijn",
   "ULN COUNTRY CODE": "ULN-landcode",
-  "ULN NUMBER": "ULN-nummer"
+  "ULN NUMBER": "ULN-nummer",
+  "CREATE NEW ANIMAL": "Maak nieuw dier aan",
+  "EDIT GENDER": "Wijzig geslacht",
+  "ANIMAL DETAILS": "Dierdetails",
+  "FIND ANIMAL": "Vind dier",
+  "OBLIGATORY FIELDS": "Verplichte velden",
+  "IMPORTANT FOR BREED VALUE CALCULATIONS AND DECLARE BIRTH": "Belangrijk voor fokwaarden berekening en geboortemelding",
+  "IMPORTANT FOR DECLARE BIRTH": "Belangrijk voor geboortemelding",
+  "BREEDER UBN INFO": "Probeer minstens de Fokker UBN text waarde in te vullen als de Fokker UBN niet als locatie in het systeem bestaat",
+  "OPTIONAL": "Optioneel"
 }

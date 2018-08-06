@@ -1,0 +1,47 @@
+<h3>{{ 'EDIT GENDER' | translate }}</h3>
+
+<form [formGroup]="editForm">
+
+    <div class="row">
+        <div class="large-5 columns">
+            <label>{{ 'ULN' | translate }}
+                <input type="text" placeholder="{{ 'ULN' | translate }}" value="{{ editAnimal.uln_country_code }}{{ editAnimal.uln_number }}" disabled/>
+            </label>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="large-5 columns">
+            <label>{{ 'STN' | translate }}
+                <input type="text" placeholder="{{ 'STN' | translate }}" value="{{ editAnimal.pedigree_country_code }}{{ editAnimal.pedigree_number }}" disabled/>
+            </label>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="large-5 columns">
+            <label>{{ 'DATE OF BIRTH' | translate }}
+                <input type="text" placeholder="{{ 'DATE OF BIRTH' | translate }}" value="{{ editAnimal.date_of_birth | date: 'dd-MM-yyyy'}}" disabled/>
+            </label>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="large-5 columns">
+            <label>{{ 'GENDER' | translate}}
+                <select formControlName="gender">
+                    <option value="EWE">{{ 'Ewe' | translate }}</option>
+                    <option value="RAM">{{ 'Ram' | translate }}</option>
+                    <option value="NEUTER">{{ 'Neuter' | translate }}</option>
+                </select>
+            </label>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="large-6 columns">
+            <button (click)="updateAnimal()" class="button">{{ 'EDIT' | translate }}</button>
+        </div>
+    </div>
+
+</form>
