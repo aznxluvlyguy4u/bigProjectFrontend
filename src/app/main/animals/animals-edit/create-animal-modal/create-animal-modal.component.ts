@@ -14,6 +14,8 @@ import { BREED_TYPES } from '../../../../global/constants/breed-type.constant';
 import { Animal } from '../../../../global/components/livestock/livestock.model';
 import { Location } from '../../../client/client.model';
 import { AnimalEditService } from '../animal-edit.service';
+import { AnimalResidenceHistory } from '../../../../global/models/animal-residence-history.model';
+import { UtilsService } from '../../../../global/services/utils/utils.service';
 
 @Component({
 	selector: 'app-create-animal-modal',
@@ -29,6 +31,7 @@ export class CreateAnimalModalComponent implements OnInit {
 
 	public defaultIsAliveValue = true;
 	public newAnimal: Animal;
+	public currentUbnStartDate: string;
 	public mandatoryValueIsMissing: boolean;
 
 	public breedTypes: string[] = BREED_TYPES;
@@ -70,6 +73,7 @@ export class CreateAnimalModalComponent implements OnInit {
 	resetCreateForm() {
 		this.clearNewAnimalEvent.emit(true);
 		this.newAnimal = new Animal();
+		this.currentUbnStartDate = undefined;
 
 		(<FormControl>this.form.controls['gender']).updateValue('');
 		(<FormControl>this.form.controls['is_alive']).updateValue(this.defaultIsAliveValue);
@@ -131,13 +135,24 @@ export class CreateAnimalModalComponent implements OnInit {
 			this.newAnimal.n_ling = this.form.controls['n_ling_backup'].value;
 			this.newAnimal.uln = this.newAnimal.uln_country_code + this.newAnimal.uln_number;
 
+			this.newAnimal.type = UtilsService.getAnimalTypeFromGender(this.newAnimal.gender);
+
+			if (!!this.newAnimal.location && !!this.currentUbnStartDate) {
+				const startResidence: AnimalResidenceHistory = {
+					start_date: this.currentUbnStartDate,
+					location: this.newAnimal.location
+				};
+
+				this.newAnimal.animal_residence_history = [startResidence];
+			}
+
 			this.nsfo.doPostRequest(this.nsfo.URI_ANIMALS_CREATE, this.newAnimal)
 				.finally(()=>{
 					this.isCreating = false;
 				})
 				.subscribe(
 					res => {
-						alert(res.result);
+						this.animalEditService.foundAnimal = res.result;
 						this.resetCreateForm();
 					}, error => {
 						alert(this.nsfo.getErrorMessage(error));
@@ -145,6 +160,7 @@ export class CreateAnimalModalComponent implements OnInit {
 						// A SIMPLE "FIX" to make sure the view and data is consistent
 						this.newAnimal.location = undefined;
 						this.newAnimal.location_of_birth = undefined;
+						this.newAnimal.animal_residence_history = [];
 					}
 				);
 		} else {

@@ -183,6 +183,23 @@
                             ></app-ubn-dropdown>
                         </div>
 
+                        <div class="large-3 medium-4 columns end">
+                            <ng-template *ngIf="newAnimal.location != null">
+                                <label>{{ ('CURRENT UBN' | translate) }} {{ ('START DATE' | translate) }}</label>
+                                <app-datepicker-v2
+                                        [dateString]="currentUbnStartDate"
+                                        [modelFormat]="settings.getModelDateTimeFormat()"
+                                        [disabled]="isSaving || newAnimal.location == null"
+                                        [updateInitialValues]="(initialValuesChanged)"
+                                        (isDateStringChanged)="currentUbnStartDate = $event"
+                                ></app-datepicker-v2>
+                            </ng-template>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
                         <div class="large-3 medium-3 columns">
                             <label>{{ 'N-LING BACKUP VALUE' | translate}} <i class="fa fa-info-circle" aria-hidden="true" title="{{'N-LING BACKUP VALUE EXPLANATION' | translate}}"></i></label>
                             <input

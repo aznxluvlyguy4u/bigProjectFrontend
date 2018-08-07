@@ -2,6 +2,7 @@ import {Injectable} from "@angular/core";
 import {NSFOService} from "../nsfo/nsfo.service";
 import {ReplaySubject} from "rxjs/Rx";
 import { User } from '../../../main/client/client.model';
+import { GENDER_TYPES } from '../../constants/gender-type.contant';
 
 @Injectable()
 export class UtilsService {
@@ -57,6 +58,14 @@ export class UtilsService {
 			}
     }
 
+    static getAnimalTypeFromGender(gender: string): string {
+        switch (gender) {
+          case 'MALE': return 'Ram';
+          case 'FEMALE': return 'Ewe';
+          case 'NEUTER': return 'Neuter';
+          default: return 'Neuter';
+        }
+    }
 
     static getBoolValAsString(boolval: boolean) {
         if (typeof boolval === 'boolean') {

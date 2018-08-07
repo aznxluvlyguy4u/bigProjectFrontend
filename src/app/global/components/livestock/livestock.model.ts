@@ -3,6 +3,7 @@ import { Ewe } from '../../models/ewe.model';
 import { Ram } from '../../models/ram.model';
 import { PedigreeRegister } from '../../models/pedigree-register.model';
 import { Location } from '../../../main/client/client.model';
+import { AnimalResidenceHistory } from '../../models/animal-residence-history.model';
 
 export class Animal {
     id?: number;
@@ -51,5 +52,6 @@ export class Animal {
     ulnLastFive?: string;
     selected?: boolean;
     filtered?: boolean;
+    animal_residence_history: AnimalResidenceHistory[] = [];
     type?: string;
 }
