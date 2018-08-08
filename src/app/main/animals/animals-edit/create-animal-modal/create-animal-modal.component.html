@@ -185,7 +185,7 @@
 
                         <div class="large-3 medium-4 columns end">
                             <ng-template *ngIf="newAnimal.location != null">
-                                <label>{{ ('CURRENT UBN' | translate) }} {{ ('START DATE' | translate) }}</label>
+                                <label>{{ ('CURRENT UBN' | translate) }} {{ ('START DATE' | translate) }} <i class="fa fa-exclamation-triangle" aria-hidden="true" title="{{'CURRENT UBN START DATE EXPLANATION' | translate}}"></i></label>
                                 <app-datepicker-v2
                                         [dateString]="currentUbnStartDate"
                                         [modelFormat]="settings.getModelDateTimeFormat()"
