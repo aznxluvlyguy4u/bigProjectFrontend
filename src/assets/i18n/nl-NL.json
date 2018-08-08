@@ -718,7 +718,7 @@
   "PREDICATES": "Predicaten",
   "DNA FEATURES": "DNA Kenmerken",
   "N-LING BACKUP VALUE": "N-ling backup waarde",
-  "N-LING BACKUP VALUE EXPLANATION": "Wanneer het dier zelf in een worp zit, dan wordt de N-ling waarde gehaald uit de worpgegevens. Anders wordt de N-ling waarde gelijk gezet als deze N-ling backup waarde.",
+  "N-LING BACKUP VALUE EXPLANATION": "Wanneer het dier zelf in een worp zit die niet is ingetrokken en waarvan de moeder van de worp bekend is, dan wordt de N-ling waarde gehaald uit de worpgegevens. Anders wordt de N-ling waarde gelijk gezet als deze N-ling backup waarde.",
   "REPORT_ANNUAL_ACTIVE_LIVE_STOCK": "Jaarlijkse actieve stallijst rapportage",
   "REPORT_ANNUAL_TE_100": "Productie per TE100 bedrijf per jaar",
   "REPORT_FERTILIZER_ACCOUNTING": "Mestboekhouding",
@@ -736,5 +736,18 @@
   "ALL REPORTS ARE AVAILABLE FOR 1 DAY": "Alle rapportages zijn 1 dag beschikbaar",
   "THE NEWEST REPORTS ARE AT THE TOP": "De nieuwste rapportages staan bovenaan",
   "REPORT OVERVIEW": "Rapportage overzicht",
-  "ALL FORM FIELDS MUST BE FILLED": "Alle formulier velden moeten ingevuld zijn"
+  "THESE FORM FIELDS MUST BE FILLED": "Deze formulier velden moeten ingevuld zijn",
+  "ULN COUNTRY CODE": "ULN-landcode",
+  "ULN NUMBER": "ULN-nummer",
+  "CREATE NEW ANIMAL": "Maak nieuw dier aan",
+  "EDIT GENDER": "Wijzig geslacht",
+  "ANIMAL DETAILS": "Dierdetails",
+  "FIND ANIMAL": "Vind dier",
+  "OBLIGATORY FIELDS": "Verplichte velden",
+  "IMPORTANT FOR BREED VALUE CALCULATIONS AND DECLARE BIRTH": "Belangrijk voor fokwaarden berekening en geboortemelding",
+  "IMPORTANT FOR DECLARE BIRTH": "Belangrijk voor geboortemelding",
+  "BREEDER UBN INFO": "Probeer minstens de Fokker UBN text waarde in te vullen als de Fokker UBN niet als locatie in het systeem bestaat",
+  "OPTIONAL": "Optioneel",
+  "FIND AN ANIMAL FIRST BEFORE YOU CAN EDIT IT": "Vind eerst het dier wat je wil aanpassen",
+  "CURRENT UBN START DATE EXPLANATION": "Als hier een start datum wordt ingevuld, dan zal voor het geselecteerde UBN ook een UBN historie record worden aangemaakt. Dit is nodig om historische stallijsten te kunnen bijhouden."
 }

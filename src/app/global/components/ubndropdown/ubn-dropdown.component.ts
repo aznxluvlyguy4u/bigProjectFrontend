@@ -18,6 +18,7 @@ export class UbnDropdownComponent {
 		@Input() isOptional = false;
 		@Input() isActive = true;
 		isDirty = false;
+		@Input() idSuffix = '1';
 
 		@Output() selectedLocationChange = new EventEmitter<Location>();
 
