@@ -18,10 +18,10 @@
     <div class="row hide-for-small-only">
         <ul class="tabs">
             <li class="tabs-title">
-                <a routerLink="/animals/batch-edit" routerLinkActive="active">{{ 'BATCH EDIT' | translate }}</a>
+                <a routerLink="/animals/animal-edit" routerLinkActive="active">{{ 'ANIMAL EDIT' | translate }}</a>
             </li>
             <li class="tabs-title">
-                <a routerLink="/animals/animal-edit" routerLinkActive="active">{{ 'ANIMAL EDIT' | translate }}</a>
+                <a routerLink="/animals/batch-edit" routerLinkActive="active">{{ 'BATCH EDIT' | translate }}</a>
             </li>
         </ul>
     </div>
@@ -30,6 +30,7 @@
     <div class="row show-for-small-only">
         <label> {{ 'TAB' | translate }}
             <select [(ngModel)]="selectedRoute" (change)="navigateTo($event.target.value)">
+                <option value="/animals/animal-edit">{{ 'ANIMAL EDIT' | translate }}</option>
                 <option value="/animals/batch-edit">{{ 'BATCH EDIT' | translate }}</option>
             </select>
         </label>

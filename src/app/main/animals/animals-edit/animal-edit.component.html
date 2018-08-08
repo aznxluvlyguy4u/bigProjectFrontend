@@ -1,91 +1,31 @@
 <div id="animals-batch-edit">
+
     <div class="row">
         <div class="large-6 columns">
-            <h3> Maak een nieuw dier aan</h3>
-            <form *ngIf="!isCreating" [formGroup]="form">
-                <div class="row">
-                    <div class="large-5 columns">
-                        <label>{{ 'ULN' | translate }}</label>
-                        <app-uln-input
-                                [ulnCountryCode]="ulnCountryCodeNewAnimal"
-                                (ulnCountryCodeChange)="ulnCountryCodeNewAnimal=$event"
-                                [ulnNumber]="ulnNumberNewAnimal"
-                                (ulnNumberChange)="ulnNumberNewAnimal=$event"
-                                [disabled]="isCreating"
-                        ></app-uln-input>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="large-5 columns">
-                        <label>{{ 'DATE OF BIRTH' | translate }}</label>
-                        <app-datepicker-v2
-                                [dateString]="dateOfBirth"
-                                [modelFormat]="settings.getModelDateTimeFormat()"
-                                [disabled]="isSaving"
-                                [updateInitialValues]="(initialValuesChanged)"
-                                (isDateStringChanged)="dateOfBirth = $event"
-                        ></app-datepicker-v2>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="large-5 columns">
-                        <label>{{ 'GENDER' | translate}}
-                            <select formControlName="gender">
-                                <option value="FEMALE">{{ 'Ewe' | translate }}</option>
-                                <option value="MALE">{{ 'Ram' | translate }}</option>
-                            </select>
-                        </label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="large-5 columns">
-                        <label>{{ 'ALIVE' | translate}}
-                            <input type="checkbox" formControlName="is_alive">
-                        </label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="large-5 columns">
-                        <label>{{ 'BREED CODE' | translate}}
-                            <input type="text" placeholder="{{ 'BREED CODE' | translate }}" formControlName="breed_code"/>
-                        </label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="large-5 columns">
-                        <label>{{ 'BREED TYPE' | translate}}
-                            <select formControlName="breed_type">
-                                <option *ngFor="let breedType of breedTypes" value="{{ breedType }}"
-                                >{{ breedType | translate }}</option>
-                            </select>
-                        </label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="large-6 columns">
-                        <button (click)="createAnimal()" class="button">{{ 'SAVE' | translate }}</button>
-                    </div>
-                </div>
-            </form>
-            <div *ngIf="isCreating" class="row">
-                <div class="large-5 columns">
-                    <div class="loader-spinner">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="large-6 columns">
+
             <div class="row">
                 <div class="large-5 columns">
-                    <h3>Wijzig geslacht</h3>
+                    <h3>{{ 'FIND ANIMAL' | translate }}</h3>
                     <form [formGroup]="findForm">
                         <label>{{ 'ULN' | translate}}
                             <input type="text" placeholder="Zoek op ULN" formControlName="uln">
                         </label>
-                        <button (click)="findAnimal()" class="button">{{ 'SEARCH' | translate}}</button>
                     </form>
                 </div>
             </div>
+
+            <div class="row">
+                <div class="large-4 columns">
+                    <button (click)="findAnimal()" class="button">
+                        {{ 'SEARCH' | translate}}</button>
+                </div>
+                <div class="large-6 columns">
+                    <button type="button" class="button primary expanded" (click)="openCreateNewModal()">
+                        {{ 'CREATE NEW ANIMAL' | translate }}</button>
+                </div>
+            </div>
+
+            <hr>
 
             <div class="row">
                 <div class="large-5 columns">
@@ -94,47 +34,53 @@
                 </div>
             </div>
 
-            <div *ngIf="!!editAnimal">
-                <form [formGroup]="editForm">
-                    <div class="row">
-                        <div class="large-5 columns">
-                            <label>{{ 'ULN' | translate }}
-                                <input type="text" placeholder="{{ 'ULN' | translate }}" value="{{ editAnimal.uln_country_code }}{{ editAnimal.uln_number }}" disabled/>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="large-5 columns">
-                            <label>{{ 'STN' | translate }}
-                                <input type="text" placeholder="{{ 'STN' | translate }}" value="{{ editAnimal.pedigree_country_code }}{{ editAnimal.pedigree_number }}" disabled/>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="large-5 columns">
-                            <label>{{ 'DATE OF BIRTH' | translate }}
-                                <input type="text" placeholder="{{ 'DATE OF BIRTH' | translate }}" value="{{ editAnimal.date_of_birth | date: 'dd-MM-yyyy'}}" disabled/>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="large-5 columns">
-                            <label>{{ 'GENDER' | translate}}
-                                <select formControlName="gender">
-                                    <option value="EWE">{{ 'Ewe' | translate }}</option>
-                                    <option value="RAM">{{ 'Ram' | translate }}</option>
-                                    <option value="NEUTER">{{ 'Neuter' | translate }}</option>
-                                </select>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="large-6 columns">
-                            <button (click)="updateAnimal()" class="button">{{ 'EDIT' | translate }}</button>
-                        </div>
-                    </div>
-                </form>
+            <div *ngIf="!getAnimal()">
+                <p>{{ 'FIND AN ANIMAL FIRST BEFORE YOU CAN EDIT IT' | translate }}</p>
             </div>
+
+            <div *ngIf="!!getAnimal()">
+
+                <h3>{{ 'ANIMAL DETAILS' | translate }}</h3>
+
+                <div class="row">
+                    <div class="large-5 columns">
+                        <label>{{ 'ULN' | translate }}</label>
+                        <p>{{ getAnimal().uln_country_code }} {{ getAnimal().uln_number }}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="large-5 columns">
+                        <label>{{ 'STN' | translate }}</label>
+                        <p>{{ getStnOutput(getAnimal()) }}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="large-5 columns">
+                        <label>{{ 'DATE OF BIRTH' | translate }}</label>
+                        <p>{{ getAnimal().date_of_birth ? (getAnimal().date_of_birth | date: 'dd-MM-yyyy') : ('DATE OF BIRTH' | translate) }}</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="large-5 columns">
+                        <label>{{ 'GENDER' | translate}}</label>
+                        <p>{{ getAnimal().type ? (getAnimal().type | translate) : '-'}}</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="large-5 columns">
+                        <button type="button" class="button primary" (click)="openGenderEditModal()">
+                            {{ 'EDIT GENDER' | translate }}</button>
+                    </div>
+                </div>
+
+            </div>
+
         </div>
     </div>
+
+    <app-create-animal-modal></app-create-animal-modal>
+    <app-edit-gender-modal></app-edit-gender-modal>
+
 </div>
