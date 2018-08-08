@@ -28,7 +28,7 @@
             <td>{{ inspection?.next_action | translate }}</td>
             <td>{{ inspection?.action_taken_by?.first_name + " " + inspection?.action_taken_by?.last_name }} ({{ settings.convertToViewDateTime(inspection?.direction_date) }})</td>
             <td>
-                <button type="button" (click)="switchToAuthPage(inspection)" class="small expanded primary button">
+                <button [disabled]="inspection.status == 'RECEIVED INCOMPLETE LAB RESULTS'" type="button" (click)="switchToAuthPage(inspection)" class="small expanded primary button">
                     {{ 'AUTHORIZE' | translate }}
                 </button>
             </td>
