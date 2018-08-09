@@ -772,5 +772,12 @@
   "BREEDER UBN INFO": "Probeer minstens de Fokker UBN text waarde in te vullen als de Fokker UBN niet als locatie in het systeem bestaat",
   "OPTIONAL": "Optioneel",
   "FIND AN ANIMAL FIRST BEFORE YOU CAN EDIT IT": "Vind eerst het dier wat je wil aanpassen",
-  "CURRENT UBN START DATE EXPLANATION": "Als hier een start datum wordt ingevuld, dan zal voor het geselecteerde UBN ook een UBN historie record worden aangemaakt. Dit is nodig om historische stallijsten te kunnen bijhouden."
+  "CURRENT UBN START DATE EXPLANATION": "Als hier een start datum wordt ingevuld, dan zal voor het geselecteerde UBN ook een UBN historie record worden aangemaakt. Dit is nodig om historische stallijsten te kunnen bijhouden.",
+  "SAVE CHANGES": "Opslaan",
+  "NSFO REFERENCE NUMBER": "NSFO referentie nummer",
+  "LAB REFERENCE NUMBER": "Lab referentie nummer",
+  "DATE SAMPLED": "Monster datum",
+  "VIEW FILE LIST": "Bekijk bestanden lijst",
+  "SAMPLE COUNT": "Aantal monsters",
+  "FILE NAME": "Bestandsnaam"
 }
