@@ -1,0 +1,61 @@
+<button (click)="openModal()" class="small expanded primary button">
+    {{ "EDIT" | translate }}
+</button>
+<div class="reveal-overlay" [ngStyle]="{'display': displayModal}">
+    <div class="medium reveal" [ngStyle]="{'display': displayModal}">
+        <div class="modal-body">
+            <hr>
+            <table>
+                <thead>
+                <tr>
+                    <th>
+                        {{ "SUB REF" | translate }}
+                    </th>
+                    <th>
+                        {{ "VET NAME" | translate }}
+                    </th>
+                    <th>
+                        {{ "CL NAME" | translate}}
+                    </th>
+                    <th>
+                        {{ "SAMPLE ID / UBN" | translate }}
+                    </th>
+                    <th>
+                        {{ "SAMPLE COUNT" | translate}}
+                    </th>
+                    <th>
+                        {{ "ACTIONS" | translate }}
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let labResult of labResults">
+                    <td>
+                        {{ labResult.veterinarian.name}}
+                    </td>
+                    <td>
+                        {{ labResult.cl_name }}
+                    </td>
+                    <td>
+                        {{ labResult.ubn }}
+                    </td>
+                    <td>
+                        {{ labResult.}}
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <hr>
+            <button class="button medium alert" (click)="closeModal()">
+                {{'CLOSE' | translate}}
+            </button>
+        </div>
+    </div>
+</div>
