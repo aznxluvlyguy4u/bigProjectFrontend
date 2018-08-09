@@ -8,7 +8,7 @@ import { Router, ROUTER_DIRECTIVES } from '@angular/router';
 	pipes: [TranslatePipe]
 })
 export class AnimalsComponent {
-	private selectedRoute: string = '/animals/batch-edit';
+	private selectedRoute: string = '/animals/animal-edit';
 
 	constructor(private router: Router) {}
 

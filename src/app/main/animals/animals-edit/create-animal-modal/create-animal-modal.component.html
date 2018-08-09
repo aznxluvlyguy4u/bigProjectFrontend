@@ -1,0 +1,264 @@
+<ng-template *ngIf="displayModal()">
+
+    <div class="reveal-overlay" [ngStyle]="{'display': animalEditService.createNewModalStatus}">
+        <div class="large reveal" [ngStyle]="{'display': animalEditService.createNewModalStatus}">
+            <div class="modal-header">
+                {{ 'CREATE NEW ANIMAL' | translate }}
+                <button type="button" (click)="closeModal()" class="pull-right" aria-label="Close modal">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form *ngIf="!isCreating" [formGroup]="form">
+                    <div class="row">
+
+                        <div class="large-12 medium-12 columns">
+                            <h6>{{'OBLIGATORY FIELDS' | translate}}</h6>
+                        </div>
+
+                        <div class="large-2 medium-2 columns">
+                            <label>{{ 'GENDER' | translate}}
+                                <select formControlName="gender" class="table-input">
+                                    <option value="FEMALE">{{ 'Ewe' | translate }}</option>
+                                    <option value="MALE">{{ 'Ram' | translate }}</option>
+                                </select>
+                            </label>
+                        </div>
+
+                        <div class="large-4 medium-4 columns">
+                            <label>{{ 'ULN' | translate }}</label>
+                            <app-uln-input
+                                    [ulnCountryCode]="newAnimal.uln_country_code"
+                                    (ulnCountryCodeChange)="newAnimal.uln_country_code=$event"
+                                    [ulnNumber]="newAnimal.uln_number"
+                                    (ulnNumberChange)="newAnimal.uln_number=$event"
+                                    [disabled]="isCreating"
+                            ></app-uln-input>
+                        </div>
+
+                        <div class="large-4 medium-4 columns">
+                            <label>{{ 'DATE OF BIRTH' | translate }}</label>
+                            <app-datepicker-v2
+                                    [dateString]="newAnimal.date_of_birth"
+                                    [modelFormat]="settings.getModelDateTimeFormat()"
+                                    [disabled]="isSaving"
+                                    [updateInitialValues]="(initialValuesChanged)"
+                                    (isDateStringChanged)="newAnimal.date_of_birth = $event"
+                            ></app-datepicker-v2>
+                        </div>
+
+                        <div class="large-2 medium-2 columns">
+                            <label>{{ 'ALIVE' | translate}}</label>
+                            <input type="checkbox" formControlName="is_alive">
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="large-12 medium-12 columns">
+                            <h6>{{'IMPORTANT FOR BREED VALUE CALCULATIONS AND DECLARE BIRTH' | translate}}</h6>
+                        </div>
+
+                        <div class="large-3 medium-4 columns">
+                            <label>{{ 'BREED TYPE' | translate}}
+                                <select
+                                        formControlName="breed_type"
+                                        class="table-input">
+                                    <option *ngFor="let breedType of breedTypes" value="{{ breedType }}"
+                                    >{{ breedType | translate }}</option>
+                                </select>
+                            </label>
+                        </div>
+
+                        <div class="large-3 medium 4 columns end">
+                            <label>{{ 'BREED CODE' | translate}}
+                                <input
+                                        type="text"
+                                        placeholder="{{ 'BREED CODE' | translate }}"
+                                        formControlName="breed_code"
+                                        class="table-input"
+                                />
+                            </label>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="large-4 medium-7 columns">
+                            <label>{{ 'BREEDER UBN' | translate }} ({{ 'LOCATION' | translate}})</label>
+                            <app-ubn-dropdown
+                                    class="table-input"
+                                    [labelText]="'BREEDER UBN'"
+                                    idSuffix="breeder"
+                                    (selectedLocationChange)="setLocationOfBirth($event)"
+                            ></app-ubn-dropdown>
+                        </div>
+
+                        <div class="large-4 medium-3 columns end">
+                            <label>{{ 'BREEDER UBN' | translate }} <i class="fa fa-info-circle" aria-hidden="true" title="{{'BREEDER UBN INFO' | translate}}"></i></label>
+                            <input title="ubnOfBirth" class="table-input" type="number" name="ubn_of_birth" [(ngModel)]="newAnimal.ubn_of_birth" [disabled]="isSaving">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="large-3 medium-4 columns">
+                            <label>{{ 'FATHER' | translate }}</label>
+                            <app-parent-selector
+                                    [parentType]="'FATHER'"
+                                    [parent]=newAnimal.parent_father
+                                    [disabled]="isSaving"
+                                    (parentChange)="newAnimal.parent_father=$event"
+                            ></app-parent-selector>
+                        </div>
+                        <div class="large-3 medium-4 columns end">
+                            <label>{{ 'MOTHER' | translate }}</label>
+                            <app-parent-selector
+                                    [parentType]="'MOTHER'"
+                                    [parent]=newAnimal.parent_mother
+                                    [disabled]="isSaving"
+                                    (parentChange)="newAnimal.parent_mother=$event"
+                            ></app-parent-selector>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="large-12 medium-12 columns">
+                            <h6>{{'IMPORTANT FOR DECLARE BIRTH' | translate}}</h6>
+                        </div>
+
+                        <div class="large-3 medium-3 columns">
+                            <label>{{ 'PEDIGREE REGISTER' | translate }}</label>
+                            <app-pedigree-register-dropdown
+                                    [selectedPedigreeRegisterId]="newAnimal.pedigree_register ? newAnimal.pedigree_register.id : null"
+                                    [disabled]="isSaving"
+                                    (pedigreeRegisterChange)="newAnimal.pedigree_register=$event"
+                            ></app-pedigree-register-dropdown>
+                        </div>
+
+                        <div class="large-4 medium-5 columns">
+                            <label>{{ 'STN' | translate }}</label>
+                            <app-stn-input
+                                    [pedigreeCountryCode]="newAnimal.pedigree_country_code"
+                                    (pedigreeCountryCodeChange)="newAnimal.pedigree_country_code=$event"
+                                    [pedigreeNumber]="newAnimal.pedigree_number"
+                                    (pedigreeNumberChange)="newAnimal.pedigree_number=$event"
+                                    [disabled]="isSaving"
+                            ></app-stn-input>
+                        </div>
+
+                        <div class="large-3 medium-3 columns end">
+                            <label>{{ 'SCRAPIE GENOTYPE' | translate }}</label>
+                            <select
+                                    formControlName="scrapie_genotype"
+                                    title="scrapieGenotype"
+                                    type="scrapieGenotype"
+                                    class="table-input scrapiegenotype-input"
+                                    [(ngModel)]="newAnimal.scrapie_genotype"
+                                    [disabled]="isSaving">
+                                <option [value]=""> </option>
+                                <option *ngFor="let scrapieGenotype of scrapieGenotypes" value="{{ scrapieGenotype }}"
+                                >{{ scrapieGenotype }}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+
+                        <div class="large-12 medium-12 columns">
+                            <h6>{{'OPTIONAL' | translate}}</h6>
+                        </div>
+
+                        <div class="large-4 medium-7 columns">
+                            <label>{{ 'CURRENT UBN' | translate }}</label>
+                            <app-ubn-dropdown
+                                    class="table-input"
+                                    [labelText]="'CURRENT UBN'"
+                                    idSuffix="current"
+                                    (selectedLocationChange)="newAnimal.location = $event;"
+                            ></app-ubn-dropdown>
+                        </div>
+
+                        <div class="large-3 medium-4 columns end">
+                            <ng-template *ngIf="newAnimal.location != null">
+                                <label>{{ ('CURRENT UBN' | translate) }} {{ ('START DATE' | translate) }} <i class="fa fa-exclamation-triangle" aria-hidden="true" title="{{'CURRENT UBN START DATE EXPLANATION' | translate}}"></i></label>
+                                <app-datepicker-v2
+                                        [dateString]="currentUbnStartDate"
+                                        [modelFormat]="settings.getModelDateTimeFormat()"
+                                        [disabled]="isSaving || newAnimal.location == null"
+                                        [updateInitialValues]="(initialValuesChanged)"
+                                        (isDateStringChanged)="currentUbnStartDate = $event"
+                                ></app-datepicker-v2>
+                            </ng-template>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="large-3 medium-3 columns">
+                            <label>{{ 'N-LING BACKUP VALUE' | translate}} <i class="fa fa-info-circle" aria-hidden="true" title="{{'N-LING BACKUP VALUE EXPLANATION' | translate}}"></i></label>
+                            <input
+                                    formControlName="n_ling_backup"
+                                    title="n_ling_backup_value"
+                                    class="table-input"
+                                    type="number"
+                                    [(ngModel)]="newAnimal.n_ling"
+                                    [disabled]="isSaving"
+                            >
+                        </div>
+
+                        <div class="large-3 medium-3 columns end">
+                            <label>{{ 'NAME' | translate }}</label>
+                            <input
+                                    formControlName="nickname"
+                                    title="nickname"
+                                    class="table-input"
+                                    type="text"
+                                    [(ngModel)]="newAnimal.nickname"
+                                    [disabled]="isSaving"
+                            >
+                        </div>
+                    </div>
+
+                </form>
+                <div *ngIf="isCreating" class="row">
+                    <div class="large-5 columns">
+                        <div class="loader-spinner">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <span class="pull-left">
+                    <label
+                            *ngIf="errorMessage"
+                            class="input-error-msg"
+                    >{{ errorMessage | translate }}</label>
+                </span>
+
+                <span class="pull-right">
+                    <button
+                            (click)="createAnimal()"
+                            class="button"
+                            type="button"
+                    >{{ 'SAVE' | translate }}
+                    <span *ngIf="isCreating">
+                             <i class="fa fa-gear fa-spin fa-fw"></i>
+                        </span>
+                    </button>
+                    <button
+                            class="alert button"
+                            [disabled]="isCreating"
+                            (click)="closeModal()"
+                    >{{ 'CANCEL' | translate}}</button>
+                </span>
+            </div>
+        </div>
+    </div>
+
+</ng-template>
