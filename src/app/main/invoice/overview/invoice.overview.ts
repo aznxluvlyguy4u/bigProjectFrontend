@@ -25,7 +25,7 @@ export class InvoiceOverviewComponent {
     private filterSearch: string = '';
     private status: string = 'ALL';
     private filterAmount: number = 10;
-    private showBatch: string = "no";
+    private showBatch: string = "all";
 
     constructor(private nsfo: NSFOService, private settings: SettingsService, private router: Router, private downloadService: DownloadService) {
         this.getInvoicesList();

@@ -34,10 +34,11 @@
     </div>
     <div class="large-2 columns">
         <label>
-            {{ 'BATCH INVOICES' | translate }}
+            {{ 'DISPLAY INVOICE TYPE' | translate }}
             <select [(ngModel)]="showBatch" (change)="page = 1">
-                <option value="no">{{ "NO" | translate }}</option>
-                <option value="yes">{{ "YES" | translate }}</option>
+                <option value="all">{{ "ALL" | translate }}</option>
+                <option value="only-automatic">{{ "ONLY AUTOMATIC" | translate }}</option>
+                <option value="only-manual">{{ "ONLY MANUAL" | translate }}</option>
             </select>
         </label>
     </div>

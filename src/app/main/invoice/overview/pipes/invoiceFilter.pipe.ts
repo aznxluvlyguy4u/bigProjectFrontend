@@ -62,10 +62,14 @@ export class invoiceFilterPipe implements PipeTransform{
             }
 
         if (isBatch) {
-            if (isBatch === "no") {
+            if (isBatch === "only-manual") {
                 filtered = filtered.filter(invoice => {
                     return invoice.is_batch === false;
                 });
+            } else if (isBatch === "only-automatic") {
+							filtered = filtered.filter(invoice => {
+								return invoice.is_batch === true;
+							});
             }
         }
         return filtered;
