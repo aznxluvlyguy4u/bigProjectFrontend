@@ -1,10 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+<button (click)="openModal()" class="small expanded primary button">
+    {{ "VIEW FILE LIST" | translate }}
+</button>
+
+<div class="reveal-overlay" [ngStyle]="{'display': displayModal}">
+    <div class="medium reveal" [ngStyle]="{'display': displayModal}">
+        <div class="modal-body">
+            <hr>
+            <table>
+                <thead>
+                <tr>
+                   <th>
+                       {{ "FILE NAME" | translate }}
+                   </th>
+                    <th>
+                        {{ "NSFO REFERENCE NUMBER" | translate }}
+                    </th>
+                    <th>
+                        {{ "LAB REFERENCE NUMBER" | translate}}
+                    </th>
+                    <th>
+                        {{ "REVISION" | translate }}
+                    </th>
+                    <th>
+                        {{ "SAMPLE COUNT" | translate}}
+                    </th>
+                    <th>
+                        {{ "ACTIONS" | translate }}
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let labResultFile of labResultFiles">
+                    <td>
+                        {{ labResultFile.filename }}
+                    </td>
+                    <td>
+                        {{ labResultFile.nsfo_reference_number }}
+                    </td>
+                    <td>
+                        {{ labResultFile.lab_reference_number }}
+                    </td>
+                    <td>
+                        {{ labResultFile.revision }}
+                    </td>
+                    <td>
+                        {{ labResultFile.sample_count }}
+                    </td>
+                    <td *ngIf="inspection.illness_type == 'MAEDI VISNA'">
+                        <maedi-visna-lab-results-editor
+                        [inspection]="inspection"
+                        [labResults]="labResultFile.results"
+                        ></maedi-visna-lab-results-editor>
+                    </td>
+                    <td *ngIf="inspection.illness_type == 'SCRAPIE'">
+                        <scrapie-lab-results-editor
+                                [inspection]="inspection"
+                                [labResults]="labResultFile.results"
+                        ></scrapie-lab-results-editor>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <hr>
+            <button class="button medium alert" (click)="closeModal()">
+                {{'CLOSE' | translate}}
+            </button>
+        </div>
+    </div>
+</div>
