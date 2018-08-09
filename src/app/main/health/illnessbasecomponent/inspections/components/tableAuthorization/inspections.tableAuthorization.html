@@ -28,6 +28,11 @@
             <td>{{ inspection?.next_action | translate }}</td>
             <td>{{ inspection?.action_taken_by?.first_name + " " + inspection?.action_taken_by?.last_name }} ({{ settings.convertToViewDateTime(inspection?.direction_date) }})</td>
             <td>
+                <lab-results-uploader [disabled]="inspection.status == 'TO AUTHORIZE'" [inspection]="inspection"></lab-results-uploader>
+                <lab-result-file-list-viewer
+                        [inspection]="inspection"
+                        [labResultFiles]="inspection.lab_result_files"
+                                ></lab-result-file-list-viewer>
                 <button [disabled]="inspection.status == 'RECEIVED INCOMPLETE LAB RESULTS'" type="button" (click)="switchToAuthPage(inspection)" class="small expanded primary button">
                     {{ 'AUTHORIZE' | translate }}
                 </button>

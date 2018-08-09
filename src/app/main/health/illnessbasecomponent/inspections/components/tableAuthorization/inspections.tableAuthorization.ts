@@ -6,10 +6,12 @@ import { Router } from "@angular/router";
 import { AuthorizationComponent } from "./authorization/tableAuthorization.authorization";
 import { NSFOService } from "../../../../../../global/services/nsfo/nsfo.service";
 import { HealthService } from '../../../../health.service';
+import {LabResultsUploaderComponent} from "../../../../../../global/components/labresultsuploader/lab-results-uploader.component";
+import {LabResultFileListComponent} from "../../../../../../global/components/labresultfilelist/lab-result-file-list.component";
 
 @Component({
     selector: 'health-table-authorization',
-    directives: [AuthorizationComponent],
+    directives: [AuthorizationComponent, LabResultsUploaderComponent, LabResultFileListComponent],
     template: require('./inspections.tableAuthorization.html'),
     pipes: [TranslatePipe]
 })
