@@ -9,12 +9,13 @@ import {invoiceFilterPipe} from "./pipes/invoiceFilter.pipe";
 import {SettingsService} from "../../../global/services/settings/settings.service";
 import {ROUTER_DIRECTIVES, Router} from "@angular/router";
 import {DownloadService} from "../../../global/services/download/download.service";
+import { LocalNumberFormat } from '../../../global/pipes/local-number-format';
 
 @Component({
     providers: [PaginationService],
     directives: [PaginationComponent, ROUTER_DIRECTIVES],
     template: require('./invoice.overview.html'),
-    pipes: [TranslatePipe, PaginatePipe, invoiceFilterPipe]
+    pipes: [TranslatePipe, PaginatePipe, invoiceFilterPipe, LocalNumberFormat]
 })
 
 export class InvoiceOverviewComponent {
@@ -23,6 +24,8 @@ export class InvoiceOverviewComponent {
     private invoices: Invoice[] = [];
     private isLoaded: boolean = false;
     private filterSearch: string = '';
+    private filterTotalExclVatMin: number;
+    private filterTotalExclVatMax: number;
     private status: string = 'ALL';
     private filterAmount: number = 10;
     private showBatch: string = "all";

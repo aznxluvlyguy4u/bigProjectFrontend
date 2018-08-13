@@ -1,21 +1,31 @@
 <div class="page-header">
-    <div class="page-title">{{ 'INVOICE OVERVIEW' | translate }}</div>
+    <div class="row">
+        <div class="large-8 columns">
+            <div class="page-title">{{ 'INVOICE OVERVIEW' | translate }}</div>
+        </div>
+        <div class="large-2 columns table-options-container">
+            <label>
+                &nbsp;
+                <button (click)="navigateTo('/invoice/batch')" class="medium primary button expanded">
+                    <i class="fa fa-file-text-o fa-fw" aria-hidden="true"></i>
+                    {{ 'BATCH INVOICE' | translate }}
+                </button>
+            </label>
+        </div>
+        <div class="large-2 columns table-options-container">
+            <label>
+                &nbsp;
+                <button (click)="navigateTo('/invoice/details/new')" class="medium primary button expanded">
+                    <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
+                    {{ 'NEW INVOICE' | translate }}
+                </button>
+            </label>
+        </div>
+    </div>
+
 </div>
 
 <div class="row table-options-container">
-    <div class="large-2 columns">
-        <label>
-            {{ 'INVOICES' | translate }}
-            <select [(ngModel)]="status" (change)="page = 1">
-                <option value="ALL">{{ 'ALL' | translate }}</option>
-                <option value="NOT SEND INVOICES">{{'NOT SEND INVOICES' | translate}}</option>
-                <option value="UNPAID INVOICES">{{ 'UNPAID INVOICES' | translate }}</option>
-                <option value="PAID INVOICES">{{'PAID INVOICES' | translate}}</option>
-                <option value="INCOMPLETE INVOICES">{{'INCOMPLETE INVOICES' | translate}}</option>
-                <option value="CANCELLED INVOICES">{{'CANCELLED INVOICES' | translate}}</option>
-            </select>
-        </label>
-    </div>
     <div class="large-2 columns">
         <label>
             {{ 'SEARCH' | translate }}
@@ -24,11 +34,14 @@
     </div>
     <div class="large-2 columns">
         <label>
-            {{ 'DISPLAY AMOUNT' | translate }}
-            <select [(ngModel)]="filterAmount" (change)="page = 1">
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
+            {{ 'STATUS' | translate }}
+            <select [(ngModel)]="status" (change)="page = 1">
+                <option value="ALL">{{ 'ALL' | translate }}</option>
+                <option value="NOT SEND INVOICES">{{'NOT SEND INVOICES' | translate}}</option>
+                <option value="UNPAID INVOICES">{{ 'UNPAID INVOICES' | translate }}</option>
+                <option value="PAID INVOICES">{{'PAID INVOICES' | translate}}</option>
+                <option value="INCOMPLETE INVOICES">{{'INCOMPLETE INVOICES' | translate}}</option>
+                <option value="CANCELLED INVOICES">{{'CANCELLED INVOICES' | translate}}</option>
             </select>
         </label>
     </div>
@@ -44,24 +57,27 @@
     </div>
     <div class="large-2 columns">
         <label>
-            &nbsp;
-            <button (click)="navigateTo('/invoice/batch')" class="medium primary button expanded">
-                <i class="fa fa-file-text-o fa-fw" aria-hidden="true"></i>
-                {{ 'BATCH INVOICE' | translate }}
-            </button>
+            {{ 'MIN' | translate }} {{ 'TOTAL EXCL VAT' | translate }}
+            <input type="number" [(ngModel)]="filterTotalExclVatMin" (keydown)="page = 1" placeholder="{{ 'MIN' | translate }}" max="100000000" min="-100000000">
+        </label>
+    </div>
+    <div class="large-2 columns end">
+        <label>
+            {{ 'MAX' | translate }} {{ 'TOTAL EXCL VAT' | translate }}
+            <input type="number" [(ngModel)]="filterTotalExclVatMax" (keydown)="page = 1" placeholder="{{ 'MAX' | translate }}" max="100000000" min="-100000000">
         </label>
     </div>
     <div class="large-2 columns">
         <label>
-            &nbsp;
-            <button (click)="navigateTo('/invoice/details/new')" class="medium primary button expanded">
-                <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
-                {{ 'NEW INVOICE' | translate }}
-            </button>
+            {{ 'DISPLAY AMOUNT' | translate }}
+            <select [(ngModel)]="filterAmount" (change)="page = 1">
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+            </select>
         </label>
     </div>
 </div>
-
 <div class="row">
     <div class="large-12 columns">
         <table class="stack invoice-overview">
@@ -73,6 +89,7 @@
                     <td>{{ 'NAME' | translate }}</td>
                     <td>{{ 'INVOICE DATE' | translate }}</td>
                     <td>{{ 'STATUS' | translate }}</td>
+                    <td class="price-column">{{ 'TOTAL EXCL VAT' | translate }}</td>
                     <td>{{ 'REMINDER(S)' | translate }}</td>
                     <td>{{ 'ACTIONS' | translate}}</td>
                 </tr>
@@ -87,7 +104,7 @@
                     </div>
                 </td>
             </tr>
-                <tr *ngFor="let invoice of invoices | invoiceFilter:[filterSearch, status, showBatch] | paginate: {itemsPerPage: filterAmount, currentPage: page}">
+                <tr *ngFor="let invoice of invoices | invoiceFilter:[filterSearch, status, showBatch, filterTotalExclVatMin, filterTotalExclVatMax] | paginate: {itemsPerPage: filterAmount, currentPage: page}">
                     <td>
                         <span *ngIf="invoice.invoice_number">
                             {{ invoice.invoice_number }}
@@ -143,6 +160,14 @@
                         </span>
                         <span *ngIf="invoice.status == 'CANCELLED'" class="alert label">
                             {{ 'CANCELLED' | translate }} ({{ calculateDays(invoice.invoice_date)}} {{ 'DAYS' | translate }})
+                        </span>
+                    </td>
+                    <td class="price-column">
+                        <span *ngIf="invoice.vat_breakdown && invoice.vat_breakdown.total_excl_vat !== undefined" >
+                            {{ invoice.vat_breakdown.total_excl_vat | localNumberFormat:3 }}
+                        </span>
+                        <span *ngIf="!invoice.vat_breakdown || invoice.vat_breakdown.total_excl_vat == undefined">
+                            --
                         </span>
                     </td>
                     <td>
