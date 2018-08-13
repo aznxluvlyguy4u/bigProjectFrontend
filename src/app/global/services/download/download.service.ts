@@ -189,11 +189,11 @@ export class DownloadService {
         this.nsfo.doPostRequest(uri, request)
             .subscribe(
             res => {
-              const download = res.result;
+							download.url = res.result;
               this.completeDownloadPreparation(download);
             },
             error => {
-                alert(this.nsfo.getErrorMessage(error));
+                this.failDownload(download, error);
             }
           );
     }
@@ -209,10 +209,11 @@ export class DownloadService {
         this.nsfo.doGetRequest(uri)
             .subscribe(
                 res => {
+                download.url = res.result;
                 this.completeDownloadPreparation(download);
             },
                 error => {
-                    alert(this.nsfo.getErrorMessage(error));
+									this.failDownload(download, error);
                 }
             );
     }
