@@ -441,7 +441,7 @@ export class InvoiceDetailsComponent {
 							}
 						}
 						if (!hasSelectedUbn) {
-							this.selectedUbn = null;
+							this.autoSetSingleLocation(this.selectedCompany.locations);
 						}
 
           } else {
@@ -460,6 +460,14 @@ export class InvoiceDetailsComponent {
         this.setInvoiceUbn();
         this.updateClientUbns();
     }
+
+    autoSetSingleLocation(locations: any[]): void {
+    	if (!!locations && locations.length === 1) {
+    		this.selectedUbn = locations[0];
+			} else {
+    		this.selectedUbn = null;
+			}
+		}
 
     setInvoiceUbn() {
 			if (this.selectedUbn == null || this.selectedUbn == '' || this.selectedUbn == 'null') {
