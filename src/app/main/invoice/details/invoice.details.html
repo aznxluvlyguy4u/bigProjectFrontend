@@ -521,4 +521,32 @@
             </table>
         </div>
     </div>
+
+    <ng-template *ngIf="companySelected">
+        <div class="row">
+            <div class="large-12 columns">
+            <span class="pull-right">
+                <button type="button" (click)="navigateTo('/invoice')" class="small primary button">
+                    {{ 'RETURN' | translate }}
+                </button>
+                <button *ngIf="!onlyView" [disabled]="!companySelected" type="button" (click)="sendInvoiceToClient()" class="small primary button">
+                    {{ 'SEND INVOICE' | translate }}
+                </button>
+                <button *ngIf="!onlyView" [disabled]="!companySelected" type="button" (click)="saveInvoice()" class="small primary button">
+                    {{ 'SAVE' | translate }}
+                </button>
+                <button type="button" (click)="downloadPdf()" [disabled]="!companySelected" class="small primary button">
+                    {{ "DOWNLOAD PDF" | translate }}
+                </button>
+                <button *ngIf="!onlyView"
+                        [disabled]="(invoice.status != 'NOT SEND' && invoice.status != 'INCOMPLETE') || invoiceId == null"
+                        type="button"
+                        (click)="deleteInvoice()"
+                        class="small alert button">
+                    {{'DELETE' | translate}}
+                </button>
+            </span>
+            </div>
+        </div>
+    </ng-template>
 </div>
