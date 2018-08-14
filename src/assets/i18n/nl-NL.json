@@ -748,5 +748,7 @@
   "CURRENT UBN START DATE EXPLANATION": "Als hier een start datum wordt ingevuld, dan zal voor het geselecteerde UBN ook een UBN historie record worden aangemaakt. Dit is nodig om historische stallijsten te kunnen bijhouden.",
   "DISPLAY INVOICE TYPE": "Toon factuurtype",
   "ONLY AUTOMATIC": "Alleen automatisch",
-  "ONLY MANUAL": "Alleen handmatig"
+  "ONLY MANUAL": "Alleen handmatig",
+  "MIN": "min",
+  "MAX": "max"
 }
