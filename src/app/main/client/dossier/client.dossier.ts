@@ -39,6 +39,7 @@ export class ClientDossierComponent {
     private savingInProgress: boolean = false;
 
     private changeModalDisplay: string = 'none';
+    private invoiceId: number;
 
     constructor(
         private router: Router,
@@ -71,6 +72,7 @@ export class ClientDossierComponent {
             animal_health_subscription: ['NO'],
             subscription_date: [''],
         });
+        this.clearInvoiceId();
     }
 
     ngOnInit() {
@@ -89,11 +91,20 @@ export class ClientDossierComponent {
                 this.clientTemp = _.cloneDeep(this.client);
             }
         });
+
+        this.router.routerState.queryParams.subscribe(params => {
+            this.invoiceId = params['invoice_id'];
+        });
     }
 
     ngOnDestroy() {
         this.provinces$.unsubscribe();
         this.dataSub.unsubscribe();
+        this.clearInvoiceId();
+    }
+
+    clearInvoiceId() {
+        this.invoiceId = null;
     }
 
     private initProvinces(): void {
@@ -235,7 +246,11 @@ export class ClientDossierComponent {
                     .subscribe(
                         res => {
 													  this.clientsStorage.refresh();
-                            this.navigateTo('/client/details/' + this.client.company_id);
+													  if (this.invoiceId) {
+															this.navigateToInvoiceIfNotNull();
+                            } else {
+															this.navigateTo('/client/details/' + this.client.company_id);
+                            }
                         },
                         err => {
                             let error = err.json();
@@ -287,5 +302,13 @@ export class ClientDossierComponent {
     
     private navigateTo(url: string) {
         this.router.navigate([url]);
+    }
+
+    navigateToInvoiceIfNotNull(): void {
+			const invoiceId = this.invoiceId;
+			this.clearInvoiceId();
+			if (invoiceId) {
+				this.navigateTo('/invoice/details/edit/'+invoiceId);
+			}
     }
 }

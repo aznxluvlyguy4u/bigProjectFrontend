@@ -268,8 +268,7 @@ export class InvoiceDetailsComponent {
 			alert('THE SELECTED COMPANY HAS NO COMPANY_ID');
 			return;
 		}
-
-		this.navigateTo("/client/dossier/edit/" + this.invoice.company.company_id);
+		this.router.navigate(["/client/dossier/edit/" + this.invoice.company.company_id], { queryParams: {invoice_id: this.invoice.id}});
 	}
 
 	hasClientAndUbn(): boolean {
@@ -334,8 +333,7 @@ export class InvoiceDetailsComponent {
 		let ruleSelection = new InvoiceRuleSelection();
         ruleSelection.invoice_rule = rule;
         ruleSelection.amount = this.temporaryRuleAmount;
-		ruleSelection.date = dateFormat;
-		console.log(dateFormat);
+				ruleSelection.date = dateFormat;
         this.postInvoiceRuleSelection(ruleSelection, type);
     }
 
