@@ -1,5 +1,5 @@
-import {Component} from "@angular/core";
-import {ROUTER_DIRECTIVES, Router} from "@angular/router";
+import { AfterViewChecked, Component } from '@angular/core';
+import { ROUTER_DIRECTIVES, Router } from '@angular/router';
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
 import {Client} from "../client.model";
@@ -18,7 +18,7 @@ declare var $;
     pipes: [TranslatePipe, ClientFilterPipe, PaginatePipe]
 })
 
-export class ClientOverviewComponent {
+export class ClientOverviewComponent implements AfterViewChecked{
     private isLoaded: boolean = false;
     private isSending: boolean = false;
     private clientList: Client[] = [];

@@ -112,6 +112,7 @@ export class CompanySelectorComponent implements OnInit {
 
 	selectClient(client: Client) {
 		this.selectedClient = client;
+		this.clickOK();
 	}
 
 	buttonText(): string {

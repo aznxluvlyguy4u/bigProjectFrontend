@@ -4,10 +4,12 @@ import {Pipe, PipeTransform} from "@angular/core";
 })
 
 export class invoiceFilterPipe implements PipeTransform{
-    transform(list: any, args: string[]): any {
+    transform(list: any, args: any[]): any {
         let filterInput: string = args[0];
         let statusFilter: string = args[1];
         let isBatch: string = args[2];
+        let filterTotalExclVatMin: number = args[3];
+        let filterTotalExclVatMax: number = args[4];
         let filtered = list;
 
         if (statusFilter) {
@@ -60,13 +62,29 @@ export class invoiceFilterPipe implements PipeTransform{
                 invoice.ubn +
                 invoice.status
             ).indexOf(filterInput) !== -1);
-            }
+        }
+
+        if (filterTotalExclVatMin != undefined) {
+            filtered = filtered.filter(invoice => (
+              (invoice.vat_breakdown ? invoice.vat_breakdown.total_excl_vat ? invoice.vat_breakdown.total_excl_vat : 0 : 0) >= filterTotalExclVatMin)
+            );
+        }
+
+			if (filterTotalExclVatMax != undefined) {
+				filtered = filtered.filter(invoice => (
+					(invoice.vat_breakdown ? invoice.vat_breakdown.total_excl_vat ? invoice.vat_breakdown.total_excl_vat : 0 : 0) <= filterTotalExclVatMax)
+				);
+			}
 
         if (isBatch) {
-            if (isBatch === "no") {
+            if (isBatch === "only-manual") {
                 filtered = filtered.filter(invoice => {
                     return invoice.is_batch === false;
                 });
+            } else if (isBatch === "only-automatic") {
+							filtered = filtered.filter(invoice => {
+								return invoice.is_batch === true;
+							});
             }
         }
         return filtered;

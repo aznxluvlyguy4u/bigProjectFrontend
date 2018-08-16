@@ -271,8 +271,7 @@ export class InvoiceDetailsComponent {
 			alert('THE SELECTED COMPANY HAS NO COMPANY_ID');
 			return;
 		}
-
-		this.navigateTo("/client/dossier/edit/" + this.invoice.company.company_id);
+		this.router.navigate(["/client/dossier/edit/" + this.invoice.company.company_id], { queryParams: {invoice_id: this.invoice.id}});
 	}
 
 	hasClientAndUbn(): boolean {
@@ -339,8 +338,7 @@ export class InvoiceDetailsComponent {
 		let ruleSelection = new InvoiceRuleSelection();
         ruleSelection.invoice_rule = rule;
         ruleSelection.amount = this.temporaryRuleAmount;
-		ruleSelection.date = dateFormat;
-		console.log(dateFormat);
+				ruleSelection.date = dateFormat;
         this.postInvoiceRuleSelection(ruleSelection, type);
     }
 
@@ -431,40 +429,48 @@ export class InvoiceDetailsComponent {
 
           // Remove selectedUbn if the old selectedUbn does not belong to the new selectedCompany
           if (this.selectedCompany.locations) {
-			  let hasSelectedUbn = false;
-			  for (let location of this.selectedCompany.locations) {
-				  if (typeof location === 'string') {
-					  if (location === this.selectedUbn) {
-						  hasSelectedUbn = true;
-						  break;
-					  }
-				  } else {
-					  if (location.ubn != null && location.ubn === this.selectedUbn) {
-						  hasSelectedUbn = true;
-						  break;
-					  }
-				  }
-			  }
-			  if (!hasSelectedUbn) {
-				  this.selectedUbn = null;
-			  }
+						let hasSelectedUbn = false;
+						for (let location of this.selectedCompany.locations) {
+							if (typeof location === 'string') {
+								if (location === this.selectedUbn) {
+									hasSelectedUbn = true;
+									break;
+								}
+							} else {
+								if (location.ubn != null && location.ubn === this.selectedUbn) {
+									hasSelectedUbn = true;
+									break;
+								}
+							}
+						}
+						if (!hasSelectedUbn) {
+							this.autoSetSingleLocation(this.selectedCompany.locations);
+						}
 
           } else {
-				this.selectedUbn = null;
+						this.selectedUbn = null;
           }
 
         } else {
-			this.invoice.company = null;
-			this.invoice.company_id = null;
-			this.invoice.company_name = null;
-			this.invoice.company_vat_number = null;
-			this.invoice.company_debtor_number = null;
-			this.selectedUbn = null;
+					this.invoice.company = null;
+					this.invoice.company_id = null;
+					this.invoice.company_name = null;
+					this.invoice.company_vat_number = null;
+					this.invoice.company_debtor_number = null;
+					this.selectedUbn = null;
         }
 
         this.setInvoiceUbn();
         this.updateClientUbns();
     }
+
+    autoSetSingleLocation(locations: any[]): void {
+    	if (!!locations && locations.length === 1) {
+    		this.selectedUbn = locations[0];
+			} else {
+    		this.selectedUbn = null;
+			}
+		}
 
     setInvoiceUbn() {
 			if (this.selectedUbn == null || this.selectedUbn == '' || this.selectedUbn == 'null') {

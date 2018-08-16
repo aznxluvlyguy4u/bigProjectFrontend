@@ -178,13 +178,51 @@ export class DownloadService {
         this.failedDownloadsCount = _.filter(this.downloadRequests, {isFailed: true}).length;
     }
 
-    private doDownloadPostRequest(uri: string, request: any) {
+    private doDownloadPostRequestAndStoreInModal(uri: string, request: any, download: DownloadRequest) {
+
+        if (download == null) {
+            return;
+        }
+
+        this.addDownload(download);
+
+        this.nsfo.doPostRequest(uri, request)
+            .subscribe(
+            res => {
+							download.url = res.result;
+              this.completeDownloadPreparation(download);
+            },
+            error => {
+                this.failDownload(download, error);
+            }
+          );
+    }
+
+    private doDownloadGetRequestAndStoreInModal(uri: string, download: DownloadRequest) {
+
+        if (download == null) {
+            return;
+        }
+
+        this.addDownload(download);
+
+        this.nsfo.doGetRequest(uri)
+            .subscribe(
+                res => {
+                download.url = res.result;
+                this.completeDownloadPreparation(download);
+            },
+                error => {
+									this.failDownload(download, error);
+                }
+            );
+    }
+
+    private doDownloadPostRequestByReportWorker(uri: string, request: any) {
 
         this.nsfo.doPostRequest(uri, request)
             .subscribe(
                 res => {
-                    //download.url = res.result;
-                    //this.completeDownloadPreparation(download);
                     this.reportService.fetchReports();
                 },
                 error => {
@@ -193,11 +231,52 @@ export class DownloadService {
             );
     }
 
-    private doDownloadGetRequest(uri: string) {
+	/**
+	 * @param {string} uri
+	 * @param {boolean} openInNewTab use true for for example PDFs
+	 */
+	private doDownloadGetWithImmediateDownload(uri: string, openInNewTab: boolean) {
+		const newTabUrl = openInNewTab ? '/loading' : '/downloaded';
+		const win = window.open(newTabUrl, '_blank');
+
+		this.nsfo.doGetRequest(uri)
+			.subscribe(
+				res => {
+				    const downloadUrl = res.result;
+					  win.location.href = downloadUrl;
+				},
+				error => {
+					alert(this.nsfo.getErrorMessage(error));
+				}
+			);
+    }
+
+
+	/**
+	 * @param {string} uri
+	 * @param request
+	 * @param {boolean} openInNewTab use true for for example PDFs
+	 */
+	private doDownloadPostWithImmediateDownload(uri: string, request: any, openInNewTab: boolean) {
+		const newTabUrl = openInNewTab ? '/loading' : '/downloaded';
+		const win = window.open(newTabUrl, '_blank');
+
+		this.nsfo.doPostRequest(uri, request)
+			.subscribe(
+				res => {
+					const downloadUrl = res.result;
+					win.location.href = downloadUrl;
+				},
+				error => {
+					alert(this.nsfo.getErrorMessage(error));
+				}
+			);
+	}
+
+    private doDownloadGetRequestByReportWorker(uri: string) {
         this.nsfo.doGetRequest(uri)
             .subscribe(
                 res => {
-                    //this.completeDownloadPreparation(download);
                     this.reportService.fetchReports();
                 },
                 error => {
@@ -214,7 +293,7 @@ export class DownloadService {
 
         const queryParam = typeof fileType === "string" ? '?' + QUERY_PARAM_FILE_TYPE + '=' + fileType.toLowerCase() : '';
 
-        this.doDownloadPostRequest(this.nsfo.URI_GET_LINEAGE_PROOF + queryParam, request);
+        this.doDownloadPostRequestByReportWorker(this.nsfo.URI_GET_LINEAGE_PROOF + queryParam, request);
     }
 
     doOffspringRequest(animals: Animal[], concatBreedValueAndAccuracyColumns: boolean) {
@@ -226,7 +305,7 @@ export class DownloadService {
         const concatBooleanString = UtilsService.getBoolValAsString(concatBreedValueAndAccuracyColumns);
         let queryParam = '?' + QUERY_PARAM_CONCAT_VALUE_AND_ACCURACY + '=' + concatBooleanString;
 
-        this.doDownloadPostRequest(this.nsfo.URI_GET_OFFSPRING + queryParam, request);
+        this.doDownloadPostRequestByReportWorker(this.nsfo.URI_GET_OFFSPRING + queryParam, request);
     }
 
     doLivestockReportPostRequest(animals: Animal[], fileType: string, concatBreedValueAndAccuracyColumns: boolean) {
@@ -242,7 +321,7 @@ export class DownloadService {
         let queryParam = '?' + QUERY_PARAM_CONCAT_VALUE_AND_ACCURACY + '=' + concatBooleanString;
         queryParam += typeof fileType === "string" ? '&' + QUERY_PARAM_FILE_TYPE + '=' + fileType.toLowerCase() : '';
 
-        this.doDownloadPostRequest(this.nsfo.URI_GET_LIVESTOCK_DOCUMENT + queryParam, data);
+        this.doDownloadPostRequestByReportWorker(this.nsfo.URI_GET_LIVESTOCK_DOCUMENT + queryParam, data);
     }
 
 
@@ -251,7 +330,7 @@ export class DownloadService {
         const concatBooleanString = UtilsService.getBoolValAsString(concatBreedValueAndAccuracyColumns);
         let queryParam = '?' + REFERENCE_DATE + '=' + referenceDateString + '&' + QUERY_PARAM_CONCAT_VALUE_AND_ACCURACY + '=' + concatBooleanString;
 
-        this.doDownloadGetRequest(this.nsfo.URI_GET_ANIMALS_OVERVIEW_REPORT + queryParam);
+        this.doDownloadGetRequestByReportWorker(this.nsfo.URI_GET_ANIMALS_OVERVIEW_REPORT + queryParam);
     }
 
 
@@ -259,7 +338,7 @@ export class DownloadService {
 
         let queryParam = '?' + YEAR + '=' + year;
 
-        this.doDownloadGetRequest(this.nsfo.URI_GET_ANNUAL_TE100_UBN_PRODUCTION_REPORT + queryParam);
+        this.doDownloadGetRequestByReportWorker(this.nsfo.URI_GET_ANNUAL_TE100_UBN_PRODUCTION_REPORT + queryParam);
     }
 
 
@@ -267,14 +346,14 @@ export class DownloadService {
 
         let queryParam = '?' + YEAR + '=' + year;
 
-        this.doDownloadGetRequest(this.nsfo.URI_GET_ANNUAL_ACTIVE_LIVESTOCK_REPORT + queryParam);
+        this.doDownloadGetRequestByReportWorker(this.nsfo.URI_GET_ANNUAL_ACTIVE_LIVESTOCK_REPORT + queryParam);
     }
 
 
     doAnnualActiveLivestockRamMatesReportGetRequest(year: number) {
 
         let queryParam = '?' + YEAR + '=' + year;
-        this.doDownloadGetRequest(this.nsfo.URI_GET_ANNUAL_ACTIVE_LIVESTOCK_RAM_MATES_REPORT + queryParam);
+        this.doDownloadGetRequestByReportWorker(this.nsfo.URI_GET_ANNUAL_ACTIVE_LIVESTOCK_RAM_MATES_REPORT + queryParam);
     }
 
 
@@ -300,7 +379,7 @@ export class DownloadService {
             "ewes": ewes
         };
 
-        this.doDownloadPostRequest(this.nsfo.URI_GET_INBREEDING_COEFFICIENT + QueryParamsService.getFileTypeQueryParam(fileType), request);
+        this.doDownloadPostRequestByReportWorker(this.nsfo.URI_GET_INBREEDING_COEFFICIENT + QueryParamsService.getFileTypeQueryParam(fileType), request);
     }
 
     static generateHash(downloadType: string, fileType: string, reportCount: number | string = 0, jsonBody: any, queryParam: string): string {
@@ -309,6 +388,6 @@ export class DownloadService {
 
     doInvoicePdfGetRequest(invoice: Invoice) {
         let uri = this.nsfo.URI_INVOICE + "/" + invoice.id + "/pdf";
-        this.doDownloadGetRequest(uri);
+        this.doDownloadGetWithImmediateDownload(uri, true);
     }
 }
