@@ -13,10 +13,10 @@
     </thead>
     <tbody>
         <tr *ngFor="let inspection of _toAuthorize">
-            <td>{{ inspection?.ubn }}</td>
+            <td>{{ inspection?.location?.ubn }}</td>
             <td>{{ inspection?.location?.first_name }} {{ inspection?.location?.last_name }}</td>
             <td>{{ inspection?.order_number }}</td>
-            <td>{{ inspection?.inspection | translate }}</td>
+            <td>{{ inspection?.illness_type | translate }}</td>
             <td>
                 <span *ngIf="inspection.request_date">
                     {{ settings.convertToViewDate(inspection?.request_date) }}
@@ -26,7 +26,7 @@
                 </span>
             </td>
             <td>{{ inspection?.next_action | translate }}</td>
-            <td>{{ inspection?.action_taken_by?.first_name + " " + inspection?.action_taken_by?.last_name }} ({{ settings.convertToViewDateTime(inspection?.direction_date) }})</td>
+            <td>{{ inspection?.action_log?.action_by?.first_name + " " + inspection?.action_log?.action_by?.last_name }} ({{ settings.convertToViewDateTime(inspection?.direction_date) }})</td>
             <td>
                 <lab-results-uploader [disabled]="inspection.status == 'TO AUTHORIZE'" [inspection]="inspection"></lab-results-uploader>
                 <lab-result-file-list-viewer
