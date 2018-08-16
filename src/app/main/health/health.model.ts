@@ -1,8 +1,10 @@
 import { Location, NestedAnnouncementLocationOutput, User } from '../client/client.model';
-import {Animal} from "../../global/components/livestock/livestock.model";
+import {Animal} from '../../global/components/livestock/livestock.model';
 import { Person } from '../../global/models/person.model';
+import {LabResultFile} from '../../global/models/lab-result-file.model';
 
 export class LocationHealthInspection {
+    public id: number;
     public request_id: string;
     public ubn: string;
     public last_name: string;
@@ -23,7 +25,9 @@ export class LocationHealthInspection {
     public is_canceled: boolean;
     public inspection_id: string;
     public illness_type: string;
+    public location: Location;
     public animals: Animal[] = []
+    public lab_result_files: LabResultFile[] = [];
 }
 
 export class ActionLog {
@@ -81,7 +85,7 @@ export class LabResult {
     public illness:string;
     public ubn:string;
     public owner:Owner;
-    public vetrenarian:Veterinarian;
+    public veterinarian:Veterinarian;
     public lab_results:Array<LabResultItem>;
     public revision:number;
     public inspectionId:string;
