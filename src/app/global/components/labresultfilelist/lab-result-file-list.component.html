@@ -49,6 +49,7 @@
                     <td *ngIf="inspection.illness_type == 'MAEDI VISNA'">
                         <maedi-visna-lab-results-editor
                         [inspection]="inspection"
+                        [labResultFile]="labResultFile"
                         [labResults]="labResultFile.results"
                         ></maedi-visna-lab-results-editor>
                     </td>
