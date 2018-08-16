@@ -82,7 +82,8 @@
                 <label> {{ 'TWINFIELD ADMINISTRATION CODE' | translate }} *</label>
             </div>
             <div class="large-8 columns">
-                <select (change)="getTwinfieldCustomers($event.target)" [(ngModel)]="client.twinfield_administration_code" formControlName="twinfield_administration_code"  [disabled]="savingInProgress">
+                <span *ngIf="loadingTwinFieldOffices"><app-spinner></app-spinner></span>
+                <select *ngIf="!loadingTwinFieldOffices" (change)="getTwinfieldCustomers($event.target)" [(ngModel)]="client.twinfield_administration_code" formControlName="twinfield_administration_code"  [disabled]="savingInProgress || loadingTwinFieldOffices">
                     <option *ngFor="let office of twinfieldOffices" [value]="office.code">{{office.code}}</option>
                 </select>
             </div>
@@ -93,7 +94,9 @@
                 <label class="middle"> {{ 'DEBTOR NUMBER' | translate }} *</label>
             </div>
             <div class="large-8 columns">
-                <select formControlName="twinfield_code" [(ngModel)]="client.debtor_number" [disabled]="savingInProgress">
+                <span *ngIf="!client.twinfield_administration_code"><p>({{'FIRST SELECT A' | translate}} {{'TWINFIELD ADMINISTRATION CODE' | translate}})</p></span>
+                <span *ngIf="loadingTwinFieldCodes"><app-spinner></app-spinner></span>
+                <select *ngIf="!loadingTwinFieldCodes && !!client.twinfield_administration_code" formControlName="twinfield_code" [(ngModel)]="client.debtor_number" [disabled]="savingInProgress || loadingTwinFieldCodes">
                     <option *ngFor="let customer of twinfieldCodes" [value]="customer.code">{{customer.code}} - {{customer.name}}</option>
                 </select>
             </div>

@@ -13,9 +13,10 @@ import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
 import {Datepicker} from "../../../global/components/datepicker/datepicker.component";
 import {SettingsService} from "../../../global/services/settings/settings.service";
 import { ClientsStorage } from '../../../global/services/storage/clients.storage';
+import { SpinnerComponent } from '../../../global/components/spinner/spinner.component';
 
 @Component({
-    directives: [REACTIVE_FORM_DIRECTIVES, LocationsDisplay, UsersDisplay, Datepicker],
+    directives: [REACTIVE_FORM_DIRECTIVES, LocationsDisplay, UsersDisplay, Datepicker, SpinnerComponent],
     template: require('./client.dossier.html'),
     pipes: [TranslatePipe]
 })
@@ -33,6 +34,9 @@ export class ClientDossierComponent {
 
     private twinfieldOffices: TwinfieldOffice[] = [];
     private twinfieldCodes: TwinfieldCustomer[] = [];
+
+    public loadingTwinFieldOffices: boolean;
+    public loadingTwinFieldCodes: boolean;
 
     private selectedOffice: string;
 
@@ -83,6 +87,8 @@ export class ClientDossierComponent {
     }
 
     ngOnInit() {
+        this.loadingTwinFieldOffices = false;
+        this.loadingTwinFieldCodes = false;
         this.initProvinces();
         this.dataSub = this.activatedRoute.params.subscribe(params => {
             this.pageMode = params['mode'];
@@ -155,9 +161,16 @@ export class ClientDossierComponent {
     };
 
     private getTwinfieldAdministrations() {
+			  this.loadingTwinFieldOffices = true;
         this.nsfo.doGetRequest(this.nsfo.URI_EXTERNAL_PROVIDER + '/offices').subscribe(
             res => {
                 this.twinfieldOffices = res.result;
+            },
+            error => {
+                this.nsfo.getErrorMessage(error);
+            },
+            () => {
+							  this.loadingTwinFieldOffices = false;
             }
         );
     }
@@ -171,9 +184,16 @@ export class ClientDossierComponent {
     }
 
     private getTwinfieldCustomers(office) {
+        this.loadingTwinFieldCodes = true;
         this.nsfo.doGetRequest(this.nsfo.URI_EXTERNAL_PROVIDER + '/offices/' + office.value + '/customers').subscribe(
             res => {
                 this.twinfieldCodes = res.result;
+            },
+            error => {
+                this.nsfo.getErrorMessage(error);
+            },
+            () => {
+                this.loadingTwinFieldCodes = false;
             }
         );
     }
