@@ -17,12 +17,30 @@ import {LabResultMaediVisna} from "../../../models/lab-result.model";
 
 export class MaediVisnaLabResultsEditorComponent {
     @Input() inspection: LocationHealthInspection;
+    @Input() labResultFile: LabResultFile;
     @Input() labResults: LabResultMaediVisna[];
     @Output() revisedResults = new EventEmitter<LabResultFile[]>();
     private displayModal = 'none';
 
     constructor(private apiService: NSFOService, private fb: FormBuilder){
 
+    }
+
+    updateLabResults() {
+        for (let labResult of this.labResults) {
+            labResult.animal = null;
+            labResult.inspection_id = this.inspection.id;
+        }
+        this.labResultFile.results = this.labResults;
+        this.apiService.doPutRequest(this.apiService.URI_LAB_RESULTS + '/' + this.inspection.id + '/' + this.labResultFile.id, this.labResultFile)
+            .subscribe(
+                res => {
+                    this.closeModal();
+                },
+                error => {
+
+                }
+            )
     }
 
     openModal() {

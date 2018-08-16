@@ -1,46 +1,57 @@
 <button (click)="openModal()" class="small expanded primary button">
     {{ "EDIT" | translate }}
 </button>
-<div class="reveal-overlay" [ngStyle]="{'display': displayModal}">
-    <div class="medium reveal" [ngStyle]="{'display': displayModal}">
-        <div class="modal-body">
+<div id="maedi-visna-modal" class="reveal-overlay" [ngStyle]="{'display': displayModal}">
+    <div class="large reveal" [ngStyle]="{'display': displayModal}">
+        <div class="modal-body content-container">
             <hr>
-            <table>
+            <table class="row">
                 <thead>
                 <tr>
-                    <th>
+                    <th class="large-2 columns">
                         {{ "SUB REF" | translate }}
                     </th>
-                    <th>
+                    <th class="large-2 columns">
                         {{ "DATE SAMPLED" | translate }}
                     </th>
-                    <th>
-                        {{ "CL NAME" | translate}}
+                    <th class="large-3 columns">
+                        {{ "CAE POOL" | translate}}
                     </th>
-                    <th>
+                    <th class="large-4 columns">
                         {{ "SAMPLE ID / UBN" | translate }}
                     </th>
-                    <th>
+                    <th class="large-1 columns">
                         {{ "MV/CAE/Ira" | translate}}
                     </th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr *ngFor="let labResult of labResults">
-                    <td>
-                        <input [ngModel]="labResult.sub_ref" value="{{ labResult.sub_ref }}" type="text">
+                    <td class="large-2 columns">
+                        <input [(ngModel)]="labResult.sub_ref" value="{{ labResult.sub_ref }}" type="text">
                     </td>
-                    <td>
+                    <td class="large-2 columns">
                         {{ labResult.result_date | date : "dd-MM-yyyy"}}
                     </td>
-                    <td>
-                        <input [ngModel]="labResult.mv_c_a_e_pool" value="{{ labResult.mv_c_a_e_pool }}" type="text">
+                    <td class="large-3 columns">
+                        <select [(ngModel)]="labResult.mv_c_a_e_pool">
+                            <option value="NEGATIVE">
+                                NEGATIVE
+                            </option>
+                            <option value="POSITIVE">
+                                POSITIVE
+                            </option>
+                        </select>
                     </td>
-                    <td>
-                        <input type="text" [ngModel]="labResult.animal_uln" value="{{ labResult.animal_uln }}">
+                    <td class="large-4 columns">
+                        <select class="large-1 columns uln-country-code" [(ngModel)]="labResult.animal_uln_country_code" name="animal_uln_country_code" id="animal_uln_country_code">
+                            <option value="NL">NL</option>
+                            <option value="LU">LU</option>
+                        </select>
+                        <input class="large-11 columns uln-number" type="text" [(ngModel)]="labResult.animal_uln_number" value="{{ labResult.animal_uln_number }}">
                     </td>
-                    <td>
-                        <input type="number" [ngModel]="labResult.mvnp" value="{{ labResult.mvnp }}">
+                    <td class="large-1 columns">
+                        <input type="number" [(ngModel)]="labResult.mvnp" value="{{ labResult.mvnp }}">
                     </td>
                 </tr>
                 </tbody>
@@ -48,7 +59,7 @@
         </div>
         <div class="modal-footer">
             <hr>
-            <button class="button medium primary">
+            <button (click)="updateLabResults()" class="button medium primary">
                 {{ "SAVE CHANGES" | translate }}
             </button>
             <button class="button medium alert" (click)="closeModal()">
