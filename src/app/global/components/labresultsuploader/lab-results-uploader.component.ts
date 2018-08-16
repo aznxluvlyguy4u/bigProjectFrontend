@@ -1,8 +1,6 @@
 import {Component, Input} from "@angular/core";
 import {NSFOService} from "../../services/nsfo/nsfo.service";
 import {LocationHealthInspection} from "../../../main/health/health.model";
-import {Headers, Http, RequestOptions} from "@angular/http";
-import {Observable} from "rxjs/Observable";
 import {TranslatePipe} from "ng2-translate";
 import {FormBuilder, FormGroup, REACTIVE_FORM_DIRECTIVES, Validator, Validators} from "@angular/forms";
 
@@ -23,7 +21,7 @@ export class LabResultsUploaderComponent {
     private errorText = '';
     private displayErrorText = false;
 
-    constructor(private http: Http, private apiService: NSFOService, private fb: FormBuilder){
+    constructor(private apiService: NSFOService, private fb: FormBuilder){
         this.form = fb.group({
             lab_file: [null, Validators.required],
             nsfo_reference_number: ["", Validators.required],
@@ -53,7 +51,7 @@ export class LabResultsUploaderComponent {
             errorText += ' NO NSFO REFERENCE';
         }
         if (!formData) {
-            errorText += ' NO FILE ';
+            errorText += ' NO FILE';
         }
 
         if (this.file.type !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
