@@ -2,6 +2,7 @@ import {LocationHealthInspection} from "../../main/health/health.model";
 import {LabResult} from "./lab-result.model";
 
 export class LabResultFile {
+    public id: number;
     public inspection: LocationHealthInspection;
     public results: LabResult;
     public part: number;
