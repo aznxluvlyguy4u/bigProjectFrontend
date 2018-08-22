@@ -8,7 +8,7 @@
 </button>
 
 <div id="selector" class="reveal-overlay" [ngStyle]="{'display': displayModal}">
-    <div class="medium reveal" [ngStyle]="{'display': displayModal}">
+    <div class="large reveal" [ngStyle]="{'display': displayModal}">
         <div class="modal-header" style="background-color:silver">
 
             <div class="row table-options-container">
@@ -66,6 +66,8 @@
                         <tr>
                             <td>{{ 'LEDGER CATEGORY' | translate }} {{ 'CODE' | translate }}</td>
                             <td>{{ 'LEDGER CATEGORY' | translate }}</td>
+                            <td>{{'ARTICLE CODE' | translate }}</td>
+                            <td>{{'SUB ARTICLE CODE' | translate }}</td>
                             <td>{{ 'DESCRIPTION' | translate }}</td>
                             <td>{{ 'VAT PERCENTAGE RATE' | translate }}</td>
                             <td>{{ 'PRICE EXCL VAT' | translate }}</td>
@@ -89,6 +91,12 @@
                             <td>
                                 <span *ngIf="rule.ledger_category">{{ rule.ledger_category.description }}</span>
                                 <span *ngIf="!rule.ledger_category">--</span>
+                            </td>
+                            <td>
+                                {{ rule.article_code }}
+                            </td>
+                            <td>
+                                {{ rule.sub_article_code }}
                             </td>
                             <td>
                                 {{ rule.description }}
