@@ -1,6 +1,6 @@
 <button
         class="button primary expanded confirmation-button"
-        [disabled]=""
+        [disabled]="inspection.status == 'TO AUTHORIZE'"
         (click)="openModal()"
 >
     {{ "UPLOAD LAB RESULTS" | translate }}

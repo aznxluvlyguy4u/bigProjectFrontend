@@ -3,6 +3,7 @@ import {NSFOService} from "../../services/nsfo/nsfo.service";
 import {LocationHealthInspection} from "../../../main/health/health.model";
 import {TranslatePipe} from "ng2-translate";
 import {FormBuilder, FormGroup, REACTIVE_FORM_DIRECTIVES, Validator, Validators} from "@angular/forms";
+import {HealthService} from "../../../main/health/health.service";
 
 @Component({
     selector: 'lab-results-uploader',
@@ -21,7 +22,7 @@ export class LabResultsUploaderComponent {
     private errorText = '';
     private displayErrorText = false;
 
-    constructor(private apiService: NSFOService, private fb: FormBuilder){
+    constructor(private apiService: NSFOService, private fb: FormBuilder, private healthService: HealthService){
         this.form = fb.group({
             lab_file: [null, Validators.required],
             nsfo_reference_number: ["", Validators.required],
@@ -69,6 +70,8 @@ export class LabResultsUploaderComponent {
             + '?nsfo_reference_number=' + nsfoReference + '&lab_reference_number=' + labReference, this.file)
             .subscribe(
             res => {
+                this.healthService.loadToReceiveLabResults();
+                this.healthService.loadToAuthorize();
                 this.closeModal();
             }
         );
