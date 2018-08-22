@@ -56,14 +56,15 @@ export class ClientDetailsComponent {
         private settings: SettingsService,
         private utils: UtilsService,
         private fb: FormBuilder,
-        private translate: TranslateService,
+        private translate: TranslateService
     ) {
         this.form = fb.group({
             "animal_health_subscription": [false],
             "scrapie_check_date" : [''],
             "maedi_visna_check_date" : [''],
             "scrapie_reason_of_edit": [''],
-            "maedi_visna_reason_of_edit": ['']
+            "maedi_visna_reason_of_edit": [''],
+            "reason_of_change": ['']
         });
     }
 
