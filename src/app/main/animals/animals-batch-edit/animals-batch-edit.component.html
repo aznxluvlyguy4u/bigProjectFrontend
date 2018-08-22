@@ -891,7 +891,7 @@
                     </td>
 
                     <td *ngIf="showPedigreeData || showPedigreeRegisterData">{{ animal.merged_n_ling ? animal.merged_n_ling : '-' }}</td>
-                    <td *ngIf="showPedigreeData || showPedigreeRegisterData"><input title="n_ling_backup_value" class="table-input" type="number" [(ngModel)]="animal.n_ling" [disabled]="isSaving"></td>
+                    <td *ngIf="showPedigreeData || showPedigreeRegisterData"><input title="n_ling_backup_value" class="table-input" type="number" [(ngModel)]="animal.n_ling" [disabled]="isSaving" max="7"></td>
                     <td *ngIf="showPedigreeData"><input title="ubnOfBirth" class="table-input" type="number" [(ngModel)]="animal.ubn_of_birth" [disabled]="isSaving"></td>
                     <td *ngIf="showPedigreeData" style="white-space: nowrap">
                         {{ animal.location_of_birth ? animal.location_of_birth.ubn : '-' }}  <i class="fa fa-info-circle" aria-hidden="true"
