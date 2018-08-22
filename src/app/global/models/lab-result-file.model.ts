@@ -4,7 +4,7 @@ import {LabResult} from "./lab-result.model";
 export class LabResultFile {
     public id: number;
     public inspection: LocationHealthInspection;
-    public results: LabResult;
+    public lab_results: LabResult[];
     public part: number;
     public revision: number;
     public illness: string;
