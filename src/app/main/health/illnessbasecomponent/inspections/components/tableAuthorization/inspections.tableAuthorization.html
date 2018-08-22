@@ -28,7 +28,7 @@
             <td>{{ inspection?.next_action | translate }}</td>
             <td>{{ inspection?.action_log?.action_by?.first_name + " " + inspection?.action_log?.action_by?.last_name }} ({{ settings.convertToViewDateTime(inspection?.direction_date) }})</td>
             <td>
-                <lab-results-uploader [disabled]="inspection.status == 'TO AUTHORIZE'" [inspection]="inspection"></lab-results-uploader>
+                <lab-results-uploader [inspection]="inspection"></lab-results-uploader>
                 <lab-result-file-list-viewer
                         [inspection]="inspection"
                         [labResultFiles]="inspection.lab_result_files"
