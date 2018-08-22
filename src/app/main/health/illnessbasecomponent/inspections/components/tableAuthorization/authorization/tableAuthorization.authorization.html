@@ -1,5 +1,6 @@
 <div id="auth-page">
-    <span *ngIf="!isLoading && labResult.lab_results.length > 0">
+    <div *ngFor="let file of fileList">
+        <span *ngIf="!isLoading && file.lab_results.length > 0">
         <div class="row">
             <div class="large-4 columns">
                 <button type="button" (click)="goToOverviewPage()" class="small primary button">
@@ -10,7 +11,7 @@
                 </button>
             </div>
             <div class="large-3 columns">
-                <div *ngIf="labResult.illness == 'SCRAPIE'">
+                <div *ngIf="file.illness == 'SCRAPIE'">
                     <strong>Scrapie Onderzoek</strong>
                     <br>
                     Referentie Nummer: {{ _inspection?.order_number }}
@@ -19,7 +20,7 @@
                     <br>
                     Sinds: {{ currentHStatus?.scrapie_check_date }}
                 </div>
-                <div *ngIf="labResult.illness == 'MAEDI VISNA'">
+                <div *ngIf="file.illness == 'MAEDI VISNA'">
                     <strong>Zwoegerziekte Onderzoek</strong>
                     <br>
                     Referentie Nummer: {{ _inspection?.order_number }}
@@ -33,7 +34,7 @@
                 <br>
                 {{ 'REQUIRED RESULTS COUNT' | translate }}: {{ _inspection?.required_animal_count }}
                 <br>
-                {{ 'RECEIVED RESULTS COUNT' | translate }}: {{ labResult.lab_results.length }}
+                {{ 'RECEIVED RESULTS COUNT' | translate }}: {{ file.lab_results.length }}
             </div>
 
             <div class="large-2 columns">
@@ -43,7 +44,7 @@
             </div>
         </div>
 
-        <div *ngFor="let lab_result_item of labResult.lab_results" class="callout">
+        <div *ngFor="let lab_result_item of file.lab_results" class="callout">
             <div class="row result-container">
                 <div class="large-2 columns">
                     <span class="header-label">{{ 'ULN' | translate }}:</span> {{ lab_result_item.animal.uln_country_code + lab_result_item.animal.uln_number }}
@@ -53,7 +54,7 @@
                 </div>
 
                 <!-- SCRAPIE -->
-                <div *ngIf="labResult.illness == 'SCRAPIE'" class="large-4 columns">
+                <div *ngIf="file.illness == 'SCRAPIE'" class="large-4 columns">
                     <span class="header-label">{{ 'MGX SAMPLE ID' | translate }}:</span>
                     <editable-component [(editableValue)]="lab_result_item.mgx_sample_id"></editable-component>
                     <!--{{ lab_result_item.mgx_sample_id }}-->
@@ -69,7 +70,7 @@
             </div>
 
             <!-- ONLY FOR SCRAPIE -->
-            <div *ngIf="labResult.illness == 'SCRAPIE'" class="row value-container">
+            <div *ngIf="file.illness == 'SCRAPIE'" class="row value-container">
                 <div class="large-2 columns">
                     <strong>{{ 'GENOTYPE' | translate }}:</strong>
                     <editable-component [(editableValue)]="lab_result_item.genotype"></editable-component>
@@ -85,7 +86,7 @@
             </div>
 
             <!-- MAEDI VISNA (Zwoeger ziekte) -->
-            <div *ngIf="labResult.illness == 'MAEDI VISNA'" class="row value-container">
+            <div *ngIf="file.illness == 'MAEDI VISNA'" class="row value-container">
                 <div class="large-2 columns">
                     <strong>{{ 'SUB REF' | translate }}:</strong>
                     <editable-component [(editableValue)]="lab_result_item.sub_ref"></editable-component>
@@ -161,6 +162,7 @@
             </div>
         </div>
     </span>
+    </div>
     <span *ngIf="isLoading">
         <div class="callout">
             <div class="row value-container text-center">

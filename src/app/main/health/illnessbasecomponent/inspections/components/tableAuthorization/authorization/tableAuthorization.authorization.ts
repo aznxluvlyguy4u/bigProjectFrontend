@@ -11,6 +11,7 @@ import { SettingsService } from '../../../../../../../global/services/settings/s
 import { EditableComponent } from '../../../../../../../global/components/editable/editable.component';
 import { HealthService } from '../../../../../health.service';
 import { NSFOService } from '../../../../../../../global/services/nsfo/nsfo.service';
+import {LabResultFile} from "../../../../../../../global/models/lab-result-file.model";
 
 @Component({
     selector: 'request-auth',
@@ -23,6 +24,7 @@ export class AuthorizationComponent implements OnInit{
     private form: ControlGroup;
     private savingInProgress: boolean;
     private isLoading: boolean = true;
+    private fileList: LabResultFile[];
     private foundHealthStatusSuggestion: boolean;
     private currentHealthStatus: string;
     private requiredCount: number;
@@ -33,7 +35,7 @@ export class AuthorizationComponent implements OnInit{
 
     private _inspection: LocationHealthInspection;
 
-    @Input() labResult:LabResult = new LabResult();
+    @Input() labResult:LabResultFile = new LabResultFile();
     @Output() showOverviewPage: EventEmitter<boolean> = new EventEmitter<boolean>();
     @Output() _authorizeInspection = new EventEmitter();
 
@@ -59,7 +61,7 @@ export class AuthorizationComponent implements OnInit{
         this.healthService.getLabResults(this._inspection)
             .subscribe(
                 res => {
-                    this.labResult = res.result;
+                    this.fileList = res.result;
                     this.isLoading = false;
                 },
                 err => {
@@ -137,25 +139,27 @@ export class AuthorizationComponent implements OnInit{
     private suggestMaediVisnaHealthStatus(): string {
         let positiveCount = 0;
 
-        // for(let lab_result of this.labResult.lab_results) {
+        // for(let lab_result of this.labResult.results) {
         //     if(lab_result.mv_caepool == 'POSITIVE') {
         //         positiveCount++
         //     }
         // }
 
         if(this.currentHealthStatus == 'FREE (1 YEAR)' || this.currentHealthStatus == 'FREE (2 YEAR)') {
-            if(positiveCount > 0 || this.labResult.lab_results.length < this.requiredCount) {
-                return 'UNDER OBSERVATION'
-            }
+            for (let file of this.fileList) {
+                if(positiveCount > 0 || file.lab_results.length < this.requiredCount) {
+                    return 'UNDER OBSERVATION'
+                }
 
-            if(positiveCount == 0 && this.labResult.lab_results.length >= this.requiredCount &&
-                this.currentHealthStatus == 'FREE (1 YEAR)') {
-                return 'FREE (2 YEAR)'
-            }
+                if(positiveCount == 0 && file.lab_results.length >= this.requiredCount &&
+                    this.currentHealthStatus == 'FREE (1 YEAR)') {
+                    return 'FREE (2 YEAR)'
+                }
 
-            if(positiveCount == 0 && this.labResult.lab_results.length >= this.requiredCount &&
-                this.currentHealthStatus == 'FREE (2 YEAR)') {
-                return 'FREE (2 YEAR)'
+                if(positiveCount == 0 && file.lab_results.length >= this.requiredCount &&
+                    this.currentHealthStatus == 'FREE (2 YEAR)') {
+                    return 'FREE (2 YEAR)'
+                }
             }
         }
 
