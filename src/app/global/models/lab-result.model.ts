@@ -3,8 +3,10 @@ import {Animal} from "../components/livestock/livestock.model";
 export class LabResult {
     public id: number;
     public animal:Animal;
+    public animal_date_of_birth: string;
     public animal_uln_number: string;
     public animal_uln_country_code: string;
+    public vet_name: string;
 }
 
 export class LabResultScrapie extends LabResult{
@@ -18,8 +20,8 @@ export class LabResultScrapie extends LabResult{
 }
 
 export class LabResultMaediVisna extends LabResult{
-    inspection_id
-    sample_id
+    inspection_id: string;
+    sample_id: string;
     sub_ref:string;
     ci_name:string;
     result_date:string;
