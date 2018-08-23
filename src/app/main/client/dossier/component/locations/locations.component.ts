@@ -8,12 +8,15 @@ import {SettingsService} from "../../../../../global/services/settings/settings.
 import {Validators} from "@angular/common";
 import {Subscription} from "rxjs/Rx";
 import {EventEmitter} from "@angular/platform-browser-dynamic/src/facade/async";
+import { Country } from '../../../../../global/models/country.model';
+import { NSFOService } from '../../../../../global/services/nsfo/nsfo.service';
+import { CountryNameToCountryCodePipe } from '../../../../../global/pipes/country-name-to-country-code.pipe';
 
 @Component({
     selector: 'locations-display',
     directives: [REACTIVE_FORM_DIRECTIVES],
     template: require('./locations.component.html'),
-    pipes: [TranslatePipe]
+    pipes: [TranslatePipe, CountryNameToCountryCodePipe]
 })
 
 export class LocationsDisplay {
@@ -32,7 +35,8 @@ export class LocationsDisplay {
     @Output() getLocations: EventEmitter<Location[]> = new EventEmitter<Location[]>();
     @Output() getDeletedLocations: EventEmitter<Location> = new EventEmitter<Location>();
 
-    constructor(private fb: FormBuilder, private utils: UtilsService, public settings: SettingsService) {
+    constructor(private fb: FormBuilder, private utils: UtilsService, public settings: SettingsService,
+                private nsfo: NSFOService) {
         this.form = fb.group({
             ubn: ['', Validators.required],
             address_street_name: ['', Validators.required],
@@ -40,7 +44,8 @@ export class LocationsDisplay {
             address_address_suffix: [''],
             address_address_postal_code: ['', Validators.required],
             address_address_city: ['', Validators.required],
-            address_address_state: ['', Validators.required]
+            address_address_state: ['', Validators.required],
+            address_country: ['', Validators.required]
         });
     }
 
@@ -50,6 +55,10 @@ export class LocationsDisplay {
 
     ngOnDestroy() {
         this.provinces$.unsubscribe();
+    }
+
+    public getCountries(): Country[] {
+        return this.nsfo.countries;
     }
 
     private initProvinces(): void {

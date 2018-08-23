@@ -7,6 +7,7 @@
                 <td>{{ 'STREET' | translate }}</td>
                 <td>{{ 'POSTAL CODE' | translate }}</td>
                 <td>{{ 'PLACE' | translate }}</td>
+                <td>{{ 'COUNTRY' | translate }}</td>
                 <td>
                     <button type="button" (click)="openModal(false)" [disabled]="disabledMode" class="tiny primary button pull-right">
                         <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
@@ -34,6 +35,10 @@
                 <td>
                     <span *ngIf="location.address.city">{{ location.address.city }}</span>
                     <span *ngIf="!location.address.city">--</span>
+                </td>
+                <td>
+                    <span *ngIf="location.address.country">{{ location.address.country | countryNameToCountryCodePipe: '--' }}</span>
+                    <span *ngIf="!location.address.country">--</span>
                 </td>
                 <td class="text-right">
                     <span *ngIf="!disabledMode">
@@ -120,6 +125,16 @@
                             <select [(ngModel)]="location.address.state" formControlName="address_address_state">
                                 <option value="">--</option>
                                 <option *ngFor="let province of provinces" value="{{ province.code }}">{{ province.name }}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="large-4 columns">
+                            <label class="middle"> {{ 'COUNTRY' | translate }} * </label>
+                        </div>
+                        <div class="large-8 columns">
+                            <select [(ngModel)]="location.address.country" formControlName="address_country" [disabled]="savingInProgress">
+                                <option *ngFor="let country of getCountries()" value="{{ country.name }}">{{ country.name | translate }}</option>
                             </select>
                         </div>
                     </div>
