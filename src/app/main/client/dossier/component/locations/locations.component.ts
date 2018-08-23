@@ -44,7 +44,7 @@ export class LocationsDisplay {
             address_address_suffix: [''],
             address_address_postal_code: ['', Validators.required],
             address_address_city: ['', Validators.required],
-            address_address_state: ['', Validators.required],
+            address_address_state: [''],
             address_country: ['', Validators.required]
         });
     }
@@ -67,6 +67,14 @@ export class LocationsDisplay {
                 this.provinces = _.sortBy(res, ['code']);
             });
     }
+
+    public removeProvinceIfCountryIsNotNetherlands() {
+        for (let location of this.locations) {
+          if (location.address.country !== 'Netherlands') {
+            location.address.state = null;
+          }
+        }
+    }
     
     private openModal(editMode: boolean, location: Location): void {
         this.isModalEditMode = editMode;
@@ -81,6 +89,7 @@ export class LocationsDisplay {
     private closeModal(): void {
         this.displayModal = 'none';
         this.location = new Location();
+        this.removeProvinceIfCountryIsNotNetherlands();
         this.resetValidation();
     }
     
@@ -104,6 +113,7 @@ export class LocationsDisplay {
 
     private removeLocation(location: Location): void {
         _.remove(this.locations, location);
+        this.removeProvinceIfCountryIsNotNetherlands();
         this.getLocations.emit(this.locations);
     }
 

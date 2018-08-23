@@ -173,30 +173,38 @@
                 </div>
             </div>
 
-            <!-- STATE -->
-            <div class="row">
-                <div class="large-4 columns">
-                    <label class="middle"> {{ 'STATE' | translate }} * </label>
-                </div>
-                <div class="large-8 columns">
-                    <select [(ngModel)]="client.address.state" formControlName="address_state" [disabled]="savingInProgress">
-                        <option value="">--</option>
-                        <option *ngFor="let province of provinces" value="{{ province.code }}">{{ province.name }}</option>
-                    </select>
-                </div>
-            </div>
-
             <!-- COUNTRY -->
             <div class="row">
                 <div class="large-4 columns">
                     <label class="middle"> {{ 'COUNTRY' | translate }} * </label>
                 </div>
                 <div class="large-8 columns">
-                    <select [(ngModel)]="client.address.country" formControlName="address_country" [disabled]="savingInProgress">
+                    <select [(ngModel)]="client.address.country" formControlName="address_country"
+                            [disabled]="savingInProgress"
+                            (click)="removeProvinceIfCountryIsNotNetherlands()"
+                    >
                         <option *ngFor="let country of getCountries()" value="{{ country.name }}">{{ country.name | translate }}</option>
                     </select>
                 </div>
             </div>
+
+            <!-- STATE -->
+            <div class="row">
+                <div class="large-4 columns">
+                    <label class="middle"> {{ 'STATE' | translate }} </label>
+                </div>
+                <div class="large-8 columns">
+                    <select *ngIf="client.address.country === 'Netherlands'"
+                            [(ngModel)]="client.address.state" formControlName="address_state"
+                            [disabled]="savingInProgress"
+                    >
+                        <option value="">--</option>
+                        <option *ngFor="let province of provinces" value="{{ province.code }}">{{ province.name }}</option>
+                    </select>
+                    <p *ngIf="client.address.country !== 'Netherlands'">{{ 'ONLY AVAILABLE FOR THE NETHERLANDS' | translate }}</p>
+                </div>
+            </div>
+
         </div>
 
         <div class="large-3 columns">
@@ -248,17 +256,6 @@
                     <input type="text" [(ngModel)]="client.billing_address.city" formControlName="billing_address_city" maxlength="30" [disabled]="savingInProgress">
                 </div>
             </div>
-            <div class="row">
-                <div class="large-4 columns">
-                    <label class="middle"> {{ 'STATE' | translate }} * </label>
-                </div>
-                <div class="large-8 columns">
-                    <select [(ngModel)]="client.billing_address.state" formControlName="billing_address_state" [disabled]="savingInProgress">
-                        <option value="">--</option>
-                        <option *ngFor="let province of provinces" value="{{ province.code }}">{{ province.name }}</option>
-                    </select>
-                </div>
-            </div>
 
             <!-- COUNTRY -->
             <div class="row">
@@ -266,9 +263,30 @@
                     <label class="middle"> {{ 'COUNTRY' | translate }} * </label>
                 </div>
                 <div class="large-8 columns">
-                    <select [(ngModel)]="client.billing_address.country" formControlName="billing_address_country" [disabled]="savingInProgress">
+                    <select
+                            [(ngModel)]="client.billing_address.country"
+                            formControlName="billing_address_country"
+                            [disabled]="savingInProgress"
+                            (click)="removeProvinceIfCountryIsNotNetherlands()"
+                    >
                         <option *ngFor="let country of getCountries()" value="{{ country.name }}">{{ country.name | translate }}</option>
                     </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="large-4 columns">
+                    <label class="middle"> {{ 'STATE' | translate }} </label>
+                </div>
+                <div class="large-8 columns">
+                    <select  *ngIf="client.billing_address.country === 'Netherlands'"
+                             [(ngModel)]="client.billing_address.state" formControlName="billing_address_state"
+                             [disabled]="savingInProgress"
+                    >
+                        <option value="">--</option>
+                        <option *ngFor="let province of provinces" value="{{ province.code }}">{{ province.name }}</option>
+                    </select>
+                    <p *ngIf="client.billing_address.country !== 'Netherlands'">{{ 'ONLY AVAILABLE FOR THE NETHERLANDS' | translate }}</p>
                 </div>
             </div>
 
