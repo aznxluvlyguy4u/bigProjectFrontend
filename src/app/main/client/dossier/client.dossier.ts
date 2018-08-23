@@ -13,6 +13,7 @@ import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
 import {Datepicker} from "../../../global/components/datepicker/datepicker.component";
 import {SettingsService} from "../../../global/services/settings/settings.service";
 import { ClientsStorage } from '../../../global/services/storage/clients.storage';
+import { Country } from '../../../global/models/country.model';
 
 @Component({
     directives: [REACTIVE_FORM_DIRECTIVES, LocationsDisplay, UsersDisplay, Datepicker],
@@ -63,12 +64,14 @@ export class ClientDossierComponent {
             address_postal_code: ['', Validators.required],
             address_city: ['', Validators.required],
             address_state: ['', Validators.required],
+            address_country: ['', Validators.required],
             billing_address_street_name: ['', Validators.required],
             billing_address_address_number: ['', Validators.required],
             billing_address_suffix: [''],
             billing_address_postal_code: ['', Validators.required],
             billing_address_city: ['', Validators.required],
             billing_address_state: ['', Validators.required],
+            billing_address_country: ['', Validators.required],
             animal_health_subscription: ['NO'],
             subscription_date: [''],
         });
@@ -105,6 +108,10 @@ export class ClientDossierComponent {
 
     clearInvoiceId() {
         this.invoiceId = null;
+    }
+
+    public getCountries(): Country[] {
+        return this.nsfo.countries;
     }
 
     private initProvinces(): void {
