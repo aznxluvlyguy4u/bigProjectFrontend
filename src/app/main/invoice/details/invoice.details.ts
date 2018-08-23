@@ -18,6 +18,7 @@ import { StandardInvoiceRuleSelectorComponent } from '../../../global/components
 import { LocalNumberFormat } from '../../../global/pipes/local-number-format';
 import {Datepicker} from "../../../global/components/datepicker/datepicker.component";
 import {DownloadService} from "../../../global/services/download/download.service";
+import { SpinnerComponent } from '../../../global/components/spinner/spinner.component';
 
 @Component({
     selector: 'ng-select',
@@ -58,6 +59,7 @@ export class InvoiceDetailsComponent {
     private invoice: Invoice = new Invoice;
     private form: FormGroup;
     private onlyView: boolean = false;
+    public loadingInvoiceForEdit = false;
     private companySelected: boolean = false;
 	private model_datetime_format;
 	private view_date_format;
@@ -91,6 +93,7 @@ export class InvoiceDetailsComponent {
         this.dataSub = this.activatedRoute.params.subscribe(params => {
             this.pageMode = params['mode'];
             if(this.isEditMode()) {
+            		this.loadingInvoiceForEdit = true;
                 this.pageTitle = 'EDIT INVOICE';
                 this.invoiceId = params['id'];
                 this.nsfo.doGetRequest(this.nsfo.URI_INVOICE + "/" + this.invoiceId)
@@ -105,6 +108,9 @@ export class InvoiceDetailsComponent {
                     },
 											error => {
 												alert(this.nsfo.getErrorMessage(error));
+											},
+											() => {
+                    		this.loadingInvoiceForEdit = false;
 											}
                     );
             }
