@@ -15,6 +15,7 @@ export class LocationHealthInspection {
     public next_action: string;
     public action_log: ActionLog;
     public sampling_date: string;
+    public results: LabResult[];
     public data: Direction[] = [];
     public total_lead_time: string;
     public authorized_by: string;
