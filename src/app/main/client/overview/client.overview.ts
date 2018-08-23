@@ -8,6 +8,8 @@ import {PaginationService, PaginatePipe} from "ng2-pagination/index";
 import {PaginationComponent} from "../../../global/components/pagination/pagination.component";
 import {SettingsService} from "../../../global/services/settings/settings.service";
 import { CheckMarkComponent } from '../../../global/components/checkmark/check-mark.component';
+import { CountryNameToCountryCodePipe } from '../../../global/pipes/country-name-to-country-code.pipe';
+import { SortService } from '../../../global/services/utils/sort.service';
 
 declare var $;
 
@@ -15,21 +17,28 @@ declare var $;
     providers: [PaginationService],
     directives: [ROUTER_DIRECTIVES, PaginationComponent, CheckMarkComponent],
     template: require('./client.overview.html'),
-    pipes: [TranslatePipe, ClientFilterPipe, PaginatePipe]
+    pipes: [TranslatePipe, ClientFilterPipe, PaginatePipe, CountryNameToCountryCodePipe]
 })
 
 export class ClientOverviewComponent implements AfterViewChecked{
     private isLoaded: boolean = false;
     private isSending: boolean = false;
     private clientList: Client[] = [];
-    private filterSearch: string = '';
-    private filterInvoices: string = 'ALL';
-    private filterAmount: number = 10;
+
+    public filterSearch: string = '';
+    public filterInvoices: string = 'ALL';
+    public filterAmount: number = 10;
+    public filterCountryName: string = 'ALL';
+
     private isLoadedFoundation: boolean;
     private userModalDisplay: string = 'none';
     private selectedClient: Client = new Client();
 
-    constructor(private nsfo: NSFOService, private router: Router, private settings: SettingsService) {
+    public currentCountryNames: string[] = [];
+    public countryNameNullFiller = '--';
+
+    constructor(private nsfo: NSFOService, private router: Router, private settings: SettingsService,
+                private sort: SortService) {
         this.getClientList();
     }
 
@@ -42,9 +51,26 @@ export class ClientOverviewComponent implements AfterViewChecked{
             .subscribe(
                 res => {
                     this.clientList = <Client[]> res.result;
-                    this.isLoaded = true;
-                }
+                    this.generateCurrentCountryNamesList(this.clientList);
+                },
+              error => {
+                    alert(this.nsfo.getErrorMessage(error));
+              },
+              () => {
+								this.isLoaded = true;
+              }
             );
+    }
+
+    private generateCurrentCountryNamesList(clientList: Client[]) {
+        for (let client of clientList) {
+            if (client.address && client.address.country) {
+							if (this.currentCountryNames.indexOf(client.address.country) < 0) {
+							    this.currentCountryNames.push(client.address.country);
+              }
+            }
+        }
+        this.currentCountryNames = this.sort.sortCountryNames(this.currentCountryNames);
     }
 
     private loginAsGhost(personID: string) {

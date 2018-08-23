@@ -56,45 +56,60 @@ export class SortService {
 	}
 
 	sortCountries(list: Country[], sortVar: string): Country[] {
-		const direction = 1; // sort ascending
-
 		return list.sort(
 			(n1, n2) => {
-
-				// always put NL on the top
-				if (n1[sortVar] === 'NL' || n1[sortVar] === 'Netherlands') {
-					return -1;
-				}
-
-				if (n2[sortVar] === 'NL' || n2[sortVar] === 'Netherlands') {
-					return 1;
-				}
-
-				// after that always put Luxemburg on top
-				if (n1[sortVar] === 'LU' || n1[sortVar] === 'Luxembourg') {
-					return -1;
-				}
-
-				if (n2[sortVar] === 'LU' || n2[sortVar] === 'Luxembourg') {
-					return 1;
-				}
-
-				// Sort other values as usual, based on their translated values
-
-				if (this.translateService.instant(n1[sortVar]) > this.translateService.instant(n2[sortVar])) {
-					return direction;
-				}
-
-				if (this.translateService.instant(n1[sortVar]) < this.translateService.instant(n2[sortVar])) {
-					return -1 * direction;
-				}
-
-				return 0;
-
+				return this.compareTwoCountryNamesForSort(n1[sortVar], n2[sortVar], 1);
 			}
 		);
 	}
 
+
+	sortCountryNames(countryNamesList: string[]): string[] {
+		return countryNamesList.sort(
+			(countryName1, countryName2) => {
+				return this.compareTwoCountryNamesForSort(countryName1, countryName2, 1);
+			}
+		);
+	}
+
+
+	/**
+	 * @param {string} countryName1
+	 * @param {string} countryName2
+	 * @param {number} direction 1 = sort ascending, -1 is sort descending
+	 * @returns {number}
+	 */
+	compareTwoCountryNamesForSort(countryName1: string, countryName2: string, direction: number) {
+		// always put NL on the top
+		if (countryName1 === 'NL' || countryName1 === 'Netherlands') {
+			return -1;
+		}
+
+		if (countryName2 === 'NL' || countryName2 === 'Netherlands') {
+			return 1;
+		}
+
+		// after that always put Luxemburg on top
+		if (countryName1 === 'LU' || countryName1 === 'Luxembourg') {
+			return -1;
+		}
+
+		if (countryName2 === 'LU' || countryName2 === 'Luxembourg') {
+			return 1;
+		}
+
+		// Sort other values as usual, based on their translated values
+
+		if (this.translateService.instant(countryName1) > this.translateService.instant(countryName2)) {
+			return direction;
+		}
+
+		if (this.translateService.instant(countryName1) < this.translateService.instant(countryName2)) {
+			return -1 * direction;
+		}
+
+		return 0;
+	}
 }
 
 export class SortOrder {

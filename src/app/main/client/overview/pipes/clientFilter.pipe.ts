@@ -9,7 +9,8 @@ export class ClientFilterPipe implements PipeTransform {
     transform(list: any, args: string[]): any {
         let search_input: string = args[0];
         let invoices_option: string = args[1];
-        
+        let countryName: string = args[2];
+
         let filtered = list;
 
         // FILTER: INVOICES
@@ -38,6 +39,17 @@ export class ClientFilterPipe implements PipeTransform {
                 (client.billing_address != null ? client.billing_address.country : '')
             ).indexOf(search_input) !== -1);
         }
+
+			// FILTER: COUNTRY NAME
+			if (countryName !== 'ALL') {
+				filtered = filtered.filter(client => (
+					(client.address != null ?
+              (client.address.country != null && client.address.country != undefined && client.address.country != '') ?
+              client.address.country
+                : '' : '' )
+				).indexOf(countryName) !== -1);
+			}
+
         return filtered
     }
 }
