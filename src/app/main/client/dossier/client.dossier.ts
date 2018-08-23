@@ -14,9 +14,10 @@ import {Datepicker} from "../../../global/components/datepicker/datepicker.compo
 import {SettingsService} from "../../../global/services/settings/settings.service";
 import { ClientsStorage } from '../../../global/services/storage/clients.storage';
 import { Country } from '../../../global/models/country.model';
+import { SpinnerBounceComponent } from '../../../global/components/spinner-bounce/spinner-bounce.component';
 
 @Component({
-    directives: [REACTIVE_FORM_DIRECTIVES, LocationsDisplay, UsersDisplay, Datepicker],
+    directives: [REACTIVE_FORM_DIRECTIVES, LocationsDisplay, UsersDisplay, Datepicker, SpinnerBounceComponent],
     template: require('./client.dossier.html'),
     pipes: [TranslatePipe]
 })
@@ -41,6 +42,8 @@ export class ClientDossierComponent {
 
     private changeModalDisplay: string = 'none';
     private invoiceId: number;
+
+    public isClientDataLoaded = false;
 
     constructor(
         private router: Router,
@@ -92,6 +95,7 @@ export class ClientDossierComponent {
             if(this.pageMode == 'new') {
                 this.pageTitle = 'NEW CLIENT';
                 this.clientTemp = _.cloneDeep(this.client);
+                this.isClientDataLoaded = true;
             }
         });
 
@@ -145,7 +149,13 @@ export class ClientDossierComponent {
                     this.client.users.push(user);
 
                     this.clientTemp = _.cloneDeep(this.client);
-                }
+                },
+              error => {
+                    alert(this.nsfo.getErrorMessage(error));
+              },
+              () => {
+								    this.isClientDataLoaded = true;
+              }
             )
     };
     
