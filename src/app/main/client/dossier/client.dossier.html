@@ -193,7 +193,6 @@
                 </div>
                 <div class="large-8 columns">
                     <select [(ngModel)]="client.address.country" formControlName="address_country" [disabled]="savingInProgress">
-                        <option value="">--</option>
                         <option *ngFor="let country of getCountries()" value="{{ country.name }}">{{ country.name | translate }}</option>
                     </select>
                 </div>
@@ -268,7 +267,6 @@
                 </div>
                 <div class="large-8 columns">
                     <select [(ngModel)]="client.billing_address.country" formControlName="billing_address_country" [disabled]="savingInProgress">
-                        <option value="">--</option>
                         <option *ngFor="let country of getCountries()" value="{{ country.name }}">{{ country.name | translate }}</option>
                     </select>
                 </div>
