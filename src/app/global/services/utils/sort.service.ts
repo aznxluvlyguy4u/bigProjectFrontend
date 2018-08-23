@@ -70,13 +70,22 @@ export class SortService {
 					return 1;
 				}
 
-				// Sort other values as usual
+				// after that always put Luxemburg on top
+				if (n1[sortVar] === 'LU' || n1[sortVar] === 'Luxembourg') {
+					return -1;
+				}
 
-				if (n1[sortVar] > n2[sortVar]) {
+				if (n2[sortVar] === 'LU' || n2[sortVar] === 'Luxembourg') {
+					return 1;
+				}
+
+				// Sort other values as usual, based on their translated values
+
+				if (this.translateService.instant(n1[sortVar]) > this.translateService.instant(n2[sortVar])) {
 					return direction;
 				}
 
-				if (n1[sortVar] < n2[sortVar]) {
+				if (this.translateService.instant(n1[sortVar]) < this.translateService.instant(n2[sortVar])) {
 					return -1 * direction;
 				}
 
