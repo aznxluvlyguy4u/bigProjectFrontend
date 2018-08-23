@@ -4,7 +4,7 @@ import {EventEmitter} from "@angular/platform-browser-dynamic/src/facade/async";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {REACTIVE_FORM_DIRECTIVES} from "@angular/forms";
 import {ControlGroup, FormBuilder} from "@angular/common";
-import {LabResult, HealthStatus, LocationHealthInspection} from "../../../../../health.model";
+import {HealthStatus, LocationHealthInspection} from "../../../../../health.model";
 import { _MAEDI_VISNA, _SCRAPIE } from '../../../../../../../global/constants/illness-type.constant';
 import { Datepicker } from '../../../../../../../global/components/datepicker/datepicker.component';
 import { SettingsService } from '../../../../../../../global/services/settings/settings.service';
@@ -35,7 +35,7 @@ export class AuthorizationComponent implements OnInit{
 
     private _inspection: LocationHealthInspection;
 
-    @Input() labResult:LabResultFile = new LabResultFile();
+    @Input() labResult: LabResultFile[];
     @Output() showOverviewPage: EventEmitter<boolean> = new EventEmitter<boolean>();
     @Output() _authorizeInspection = new EventEmitter();
 
@@ -56,12 +56,12 @@ export class AuthorizationComponent implements OnInit{
             check_date: [''],
             reason_of_edit: ['']
         });
-
         /** get the lab results for current inspection */
         this.healthService.getLabResults(this._inspection)
             .subscribe(
                 res => {
                     this.fileList = res.result;
+                    console.log(this.fileList);
                     this.isLoading = false;
                 },
                 err => {
@@ -147,16 +147,16 @@ export class AuthorizationComponent implements OnInit{
 
         if(this.currentHealthStatus == 'FREE (1 YEAR)' || this.currentHealthStatus == 'FREE (2 YEAR)') {
             for (let file of this.fileList) {
-                if(positiveCount > 0 || file.lab_results.length < this.requiredCount) {
+                if(positiveCount > 0 || file.results.length < this.requiredCount) {
                     return 'UNDER OBSERVATION'
                 }
 
-                if(positiveCount == 0 && file.lab_results.length >= this.requiredCount &&
+                if(positiveCount == 0 && file.results.length >= this.requiredCount &&
                     this.currentHealthStatus == 'FREE (1 YEAR)') {
                     return 'FREE (2 YEAR)'
                 }
 
-                if(positiveCount == 0 && file.lab_results.length >= this.requiredCount &&
+                if(positiveCount == 0 && file.results.length >= this.requiredCount &&
                     this.currentHealthStatus == 'FREE (2 YEAR)') {
                     return 'FREE (2 YEAR)'
                 }
@@ -191,20 +191,25 @@ export class AuthorizationComponent implements OnInit{
     // }
 
     private saveLabResult(){
-        let body = {
-            result:this.labResult
-        }
-        this.savingInProgress = true;
-        this.nsfo.doPostRequest(this.nsfo.URI_LAB_RESULTS, body)
-        .subscribe(
-            res => {
-                this.labResult = res.result;
-                this.savingInProgress = false;
-            },
-            err => {
-                this.savingInProgress = false;
+        for (let file of this.fileList) {
+            for (let result of file.results) {
+                console.log(result);
             }
-        );
+        } 
+        // let body = {
+        //     result:this.labResult
+        // }
+        // this.savingInProgress = true;
+        // this.nsfo.doPostRequest(this.nsfo.URI_LAB_RESULTS, body)
+        // .subscribe(
+        //     res => {
+        //         this.labResult = res.result;
+        //         this.savingInProgress = false;
+        //     },
+        //     err => {
+        //         this.savingInProgress = false;
+        //     }
+        // );
     }
 
     private changeStatus(): void {
