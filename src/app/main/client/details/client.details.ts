@@ -16,9 +16,10 @@ import {REACTIVE_FORM_DIRECTIVES} from "@angular/forms";
 import {ControlGroup, FormBuilder} from "@angular/common";
 import {DownloadService} from "../../../global/services/download/download.service";
 import {Invoice} from "../../invoice/invoice.model";
+import { SpinnerBounceComponent } from '../../../global/components/spinner-bounce/spinner-bounce.component';
 
 @Component({
-    directives: [REACTIVE_FORM_DIRECTIVES, Datepicker],
+    directives: [REACTIVE_FORM_DIRECTIVES, Datepicker, SpinnerBounceComponent],
     template: require('./client.details.html'),
     pipes: [TranslatePipe]
 })
@@ -38,6 +39,11 @@ export class ClientDetailsComponent {
     animalHealthSubscription = false;
     showScrapieDatePicker: boolean;
     showMaediVisnaDatePicker: boolean;
+
+    public loadingClientDetails = false;
+    public loadingHealthStatusses = false;
+    public loadingClientNotes = false;
+
     private healthStatusses: LocationHealthStatus[] = [];
     private selectedLocation: LocationHealthStatus = new LocationHealthStatus();
     private tempSelectedLocation: LocationHealthStatus = new LocationHealthStatus();
@@ -83,25 +89,46 @@ export class ClientDetailsComponent {
     }
 
     private getClientDetails(): void {
+        this.loadingClientDetails = true;
         this.nsfo.doGetRequest(this.nsfo.URI_CLIENTS + '/' + this.clientId + '/details')
             .subscribe(res => {
                 this.clientDetails = <ClientDetails> res.result;
-            });
+            },
+              error => {
+                alert(this.nsfo.getErrorMessage(error));
+              },
+              () => {
+                this.loadingClientDetails = false;
+              });
     }
 
     private getClientNotes(): void {
+        this.loadingClientNotes = true;
         this.nsfo.doGetRequest(this.nsfo.URI_CLIENTS + '/' + this.clientId  + '/notes')
             .subscribe(res => {
                 this.clientNotes = <ClientNote[]> res.result;
                 this.clientNotes = _.orderBy(this.clientNotes, ['creation_date'], ['desc']);
-            });
+            },
+							error => {
+								alert(this.nsfo.getErrorMessage(error));
+							},
+							() => {
+								this.loadingClientNotes = false;
+							});
     }
 
     private getHealthStatusses(): void {
+        this.loadingHealthStatusses = true;
         this.nsfo.doGetRequest(this.nsfo.URI_HEALTH_COMPANY + '/' + this.clientId)
             .subscribe(res => {
                 this.setHealthResults(res);
-            });
+            },
+							error => {
+								alert(this.nsfo.getErrorMessage(error));
+							},
+							() => {
+								this.loadingHealthStatusses = false;
+							});
     }
 
     private setHealthResults(healthStatusResult: any) {

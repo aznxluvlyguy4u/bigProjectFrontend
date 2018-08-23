@@ -109,8 +109,8 @@ export class LocationHealthStatus {
 }
 
 class BreederNumber {
-    public code: string;
-    public number: string;
+    public pedigree_register_abbreviation: string;
+    public breeder_number: string;
 }
 
 class AnimalHealth {
