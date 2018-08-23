@@ -81,6 +81,7 @@ export class LedgerCategoryDropdownComponent implements OnInit {
 
 	selectLedgerCategory(ledgerCategory: LedgerCategory) {
 		this.selectedLedgerCategory = ledgerCategory;
+		this.clickOK();
 	}
 
 	buttonText(): string {
