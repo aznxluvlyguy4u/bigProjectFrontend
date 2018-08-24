@@ -68,6 +68,12 @@ export class AuthorizationComponent implements OnInit{
 
                 }
             )
+        this.healthService.getSuggestedStatus(this._inspection)
+            .subscribe(
+                res => {
+                    this.suggestedHealthStatus = res.result;
+                }
+            )
     }
 
     useDateUntil(): boolean {
