@@ -48,6 +48,7 @@ export class NSFOService {
 
     public URI_HEALTH_COMPANY: string = '/v1/health/company';
     public URI_HEALTH_UBN: string = '/v1/health/ubn';
+    public URI_HEALTH: string = '/v1/health';
     public URI_HEALTH_INSPECTIONS: string = '/v1/inspections';
     public URI_HEALTH_LOCATION_LETTERS: string = '/v1/health_location_letters';
 
