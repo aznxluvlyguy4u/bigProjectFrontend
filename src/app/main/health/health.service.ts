@@ -272,7 +272,8 @@ export class HealthService {
     /** Finish (Authorize) an Inspection the Inspection will be shown in the the finished swim lane */
     public finishInspection(inspection) {
       let body = {
-          new_status : "FINISHED"
+          new_status : "FINISHED",
+          disease_status: inspection
       }
       return this.nsfoService.doPutRequest(this.nsfoService.URI_INSPECTIONS + '/' + inspection.inspection_id , body);
     }
@@ -416,6 +417,9 @@ export class HealthService {
         return this.nsfoService.doGetRequest(this.nsfoService.URI_LAB_RESULTS + '?inspectionId=' + inspection.inspection_id);
     }
 
+    public getSuggestedStatus(inspection: LocationHealthInspection){
+        return this.nsfoService.doGetRequest(this.nsfoService.URI_HEALTH + '/' + inspection.location.id + '?illness_type=' + inspection.illness_type);
+    }
 
     private getIllnessTypeQueryParam() {
       return HealthService.getIllnessTypeQueryParameterByIllnessType(this.selectedIllness);
