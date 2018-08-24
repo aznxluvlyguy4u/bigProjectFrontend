@@ -1,5 +1,8 @@
 <span id="component-uln-input" class="uid-input-group">
-    <select
+    <div style="width: 3rem; text-align: center" *ngIf="getCountryCodeList().length === 0">
+        <app-spinner></app-spinner>
+    </div>
+    <select *ngIf="getCountryCodeList().length > 0"
             id="component-uln-input-country-code"
             class="uln-country-code"
             [(ngModel)]="ulnCountryCode"
