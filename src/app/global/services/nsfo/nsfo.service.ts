@@ -98,8 +98,8 @@ export class NSFOService {
 			this.doGetRequest(this.URI_GET_COUNTRY_CODES)
 				.subscribe(
 					res => {
-						this.countryCodeList = this.sort.sortCountries(res.result, 'code');
-						this.countries = this.sort.sortCountries(res.result, 'name');
+						this.countryCodeList = this.sort.sortCountries(res.result, 'code', false);
+						this.countries = this.sort.sortCountries(res.result, 'name', true);
 					},
 					error => {
 						alert(this.getErrorMessage(error));

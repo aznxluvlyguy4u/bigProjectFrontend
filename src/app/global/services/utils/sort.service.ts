@@ -55,31 +55,33 @@ export class SortService {
 		);
 	}
 
-	sortCountries(list: Country[], sortVar: string): Country[] {
+	sortCountries(list: Country[], sortVar: string, translateValues: boolean): Country[] {
 		return list.sort(
 			(n1, n2) => {
-				return this.compareTwoCountryNamesForSort(n1[sortVar], n2[sortVar], 1);
+				return this.compareTwoCountryNamesForSort(n1[sortVar], n2[sortVar], 1, translateValues);
 			}
 		);
 	}
 
 
-	sortCountryNames(countryNamesList: string[]): string[] {
+	sortCountryNames(countryNamesList: string[], translateValues: boolean): string[] {
 		return countryNamesList.sort(
 			(countryName1, countryName2) => {
-				return this.compareTwoCountryNamesForSort(countryName1, countryName2, 1);
+				return this.compareTwoCountryNamesForSort(countryName1, countryName2, 1, translateValues);
 			}
 		);
 	}
 
 
 	/**
+	 *
 	 * @param {string} countryName1
 	 * @param {string} countryName2
 	 * @param {number} direction 1 = sort ascending, -1 is sort descending
+	 * @param {boolean} translateValues
 	 * @returns {number}
 	 */
-	compareTwoCountryNamesForSort(countryName1: string, countryName2: string, direction: number) {
+	compareTwoCountryNamesForSort(countryName1: string, countryName2: string, direction: number, translateValues: boolean) {
 		// always put NL on the top
 		if (countryName1 === 'NL' || countryName1 === 'Netherlands') {
 			return -1;
@@ -99,14 +101,28 @@ export class SortService {
 		}
 
 		// Sort other values as usual, based on their translated values
+		if (translateValues) {
 
-		if (this.translateService.instant(countryName1) > this.translateService.instant(countryName2)) {
-			return direction;
+			if (this.translateService.instant(countryName1) > this.translateService.instant(countryName2)) {
+				return direction;
+			}
+
+			if (this.translateService.instant(countryName1) < this.translateService.instant(countryName2)) {
+				return -1 * direction;
+			}
+
+		} else {
+
+			if (countryName1 > countryName2) {
+				return direction;
+			}
+
+			if (countryName1 < countryName2) {
+				return -1 * direction;
+			}
+
 		}
 
-		if (this.translateService.instant(countryName1) < this.translateService.instant(countryName2)) {
-			return -1 * direction;
-		}
 
 		return 0;
 	}

@@ -70,7 +70,7 @@ export class ClientOverviewComponent implements AfterViewChecked{
               }
             }
         }
-        this.currentCountryNames = this.sort.sortCountryNames(this.currentCountryNames);
+        this.currentCountryNames = this.sort.sortCountryNames(this.currentCountryNames, true);
     }
 
     private loginAsGhost(personID: string) {
