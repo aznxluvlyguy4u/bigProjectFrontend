@@ -259,6 +259,16 @@ export class InvoiceDetailsComponent {
 					this.invoice.company_name = company.company_name;
 					this.invoice.company_debtor_number = company.debtor_number;
 					this.invoice.company_vat_number = company.vat_number;
+
+					if (!!company.billing_address) {
+						this.invoice.company_address_street_name = company.billing_address.street_name;
+						this.invoice.company_address_street_number = company.billing_address.address_number;
+						this.invoice.company_address_street_number_suffix = company.billing_address.address_number_suffix;
+						this.invoice.company_address_city = company.billing_address.city;
+						this.invoice.company_address_postal_code = company.billing_address.postal_code;
+						this.invoice.company_address_state = company.billing_address.state;
+						this.invoice.company_address_country = company.billing_address.country;
+					}
 			}
 	}
 

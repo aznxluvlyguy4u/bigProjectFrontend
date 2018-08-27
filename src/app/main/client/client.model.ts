@@ -57,7 +57,7 @@ export class ActionLog {
 
 export class Address {
     public street_name: string;
-    public address_number: string;
+    public address_number: number;
     public address_number_suffix: string;
     public suffix: string; // WARNING 'suffix' is indirectly linked to address_number_suffix in API
     public postal_code: string;

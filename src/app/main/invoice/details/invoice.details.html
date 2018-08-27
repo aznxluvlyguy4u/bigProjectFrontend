@@ -140,6 +140,38 @@
                         </span>
                     </td>
                 </tr>
+                <tr class="row">
+                    <td class="large-6 columns">
+                        {{ 'ADDRESS' | translate }}
+                    </td>
+                    <td class="large-6 columns">
+                        <span>
+                            {{ (invoice.company_address_street_name) + ' ' + (invoice.company_address_street_number)
+                            + (!!invoice.company_address_street_number_suffix ? invoice.company_address_street_number_suffix : '')
+                            }}
+                        </span>
+                    </td>
+                </tr>
+                <tr class="row">
+                    <td class="large-6 columns">
+                        {{ 'POSTAL CODE' | translate }}
+                    </td>
+                    <td class="large-6 columns">
+                        <span>
+                            {{ invoice.company_address_postal_code }}
+                        </span>
+                    </td>
+                </tr>
+                <tr class="row">
+                    <td class="large-6 columns">
+                        {{ 'COUNTRY' | translate }}
+                    </td>
+                    <td class="large-6 columns">
+                        <span>
+                            {{ invoice.company_address_country }}
+                        </span>
+                    </td>
+                </tr>
             </table>
         </div>
         <div class="large-4 columns end">
