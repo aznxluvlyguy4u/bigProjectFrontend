@@ -152,7 +152,7 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr *ngFor="let client of getClients() | clientFilter:[filterSearch, filterInvoices] | paginate: {itemsPerPage: filterAmount, currentPage: page}; let i = index">
+                        <tr *ngFor="let client of getClients() | clientFilter:[filterSearch, filterInvoices, filterCountryName] | paginate: {itemsPerPage: filterAmount, currentPage: page}; let i = index">
                             <td>
                                 <span *ngIf="client.debtor_number">{{ client.debtor_number }}</span>
                                 <span *ngIf="!client.debtor_number">--</span>
