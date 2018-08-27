@@ -98,8 +98,10 @@ export class NSFOService {
 			this.doGetRequest(this.URI_GET_COUNTRY_CODES)
 				.subscribe(
 					res => {
-						this.countryCodeList = this.sort.sortCountries(res.result, 'code', false);
-						this.countries = this.sort.sortCountries(res.result, 'name', true);
+						const countriesForCountryCodeList = _.cloneDeep(res.result);
+						const countries = _.cloneDeep(res.result);
+						this.countryCodeList = this.sort.sortCountries(countriesForCountryCodeList, 'code', false);
+						this.countries = this.sort.sortCountries(countries, 'name', true);
 					},
 					error => {
 						alert(this.getErrorMessage(error));
