@@ -100,7 +100,11 @@ export class ClientDossierComponent {
         });
 
         this.router.routerState.queryParams.subscribe(params => {
-            this.invoiceId = params['invoice_id'];
+            if (!!params['invoice_id']) {
+							  this.invoiceId = params['invoice_id'];
+            } else {
+                this.invoiceId = null;
+            }
         });
     }
 
