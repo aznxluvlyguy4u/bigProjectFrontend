@@ -277,13 +277,13 @@
                             </label>
                         </div>
                         <div class="large-8 columns">
-                            <label *ngIf="!tempRuleAmountDecimalCountIsValid()" class="input-error-msg" style="text-align: left">{{'ONLY INTEGERS ARE ALLOWED'|translate}}!</label>
+                            <label *ngIf="!tempRuleAmountDecimalCountIsValid()" class="input-error-msg" style="text-align: left">{{('AMOUNT CANNOT EXCEED THIS AMOUNT OF DECIMAL SPACES'|translate) + ' ' + maxDecimalCountForAmount}}!</label>
                             <label *ngIf="!ruleAmountIsAboveAllowedMinimum()" class="input-error-msg" style="text-align: left">{{('AMOUNT MUST BE AT LEAST'|translate) + ' ' + minRuleAmount}}!</label>
                             <input
                                     name="amount"
                                     type="number"
                                     [(ngModel)]="temporaryRuleAmount"
-                                    step="1"
+                                    step="0.01"
                                     [min]="minRuleAmount"
                             >
                         </div>
@@ -294,7 +294,7 @@
                     <div class="row">
                         <h5>&nbsp;</h5>
                         <button
-                                [disabled]="selectedInvoiceRule == undefined"
+                                [disabled]="!isStandardInvoiceRuleCreateButtonActive()"
                                 (click)="addInvoiceRule('standard', 'GENERAL')"
                                 class="small primary button"
                         ><i class="fa fa-plus fa-fw" aria-hidden="true"></i> {{ 'ADD' | translate }}
@@ -404,13 +404,13 @@
                             </label>
                         </div>
                         <div class="large-8 columns">
-                            <label *ngIf="!tempRuleAmountDecimalCountIsValid()" class="input-error-msg" style="text-align: left">{{'ONLY INTEGERS ARE ALLOWED'|translate}}!</label>
+                            <label *ngIf="!tempRuleAmountDecimalCountIsValid()" class="input-error-msg" style="text-align: left">{{('AMOUNT CANNOT EXCEED THIS AMOUNT OF DECIMAL SPACES'|translate) + ' ' + maxDecimalCountForAmount}}!</label>
                             <label *ngIf="!ruleAmountIsAboveAllowedMinimum()" class="input-error-msg" style="text-align: left">{{('AMOUNT MUST BE AT LEAST'|translate) + ' ' + minRuleAmount}}!</label>
                             <input
                                     type="number"
                                     [(ngModel)]="temporaryRuleAmount"
                                     formControlName="amount"
-                                    step="1"
+                                    step="0.01"
                                     [min]="minRuleAmount"
                             >
                         </div>
@@ -485,7 +485,7 @@
                             {{invoice_rule_selection.invoice_rule.price_excl_vat | localNumberFormat:3 }}
                         </td>
                         <td class="text-left">
-                            {{invoice_rule_selection.amount}}
+                            {{invoice_rule_selection.amount | localNumberFormat:2}}
                         </td>
                         <td class="text-right">
                             {{(invoice_rule_selection.invoice_rule.price_excl_vat * invoice_rule_selection.amount) | localNumberFormat:3}}

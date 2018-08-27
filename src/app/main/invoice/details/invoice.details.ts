@@ -12,13 +12,14 @@ import { CompanySelectorComponent } from '../../../global/components/clientselec
 import { Address, Client } from '../../client/client.model';
 import { SettingsService } from '../../../global/services/settings/settings.service';
 import { LedgerCategoryDropdownComponent } from '../../../global/components/ledgercategorydropdown/ledger-category-dropdown.component';
-import { FormatService } from '../../../global/services/utils/format.service';
+import { FormatService, MAX_CURRENCY_DECIMAL_COUNT } from '../../../global/services/utils/format.service';
 import { ClientsStorage } from '../../../global/services/storage/clients.storage';
 import { StandardInvoiceRuleSelectorComponent } from '../../../global/components/standardinvoiceruleselector/standard-invoice-rule-selector.component';
 import { LocalNumberFormat } from '../../../global/pipes/local-number-format';
 import {Datepicker} from "../../../global/components/datepicker/datepicker.component";
 import {DownloadService} from "../../../global/services/download/download.service";
 import { SpinnerComponent } from '../../../global/components/spinner/spinner.component';
+import { UtilsService } from '../../../global/services/utils/utils.service';
 
 @Component({
     selector: 'ng-select',
@@ -55,7 +56,8 @@ export class InvoiceDetailsComponent {
     temporaryRuleAmount: number;
     temporaryRuleDate: string = moment().format(this.settings.getViewDateFormat());
 	temporaryRuleDate2: string = moment().format(this.settings.getViewDateFormat());
-    minRuleAmount = 1;
+    public minRuleAmount = 0;
+    public maxDecimalCountForAmount = 2;
     private invoice: Invoice = new Invoice;
     private form: FormGroup;
     private onlyView: boolean = false;
@@ -282,6 +284,13 @@ export class InvoiceDetailsComponent {
 				&& this.selectedUbn != null;
 	}
 
+	isStandardInvoiceRuleCreateButtonActive(): boolean {
+		return this.selectedInvoiceRule != null && this.selectedInvoiceRule != undefined
+			&& this.tempRuleAmountDecimalCountIsValid()
+			&& this.ruleAmountIsAboveAllowedMinimum()
+			;
+	}
+
 	isCustomInvoiceRuleCreateButtonActive(): boolean {
     	return this.temporaryRule != null
 					&& this.temporaryRule.description != null
@@ -299,7 +308,7 @@ export class InvoiceDetailsComponent {
     	if (this.temporaryRuleAmount == null) {
     		return false;
 			}
-		return FormatService.isInteger(this.temporaryRuleAmount);
+		return UtilsService.countDecimals(this.temporaryRuleAmount) <= this.maxDecimalCountForAmount;
 	}
 
 	ruleAmountIsAboveAllowedMinimum(): boolean {

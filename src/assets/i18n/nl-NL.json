@@ -777,5 +777,6 @@
   "Spain": "Spanje",
   "Sweden": "Zweden",
   "United Kingdom": "Verenigd Koningkrijk",
-  "ONLY AVAILABLE FOR THE NETHERLANDS": "Alleen beschikbaar voor Nederland"
+  "ONLY AVAILABLE FOR THE NETHERLANDS": "Alleen beschikbaar voor Nederland",
+  "AMOUNT CANNOT EXCEED THIS AMOUNT OF DECIMAL SPACES": "Aantal mag niet meer decimalen hebben dan"
 }
