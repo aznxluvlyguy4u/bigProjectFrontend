@@ -3,7 +3,6 @@ import {Pipe, PipeTransform} from "@angular/core";
 @Pipe({
     name: 'clientFilter'
 })
-
 export class ClientFilterPipe implements PipeTransform {
 
     transform(list: any, args: string[]): any {

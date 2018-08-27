@@ -10,12 +10,13 @@ import {SettingsService} from "../../../global/services/settings/settings.servic
 import {ROUTER_DIRECTIVES, Router} from "@angular/router";
 import {DownloadService} from "../../../global/services/download/download.service";
 import { LocalNumberFormat } from '../../../global/pipes/local-number-format';
+import { invoiceSortPipe } from './pipes/invoiceSort.pipe';
 
 @Component({
     providers: [PaginationService],
     directives: [PaginationComponent, ROUTER_DIRECTIVES],
     template: require('./invoice.overview.html'),
-    pipes: [TranslatePipe, PaginatePipe, invoiceFilterPipe, LocalNumberFormat]
+    pipes: [TranslatePipe, PaginatePipe, invoiceFilterPipe, invoiceSortPipe, LocalNumberFormat]
 })
 
 export class InvoiceOverviewComponent {
