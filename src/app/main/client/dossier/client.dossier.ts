@@ -3,7 +3,7 @@ import {Component} from "@angular/core";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {Router, ActivatedRoute} from "@angular/router";
 import {Subscription} from "rxjs/Rx";
-import {Client, TwinfieldCustomer, TwinfieldOffice, User} from "../client.model";
+import { Client, Location, TwinfieldCustomer, TwinfieldOffice, User } from '../client.model';
 import {ControlGroup, FormBuilder, Validators} from "@angular/common";
 import {UsersDisplay} from "./component/users/users.component";
 import {LocationsDisplay} from "./component/locations/locations.component";
@@ -128,6 +128,10 @@ export class ClientDossierComponent {
         this.clearInvoiceId();
     }
 
+    clearRemovedLocations(locations: Location[]) {
+    	return locations.filter(location => (location.is_active === true ));
+		}
+
     clearInvoiceId() {
         this.invoiceId = null;
     }
@@ -148,6 +152,7 @@ export class ClientDossierComponent {
             .subscribe(
                 res => {
                     this.client = res.result;
+                    this.client.locations = this.clearRemovedLocations(this.client.locations);
                     this.client.deleted_users = [];
                     this.client.deleted_locations = [];
                     this.client.users = res.result.company_users;
