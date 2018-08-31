@@ -16,14 +16,15 @@ import { Router } from '@angular/router';
 	pipes: [TranslatePipe, ClientFilterPipe, PaginatePipe]
 })
 export class CompanySelectorComponent implements OnInit {
-	isLoaded: boolean;
+	public isLoaded: boolean;
 
-	filterSearch: string;
-	filterInvoices: string;
-	filterAmount: number;
+	public filterSearch: string;
+	public filterInvoices: string;
+	public filterCountryName: string = 'ALL';
+	public filterAmount: number;
 
-	displayModal: string;
-	initialSelectedClient: Client;
+	public displayModal: string;
+	public initialSelectedClient: Client;
 
 
 	@Input() selectedClient: Client;

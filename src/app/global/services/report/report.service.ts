@@ -14,6 +14,8 @@ export class ReportService implements OnInit {
   failedReportsCount: number;
   private reportRequestShownInModal: ReportRequest[];
 
+  private isFirstFetch = true;
+
   constructor(private nsfo: NSFOService) {
       this.resetReportList();
       this.fetchReports();
@@ -39,10 +41,11 @@ export class ReportService implements OnInit {
                 this.fetchReports();
             }, 2000);
         } else {
-            if (this.reportRequestShownInModal.length > 0) {
+            if (this.reportRequestShownInModal.length > 0 && !this.isFirstFetch) {
                 this.updateModalNotificationStatus(true);
             }
         }
+        this.isFirstFetch = false;
     });
   }
 

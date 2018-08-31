@@ -13,10 +13,12 @@ import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
 import {Datepicker} from "../../../global/components/datepicker/datepicker.component";
 import {SettingsService} from "../../../global/services/settings/settings.service";
 import { ClientsStorage } from '../../../global/services/storage/clients.storage';
+import { Country } from '../../../global/models/country.model';
 import { SpinnerComponent } from '../../../global/components/spinner/spinner.component';
+import { SpinnerBounceComponent } from '../../../global/components/spinner-bounce/spinner-bounce.component';
 
 @Component({
-    directives: [REACTIVE_FORM_DIRECTIVES, LocationsDisplay, UsersDisplay, Datepicker, SpinnerComponent],
+    directives: [REACTIVE_FORM_DIRECTIVES, LocationsDisplay, UsersDisplay, Datepicker, SpinnerComponent, SpinnerBounceComponent],
     template: require('./client.dossier.html'),
     pipes: [TranslatePipe]
 })
@@ -50,6 +52,8 @@ export class ClientDossierComponent {
     private changeModalDisplay: string = 'none';
     private invoiceId: number;
 
+    public isClientDataLoaded = false;
+
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
@@ -71,13 +75,15 @@ export class ClientDossierComponent {
             address_suffix: [''],
             address_postal_code: ['', Validators.required],
             address_city: ['', Validators.required],
-            address_state: ['', Validators.required],
+            address_state: [''],
+            address_country: ['', Validators.required],
             billing_address_street_name: ['', Validators.required],
             billing_address_address_number: ['', Validators.required],
             billing_address_suffix: [''],
             billing_address_postal_code: ['', Validators.required],
             billing_address_city: ['', Validators.required],
-            billing_address_state: ['', Validators.required],
+            billing_address_state: [''],
+            billing_address_country: ['', Validators.required],
             animal_health_subscription: ['NO'],
             subscription_date: [''],
             twinfield_code: [0, Validators.required],
@@ -102,12 +108,17 @@ export class ClientDossierComponent {
             if(this.pageMode == 'new') {
                 this.pageTitle = 'NEW CLIENT';
                 this.clientTemp = _.cloneDeep(this.client);
+                this.isClientDataLoaded = true;
             }
             this.getTwinfieldAdministrations();
         });
 
         this.router.routerState.queryParams.subscribe(params => {
-            this.invoiceId = params['invoice_id'];
+            if (!!params['invoice_id']) {
+							  this.invoiceId = params['invoice_id'];
+            } else {
+                this.invoiceId = null;
+            }
         });
     }
 
@@ -119,6 +130,10 @@ export class ClientDossierComponent {
 
     clearInvoiceId() {
         this.invoiceId = null;
+    }
+
+    public getCountries(): Country[] {
+        return this.nsfo.countries;
     }
 
     private initProvinces(): void {
@@ -156,7 +171,13 @@ export class ClientDossierComponent {
                     }
 
                     this.clientTemp = _.cloneDeep(this.client);
-                }
+                },
+              error => {
+                    alert(this.nsfo.getErrorMessage(error));
+              },
+              () => {
+								    this.isClientDataLoaded = true;
+              }
             )
     };
 
@@ -214,7 +235,17 @@ export class ClientDossierComponent {
         this.client.deleted_users.push(user);
     }
 
-    private saveClient(): void {
+    public removeProvinceIfCountryIsNotNetherlands() {
+        if (this.client.address.country !== 'Netherlands') {
+            this.client.address.state = null;
+        }
+
+        if (this.client.billing_address.country !== 'Netherlands') {
+            this.client.billing_address.state = null;
+        }
+    }
+
+    public saveClient(): void {
         this.isValidForm = true;
         this.errorMessage = '';
 
@@ -271,7 +302,7 @@ export class ClientDossierComponent {
         }
     }
     
-    private editClient(): void {
+    public editClient(): void {
         this.isValidForm = true;
         this.errorMessage = '';
 

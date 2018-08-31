@@ -39,76 +39,93 @@
 <div class="row">
     <div class="large-3 columns">
         <div class="client-info-overview">
-            <div class="general">
-                <div>{{ clientDetails.company_name }}</div>
-                <div>{{ clientDetails.address.street_name + ' ' + clientDetails.address.address_number + ' ' + clientDetails.address.suffix }} </div>
-                <div>{{ clientDetails.address.postal_code + ' ' + clientDetails.address.city }}</div>
-            </div>
+            <ng-template *ngIf="loadingClientDetails">
+                <app-spinner-bounce></app-spinner-bounce>
+            </ng-template>
 
-            <label>{{ 'TELEPHONE NUMBER' | translate }}</label>
-            <div class="value">{{ clientDetails.telephone_number }}</div>
+            <ng-template *ngIf="!loadingClientDetails">
 
-            <label>{{ 'PRIMARY CONTACT PERSON' | translate }}</label>
-            <div class="value">{{ clientDetails.owner.prefix | translate }} {{ clientDetails.owner.first_name + ' ' + clientDetails.owner.last_name }}</div>
-            <div class="value">{{ clientDetails.owner.email_address }}</div>
+                <div class="general">
+                    <div>{{ clientDetails.company_name }}</div>
+                    <div>{{ clientDetails.address.street_name + ' ' + clientDetails.address.address_number + ' ' + clientDetails.address.suffix }} </div>
+                    <div>{{ clientDetails.address.postal_code + ' ' + clientDetails.address.city }}</div>
+                    <div>{{ clientDetails.address.country | translate }}</div>
+                </div>
 
-            <label>{{ 'STATUS' | translate }}</label>
-            <div class="value">
-                <span *ngIf="clientDetails.status">
-                    {{ 'ACTIVE' | translate }}
-                </span>
-                  <span *ngIf="!clientDetails.status">
-                    {{ 'NON-ACTIVE' | translate }}
-                </span>
-            </div>
+                <label>{{ 'TELEPHONE NUMBER' | translate }}</label>
+                <div class="value">{{ clientDetails.telephone_number }}</div>
 
-            <label>{{ 'SUBSCRIPTION DATE' | translate }}</label>
-            <div class="value">
-                <span *ngIf="clientDetails.subscription_date">
-                    {{ settings.convertToViewDate(clientDetails.subscription_date) }}
-                </span>
-                <span *ngIf="!clientDetails.subscription_date">
-                    --
-                </span>
-            </div>
+                <label>{{ 'PRIMARY CONTACT PERSON' | translate }}</label>
+                <div class="value">{{ clientDetails.owner.prefix | translate }} {{ clientDetails.owner.first_name + ' ' + clientDetails.owner.last_name }}</div>
+                <div class="value">{{ clientDetails.owner.email_address }}</div>
+
+                <label>{{ 'STATUS' | translate }}</label>
+                <div class="value">
+                    <span *ngIf="clientDetails.status">
+                        {{ 'ACTIVE' | translate }}
+                    </span>
+                      <span *ngIf="!clientDetails.status">
+                        {{ 'NON-ACTIVE' | translate }}
+                    </span>
+                </div>
+
+                <label>{{ 'SUBSCRIPTION DATE' | translate }}</label>
+                <div class="value">
+                    <span *ngIf="clientDetails.subscription_date">
+                        {{ settings.convertToViewDate(clientDetails.subscription_date) }}
+                    </span>
+                    <span *ngIf="!clientDetails.subscription_date">
+                        --
+                    </span>
+                </div>
+
+            </ng-template>
         </div>
         <div class="client-info-overview">
-            <table>
-                <thead>
-                <tr>
-                    <td>{{ 'AMOUNT AVAILABLE ANIMALS' | translate }}</td>
-                    <td class="text-center">{{ 'RAM' | translate }}</td>
-                    <td class="text-center">{{ 'EWE' | translate }}</td>
-                    <td class="text-center">{{ 'NEUTER' | translate }}</td>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>< 6 {{ 'MONTHS' | translate }}</td>
-                    <td class="text-center">{{ clientDetails.livestock.ram.less_6_months }}</td>
-                    <td class="text-center">{{ clientDetails.livestock.ewe.less_6_months }}</td>
-                    <td class="text-center">{{ clientDetails.livestock.neuter.less_6_months }}</td>
-                </tr>
-                <tr>
-                    <td>6 - 12 {{ 'MONTHS' | translate }}</td>
-                    <td class="text-center">{{ clientDetails.livestock.ram.between_6_12_months }}</td>
-                    <td class="text-center">{{ clientDetails.livestock.ewe.between_6_12_months }}</td>
-                    <td class="text-center">{{ clientDetails.livestock.neuter.between_6_12_months }}</td>
-                </tr>
-                <tr>
-                    <td> > 12 {{ 'MONTHS' | translate }}</td>
-                    <td class="text-center">{{ clientDetails.livestock.ram.greater_12_months }}</td>
-                    <td class="text-center">{{ clientDetails.livestock.ewe.greater_12_months }}</td>
-                    <td class="text-center">{{ clientDetails.livestock.neuter.greater_12_months }}</td>
-                </tr>
-                <tr>
-                    <td>{{ 'TOTAL' | translate }}</td>
-                    <td class="text-center">{{ clientDetails.livestock.ram.total }}</td>
-                    <td class="text-center">{{ clientDetails.livestock.ewe.total }}</td>
-                    <td class="text-center">{{ clientDetails.livestock.neuter.total }}</td>
-                </tr>
-                </tbody>
-            </table>
+            <ng-template *ngIf="loadingClientDetails">
+                <app-spinner-bounce></app-spinner-bounce>
+            </ng-template>
+
+            <ng-template *ngIf="!loadingClientDetails">
+
+                <table>
+                    <thead>
+                    <tr>
+                        <td>{{ 'AMOUNT AVAILABLE ANIMALS' | translate }}</td>
+                        <td class="text-center">{{ 'RAM' | translate }}</td>
+                        <td class="text-center">{{ 'EWE' | translate }}</td>
+                        <td class="text-center">{{ 'NEUTER' | translate }}</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>< 6 {{ 'MONTHS' | translate }}</td>
+                        <td class="text-center">{{ clientDetails.livestock.ram.less_6_months }}</td>
+                        <td class="text-center">{{ clientDetails.livestock.ewe.less_6_months }}</td>
+                        <td class="text-center">{{ clientDetails.livestock.neuter.less_6_months }}</td>
+                    </tr>
+                    <tr>
+                        <td>6 - 12 {{ 'MONTHS' | translate }}</td>
+                        <td class="text-center">{{ clientDetails.livestock.ram.between_6_12_months }}</td>
+                        <td class="text-center">{{ clientDetails.livestock.ewe.between_6_12_months }}</td>
+                        <td class="text-center">{{ clientDetails.livestock.neuter.between_6_12_months }}</td>
+                    </tr>
+                    <tr>
+                        <td> > 12 {{ 'MONTHS' | translate }}</td>
+                        <td class="text-center">{{ clientDetails.livestock.ram.greater_12_months }}</td>
+                        <td class="text-center">{{ clientDetails.livestock.ewe.greater_12_months }}</td>
+                        <td class="text-center">{{ clientDetails.livestock.neuter.greater_12_months }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'TOTAL' | translate }}</td>
+                        <td class="text-center">{{ clientDetails.livestock.ram.total }}</td>
+                        <td class="text-center">{{ clientDetails.livestock.ewe.total }}</td>
+                        <td class="text-center">{{ clientDetails.livestock.neuter.total }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </ng-template>
         </div>
         <div *ngIf="clientDetails.breeder_numbers.length > 0" class="client-info-overview">
             <table>
@@ -119,8 +136,8 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let number of clientDetails.breeder_numbers">
-                        <td>{{ number.number }}</td>
-                        <td>{{ number.code }}</td>
+                        <td>{{ number.pedigree_register_abbreviation }}</td>
+                        <td>{{ number.breeder_number }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -142,7 +159,16 @@
                             <td></td>
                         </tr>
                     </thead>
-                    <tbody>
+
+                    <tbody *ngIf="loadingHealthStatusses">
+                    <tr>
+                        <td colspan="3" class="text-center">
+                            <app-spinner-bounce></app-spinner-bounce>
+                        </td>
+                    </tr>
+                    </tbody>
+
+                    <tbody *ngIf="!loadingHealthStatusses">
                         <tr *ngIf="healthStatusses.length == 0">
                             <td colspan="4" class="text-center">{{ 'THERE ARE NO LOCATIONS' | translate }}</td>
                         </tr>
@@ -190,8 +216,16 @@
                         <td>{{ 'AUTHORIZED BY' | translate }}</td>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr *ngIf="clientDetails.invoices.length == 0">
+                    <tbody *ngIf="loadingClientDetails">
+                        <tr>
+                            <td colspan="7" class="text-center">
+                                <app-spinner-bounce></app-spinner-bounce>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                    <tbody *ngIf="!loadingClientDetails">
+                    <tr *ngIf="clientDetails?.animal_health?.length == 0">
                         <td colspan="7" class="text-center">{{ 'THERE ARE NO FINISHED INSPECTIONS' | translate }}</td>
                     </tr>
                     <tr *ngFor="let health of clientDetails.animal_health">
@@ -226,7 +260,15 @@
                             <td></td>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody *ngIf="loadingClientDetails">
+                    <tr>
+                        <td colspan="3" class="text-center">
+                            <app-spinner-bounce></app-spinner-bounce>
+                        </td>
+                    </tr>
+                    </tbody>
+
+                    <tbody *ngIf="!loadingClientDetails">
                         <tr *ngIf="clientDetails.invoices.length == 0">
                             <td colspan="4" class="text-center">{{ 'THERE ARE NO INVOICES' | translate }}</td>
                         </tr>
@@ -253,18 +295,28 @@
     <div class="large-3 columns">
         <div class="row">
             <div class="large-12 columns notes">
-                <label>
-                    {{ 'NOTES' | translate }}
-                    <textarea [(ngModel)]="clientNote.message" rows="7"></textarea>
-                </label>
-                <button type="button" (click)="addClientNote()" [disabled]="isSavingNote" class="small primary button expanded">
+
+                <ng-template *ngIf="loadingClientNotes">
+                    <label>
+                        {{ 'NOTES' | translate }}
+                    </label>
+                    <app-spinner-bounce></app-spinner-bounce>
+                </ng-template>
+
+                <ng-template *ngIf="!loadingClientNotes">
+                    <label>
+                        {{ 'NOTES' | translate }}
+                        <textarea [(ngModel)]="clientNote.message" rows="7"></textarea>
+                    </label>
+                    <button type="button" (click)="addClientNote()" [disabled]="isSavingNote" class="small primary button expanded">
                      <span *ngIf="!isSavingNote">
                         {{ 'SAVE' | translate }}
                     </span>
-                    <span *ngIf="isSavingNote">
+                        <span *ngIf="isSavingNote">
                         <i class="fa fa-gear fa-spin fa-fw"></i>
                     </span>
-                </button>
+                    </button>
+                </ng-template>
             </div>
         </div>
         <div class="row">

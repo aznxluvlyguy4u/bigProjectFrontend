@@ -37,45 +37,31 @@
     </div>
 </div>
 
-<div [formGroup]="form" class="row dossier-client-info">
-    <div class="large-3 columns">
+<ng-template *ngIf="!isClientDataLoaded">
+    <app-spinner-bounce></app-spinner-bounce>
+</ng-template>
 
-        <!-- COMPANY INFO CONTAINER -->
-        <div class="row">
-            <div class="large-12 columns">
-                <label class="category">{{ 'COMPANY INFORMATION' | translate }}</label>
-            </div>
-        </div>
+<ng-template *ngIf="isClientDataLoaded">
 
-        <!-- COMPANY NAME -->
-        <div class="row">
-            <div class="large-4 columns">
-                <label class="middle">{{ 'COMPANY NAME' | translate }} * </label>
-            </div>
-            <div class="large-8 columns">
-                <input type="text" [(ngModel)]="client.company_name" formControlName="company_name" maxlength="50" [disabled]="savingInProgress">
-            </div>
-        </div>
+    <div [formGroup]="form" class="row dossier-client-info">
+        <div class="large-3 columns">
 
-        <!-- TELEPHONE -->
-        <div class="row">
-            <div class="large-4 columns">
-                <label class="middle"> {{ 'TELEPHONE NUMBER' | translate }} </label>
+            <!-- COMPANY INFO CONTAINER -->
+            <div class="row">
+                <div class="large-12 columns">
+                    <label class="category">{{ 'COMPANY INFORMATION' | translate }}</label>
+                </div>
             </div>
-            <div class="large-8 columns">
-                <input type="text" [(ngModel)]="client.telephone_number" formControlName="telephone_number" maxlength="12" [disabled]="savingInProgress">
-            </div>
-        </div>
 
-        <!-- BRS NUMBER -->
-        <div class="row">
-            <div class="large-4 columns">
-                <label class="middle"> {{ 'BRS NUMBER' | translate }} </label>
+            <!-- COMPANY NAME -->
+            <div class="row">
+                <div class="large-4 columns">
+                    <label class="middle">{{ 'COMPANY NAME' | translate }} * </label>
+                </div>
+                <div class="large-8 columns">
+                    <input type="text" [(ngModel)]="client.company_name" formControlName="company_name" maxlength="50" [disabled]="savingInProgress">
+                </div>
             </div>
-            <div class="large-8 columns">
-                <input type="text" [(ngModel)]="client.company_relation_number" formControlName="company_relation_number" maxlength="20" [disabled]="savingInProgress">
-            </div>
-        </div>
 
         <div class="row">
             <div class="large-4 columns">
@@ -102,218 +88,284 @@
             </div>
         </div>
 
-        <!-- BTW NUMBER -->
-        <div class="row">
-            <div class="large-4 columns">
-                <label class="middle"> {{ 'BTW NUMBER' | translate }} </label>
+            <!-- TELEPHONE -->
+            <div class="row">
+                <div class="large-4 columns">
+                    <label class="middle"> {{ 'TELEPHONE NUMBER' | translate }} </label>
+                </div>
+                <div class="large-8 columns">
+                    <input type="text" [(ngModel)]="client.telephone_number" formControlName="telephone_number" maxlength="12" [disabled]="savingInProgress">
+                </div>
             </div>
-            <div class="large-8 columns">
-                <input type="text" [(ngModel)]="client.vat_number" formControlName="vat_number" maxlength="20" [disabled]="savingInProgress">
+
+            <!-- BRS NUMBER -->
+            <div class="row">
+                <div class="large-4 columns">
+                    <label class="middle"> {{ 'BRS NUMBER' | translate }} </label>
+                </div>
+                <div class="large-8 columns">
+                    <input type="text" [(ngModel)]="client.company_relation_number" formControlName="company_relation_number" maxlength="20" [disabled]="savingInProgress">
+                </div>
+            </div>
+
+            <!-- BTW NUMBER -->
+            <div class="row">
+                <div class="large-4 columns">
+                    <label class="middle"> {{ 'BTW NUMBER' | translate }} </label>
+                </div>
+                <div class="large-8 columns">
+                    <input type="text" [(ngModel)]="client.vat_number" formControlName="vat_number" maxlength="20" [disabled]="savingInProgress">
+                </div>
+            </div>
+
+            <!-- KVK NUMBER -->
+            <div class="row">
+                <div class="large-4 columns">
+                    <label class="middle"> {{ 'KVK NUMBER' | translate }} </label>
+                </div>
+                <div class="large-8 columns">
+                    <input type="text" [(ngModel)]="client.chamber_of_commerce_number" formControlName="chamber_of_commerce_number" maxlength="20" [disabled]="savingInProgress">
+                </div>
             </div>
         </div>
 
-        <!-- KVK NUMBER -->
-        <div class="row">
-            <div class="large-4 columns">
-                <label class="middle"> {{ 'KVK NUMBER' | translate }} </label>
+        <div class="large-3 columns">
+
+            <!-- ADDRESS CONTAINER -->
+            <div class="row">
+                <div class="large-12 columns">
+                    <label class="category"> {{ 'ADDRESS' | translate }} </label>
+                </div>
             </div>
-            <div class="large-8 columns">
-                <input type="text" [(ngModel)]="client.chamber_of_commerce_number" formControlName="chamber_of_commerce_number" maxlength="20" [disabled]="savingInProgress">
+
+            <!-- STREET NAME -->
+            <div class="row">
+                <div class="large-4 columns">
+                    <label class="middle"> {{ 'STREET NAME' | translate }} * </label>
+                </div>
+                <div class="large-8 columns">
+                    <input type="text" [(ngModel)]="client.address.street_name" formControlName="address_street_name" maxlength="40" [disabled]="savingInProgress">
+                </div>
+            </div>
+
+            <!-- STREET NUMBER -->
+            <div class="row">
+                <div class="large-4 columns">
+                    <label class="middle"> {{ 'STREET NUMBER' | translate }} * </label>
+                </div>
+                <div class="large-8 columns">
+                    <input type="number" [(ngModel)]="client.address.address_number" formControlName="address_address_number" min=0 maxlength="10" [disabled]="savingInProgress">
+                </div>
+            </div>
+
+            <!-- STREET NUMBER SUFFIX -->
+            <div class="row">
+                <div class="large-4 columns">
+                    <label> {{ 'STREET NUMBER SUFFIX' | translate }} </label>
+                </div>
+                <div class="large-8 columns">
+                    <input type="text" [(ngModel)]="client.address.suffix" formControlName="address_suffix" maxlength="10" [disabled]="savingInProgress">
+                </div>
+            </div>
+
+            <!-- POSTAL CODE -->
+            <div class="row">
+                <div class="large-4 columns">
+                    <label class="middle"> {{ 'POSTAL CODE' | translate }} * </label>
+                </div>
+                <div class="large-8 columns">
+                    <input type="text" [(ngModel)]="client.address.postal_code" formControlName="address_postal_code" maxlength="6" [disabled]="savingInProgress">
+                </div>
+            </div>
+
+            <!-- PLACE -->
+            <div class="row">
+                <div class="large-4 columns">
+                    <label class="middle"> {{ 'PLACE' | translate }} * </label>
+                </div>
+                <div class="large-8 columns">
+                    <input type="text" [(ngModel)]="client.address.city" formControlName="address_city" maxlength="30" [disabled]="savingInProgress">
+                </div>
+            </div>
+
+            <!-- COUNTRY -->
+            <div class="row">
+                <div class="large-4 columns">
+                    <label class="middle"> {{ 'COUNTRY' | translate }} * </label>
+                </div>
+                <div class="large-8 columns">
+                    <select [(ngModel)]="client.address.country" formControlName="address_country"
+                            [disabled]="savingInProgress"
+                            (click)="removeProvinceIfCountryIsNotNetherlands()"
+                    >
+                        <option *ngFor="let country of getCountries()" value="{{ country.name }}">{{ country.name | translate }}</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- STATE -->
+            <div class="row">
+                <div class="large-4 columns">
+                    <label class="middle"> {{ 'STATE' | translate }} </label>
+                </div>
+                <div class="large-8 columns">
+                    <select *ngIf="client.address.country === 'Netherlands'"
+                            [(ngModel)]="client.address.state" formControlName="address_state"
+                            [disabled]="savingInProgress"
+                    >
+                        <option value="">--</option>
+                        <option *ngFor="let province of provinces" value="{{ province.code }}">{{ province.name }}</option>
+                    </select>
+                    <p *ngIf="client.address.country !== 'Netherlands'">{{ 'ONLY AVAILABLE FOR THE NETHERLANDS' | translate }}</p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="large-3 columns">
+
+            <!-- BILLING ADDRESS -->
+            <div class="row">
+                <div class="large-12 columns">
+                    <label class="category bottom"> {{ 'BILLING ADDRESS' | translate }} </label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="large-4 columns">
+                    <label class="middle"> {{ 'STREET NAME' | translate }} * </label>
+                </div>
+                <div class="large-8 columns">
+                    <input type="text" [(ngModel)]="client.billing_address.street_name" formControlName="billing_address_street_name" maxlength="40" [disabled]="savingInProgress">
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-4 columns">
+                    <label class="middle"> {{ 'STREET NUMBER' | translate }} * </label>
+                </div>
+                <div class="large-8 columns">
+                    <input type="number" [(ngModel)]="client.billing_address.address_number" formControlName="billing_address_address_number" min=0 maxlength="10" [disabled]="savingInProgress">
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-4 columns">
+                    <label> {{ 'STREET NUMBER SUFFIX' | translate }} </label>
+                </div>
+                <div class="large-8 columns">
+                    <input type="text" [(ngModel)]="client.billing_address.suffix" formControlName="billing_address_suffix" maxlength="10" [disabled]="savingInProgress">
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-4 columns">
+                    <label class="middle"> {{ 'POSTAL CODE' | translate }} * </label>
+                </div>
+                <div class="large-8 columns">
+                    <input type="text" [(ngModel)]="client.billing_address.postal_code" formControlName="billing_address_postal_code" maxlength="6" [disabled]="savingInProgress">
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-4 columns">
+                    <label class="middle"> {{ 'PLACE' | translate }} * </label>
+                </div>
+                <div class="large-8 columns">
+                    <input type="text" [(ngModel)]="client.billing_address.city" formControlName="billing_address_city" maxlength="30" [disabled]="savingInProgress">
+                </div>
+            </div>
+
+            <!-- COUNTRY -->
+            <div class="row">
+                <div class="large-4 columns">
+                    <label class="middle"> {{ 'COUNTRY' | translate }} * </label>
+                </div>
+                <div class="large-8 columns">
+                    <select
+                            [(ngModel)]="client.billing_address.country"
+                            formControlName="billing_address_country"
+                            [disabled]="savingInProgress"
+                            (click)="removeProvinceIfCountryIsNotNetherlands()"
+                    >
+                        <option *ngFor="let country of getCountries()" value="{{ country.name }}">{{ country.name | translate }}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="large-4 columns">
+                    <label class="middle"> {{ 'STATE' | translate }} </label>
+                </div>
+                <div class="large-8 columns">
+                    <select  *ngIf="client.billing_address.country === 'Netherlands'"
+                             [(ngModel)]="client.billing_address.state" formControlName="billing_address_state"
+                             [disabled]="savingInProgress"
+                    >
+                        <option value="">--</option>
+                        <option *ngFor="let province of provinces" value="{{ province.code }}">{{ province.name }}</option>
+                    </select>
+                    <p *ngIf="client.billing_address.country !== 'Netherlands'">{{ 'ONLY AVAILABLE FOR THE NETHERLANDS' | translate }}</p>
+                </div>
+            </div>
+
+        </div>
+        <div class="large-3 columns">
+            <!-- ADDITIONAL -->
+            <div class="row">
+                <div class="large-12 columns">
+                    <label class="category bottom"> {{ 'ADDITIONAL' | translate }} </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-6 columns">
+                    <label> {{ 'ANIMAL HEALTH SUBSCRIPTION' | translate }} * </label>
+                </div>
+                <div class="large-6 columns">
+                    <select formControlName="animal_health_subscription" [disabled]="savingInProgress">
+                        <option value="NO">{{ 'NO' | translate }}</option>
+                        <option value="YES">{{ 'YES' | translate }}</option>
+                    </select>
+                </div>
+            </div>
+            <div *ngIf="form.controls['animal_health_subscription'].value == 'YES'" class="row">
+                <div class="large-6 columns">
+                    <label class="middle"> {{ 'SUBSCRIPTION DATE' | translate }}</label>
+                </div>
+                <div class="large-6 columns">
+                    <span>
+                        <datepicker [formCtrl]="form.controls['subscription_date']" [initDate]="client.subscription_date" [viewFormat]="settings.getViewDateFormat()" [modelFormat]="settings.getModelDateTimeFormat()" [editMode]="!savingInProgress"></datepicker>
+                    </span>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="large-3 columns">
+    <div class="row dossier-table">
+        <div class="large-6 columns">
 
-        <!-- ADDRESS CONTAINER -->
-        <div class="row">
-            <div class="large-12 columns">
-                <label class="category"> {{ 'ADDRESS' | translate }} </label>
+            <!-- LOCATIONS -->
+            <div class="row">
+                <div class="large-12 columns">
+                    <label class="category"> {{ 'LOCATIONS' | translate }} </label>
+                </div>
+            </div>
+            <div class="row">
+                <locations-display (getLocations)="updateLocations($event)" [locations]="client.locations" (getDeletedLocations)="updateDeletedLocations($event)" [disabledMode]="savingInProgress"></locations-display>
             </div>
         </div>
+        <div class="large-6 columns">
 
-        <!-- STREET NAME -->
-        <div class="row">
-            <div class="large-4 columns">
-                <label class="middle"> {{ 'STREET NAME' | translate }} * </label>
+            <!-- USERS -->
+            <div class="row">
+                <div class="large-12 columns">
+                    <label class="category"> {{ 'USERS' | translate }} </label>
+                </div>
             </div>
-            <div class="large-8 columns">
-                <input type="text" [(ngModel)]="client.address.street_name" formControlName="address_street_name" maxlength="40" [disabled]="savingInProgress">
-            </div>
-        </div>
-
-        <!-- STREET NUMBER -->
-        <div class="row">
-            <div class="large-4 columns">
-                <label class="middle"> {{ 'STREET NUMBER' | translate }} * </label>
-            </div>
-            <div class="large-8 columns">
-                <input type="number" [(ngModel)]="client.address.address_number" formControlName="address_address_number" min=0 maxlength="10" [disabled]="savingInProgress">
-            </div>
-        </div>
-
-        <!-- STREET NUMBER SUFFIX -->
-        <div class="row">
-            <div class="large-4 columns">
-                <label> {{ 'STREET NUMBER SUFFIX' | translate }} </label>
-            </div>
-            <div class="large-8 columns">
-                <input type="text" [(ngModel)]="client.address.suffix" formControlName="address_suffix" maxlength="10" [disabled]="savingInProgress">
-            </div>
-        </div>
-
-        <!-- POSTAL CODE -->
-        <div class="row">
-            <div class="large-4 columns">
-                <label class="middle"> {{ 'POSTAL CODE' | translate }} * </label>
-            </div>
-            <div class="large-8 columns">
-                <input type="text" [(ngModel)]="client.address.postal_code" formControlName="address_postal_code" maxlength="6" [disabled]="savingInProgress">
-            </div>
-        </div>
-
-        <!-- PLACE -->
-        <div class="row">
-            <div class="large-4 columns">
-                <label class="middle"> {{ 'PLACE' | translate }} * </label>
-            </div>
-            <div class="large-8 columns">
-                <input type="text" [(ngModel)]="client.address.city" formControlName="address_city" maxlength="30" [disabled]="savingInProgress">
-            </div>
-        </div>
-
-        <!-- STATE -->
-        <div class="row">
-            <div class="large-4 columns">
-                <label class="middle"> {{ 'STATE' | translate }} * </label>
-            </div>
-            <div class="large-8 columns">
-                <select [(ngModel)]="client.address.state" formControlName="address_state" [disabled]="savingInProgress">
-                    <option value="">--</option>
-                    <option *ngFor="let province of provinces" value="{{ province.code }}">{{ province.name }}</option>
-                </select>
+            <div class="row">
+                <users-display (getUsers)="updateUsers($event)" [users]="client.users" (getDeletedUsers)="updateDeletedUsers($event)" [disabledMode]="savingInProgress"></users-display>
             </div>
         </div>
     </div>
 
-    <div class="large-3 columns">
+</ng-template>
 
-        <!-- BILLING ADDRESS -->
-        <div class="row">
-            <div class="large-12 columns">
-                <label class="category bottom"> {{ 'BILLING ADDRESS' | translate }} </label>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="large-4 columns">
-                <label class="middle"> {{ 'STREET NAME' | translate }} * </label>
-            </div>
-            <div class="large-8 columns">
-                <input type="text" [(ngModel)]="client.billing_address.street_name" formControlName="billing_address_street_name" maxlength="40" [disabled]="savingInProgress">
-            </div>
-        </div>
-        <div class="row">
-            <div class="large-4 columns">
-                <label class="middle"> {{ 'STREET NUMBER' | translate }} * </label>
-            </div>
-            <div class="large-8 columns">
-                <input type="number" [(ngModel)]="client.billing_address.address_number" formControlName="billing_address_address_number" min=0 maxlength="10" [disabled]="savingInProgress">
-            </div>
-        </div>
-        <div class="row">
-            <div class="large-4 columns">
-                <label> {{ 'STREET NUMBER SUFFIX' | translate }} </label>
-            </div>
-            <div class="large-8 columns">
-                <input type="text" [(ngModel)]="client.billing_address.suffix" formControlName="billing_address_suffix" maxlength="10" [disabled]="savingInProgress">
-            </div>
-        </div>
-        <div class="row">
-            <div class="large-4 columns">
-                <label class="middle"> {{ 'POSTAL CODE' | translate }} * </label>
-            </div>
-            <div class="large-8 columns">
-                <input type="text" [(ngModel)]="client.billing_address.postal_code" formControlName="billing_address_postal_code" maxlength="6" [disabled]="savingInProgress">
-            </div>
-        </div>
-        <div class="row">
-            <div class="large-4 columns">
-                <label class="middle"> {{ 'PLACE' | translate }} * </label>
-            </div>
-            <div class="large-8 columns">
-                <input type="text" [(ngModel)]="client.billing_address.city" formControlName="billing_address_city" maxlength="30" [disabled]="savingInProgress">
-            </div>
-        </div>
-        <div class="row">
-            <div class="large-4 columns">
-                <label class="middle"> {{ 'STATE' | translate }} * </label>
-            </div>
-            <div class="large-8 columns">
-                <select [(ngModel)]="client.billing_address.state" formControlName="billing_address_state" [disabled]="savingInProgress">
-                    <option value="">--</option>
-                    <option *ngFor="let province of provinces" value="{{ province.code }}">{{ province.name }}</option>
-                </select>
-            </div>
-        </div>
-    </div>
-    <div class="large-3 columns">
-        <!-- ADDITIONAL -->
-        <div class="row">
-            <div class="large-12 columns">
-                <label class="category bottom"> {{ 'ADDITIONAL' | translate }} </label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="large-6 columns">
-                <label> {{ 'ANIMAL HEALTH SUBSCRIPTION' | translate }} * </label>
-            </div>
-            <div class="large-6 columns">
-                <select formControlName="animal_health_subscription" [disabled]="savingInProgress">
-                    <option value="NO">{{ 'NO' | translate }}</option>
-                    <option value="YES">{{ 'YES' | translate }}</option>
-                </select>
-            </div>
-        </div>
-        <div *ngIf="form.controls['animal_health_subscription'].value == 'YES'" class="row">
-            <div class="large-6 columns">
-                <label class="middle"> {{ 'SUBSCRIPTION DATE' | translate }}</label>
-            </div>
-            <div class="large-6 columns">
-                <span>
-                    <datepicker [formCtrl]="form.controls['subscription_date']" [initDate]="client.subscription_date" [viewFormat]="settings.getViewDateFormat()" [modelFormat]="settings.getModelDateTimeFormat()" [editMode]="!savingInProgress"></datepicker>
-                </span>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row dossier-table">
-    <div class="large-6 columns">
-
-        <!-- LOCATIONS -->
-        <div class="row">
-            <div class="large-12 columns">
-                <label class="category"> {{ 'LOCATIONS' | translate }} </label>
-            </div>
-        </div>
-        <div class="row">
-            <locations-display (getLocations)="updateLocations($event)" [locations]="client.locations" (getDeletedLocations)="updateDeletedLocations($event)" [disabledMode]="savingInProgress"></locations-display>
-        </div>
-    </div>
-    <div class="large-6 columns">
-
-        <!-- USERS -->
-        <div class="row">
-            <div class="large-12 columns">
-                <label class="category"> {{ 'USERS' | translate }} </label>
-            </div>
-        </div>
-        <div class="row">
-            <users-display (getUsers)="updateUsers($event)" [users]="client.users" (getDeletedUsers)="updateDeletedUsers($event)" [disabledMode]="savingInProgress"></users-display>
-        </div>
-    </div>
-</div>
 
 <!--ERROR MODAL-->
 <div class="reveal-overlay" [ngStyle]="{'display': modalDisplay}">

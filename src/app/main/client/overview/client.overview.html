@@ -28,6 +28,15 @@
             </select>
         </label>
     </div>
+    <div class="large-1 columns">
+        <label>
+            {{ 'COUNTRY' | translate }}
+            <select [(ngModel)]="filterCountryName" [disabled]="currentCountryNames.length === 0">
+                <option value="ALL">{{ 'ALL' | translate }}</option>
+                <option *ngFor="let countryName of currentCountryNames" value="{{ countryName }}">{{ countryName | countryNameToCountryCodePipe }}</option>
+            </select>
+        </label>
+    </div>
     <div class="large-2 columns">
         <label>
             &nbsp;
@@ -48,6 +57,7 @@
                     <td>{{ 'DEBTORS' | translate }} #</td>
                     <td>{{ 'COMPANY NAME' | translate }}</td>
                     <td>{{ 'PLACE' | translate }}</td>
+                    <td>{{ 'COUNTRY' | translate }}</td>
                     <td>{{ 'PRIMARY CONTACTPERSON' | translate }}</td>
                     <td>{{ 'UBN' | translate }}</td>
                     <td>{{ 'SUBSCRIPTION DATE' | translate }}</td>
@@ -67,7 +77,7 @@
                         </div>
                     </td>
                 </tr>
-                <tr *ngFor="let client of clientList | clientFilter:[filterSearch, filterInvoices] | paginate: {itemsPerPage: filterAmount, currentPage: page}; let i = index">
+                <tr *ngFor="let client of clientList | clientFilter:[filterSearch, filterInvoices, filterCountryName] | paginate: {itemsPerPage: filterAmount, currentPage: page}; let i = index">
                     <td>
                         <span *ngIf="client.debtor_number">{{ client.debtor_number }}</span>
                         <span *ngIf="!client.debtor_number">--</span>
@@ -79,6 +89,10 @@
                     <td>
                         <span *ngIf="client.address.city">{{ client.address.city }}</span>
                         <span *ngIf="!client.address.city">--</span>
+                    </td>
+                    <td>
+                        <span *ngIf="client.address.country">{{ client.address.country | countryNameToCountryCodePipe: countryNameNullFiller}}</span>
+                        <span *ngIf="!client.address.country">--</span>
                     </td>
                     <td>{{ client.owner.first_name }} {{ client.owner.last_name }}</td>
                     <td>
