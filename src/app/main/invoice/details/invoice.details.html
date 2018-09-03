@@ -102,6 +102,14 @@
                         </ng-template>
                     </td>
                 </tr>
+                <tr>
+                    <td class="large-6 columns">
+                        {{ "DEBTOR NUMBER" | translate}}
+                    </td>
+                    <td class="large-6 columns">
+                        {{ invoice.company.debtor_number && invoice.company.debtor_number != "" ? invoice.company.debtor_number : "--"}}
+                    </td>
+                </tr>
                 <tr >
                     <td class="large-6 columns">
                         {{ 'UBN' | translate }}
@@ -382,11 +390,22 @@
                         </div>
                     </div>
                     <div class="row">
-                        <!--<div class="large-4 columns">-->
-                            <!--<md-datepicker [(ngModel)]="temporaryRuleDate">-->
-
-                            <!--</md-datepicker>-->
-                        <!--</div>-->
+                        <div class="large-4 columns">
+                            <label class="middle">{{ 'ARTICLE CODE' | translate }} * </label>
+                        </div>
+                        <div class="large-8 columns">
+                            <input type="text" [(ngModel)]="temporaryRule.article_code" formControlName="article_code">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="large-4 columns">
+                            <label class="middle">{{ 'SUB ARTICLE CODE' | translate }} </label>
+                        </div>
+                        <div class="large-8 columns">
+                            <input type="text" [(ngModel)]="temporaryRule.sub_article_code" formControlName="sub_article_code">
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="large-4 columns">
                             <label>
                                 {{'DESCRIPTION' | translate}}
@@ -480,6 +499,12 @@
                             {{"CATEGORY" | translate }}
                         </td>
                         <td>
+                            {{"ARTICLE CODE" | translate}}
+                        </td>
+                        <td>
+                            {{"SUB ARTICLE CODE" | translate}}
+                        </td>
+                        <td>
                             {{ 'DESCRIPTION' | translate }}
                         </td>
                         <td class="text-left">
@@ -506,6 +531,12 @@
                         </td>
                         <td>
                             {{invoice_rule_selection.invoice_rule.ledger_category ? invoice_rule_selection.invoice_rule.ledger_category.code + ': ' + invoice_rule_selection.invoice_rule.ledger_category.description : ''}}
+                        </td>
+                        <td>
+                            {{invoice_rule_selection.invoice_rule.article_code ? invoice_rule_selection.invoice_rule.article_code : ''}}
+                        </td>
+                        <td>
+                            {{invoice_rule_selection.invoice_rule.sub_article_code ? invoice_rule_selection.invoice_rule.sub_article_code : ''}}
                         </td>
                         <td>
                             {{invoice_rule_selection.invoice_rule.description}}
@@ -568,31 +599,30 @@
             </table>
         </div>
     </div>
-
     <ng-template *ngIf="companySelected">
         <div class="row">
             <div class="large-12 columns">
-            <span class="pull-right">
-                <button type="button" (click)="navigateTo('/invoice')" class="small primary button">
-                    {{ 'RETURN' | translate }}
-                </button>
-                <button *ngIf="!onlyView" [disabled]="!companySelected" type="button" (click)="sendInvoiceToClient()" class="small primary button">
-                    {{ 'SEND INVOICE' | translate }}
-                </button>
-                <button *ngIf="!onlyView" [disabled]="!companySelected" type="button" (click)="saveInvoice()" class="small primary button">
-                    {{ 'SAVE' | translate }}
-                </button>
-                <button type="button" (click)="downloadPdf()" [disabled]="!companySelected" class="small primary button">
-                    {{ "DOWNLOAD PDF" | translate }}
-                </button>
-                <button *ngIf="!onlyView"
-                        [disabled]="(invoice.status != 'NOT SEND' && invoice.status != 'INCOMPLETE') || invoiceId == null"
-                        type="button"
-                        (click)="deleteInvoice()"
-                        class="small alert button">
-                    {{'DELETE' | translate}}
-                </button>
-            </span>
+                <span class="pull-right">
+                    <button type="button" (click)="navigateTo('/invoice')" class="small primary button">
+                        {{ 'RETURN' | translate }}
+                    </button>
+                    <button *ngIf="!onlyView" [disabled]="!companySelected" type="button" (click)="sendInvoiceToClient()" class="small primary button">
+                        {{ 'SEND INVOICE' | translate }}
+                    </button>
+                    <button *ngIf="!onlyView" [disabled]="!companySelected" type="button" (click)="saveInvoice()" class="small primary button">
+                        {{ 'SAVE' | translate }}
+                    </button>
+                    <button type="button" (click)="downloadPdf()" [disabled]="!companySelected" class="small primary button">
+                        {{ "DOWNLOAD PDF" | translate }}
+                    </button>
+                    <button *ngIf="!onlyView"
+                            [disabled]="(invoice.status != 'NOT SEND' && invoice.status != 'INCOMPLETE') || invoiceId == null"
+                            type="button"
+                            (click)="deleteInvoice()"
+                            class="small alert button">
+                        {{'DELETE' | translate}}
+                    </button>
+                </span>
             </div>
         </div>
     </ng-template>

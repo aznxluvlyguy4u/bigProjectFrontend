@@ -23,7 +23,9 @@ export class Client {
     public deleted_locations: Location[] = [];
     public users: User[] = [];
     public deleted_users: User[] = [];
-	  public invoices: Invoice[] = [];
+    public twinfield_administration_code: string;
+    public twinfield_code: number;
+    public invoices: Invoice[] = [];
 }
 
 export class Location {
@@ -150,6 +152,16 @@ export class ClientNote {
 export class QueryParam {
     public key: string;
     public value: any;
+}
+
+export class TwinfieldOffice {
+    public name: string;
+    public countryCode: string;
+    public code: string;
+}
+
+export class TwinfieldCustomer {
+    public code: string;
 }
 
 export const MAEDI_VISNA_STATUS_OPTIONS = [

@@ -43,6 +43,7 @@ export class InvoiceBatchComponent {
     private ruleForm: FormGroup;
     private selectedRule: InvoiceRule = new InvoiceRule();
     private displayModal: string = 'none';
+    private disableSubArticle: boolean = true;
     selectedLedgerCategory: LedgerCategory;
     private model_datetime_format;
     private view_date_format;
@@ -115,6 +116,11 @@ export class InvoiceBatchComponent {
     }
 
     private setModalInput(rule: InvoiceRule = null) {
+        if (rule.type === 'AdministrationOnlineEwe' || rule.type === 'AdministrationOfflineEwe') {
+            this.disableSubArticle = true;
+        } else {
+            this.disableSubArticle = false;
+        }
         this.selectedRule = rule;
         this.displayModal = "block";
     }

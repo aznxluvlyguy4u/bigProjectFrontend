@@ -48,6 +48,7 @@ export class InvoiceDetailsComponent {
     private pageMode: string;
     private invoiceId: number;
     private selectedUbn: string;
+    private companyTwinfieldError: boolean = false;
     private form1: FormGroup;
     private selectedCompany: Client;
     clientUbns: string[] = [];
@@ -80,7 +81,9 @@ export class InvoiceDetailsComponent {
             price_excl_vat: ['', Validators.required],
             vat_percentage_rate: ['', Validators.required],
             amount: ['', Validators.required],
-			date: ['', Validators.required]
+			date: ['', Validators.required],
+			article_code: ['', Validators.required],
+			sub_article_code: ['']
         });
         this.form1 = fb.group({
 			amount: ['', Validators.required],
@@ -352,6 +355,8 @@ export class InvoiceDetailsComponent {
             rule.ledger_category = this.temporaryRule.ledger_category;
             rule.vat_percentage_rate = this.temporaryRule.vat_percentage_rate;
             rule.price_excl_vat = this.temporaryRule.price_excl_vat;
+            rule.article_code = this.temporaryRule.article_code;
+            rule.sub_article_code = this.temporaryRule.sub_article_code;
             rule.description = this.temporaryRule.description;
         }
 
@@ -520,6 +525,7 @@ export class InvoiceDetailsComponent {
     }
 
     private sendInvoiceToClient() {
+		this.invoice.company_twinfield_administration_code = this.selectedCompany.twinfield_administration_code;
         this.invoice.sender_details = this.senderDetails;
         this.invoice.status = "UNPAID";
 
@@ -548,6 +554,10 @@ export class InvoiceDetailsComponent {
     }
 
     private saveInvoice() {
+    	if (this.invoice.company.debtor_number != null) {
+    		this.invoice.company_twinfield_administration_code = this.invoice.company.twinfield_administration_code;
+    		this.invoice.company_debtor_number = this.invoice.company.debtor_number;
+		}
         this.invoice.sender_details = this.senderDetails;
         this.invoice.status = "NOT SEND";
 

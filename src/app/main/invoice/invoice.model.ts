@@ -14,6 +14,7 @@ export class Invoice {
     public company_address_city: string;
     public company_address_state: string;
     public company_address_country: string;
+    public company_twinfield_administration_code: string;
     public company: Client;
     public company_name: string;
     public company_vat_number: string;
@@ -37,6 +38,8 @@ export class Invoice {
 export class InvoiceRule {
     public id: number;
     public description: string;
+    public article_code: string;
+    public sub_article_code: string;
     public vat_percentage_rate: number;
     public price_excl_vat: number;
     public sort_order: number;

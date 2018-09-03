@@ -31,6 +31,8 @@
             <thead>
                 <tr>
                     <td>{{'LEDGER CATEGORY' | translate}}</td>
+                    <td>{{'ARTICLE CODE' | translate}}</td>
+                    <td>{{'SUB ARTICLE CODE' | translate}}</td>
                     <td>{{'DESCRIPTION' | translate}}</td>
                     <td style="text-align: right">{{'PRICE (EXCL. VAT)' | translate}}</td>
                     <td>{{'VAT PERCENTAGE RATE' | translate}}</td>
@@ -60,6 +62,12 @@
                 <tr *ngFor="let rule of rules | invoiceRuleSearchPipe:getFilterOptions()  | paginate: {itemsPerPage: filterAmount, currentPage: page}">
                     <td>
                         {{ rule.ledger_category ? rule.ledger_category.description : '-' }} [{{ rule.ledger_category ? rule.ledger_category.code : '-' }}]
+                    </td>
+                    <td>
+                        {{ rule.article_code ? rule.article_code : '-'}}
+                    </td>
+                    <td>
+                        {{ rule.sub_article_code ? rule.sub_article_code : '-'}}
                     </td>
                     <td>
                         {{ rule.description }}

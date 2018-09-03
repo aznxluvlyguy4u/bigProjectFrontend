@@ -3,7 +3,7 @@ import {Component} from "@angular/core";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {Router, ActivatedRoute} from "@angular/router";
 import {Subscription} from "rxjs/Rx";
-import {Client, User} from "../client.model";
+import { Client, Location, TwinfieldCustomer, TwinfieldOffice, User } from '../client.model';
 import {ControlGroup, FormBuilder, Validators} from "@angular/common";
 import {UsersDisplay} from "./component/users/users.component";
 import {LocationsDisplay} from "./component/locations/locations.component";
@@ -14,10 +14,11 @@ import {Datepicker} from "../../../global/components/datepicker/datepicker.compo
 import {SettingsService} from "../../../global/services/settings/settings.service";
 import { ClientsStorage } from '../../../global/services/storage/clients.storage';
 import { Country } from '../../../global/models/country.model';
+import { SpinnerComponent } from '../../../global/components/spinner/spinner.component';
 import { SpinnerBounceComponent } from '../../../global/components/spinner-bounce/spinner-bounce.component';
 
 @Component({
-    directives: [REACTIVE_FORM_DIRECTIVES, LocationsDisplay, UsersDisplay, Datepicker, SpinnerBounceComponent],
+    directives: [REACTIVE_FORM_DIRECTIVES, LocationsDisplay, UsersDisplay, Datepicker, SpinnerComponent, SpinnerBounceComponent],
     template: require('./client.dossier.html'),
     pipes: [TranslatePipe]
 })
@@ -32,6 +33,14 @@ export class ClientDossierComponent {
 
     private client: Client = new Client();
     private clientTemp: Client;
+
+    private twinfieldOffices: TwinfieldOffice[] = [];
+    private twinfieldCodes: TwinfieldCustomer[] = [];
+
+    public loadingTwinFieldOffices: boolean;
+    public loadingTwinFieldCodes: boolean;
+
+    private selectedOffice: string;
 
     private form: ControlGroup;
     private isValidForm: boolean = true;
@@ -77,11 +86,15 @@ export class ClientDossierComponent {
             billing_address_country: ['', Validators.required],
             animal_health_subscription: ['NO'],
             subscription_date: [''],
+            twinfield_code: [0, Validators.required],
+            twinfield_administration_code: ['', Validators.required]
         });
         this.clearInvoiceId();
     }
 
     ngOnInit() {
+        this.loadingTwinFieldOffices = false;
+        this.loadingTwinFieldCodes = false;
         this.initProvinces();
         this.dataSub = this.activatedRoute.params.subscribe(params => {
             this.pageMode = params['mode'];
@@ -97,6 +110,7 @@ export class ClientDossierComponent {
                 this.clientTemp = _.cloneDeep(this.client);
                 this.isClientDataLoaded = true;
             }
+            this.getTwinfieldAdministrations();
         });
 
         this.router.routerState.queryParams.subscribe(params => {
@@ -113,6 +127,10 @@ export class ClientDossierComponent {
         this.dataSub.unsubscribe();
         this.clearInvoiceId();
     }
+
+    clearRemovedLocations(locations: Location[]) {
+    	return locations.filter(location => (location.is_active === true ));
+		}
 
     clearInvoiceId() {
         this.invoiceId = null;
@@ -134,9 +152,10 @@ export class ClientDossierComponent {
             .subscribe(
                 res => {
                     this.client = res.result;
+                    this.client.locations = this.clearRemovedLocations(this.client.locations);
                     this.client.deleted_users = [];
                     this.client.deleted_locations = [];
-
+                    this.client.users = res.result.company_users;
                     if(this.client.animal_health_subscription) {
                         this.form.controls['animal_health_subscription'].updateValue('YES');
                         this.client.subscription_date = this.settings.convertToViewDate(this.client.subscription_date);
@@ -152,6 +171,10 @@ export class ClientDossierComponent {
                     user.primary_contactperson = true;
                     this.client.users.push(user);
 
+                    if (this.client.twinfield_administration_code) {
+                        this.getTwinfieldCustomersDirect(this.client.twinfield_administration_code);
+                    }
+
                     this.clientTemp = _.cloneDeep(this.client);
                 },
               error => {
@@ -162,6 +185,46 @@ export class ClientDossierComponent {
               }
             )
     };
+
+    private getTwinfieldAdministrations() {
+			  this.loadingTwinFieldOffices = true;
+        this.nsfo.doGetRequest(this.nsfo.URI_EXTERNAL_PROVIDER + '/offices').subscribe(
+            res => {
+                this.twinfieldOffices = res.result;
+            },
+            error => {
+                this.nsfo.getErrorMessage(error);
+            },
+            () => {
+							  this.loadingTwinFieldOffices = false;
+            }
+        );
+    }
+
+    private getTwinfieldCustomersDirect(office) {
+			  this.loadingTwinFieldCodes = true;
+        this.nsfo.doGetRequest(this.nsfo.URI_EXTERNAL_PROVIDER + '/offices/' + office + '/customers').subscribe(
+            res => {
+                this.twinfieldCodes = res.result;
+							  this.loadingTwinFieldCodes = false;
+            }
+        );
+    }
+
+    getTwinfieldCustomers(office) {
+        this.loadingTwinFieldCodes = true;
+        this.nsfo.doGetRequest(this.nsfo.URI_EXTERNAL_PROVIDER + '/offices/' + office.value + '/customers').subscribe(
+            res => {
+                this.twinfieldCodes = res.result;
+            },
+            error => {
+                this.nsfo.getErrorMessage(error);
+            },
+            () => {
+                this.loadingTwinFieldCodes = false;
+            }
+        );
+    }
     
     private updateLocations(locations: Location[]): void {
         this.client.locations = locations;
@@ -192,6 +255,9 @@ export class ClientDossierComponent {
     public saveClient(): void {
         this.isValidForm = true;
         this.errorMessage = '';
+
+        console.log(this.form.controls['twinfield_administration_code'].value);
+        console.log(this.form.controls['twinfield_code'].value);
 
         if (this.client.users.length == 0) {
             this.isValidForm = false;
@@ -247,6 +313,7 @@ export class ClientDossierComponent {
         this.isValidForm = true;
         this.errorMessage = '';
 
+
         let owner = _.find(this.client.users, ['primary_contactperson', true]);
         if (!owner) {
             this.isValidForm = false;
@@ -259,6 +326,11 @@ export class ClientDossierComponent {
                 this.savingInProgress = true;
 
                 let newClient = _.cloneDeep(this.client);
+
+                if (this.form.controls['twinfield_administration_code'].value && this.form.controls['twinfield_code'].value) {
+                    newClient.twinfield_administration_code = this.form.controls['twinfield_administration_code'].value;
+                    newClient.twinfield_code = this.form.controls['twinfield_code'].value;
+                }
 
                 if(this.form.controls['animal_health_subscription'].value == 'YES') {
                     newClient.animal_health_subscription = true;
