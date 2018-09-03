@@ -202,14 +202,16 @@ export class ClientDossierComponent {
     }
 
     private getTwinfieldCustomersDirect(office) {
+			  this.loadingTwinFieldCodes = true;
         this.nsfo.doGetRequest(this.nsfo.URI_EXTERNAL_PROVIDER + '/offices/' + office + '/customers').subscribe(
             res => {
                 this.twinfieldCodes = res.result;
+							  this.loadingTwinFieldCodes = false;
             }
         );
     }
 
-    private getTwinfieldCustomers(office) {
+    getTwinfieldCustomers(office) {
         this.loadingTwinFieldCodes = true;
         this.nsfo.doGetRequest(this.nsfo.URI_EXTERNAL_PROVIDER + '/offices/' + office.value + '/customers').subscribe(
             res => {
