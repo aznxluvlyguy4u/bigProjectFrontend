@@ -784,5 +784,6 @@
   "Sweden": "Zweden",
   "United Kingdom": "Verenigd Koningkrijk",
   "ONLY AVAILABLE FOR THE NETHERLANDS": "Alleen beschikbaar voor Nederland",
-  "AMOUNT CANNOT EXCEED THIS AMOUNT OF DECIMAL SPACES": "Aantal mag niet meer decimalen hebben dan"
+  "AMOUNT CANNOT EXCEED THIS AMOUNT OF DECIMAL SPACES": "Aantal mag niet meer decimalen hebben dan",
+  "REFRESH TO USE NEW VALUE": "Ververs data om nieuwe waarde te gebruiken"
 }

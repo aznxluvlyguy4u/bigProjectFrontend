@@ -102,12 +102,24 @@
                         </ng-template>
                     </td>
                 </tr>
+                <tr class="row">
+                    <td class="large-6 columns">
+                        {{ 'TWINFIELD ADMINISTRATION CODE' | translate }}
+                    </td>
+                    <td class="large-6 columns">
+                        <span>
+                            {{ invoice.company_twinfield_office_code }}
+                        </span>
+                        <span *ngIf="!onlyView && invoice.company.twinfield_administration_code !== invoice.company_twinfield_office_code"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true" title="{{ 'REFRESH TO USE NEW VALUE' | translate }}"></i></span>
+                    </td>
+                </tr>
                 <tr>
                     <td class="large-6 columns">
                         {{ "DEBTOR NUMBER" | translate}}
                     </td>
                     <td class="large-6 columns">
-                        {{ invoice.company.debtor_number && invoice.company.debtor_number != "" ? invoice.company.debtor_number : "--"}}
+                        {{ invoice.company_debtor_number && invoice.company_debtor_number != "" ? invoice.company_debtor_number : "--"}}
+                        <span *ngIf="!onlyView && invoice.company.debtor_number !== invoice.company_debtor_number"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true" title="{{ 'REFRESH TO USE NEW VALUE' | translate }}"></i></span>
                     </td>
                 </tr>
                 <tr >
@@ -136,6 +148,7 @@
                         <span>
                             {{ invoice.company_name }}
                         </span>
+                        <span *ngIf="!onlyView && invoice.company.company_name !== invoice.company_name"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true" title="{{ 'REFRESH TO USE NEW VALUE' | translate }}"></i></span>
                     </td>
                 </tr>
                 <tr class="row">
@@ -146,6 +159,7 @@
                         <span>
                             {{ invoice.company_vat_number }}
                         </span>
+                        <span *ngIf="!onlyView && invoice.company.vat_number !== invoice.company_vat_number"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true" title="{{ 'REFRESH TO USE NEW VALUE' | translate }}"></i></span>
                     </td>
                 </tr>
                 <tr class="row">
@@ -158,6 +172,7 @@
                             + (!!invoice.company_address_street_number_suffix ? invoice.company_address_street_number_suffix : '')
                             }}
                         </span>
+                        <span *ngIf="!onlyView && hasBillingAddressChanged()"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true" title="{{ 'REFRESH TO USE NEW VALUE' | translate }}"></i></span>
                     </td>
                 </tr>
                 <tr class="row">
@@ -168,6 +183,7 @@
                         <span>
                             {{ invoice.company_address_postal_code }}
                         </span>
+                        <span *ngIf="!onlyView && invoice.company?.billing_address?.postal_code !== invoice.company_address_postal_code"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true" title="{{ 'REFRESH TO USE NEW VALUE' | translate }}"></i></span>
                     </td>
                 </tr>
                 <tr class="row">
@@ -178,6 +194,7 @@
                         <span>
                             {{ invoice.company_address_country }}
                         </span>
+                        <span *ngIf="!onlyView && invoice.company?.billing_address?.country !== invoice.company_address_country"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true" title="{{ 'REFRESH TO USE NEW VALUE' | translate }}"></i></span>
                     </td>
                 </tr>
             </table>

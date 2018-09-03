@@ -16,6 +16,6 @@ export class invoiceSortPipe implements PipeTransform{
           isDate: false // it is date string, not a date
         };
 
-        return this.sort.sort(list, [sortOrder]);
+        return this.sort.sort(list, [sortOrder], true);
     }
 }

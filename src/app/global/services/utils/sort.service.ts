@@ -7,10 +7,10 @@ export class SortService {
 
 	constructor(private translateService: TranslateService)  {}
 
-	sort(list: any[], options: SortOrder[]): any[] {
+	sort(list: any[], options: SortOrder[], undefinedValuesOnTop: boolean = false): any[] {
 		let sortedList = list;
 		for(let sortOrder of options.reverse()) {
-			sortedList = this.sortObjectWithSingleSortOrder(sortedList, sortOrder);
+			sortedList = this.sortObjectWithSingleSortOrder(sortedList, sortOrder, undefinedValuesOnTop);
 		}
 
 		return sortedList;
@@ -32,12 +32,21 @@ export class SortService {
 		);
 	}
 
-	private sortObjectWithSingleSortOrder(list: any[], sortOrder: SortOrder) {
+	private sortObjectWithSingleSortOrder(list: any[], sortOrder: SortOrder, undefinedValuesOnTop: boolean = false) {
 		const direction = sortOrder.ascending ? 1 : -1;
 		const variableName = sortOrder.variableName;
 
 		return list.sort(
 			(n1, n2) => {
+
+				if (n1[variableName] == null || n1[variableName] == undefined) {
+					return undefinedValuesOnTop ? direction : -direction;
+				}
+
+				if (n2[variableName] == null || n2[variableName] == undefined) {
+					return undefinedValuesOnTop ? -direction : direction;
+				}
+
 				if (sortOrder.isDate) {
 					return (n1[variableName] - n2[variableName]) * direction;
 
