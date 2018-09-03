@@ -14,7 +14,8 @@ export class Invoice {
     public company_address_city: string;
     public company_address_state: string;
     public company_address_country: string;
-    public company_twinfield_administration_code: string;
+    public company_twinfield_office_code: string;
+    public company_twinfield_code: string;
     public company: Client;
     public company_name: string;
     public company_vat_number: string;

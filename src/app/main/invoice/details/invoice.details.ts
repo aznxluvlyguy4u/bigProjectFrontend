@@ -263,6 +263,9 @@ export class InvoiceDetailsComponent {
 					this.invoice.company_debtor_number = company.debtor_number;
 					this.invoice.company_vat_number = company.vat_number;
 
+					this.invoice.company_twinfield_office_code = company.twinfield_administration_code;
+					this.invoice.company_debtor_number = this.invoice.company.debtor_number;
+
 					if (!!company.billing_address) {
 						this.invoice.company_address_street_name = company.billing_address.street_name;
 						this.invoice.company_address_street_number = company.billing_address.address_number;
@@ -273,6 +276,30 @@ export class InvoiceDetailsComponent {
 						this.invoice.company_address_country = company.billing_address.country;
 					}
 			}
+	}
+
+	hasBillingAddressChanged(): boolean {
+		const company = this.invoice.company;
+		if (!!company.billing_address) {
+
+			let invoice_street_number_suffix = this.invoice.company_address_street_number_suffix;
+			if (this.invoice.company_address_street_number_suffix === ''
+				|| this.invoice.company_address_street_number_suffix === null) {
+				invoice_street_number_suffix = undefined;
+			}
+
+			let billing_address_number_suffix = company.billing_address.address_number_suffix;
+			if (company.billing_address.address_number_suffix === ''
+			|| company.billing_address.address_number_suffix === null) {
+				billing_address_number_suffix = undefined;
+			}
+
+			return this.invoice.company_address_street_name !== company.billing_address.street_name
+					|| this.invoice.company_address_street_number !== company.billing_address.address_number
+					|| invoice_street_number_suffix != billing_address_number_suffix
+				;
+		}
+		return false;
 	}
 
 	hasSelectedClientWithCompanyId(): boolean {
@@ -525,7 +552,6 @@ export class InvoiceDetailsComponent {
     }
 
     private sendInvoiceToClient() {
-		this.invoice.company_twinfield_administration_code = this.selectedCompany.twinfield_administration_code;
         this.invoice.sender_details = this.senderDetails;
         this.invoice.status = "UNPAID";
 
@@ -554,10 +580,6 @@ export class InvoiceDetailsComponent {
     }
 
     private saveInvoice() {
-    	if (this.invoice.company.debtor_number != null) {
-    		this.invoice.company_twinfield_administration_code = this.invoice.company.twinfield_administration_code;
-    		this.invoice.company_debtor_number = this.invoice.company.debtor_number;
-		}
         this.invoice.sender_details = this.senderDetails;
         this.invoice.status = "NOT SEND";
 
