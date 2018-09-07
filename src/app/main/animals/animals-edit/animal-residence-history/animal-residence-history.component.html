@@ -6,11 +6,29 @@
         <td class="text-center">{{ 'START DATE' | translate }}</td>
         <td class="text-center">{{ 'END DATE' | translate }}</td>
         <td class="text-center">{{ 'UBN' | translate }}</td>
+        <td class="text-center">{{ 'COUNTRY' | translate }}</td>
         <td class="text-center">{{ 'IS PENDING' | translate }} <i class="fa fa-info-circle" aria-hidden="true" title="{{ 'ANIMAL RESIDENCE IS PENDING INFO' | translate }}"></i></td>
         <td class="text-center">
-            <span *ngIf="!getIsSearchingResidences() && getAnimal() != undefined" class="pull-right overview-controls">
-                <a (click)="refreshAnimalResidences()"><i class="fa fa-refresh fa-fw" aria-hidden="true"></i></a>
+            <span *ngIf="!getIsSearchingResidences() && getAnimal() != undefined && !areDeleteResidenceOptionsActive()
+            && !animalEditService.isEditingResidences" class="pull-right overview-controls">
+                <a *ngIf="newResidence == undefined" (click)="refreshAnimalResidences()"><i class="fa fa-refresh fa-fw" aria-hidden="true"></i></a>
                 <a (click)="startCreateNewResidence()"><i class="fa fa-plus fa-fw" aria-hidden="true"></i></a>
+            </span>
+        </td>
+        <td class="text-center">
+            <span *ngIf="animalEditService.isEditingResidences" class="fa-stack">
+                <i class="fa fa-trash-o fa-stack-1x" aria-hidden="true"></i>
+                <i class="fa fa-ban fa-stack-2x text-danger" aria-hidden="true"></i>
+            </span>
+            <span *ngIf="!getIsSearchingResidences() && getAnimal() != undefined && !animalEditService.isEditingResidences">
+                <a *ngIf="!areDeleteResidenceOptionsActive()" (click)="activateDeleteResidence()"
+                   title="{{'TOGGLE DELETE OPTION'|translate}}"
+                ><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+                <i *ngIf="!areDeleteResidenceOptionsActive()" class="fa fa-toggle-off" aria-hidden="true" title="{{'TOGGLE DELETE OPTION'|translate}}"></i>
+                <a *ngIf="areDeleteResidenceOptionsActive()" (click)="deactivateDeleteResidence()"
+                   title="{{'TOGGLE DELETE OPTION'|translate}}"
+                ><i class="fa fa-trash fa-fw" aria-hidden="true"></i></a>
+                <i *ngIf="areDeleteResidenceOptionsActive()" class="fa fa-toggle-on" aria-hidden="true" title="{{'TOGGLE DELETE OPTION'|translate}}"></i>
             </span>
         </td>
     </tr>
@@ -23,32 +41,11 @@
     </tr>
     </tbody>
     <tbody *ngIf="!getIsSearchingResidences() && getAnimal()?.animal_residence_history != undefined">
-    <!--<tr>-->
-    <!--<td class="text-center">{{ 'START DATE' | translate }}</td>-->
-    <!--<td class="text-center">{{ 'END DATE' | translate }}</td>-->
-    <!--<td class="text-center">{{ 'UBN' | translate }}</td>-->
-    <!--<td class="text-center">{{ 'IS PENDING' | translate }}</td>-->
-    <!--<td class="text-center">-->
-    <!--<span *ngIf="!isSearchingResidences && getAnimal() != undefined" class="pull-right overview-controls">-->
-    <!--<a (click)="refreshAnimalResidences()"><i class="fa fa-refresh fa-fw" aria-hidden="true"></i></a>-->
-    <!--<a (click)="startCreateNewResidence()"><i class="fa fa-plus fa-fw" aria-hidden="true"></i></a>-->
-    <!--</span>-->
-    <!--</td>-->
-    <!--</tr>-->
-    <tr *ngFor="let residence of getAnimal().animal_residence_history | animalResidenceSortPipe:sortResidencesAscending | paginate: {itemsPerPage: filterResidenceAmount, currentPage: residencePage}">
-        <td class="text-center">{{ residence.start_date | date: 'dd-MM-yyyy HH:mm:ss' }}</td>
-        <td class="text-center">{{ residence.end_date | date: 'dd-MM-yyyy HH:mm:ss' }}</td>
-        <td class="text-center">{{ residence?.location?.ubn }}</td>
-        <td><app-check-mark [boolVal]="residence.is_pending"></app-check-mark></td>
-        <td>
-            <span *ngIf="residence.id && !isEditingResidence" class="pull-right overview-controls">
-                <a (click)="openResidenceEditModal(residence)"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
-                <a (click)="openResidenceRemoveModal(residence)" class="remove-button"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
-            </span>
-            <span *ngIf="residence.id && isEditingResidence" class="pull-right overview-controls">
-                <app-spinner></app-spinner>
-            </span>
-        </td>
+    <tr *ngIf="animalEditService.newResidence != undefined"
+        app-animal-residence-history-row [residence]="animalEditService.newResidence"
+        [isCreate]="true" [isForm]="true"
+    ></tr>
+    <tr app-animal-residence-history-row *ngFor="let residence of getAnimal().animal_residence_history | animalResidenceSortPipe:sortResidencesAscending | paginate: {itemsPerPage: filterResidenceAmount, currentPage: residencePage}" [residence]="residence">
     </tr>
     </tbody>
 </table>

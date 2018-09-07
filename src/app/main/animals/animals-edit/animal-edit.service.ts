@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Animal } from '../../../global/components/livestock/livestock.model';
 import { Subject } from 'rxjs/Subject';
 import { NSFOService } from '../../../global/services/nsfo/nsfo.service';
+import { AnimalResidenceHistory } from '../../../global/models/animal-residence-history.model';
 
 /**
  * This is not used as a global service
@@ -13,8 +14,13 @@ export class AnimalEditService {
 	public foundAnimal: Animal;
 
 	public isSearchingResidences = false;
+	public isEditingResidences = false;
+	public isDeleting = false;
+	public areDeleteResidenceOptionsActive = false;
+	public newResidence: AnimalResidenceHistory;
 
 	genderEditModalButtonClicked = new Subject<boolean>();
+	isEditSuccessFul = new Subject<boolean>();
 
 	constructor(private nsfo: NSFOService) {}
 
@@ -71,4 +77,60 @@ export class AnimalEditService {
 				}
 			);
 	}
+
+	public startCreateNewResidence() {
+		this.newResidence = new AnimalResidenceHistory();
+		this.areDeleteResidenceOptionsActive = false;
+		this.isEditingResidences = true;
+	}
+
+	public doDeleteAnimalResidence(animalResidence: AnimalResidenceHistory) {
+		if (!this.isDeleting) {
+			this.isDeleting = true;
+			this.nsfo.doDeleteRequest(this.nsfo.URI_ANIMAL_RESIDENCES + '/' + animalResidence.id, {})
+				.finally(()=>{
+					this.isDeleting = false;
+				})
+				.subscribe(
+					res => {
+						this.foundAnimal.animal_residence_history = res.result;
+						this.isEditSuccessFul.next(true);
+					}, error => {
+						alert(this.nsfo.getErrorMessage(error));
+						this.isEditSuccessFul.next(false);
+					}
+				);
+		}
+	}
+
+	public doEditAnimalResidence(animalResidence: AnimalResidenceHistory) {
+		this.nsfo.doPutRequest(this.nsfo.URI_ANIMAL_RESIDENCES + '/' + animalResidence.id, animalResidence)
+			.finally(()=>{
+			})
+			.subscribe(
+				res => {
+					this.foundAnimal.animal_residence_history = res.result;
+					this.isEditSuccessFul.next(true);
+				}, error => {
+					alert(this.nsfo.getErrorMessage(error));
+					this.isEditSuccessFul.next(false);
+				}
+			);
+	}
+
+	public doCreateAnimalResidence(animalResidences: AnimalResidenceHistory[]) {
+		this.nsfo.doPostRequest(this.nsfo.URI_ANIMAL_RESIDENCES, animalResidences)
+			.finally(()=>{
+			})
+			.subscribe(
+				res => {
+					this.foundAnimal.animal_residence_history = res.result;
+					this.isEditSuccessFul.next(true);
+				}, error => {
+					alert(this.nsfo.getErrorMessage(error));
+					this.isEditSuccessFul.next(false);
+				}
+			);
+	}
+
 }

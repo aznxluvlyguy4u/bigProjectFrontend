@@ -1,0 +1,122 @@
+<td class="text-center">
+    <span *ngIf="!tempResidence" title="{{ residence.start_date | date: 'dd-MM-yyyy HH:mm:ss' }}">
+        {{ residence.start_date | date: 'dd-MM-yyyy' }}
+    </span>
+    <span *ngIf="tempResidence">
+        <app-datepicker-v2
+                [dateString]="tempResidence.start_date"
+                [modelFormat]="settings.getModelDateTimeFormat()"
+                [disabled]="isSaving"
+                (isDateStringChanged)="tempResidence.start_date = $event"
+        ></app-datepicker-v2>
+    </span>
+</td>
+<td class="text-center">
+    <span *ngIf="!tempResidence" title="{{ residence.end_date | date: 'dd-MM-yyyy HH:mm:ss' }}">
+        {{ residence.end_date | date: 'dd-MM-yyyy' }}
+    </span>
+    <span *ngIf="tempResidence">
+        <app-datepicker-v2
+                [dateString]="tempResidence.end_date"
+                [modelFormat]="settings.getModelDateTimeFormat()"
+                [disabled]="isSaving"
+                (isDateStringChanged)="tempResidence.end_date = $event"
+        ></app-datepicker-v2>
+    </span>
+</td>
+<td class="text-center">
+    <span *ngIf="!tempResidence">
+        {{ residence?.location?.ubn }}
+    </span>
+    <span *ngIf="tempResidence">
+        <button class="button primary" type="button" (click)="openLocationEditModal()">{{ tempUbnDisplayValue() }}</button>
+    </span>
+</td>
+<td class="text-center">
+    <span *ngIf="!tempResidence">
+        {{ residence.country }}
+    </span>
+    <select *ngIf="getCountryCodeList().length > 0 && tempResidence"
+            id="component-uln-input-country-code"
+            class="uln-country-code"
+            [(ngModel)]="tempResidence.country"
+            title="ulnCountryCode" [disabled]="isSaving"
+            [ngClass]="{'ng-dirty': false}"
+    >
+        <option
+                *ngFor="let countryCode of getCountryCodeList()"
+                value="{{ countryCode.code }}"
+        >{{ countryCode.code }}</option>
+    </select>
+</td>
+<td class="text-center">
+    <span *ngIf="!tempResidence">
+        <app-check-mark [boolVal]="residence.is_pending"></app-check-mark>
+    </span>
+    <span *ngIf="tempResidence">
+        <app-boolean-input
+                [allowNull]="false"
+                [boolVal]="tempResidence.is_pending"
+                (boolValChanged)="tempResidence.is_pending = $event"
+                [disabled]="isSaving"
+        ></app-boolean-input>
+    </span>
+</td>
+<td class="text-center">
+    <span *ngIf="residence.id && !isSaving && !isForm && !areDeleteResidenceOptionsActive()" class="pull-right overview-controls">
+        <a (click)="startEdit()"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
+    </span>
+    <span *ngIf="(residence.id || tempResidence) && !isSaving && isForm && !areDeleteResidenceOptionsActive()" class="pull-right overview-controls">
+        <a (click)="applyChanges()"><i class="fa fa-check" aria-hidden="true"></i></a>
+        <a (click)="cancelChanges()" class="remove-button"><i class="fa fa-times" aria-hidden="true"></i></a>
+    </span>
+    <span *ngIf="residence.id && isSaving && !areDeleteResidenceOptionsActive()" class="pull-right overview-controls">
+        <app-spinner></app-spinner>
+    </span>
+</td>
+<td>
+    <span *ngIf="residence.id && !isSaving && !isForm && areDeleteResidenceOptionsActive() && !animalEditService.isDeleting">
+        <a (click)="remove()" class="remove-button"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+    </span>
+    <span *ngIf="(residence.id && !isSaving && !isForm && !areDeleteResidenceOptionsActive()) || animalEditService.isDeleting" class="fa-stack">
+        <i class="fa fa-trash-o fa-stack-1x" aria-hidden="true"></i>
+        <i class="fa fa-ban fa-stack-2x text-danger" aria-hidden="true"></i>
+    </span>
+    <span *ngIf="residence.id && isSaving && areDeleteResidenceOptionsActive()">
+        <app-spinner></app-spinner>
+    </span>
+</td>
+
+
+<!-- CURRENT LOCATION MODAL-->
+<div class="reveal-overlay" [ngStyle]="{'display': displayLocationEditModal}">
+    <div class="tiny reveal" [ngStyle]="{'display': displayLocationEditModal}">
+        <div class="modal-header">
+            {{ 'UBN' | translate }}
+            <button type="button" (click)="closeLocationEditModal()" class="pull-right" aria-label="Close modal">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <app-ubn-dropdown
+                    [labelText]="'CURRENT UBN'"
+                    (selectedLocationChange)="modalSelectedLocation = $event;"
+            ></app-ubn-dropdown>
+            <div class="modal-footer">
+                   <span class="pull-left">
+                        <button
+                                class="tiny primary button"
+                                (click)="closeLocationEditModal(); tempResidence.location = modalSelectedLocation;"
+                        >{{ 'OK' | translate}}</button>
+                    </span>
+
+                <span class="pull-right">
+                        <button
+                                class="tiny alert button"
+                                (click)="closeLocationEditModal();"
+                        >{{ 'CANCEL' | translate}}</button>
+                    </span>
+            </div>
+        </div>
+    </div>
+</div>
