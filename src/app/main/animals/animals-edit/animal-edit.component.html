@@ -80,61 +80,7 @@
         </div>
 
         <div class="large-6 columns">
-
-            <h3>{{ 'ANIMAL RESIDENCE HISTORY' | translate }}</h3>
-
-            <table>
-                <thead>
-                    <tr>
-                        <td class="text-center">{{ 'START DATE' | translate }}</td>
-                        <td class="text-center">{{ 'END DATE' | translate }}</td>
-                        <td class="text-center">{{ 'UBN' | translate }}</td>
-                        <td class="text-center">{{ 'IS PENDING' | translate }}</td>
-                        <td class="text-center">
-                            <span *ngIf="!isSearchingResidences && getAnimal() != undefined" class="pull-right overview-controls">
-                                <a (click)="refreshAnimalResidences()"><i class="fa fa-refresh fa-fw" aria-hidden="true"></i></a>
-                                <a (click)="startCreateNewResidence()"><i class="fa fa-plus fa-fw" aria-hidden="true"></i></a>
-                            </span>
-                        </td>
-                    </tr>
-                </thead>
-                <tbody *ngIf="isSearchingResidences">
-                    <tr>
-                        <td>
-                            <div class="loader-spinner"></div>
-                        </td>
-                    </tr>
-                </tbody>
-                <tbody *ngIf="!isSearchingResidences && getAnimal()?.animal_residence_history != undefined">
-                    <!--<tr>-->
-                        <!--<td class="text-center">{{ 'START DATE' | translate }}</td>-->
-                        <!--<td class="text-center">{{ 'END DATE' | translate }}</td>-->
-                        <!--<td class="text-center">{{ 'UBN' | translate }}</td>-->
-                        <!--<td class="text-center">{{ 'IS PENDING' | translate }}</td>-->
-                        <!--<td class="text-center">-->
-                                <!--<span *ngIf="!isSearchingResidences && getAnimal() != undefined" class="pull-right overview-controls">-->
-                                    <!--<a (click)="refreshAnimalResidences()"><i class="fa fa-refresh fa-fw" aria-hidden="true"></i></a>-->
-                                    <!--<a (click)="startCreateNewResidence()"><i class="fa fa-plus fa-fw" aria-hidden="true"></i></a>-->
-                                <!--</span>-->
-                        <!--</td>-->
-                    <!--</tr>-->
-                    <tr *ngFor="let residence of getAnimal().animal_residence_history | animalResidenceSortPipe:sortResidencesAscending | paginate: {itemsPerPage: filterResidenceAmount, currentPage: residencePage}">
-                        <td class="text-center">{{ residence.start_date | date: 'dd-MM-yyyy HH:mm:ss' }}</td>
-                        <td class="text-center">{{ residence.end_date | date: 'dd-MM-yyyy HH:mm:ss' }}</td>
-                        <td class="text-center">{{ residence?.location?.ubn }}</td>
-                        <td><app-check-mark [boolVal]="residence.is_pending"></app-check-mark></td>
-                        <td>
-                            <span *ngIf="residence.id && !isEditingResidence" class="pull-right overview-controls">
-                                <a (click)="openResidenceEditModal(residence)"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
-                                <a (click)="openResidenceRemoveModal(residence)" class="remove-button"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
-                            </span>
-                            <span *ngIf="residence.id && isEditingResidence" class="pull-right overview-controls">
-                                <app-spinner></app-spinner>
-                            </span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <app-animal-residence-history></app-animal-residence-history>
         </div>
 
     </div>

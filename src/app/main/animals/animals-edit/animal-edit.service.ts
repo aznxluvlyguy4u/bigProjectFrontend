@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Animal } from '../../../global/components/livestock/livestock.model';
 import { Subject } from 'rxjs/Subject';
+import { NSFOService } from '../../../global/services/nsfo/nsfo.service';
 
 /**
  * This is not used as a global service
@@ -11,7 +12,11 @@ export class AnimalEditService {
 	public createNewModalStatus = 'none';
 	public foundAnimal: Animal;
 
+	public isSearchingResidences = false;
+
 	genderEditModalButtonClicked = new Subject<boolean>();
+
+	constructor(private nsfo: NSFOService) {}
 
 	openGenderEditModal(): void {
 		this.genderEditModalStatus = 'block';
@@ -51,4 +56,19 @@ export class AnimalEditService {
 		}
 	}
 
+
+	public doGetAnimalResidences(): void {
+		this.isSearchingResidences = true;
+		this.nsfo.doGetRequest(this.nsfo.URI_ANIMAL_RESIDENCES + '/animal/' + this.foundAnimal.id)
+			.finally(()=>{
+				this.isSearchingResidences = false;
+			})
+			.subscribe(
+				res => {
+					this.foundAnimal.animal_residence_history = res.result;
+				}, error => {
+					alert(this.nsfo.getErrorMessage(error));
+				}
+			);
+	}
 }
