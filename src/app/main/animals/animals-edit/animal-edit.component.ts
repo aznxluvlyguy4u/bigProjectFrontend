@@ -17,19 +17,32 @@ import { StnInputComponent } from '../../../global/components/stninput/stn-input
 import { CreateAnimalModalComponent } from './create-animal-modal/create-animal-modal.component';
 import { EditGenderModalComponent } from './edit-gender-modal/edit-gender-modal.component';
 import { AnimalEditService } from './animal-edit.service';
+import { AnimalResidenceSortPipe } from '../../../global/pipes/animal-residence-sort.pipe';
+import { PaginatePipe, PaginationService } from 'ng2-pagination';
+import { PaginationComponent } from '../../../global/components/pagination/pagination.component';
+import { CheckMarkComponent } from '../../../global/components/checkmark/check-mark.component';
+import { SpinnerComponent } from '../../../global/components/spinner/spinner.component';
+import { AnimalResidenceHistory } from '../../../global/models/animal-residence-history.model';
 
 @Component({
 		directives: [REACTIVE_FORM_DIRECTIVES, DatepickerV2Component, UlnInputComponent,
 			UbnDropdownComponent, PedigreeRegisterDropdownComponent, ParentSelectorComponent,
-			StnInputComponent, CreateAnimalModalComponent, EditGenderModalComponent],
+			StnInputComponent, CreateAnimalModalComponent, EditGenderModalComponent, PaginationComponent,
+			CheckMarkComponent, SpinnerComponent],
 		template: require('./animal-edit.component.html'),
-		providers: [AnimalEditService],
-		pipes: [TranslatePipe]
+		providers: [AnimalEditService, PaginationService],
+		pipes: [TranslatePipe, AnimalResidenceSortPipe, PaginatePipe]
 })
 export class AnimalEditComponent implements OnInit, OnDestroy {
     public findForm: FormGroup;
 
     public isSearching: boolean = false;
+    public isSearchingResidences: boolean = false;
+    public isEditingResidence: boolean = false;
+
+    public filterResidenceAmount = 10;
+    public residencePage = 1;
+    public sortResidencesAscending = false;
 
     @Input()
     public displayNewAnimalModal = 'none';
@@ -78,12 +91,28 @@ export class AnimalEditComponent implements OnInit, OnDestroy {
                     res => {
                         this.animalEditService.foundAnimal = res.result;
                         this.resetFindForm();
+                        this.getAnimalResidences();
                     }, error => {
                         alert(this.nsfo.getErrorMessage(error));
                     }
                 );
         }
     }
+
+    private getAnimalResidences(): void {
+    	this.isSearchingResidences = true;
+			this.nsfo.doGetRequest(this.nsfo.URI_ANIMAL_RESIDENCES + '/animal/' + this.animalEditService.foundAnimal.id)
+				.finally(()=>{
+					this.isSearchingResidences = false;
+				})
+				.subscribe(
+					res => {
+						this.animalEditService.foundAnimal.animal_residence_history = res.result;
+					}, error => {
+						alert(this.nsfo.getErrorMessage(error));
+					}
+				);
+		}
 
     getAnimal(): Animal {
     	return this.animalEditService.foundAnimal;
@@ -104,5 +133,21 @@ export class AnimalEditComponent implements OnInit, OnDestroy {
 
 		public openCreateNewModal(): void {
     	this.animalEditService.openCreateNewModal();
+		}
+
+		public openResidenceEditModal(residence: AnimalResidenceHistory) {
+
+		}
+
+		public openResidenceRemoveModal(residence: AnimalResidenceHistory) {
+
+		}
+
+		public startCreateNewResidence() {
+
+		}
+
+		public refreshAnimalResidences() {
+    		this.getAnimalResidences();
 		}
 }

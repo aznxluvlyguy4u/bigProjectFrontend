@@ -22,6 +22,7 @@ export class NSFOService {
     public URI_ANIMALS_CREATE = '/v1/animals/create';
     public URI_ANIMALS_FIND = '/v1/animals/find';
     public URI_ANIMALS_UPDATE_GENDER = '/v1/animals-gender';
+    public URI_ANIMAL_RESIDENCES = '/v1/animal-residences';
     public URI_GET_COLLAR_COLORS = '/v1/collars';
 
     public URI_GHOST_LOGIN: string = '/v1/admins/ghost';

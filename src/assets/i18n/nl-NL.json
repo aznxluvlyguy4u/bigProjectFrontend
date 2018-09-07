@@ -680,6 +680,7 @@
   "OFFSPRING_REPORT": "Nakomelingen rapportage",
   "FILE TYPE": "Bestandstype",
   "ANIMAL REPORTS": "Dierrapportages",
+  "ANIMAL RESIDENCE HISTORY": "DierUBNhistory",
   "ALL ANIMALS OVERVIEW REPORT": "Rapportage Overzicht Alle Dieren",
   "TE100 ANNUAL PRODUCTION": "Productie per TE100 bedrijf per jaar",
   "CONCATENATE VALUE AND ACCURACY": "Voeg waarde en nauwkeurigheid samen",
@@ -788,5 +789,7 @@
   "United Kingdom": "Verenigd Koningkrijk",
   "ONLY AVAILABLE FOR THE NETHERLANDS": "Alleen beschikbaar voor Nederland",
   "AMOUNT CANNOT EXCEED THIS AMOUNT OF DECIMAL SPACES": "Aantal mag niet meer decimalen hebben dan",
-  "REFRESH TO USE NEW VALUE": "Ververs data om nieuwe waarde te gebruiken"
+  "REFRESH TO USE NEW VALUE": "Ververs data om nieuwe waarde te gebruiken",
+  "IS PENDING": "in behandeling",
+  "ANIMAL RESIDENCE IS PENDING INFO": "Een ubn history record kan in behandeling zijn als het wordt aangemaakt tijdens een melding en de melding is nog niet afgerond"
 }
