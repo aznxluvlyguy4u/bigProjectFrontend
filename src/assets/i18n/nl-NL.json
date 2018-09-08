@@ -792,5 +792,7 @@
   "REFRESH TO USE NEW VALUE": "Ververs data om nieuwe waarde te gebruiken",
   "IS PENDING": "in behandeling",
   "ANIMAL RESIDENCE IS PENDING INFO": "Een ubn history record kan in behandeling zijn als het wordt aangemaakt tijdens een melding en de melding is nog niet afgerond",
-  "TOGGLE DELETE OPTION": "Schakel delete optie aan/uit"
+  "TOGGLE DELETE OPTION": "Schakel delete optie aan/uit",
+  "DELETE THE SELECTED ANIMAL RESIDENCE?": "Verwijder het geselecteerde DierUBNhistory record?",
+  "DELETE ANIMAL RESIDENCE": "Verwijder DierUBNhistory record"
 }

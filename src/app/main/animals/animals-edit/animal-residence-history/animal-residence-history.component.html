@@ -16,19 +16,27 @@
             </span>
         </td>
         <td class="text-center">
-            <span *ngIf="animalEditService.isEditingResidences" class="fa-stack">
+
+            <ng-template *ngIf="!getIsSearchingResidences() && getAnimal() != undefined
+            && !animalEditService.isEditingResidences && !animalEditService.isDeleting">
+                <div class="switch delete-switch"
+                     title="{{'TOGGLE DELETE OPTION'|translate}}"
+                >
+                    <input class="switch-input" id="yes-no" type="checkbox" name="boolean-switch" [(ngModel)]="animalEditService.areDeleteResidenceOptionsActive" (click)="animalEditService.toggleDeleteMode()">
+                    <label class="switch-paddle" for="yes-no">
+                        <span class="switch-active" aria-hidden="true" value="true">
+                            <i class="fa fa-trash-o fa-fw" aria-hidden="true"></i>
+                        </span>
+                        <span class="switch-inactive" aria-hidden="true" value="false">
+                            <i class="fa fa-trash-o fa-fw" aria-hidden="true"></i>
+                        </span>
+                    </label>
+                </div>
+            </ng-template>
+
+            <span *ngIf="animalEditService.isEditingResidences || animalEditService.isDeleting" class="fa-stack">
                 <i class="fa fa-trash-o fa-stack-1x" aria-hidden="true"></i>
                 <i class="fa fa-ban fa-stack-2x text-danger" aria-hidden="true"></i>
-            </span>
-            <span *ngIf="!getIsSearchingResidences() && getAnimal() != undefined && !animalEditService.isEditingResidences">
-                <a *ngIf="!areDeleteResidenceOptionsActive()" (click)="activateDeleteResidence()"
-                   title="{{'TOGGLE DELETE OPTION'|translate}}"
-                ><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
-                <i *ngIf="!areDeleteResidenceOptionsActive()" class="fa fa-toggle-off" aria-hidden="true" title="{{'TOGGLE DELETE OPTION'|translate}}"></i>
-                <a *ngIf="areDeleteResidenceOptionsActive()" (click)="deactivateDeleteResidence()"
-                   title="{{'TOGGLE DELETE OPTION'|translate}}"
-                ><i class="fa fa-trash fa-fw" aria-hidden="true"></i></a>
-                <i *ngIf="areDeleteResidenceOptionsActive()" class="fa fa-toggle-on" aria-hidden="true" title="{{'TOGGLE DELETE OPTION'|translate}}"></i>
             </span>
         </td>
     </tr>

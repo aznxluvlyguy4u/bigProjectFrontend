@@ -32,6 +32,8 @@ export class AnimalResidenceHistoryRowComponent implements OnInit {
 	private tempResidence: AnimalResidenceHistory;
 	public modalSelectedLocation: Location;
 
+	public displayRemoveConfirmationModal = 'none';
+
 	constructor(public animalEditService: AnimalEditService, public settings: SettingsService,
 							private nsfo: NSFOService) {}
 
@@ -53,6 +55,7 @@ export class AnimalResidenceHistoryRowComponent implements OnInit {
 	public remove() {
 		this.isForm = true;
 		this.isCreate = true;
+		this.closeRemoveConfirmationModal();
 		this.animalEditService.doDeleteAnimalResidence(this.residence);
 	}
 
@@ -109,11 +112,24 @@ export class AnimalResidenceHistoryRowComponent implements OnInit {
 		this.displayLocationEditModal = 'block';
 	}
 
+	public cancelRemove() {
+		this.closeRemoveConfirmationModal();
+	}
+
+	private closeRemoveConfirmationModal() {
+		this.displayRemoveConfirmationModal = 'none';
+	}
+
+	public openRemoveConfirmationModal() {
+		this.displayRemoveConfirmationModal = 'block';
+	}
+
 	private mergeChangesInOriginalResidence() {
 		this.residence.start_date = this.tempResidence.start_date;
 		this.residence.end_date = this.tempResidence.end_date;
 		this.residence.location = this.tempResidence.location;
 		this.residence.is_pending = this.tempResidence.is_pending;
+		this.residence.country = this.tempResidence.country;
 	}
 
 	private createDefaultResidence(): void {

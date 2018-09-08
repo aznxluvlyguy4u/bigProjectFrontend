@@ -41,14 +41,6 @@ export class AnimalResidenceHistoryComponent {
 		this.animalEditService.doGetAnimalResidences();
 	}
 
-	public activateDeleteResidence() {
-		this.animalEditService.areDeleteResidenceOptionsActive = true;
-	}
-
-	public deactivateDeleteResidence() {
-		this.animalEditService.areDeleteResidenceOptionsActive = false;
-	}
-
 	public areDeleteResidenceOptionsActive(): boolean {
 		return this.animalEditService.areDeleteResidenceOptionsActive;
 	}

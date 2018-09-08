@@ -62,6 +62,16 @@ export class AnimalEditService {
 		}
 	}
 
+	toggleDeleteMode(): void {
+		this.areDeleteResidenceOptionsActive = !this.areDeleteResidenceOptionsActive;
+		// if (this.isDeleting) {
+		//
+		// 	this.isDeleting = false;
+		// } else {
+		// 	this.animalEditService.areDeleteResidenceOptionsActive = true;
+		// 	this.isDeleting = true;
+		// }
+	}
 
 	public doGetAnimalResidences(): void {
 		this.isSearchingResidences = true;
