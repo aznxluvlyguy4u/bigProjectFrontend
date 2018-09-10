@@ -7,10 +7,11 @@ import { PaginatePipe, PaginationService } from 'ng2-pagination';
 import { PaginationComponent } from '../../../../global/components/pagination/pagination.component';
 import { AnimalResidenceSortPipe } from '../../../../global/pipes/animal-residence-sort.pipe';
 import { AnimalResidenceHistoryRowComponent } from './animal-residence-history-row/animal-residence-history-row.component';
+import { SpinnerComponent } from '../../../../global/components/spinner/spinner.component';
 
 @Component({
 	selector: "app-animal-residence-history",
-	directives: [PaginationComponent, AnimalResidenceHistoryRowComponent],
+	directives: [PaginationComponent, AnimalResidenceHistoryRowComponent, SpinnerComponent],
 	template: require('./animal-residence-history.component.html'),
 	providers: [PaginationService],
 	pipes: [TranslatePipe, AnimalResidenceSortPipe, PaginatePipe]

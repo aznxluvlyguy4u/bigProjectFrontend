@@ -16,6 +16,7 @@ export class AnimalEditService {
 	public isSearchingResidences = false;
 	public isEditingResidences = false;
 	public isDeleting = false;
+	public isProcessingChanges = false;
 	public areDeleteResidenceOptionsActive = false;
 	public newResidence: AnimalResidenceHistory;
 
@@ -97,9 +98,11 @@ export class AnimalEditService {
 	public doDeleteAnimalResidence(animalResidence: AnimalResidenceHistory) {
 		if (!this.isDeleting) {
 			this.isDeleting = true;
+			this.isProcessingChanges = true;
 			this.nsfo.doDeleteRequest(this.nsfo.URI_ANIMAL_RESIDENCES + '/' + animalResidence.id, {})
 				.finally(()=>{
 					this.isDeleting = false;
+					this.isProcessingChanges = false;
 				})
 				.subscribe(
 					res => {
@@ -114,8 +117,10 @@ export class AnimalEditService {
 	}
 
 	public doEditAnimalResidence(animalResidence: AnimalResidenceHistory) {
+		this.isProcessingChanges = true;
 		this.nsfo.doPutRequest(this.nsfo.URI_ANIMAL_RESIDENCES + '/' + animalResidence.id, animalResidence)
 			.finally(()=>{
+				this.isProcessingChanges = false;
 			})
 			.subscribe(
 				res => {
@@ -129,8 +134,10 @@ export class AnimalEditService {
 	}
 
 	public doCreateAnimalResidence(animalResidences: AnimalResidenceHistory[]) {
+		this.isProcessingChanges = true;
 		this.nsfo.doPostRequest(this.nsfo.URI_ANIMAL_RESIDENCES, animalResidences)
 			.finally(()=>{
+				this.isProcessingChanges = false;
 			})
 			.subscribe(
 				res => {

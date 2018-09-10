@@ -9,6 +9,7 @@
         <td class="text-center">{{ 'COUNTRY' | translate }}</td>
         <td class="text-center">{{ 'IS COMPLETED' | translate }} <i class="fa fa-info-circle" aria-hidden="true" title="{{ 'ANIMAL RESIDENCE IS COMPLETED INFO' | translate }}"></i></td>
         <td class="text-center">
+            <app-spinner *ngIf="animalEditService.isProcessingChanges"></app-spinner>
             <span *ngIf="!getIsSearchingResidences() && getAnimal() != undefined && !areDeleteResidenceOptionsActive()
             && !animalEditService.isEditingResidences" class="pull-right overview-controls">
                 <a *ngIf="newResidence == undefined" (click)="refreshAnimalResidences()"><i class="fa fa-refresh fa-fw" aria-hidden="true"></i></a>

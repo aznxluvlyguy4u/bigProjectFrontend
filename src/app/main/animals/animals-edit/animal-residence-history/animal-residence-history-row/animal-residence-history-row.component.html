@@ -64,7 +64,7 @@
 </td>
 <td class="text-center">
     <span *ngIf="areEditOptionsActive()" class="overview-controls">
-        <a (click)="startEdit()"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
+        <a (click)="startEdit()"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true" style="margin-top: 0"></i></a>
     </span>
     <button *ngIf="isEditValidationActive()" class="button primary" (click)="applyChanges()">{{ 'OK' | translate}}</button>
     <span *ngIf="isEditOptionsSpinning()" class="pull-right overview-controls">
@@ -76,9 +76,8 @@
     <span *ngIf="isDeleteOptionActive()">
         <a (click)="openRemoveConfirmationModal()" class="remove-button"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
     </span>
-    <span *ngIf="isDeleteOptionInactive()" class="fa-stack">
-        <i class="fa fa-trash-o fa-stack-1x" aria-hidden="true"></i>
-        <i class="fa fa-ban fa-stack-2x text-danger" aria-hidden="true"></i>
+    <span *ngIf="isDeleteOptionInactive()">
+        <a class="remove-button"><i class="fa fa-trash-o fa-fw" style="color: lightslategrey" aria-hidden="true"></i></a>
     </span>
     <span *ngIf="isDeleteOptionSpinning()">
         <app-spinner></app-spinner>
