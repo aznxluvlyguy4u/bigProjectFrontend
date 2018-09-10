@@ -59,4 +59,4 @@
     </tbody>
 </table>
 
-<pagination *ngIf="getAnimal()?.animal_residence_history != undefined" (pageChange)="residencePage = $event"></pagination>
+<pagination *ngIf="getAnimal()?.animal_residence_history != undefined && getAnimal()?.animal_residence_history.length > filterResidenceAmount" (pageChange)="residencePage = $event"></pagination>
