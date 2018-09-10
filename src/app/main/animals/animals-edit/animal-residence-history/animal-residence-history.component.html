@@ -7,7 +7,7 @@
         <td class="text-center">{{ 'END DATE' | translate }}</td>
         <td class="text-center">{{ 'UBN' | translate }}</td>
         <td class="text-center">{{ 'COUNTRY' | translate }}</td>
-        <td class="text-center">{{ 'IS PENDING' | translate }} <i class="fa fa-info-circle" aria-hidden="true" title="{{ 'ANIMAL RESIDENCE IS PENDING INFO' | translate }}"></i></td>
+        <td class="text-center">{{ 'IS COMPLETED' | translate }} <i class="fa fa-info-circle" aria-hidden="true" title="{{ 'ANIMAL RESIDENCE IS COMPLETED INFO' | translate }}"></i></td>
         <td class="text-center">
             <span *ngIf="!getIsSearchingResidences() && getAnimal() != undefined && !areDeleteResidenceOptionsActive()
             && !animalEditService.isEditingResidences" class="pull-right overview-controls">
@@ -57,3 +57,5 @@
     </tr>
     </tbody>
 </table>
+
+<pagination *ngIf="getAnimal()?.animal_residence_history != undefined" (pageChange)="residencePage = $event"></pagination>

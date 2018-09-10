@@ -51,13 +51,13 @@
 </td>
 <td class="text-center">
     <span *ngIf="!tempResidence">
-        <app-check-mark [boolVal]="residence.is_pending"></app-check-mark>
+        <app-check-mark [boolVal]="!residence.is_pending"></app-check-mark>
     </span>
     <span *ngIf="tempResidence">
         <app-boolean-input
                 [allowNull]="false"
-                [boolVal]="tempResidence.is_pending"
-                (boolValChanged)="tempResidence.is_pending = $event"
+                [boolVal]="!tempResidence.is_pending"
+                (boolValChanged)="tempResidence.is_pending = !$event"
                 [disabled]="isSaving"
         ></app-boolean-input>
     </span>
@@ -172,7 +172,7 @@
                         {{ 'IS PENDING' | translate }}
                     </td>
                     <td class="text-center">
-                        <app-check-mark [boolVal]="residence.is_pending"></app-check-mark>
+                        <app-check-mark [boolVal]="!residence.is_pending"></app-check-mark>
                     </td>
                 </tr>
             </table>
