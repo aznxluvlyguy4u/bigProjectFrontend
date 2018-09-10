@@ -138,4 +138,28 @@ export class AnimalResidenceHistoryRowComponent implements OnInit {
 		this.tempResidence.is_pending = false;
 		this.tempResidence.animal = this.animalEditService.foundAnimal;
 	}
+
+	isEditValidationActive(): boolean {
+		return (this.residence.id || this.tempResidence) && !this.isSaving && this.isForm && !this.areDeleteResidenceOptionsActive();
+	}
+
+	areEditOptionsActive(): boolean {
+		return this.residence.id && !this.isSaving && !this.isForm && !this.areDeleteResidenceOptionsActive();
+	}
+
+	isEditOptionsSpinning(): boolean {
+		return this.residence.id && this.isSaving && !this.areDeleteResidenceOptionsActive();
+	}
+
+	isDeleteOptionActive(): boolean {
+		return this.residence.id && !this.isSaving && !this.isForm && this.areDeleteResidenceOptionsActive() && !this.animalEditService.isDeleting;
+	}
+
+	isDeleteOptionInactive(): boolean {
+		return (this.residence.id && !this.isSaving && !this.isForm && !this.areDeleteResidenceOptionsActive()) || this.animalEditService.isDeleting;
+	}
+
+	isDeleteOptionSpinning(): boolean {
+		return this.residence.id && this.isSaving && this.areDeleteResidenceOptionsActive();
+	}
 }
