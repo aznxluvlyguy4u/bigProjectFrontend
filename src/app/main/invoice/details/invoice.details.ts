@@ -419,6 +419,7 @@ export class InvoiceDetailsComponent {
                     } else {
 											this.selectedInvoiceRule = null;
 										}
+										this.temporaryRuleAmount = 1;
 					this.invoice = res.result;
                 },
                   error => {
