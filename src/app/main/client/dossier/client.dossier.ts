@@ -44,7 +44,7 @@ export class ClientDossierComponent {
 
     private form: ControlGroup;
     private isValidForm: boolean = true;
-    private modalDisplay: string = 'none';
+    public modalDisplay: string = 'none';
     private errorData: string;
     private errorMessage: string;
     private savingInProgress: boolean = false;
@@ -159,6 +159,10 @@ export class ClientDossierComponent {
 
                     if (this.client.address) {
 											this.client.address.suffix = this.client.address.address_number_suffix;
+                    }
+
+                    if (this.client.billing_address) {
+                        this.client.billing_address.suffix = this.client.billing_address.address_number_suffix;
                     }
 
                     if(this.client.animal_health_subscription) {
@@ -300,10 +304,7 @@ export class ClientDossierComponent {
                         },
                         err => {
                             let error = err.json();
-                            this.errorData = error.data;
-                            this.errorMessage = error.message;
-                            this.openModal();
-                            this.savingInProgress = false;
+                            this.displayErrorData(error);
                         }
                     );
             } else {
@@ -362,10 +363,7 @@ export class ClientDossierComponent {
                         },
                         err => {
                             let error = err.json();
-                            this.errorData = error.data;
-                            this.errorMessage = error.message;
-                            this.openModal();
-                            this.savingInProgress = false;
+													  this.displayErrorData(error);
                         }
                     );
 
@@ -375,6 +373,17 @@ export class ClientDossierComponent {
                 this.openModal();
             }
         }
+    }
+
+    private displayErrorData(error)
+    {
+			if (error.result) {
+				error = error.result;
+			}
+			this.errorData = error.data;
+			this.errorMessage = error.message;
+			this.openModal();
+			this.savingInProgress = false;
     }
 
     private navigateToClientOverview(){
