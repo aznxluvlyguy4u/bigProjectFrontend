@@ -20,30 +20,30 @@
             <tr *ngIf="locations.length == 0">
                 <td colspan="5" class="text-center">{{ 'THERE IS NO LOCATION ADDED' | translate }}</td>
             </tr>
-            <tr *ngFor="let location of locations">
-                <td>{{ location.ubn }}</td>
+            <tr *ngFor="let key of objectKeys(locations)">
+                <td>{{ getLocationByKey(key).ubn }}</td>
                 <td>
-                    <span *ngIf="location.address.street_name">
-                        {{ location.address.street_name + ' ' + location.address.address_number }}<span *ngIf="location.address.suffix">{{ location.address.suffix }}</span>
+                    <span *ngIf="locations[key].address.street_name">
+                        {{ getLocationByKey(key).address.street_name + ' ' + getLocationByKey(key).address.address_number }}<span *ngIf="getLocationByKey(key).address.suffix">{{ location.address.suffix }}</span>
                     </span>
-                    <span *ngIf="!location.address.street_name">--</span>
+                    <span *ngIf="!getLocationByKey(key).address.street_name">--</span>
                 </td>
                 <td>
-                    <span *ngIf="location.address.postal_code">{{ location.address.postal_code }}</span>
-                    <span *ngIf="!location.address.postal_code">--</span>
+                    <span *ngIf="getLocationByKey(key).address.postal_code">{{ getLocationByKey(key).address.postal_code }}</span>
+                    <span *ngIf="!getLocationByKey(key).address.postal_code">--</span>
                 </td>
                 <td>
-                    <span *ngIf="location.address.city">{{ location.address.city }}</span>
-                    <span *ngIf="!location.address.city">--</span>
+                    <span *ngIf="getLocationByKey(key).address.city">{{ getLocationByKey(key).address.city }}</span>
+                    <span *ngIf="!getLocationByKey(key).address.city">--</span>
                 </td>
                 <td>
-                    <span *ngIf="location.address.country">{{ location.address.country | countryNameToCountryCodePipe: '--' }}</span>
-                    <span *ngIf="!location.address.country">--</span>
+                    <span *ngIf="getLocationByKey(key).address.country">{{ getLocationByKey(key).address.country | countryNameToCountryCodePipe: '--' }}</span>
+                    <span *ngIf="!getLocationByKey(key).address.country">--</span>
                 </td>
                 <td class="text-right">
                     <span *ngIf="!disabledMode">
-                        <a (click)="openModal(true, location)"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
-                        <a (click)="removeLocation(location);sendDeletedLocation(location)" class="remove-button"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+                        <a (click)="openModal(true, key)"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
+                        <a (click)="removeLocation(key)" class="remove-button"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
                     </span>
                 </td>
             </tr>
@@ -71,7 +71,7 @@
                             <label class="middle"> {{ 'UBN' | translate }} * </label>
                         </div>
                         <div class="large-8 columns">
-                            <input type="text" [(ngModel)]="location.ubn" formControlName="ubn" (keydown)="resetValidation()" maxlength="10">
+                            <input type="text" [(ngModel)]="getModalLocation().ubn" formControlName="ubn" (keydown)="resetValidation()" maxlength="10">
                         </div>
                     </div>
 
@@ -80,7 +80,7 @@
                             <label class="middle"> {{ 'STREET NAME' | translate }} * </label>
                         </div>
                         <div class="large-8 columns">
-                            <input type="text" [(ngModel)]="location.address.street_name" formControlName="address_street_name" maxlength="40">
+                            <input type="text" [(ngModel)]="getModalLocation().address.street_name" formControlName="address_street_name" maxlength="40">
                         </div>
                     </div>
 
@@ -89,7 +89,7 @@
                             <label class="middle"> {{ 'STREET NUMBER' | translate }} * </label>
                         </div>
                         <div class="large-8 columns">
-                            <input type="number" [(ngModel)]="location.address.address_number" formControlName="address_address_number" maxlength="10">
+                            <input type="number" [(ngModel)]="getModalLocation().address.address_number" formControlName="address_address_number" maxlength="10">
                         </div>
                     </div>
 
@@ -98,7 +98,7 @@
                             <label class="middle"> {{ 'STREET NUMBER SUFFIX' | translate }} </label>
                         </div>
                         <div class="large-8 columns">
-                            <input type="text" [(ngModel)]="location.address.suffix" formControlName="address_address_suffix" maxlength="10">
+                            <input type="text" [(ngModel)]="getModalLocation().address.suffix" formControlName="address_address_suffix" maxlength="10">
                         </div>
                     </div>
                     <div class="row">
@@ -106,7 +106,7 @@
                             <label class="middle"> {{ 'POSTAL CODE' | translate }} * </label>
                         </div>
                         <div class="large-8 columns">
-                            <input type="text" [(ngModel)]="location.address.postal_code" formControlName="address_address_postal_code" maxlength="6">
+                            <input type="text" [(ngModel)]="getModalLocation().address.postal_code" formControlName="address_address_postal_code" maxlength="6">
                         </div>
                     </div>
                     <div class="row">
@@ -114,7 +114,7 @@
                             <label class="middle"> {{ 'PLACE' | translate }} * </label>
                         </div>
                         <div class="large-8 columns">
-                            <input type="text" [(ngModel)]="location.address.city" formControlName="address_address_city" maxlength="30">
+                            <input type="text" [(ngModel)]="getModalLocation().address.city" formControlName="address_address_city" maxlength="30">
                         </div>
                     </div>
 
@@ -124,7 +124,7 @@
                         </div>
                         <div class="large-8 columns">
                             <select
-                                    [(ngModel)]="location.address.country" formControlName="address_country"
+                                    [(ngModel)]="getModalLocation().address.country" formControlName="address_country"
                                     [disabled]="savingInProgress"
                                     (click)="removeProvinceIfCountryIsNotNetherlands()"
                             >
@@ -138,12 +138,12 @@
                             <label class="middle"> {{ 'STATE' | translate }} </label>
                         </div>
                         <div class="large-8 columns">
-                            <select *ngIf="location.address.country === 'Netherlands'"
-                                    [(ngModel)]="location.address.state" formControlName="address_address_state">
+                            <select *ngIf="getModalLocation().address.country === 'Netherlands'"
+                                    [(ngModel)]="getModalLocation().address.state" formControlName="address_address_state">
                                 <option value="">--</option>
                                 <option *ngFor="let province of provinces" value="{{ province.code }}">{{ province.name }}</option>
                             </select>
-                            <p *ngIf="location.address.country !== 'Netherlands'">{{ 'ONLY AVAILABLE FOR THE NETHERLANDS' | translate }}</p>
+                            <p *ngIf="getModalLocation().address.country !== 'Netherlands'">{{ 'ONLY AVAILABLE FOR THE NETHERLANDS' | translate }}</p>
                         </div>
                     </div>
 
