@@ -156,6 +156,11 @@ export class ClientDossierComponent {
                     this.client.deleted_users = [];
                     this.client.deleted_locations = [];
                     this.client.users = res.result.company_users;
+
+                    if (this.client.address) {
+											this.client.address.suffix = this.client.address.address_number_suffix;
+                    }
+
                     if(this.client.animal_health_subscription) {
                         this.form.controls['animal_health_subscription'].updateValue('YES');
                         this.client.subscription_date = this.settings.convertToViewDate(this.client.subscription_date);
