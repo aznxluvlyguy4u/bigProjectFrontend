@@ -264,7 +264,7 @@ export class InvoiceDetailsComponent {
 					this.invoice.company = this.clientStorage.getUpdatedClient(this.invoice.company);
 					const company = this.invoice.company;
 
-					if (!(company.locations && company.locations.indexOf(this.invoice.ubn) !== -1)) {
+					if (!InvoiceDetailsComponent.hasUbnInCollection(this.invoice.ubn, company.locations)) {
 							this.invoice.ubn = undefined;
 					}
 
@@ -491,21 +491,8 @@ export class InvoiceDetailsComponent {
           }
 
           // Remove selectedUbn if the old selectedUbn does not belong to the new selectedCompany
-          if (this.selectedCompany.locations) {
-						let hasSelectedUbn = false;
-						for (let location of this.selectedCompany.locations) {
-							if (typeof location === 'string') {
-								if (location === this.selectedUbn) {
-									hasSelectedUbn = true;
-									break;
-								}
-							} else {
-								if (location.ubn != null && location.ubn === this.selectedUbn) {
-									hasSelectedUbn = true;
-									break;
-								}
-							}
-						}
+					if (this.selectedCompany.locations) {
+						const hasSelectedUbn = InvoiceDetailsComponent.hasUbnInCollection(this.selectedUbn, this.selectedCompany.locations);
 						if (!hasSelectedUbn) {
 							this.autoSetSingleLocation(this.selectedCompany.locations);
 						}
@@ -526,6 +513,26 @@ export class InvoiceDetailsComponent {
         this.setInvoiceUbn();
         this.updateClientUbns();
     }
+
+
+	static hasUbnInCollection(ubn: any, locations: any[]): boolean {
+		if (!locations) {
+			return false;
+		}
+
+		for (let location of locations) {
+			if (typeof location === 'string') {
+				if (location === ubn) {
+					return true;
+				}
+			} else {
+				if (location.ubn != null && location.ubn === ubn) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 
     autoSetSingleLocation(locations: any[]): void {
     	if (!!locations && locations.length === 1) {
