@@ -209,13 +209,18 @@ export class InvoiceDetailsComponent {
 			);
   }
 
-  private updateInvoiceClientAndUbn() {
+  public updateInvoiceClientAndUbn() {
     	if (this.invoice.id === null) {
 
 		}
     	this.invoice.company = this.selectedCompany;
     	this.invoice.ubn = this.selectedUbn;
-    	this.nsfo.doPutRequest(this.nsfo.URI_INVOICE + "/" + this.invoice.id, this.invoice)
+			this.invoice.sender_details = this.senderDetails;
+    	this.updateInvoice();
+  }
+
+  private updateInvoice() {
+		this.nsfo.doPutRequest(this.nsfo.URI_INVOICE + "/" + this.invoice.id, this.invoice)
 			.subscribe(
 				res => {
 					this.invoice = res.result;
@@ -231,13 +236,17 @@ export class InvoiceDetailsComponent {
 					}
 				}
 			)
-  }
+	}
 
 	refreshSenderDetails() {
+		this.invoice.company = this.selectedCompany;
+		this.invoice.ubn = this.selectedUbn;
+		this.invoice.sender_details = this.senderDetails;
 		this.nsfo.doGetRequest(this.nsfo.URI_INVOICE_SENDER_DETAILS)
 			.subscribe(
 				res => {
 					this.senderDetails = res.result;
+					this.updateInvoice();
 				},
 				error => {
 					alert(this.nsfo.getErrorMessage(error));
@@ -275,6 +284,8 @@ export class InvoiceDetailsComponent {
 						this.invoice.company_address_state = company.billing_address.state;
 						this.invoice.company_address_country = company.billing_address.country;
 					}
+
+					this.updateInvoice();
 			}
 	}
 
@@ -579,7 +590,7 @@ export class InvoiceDetailsComponent {
         }
     }
 
-    private saveInvoice() {
+    public saveInvoice() {
         this.invoice.sender_details = this.senderDetails;
         this.invoice.status = "NOT SEND";
 
