@@ -794,5 +794,7 @@
   "ANIMAL RESIDENCE IS COMPLETED INFO": "Een ubn history record kan 'niet afgerond' zijn als het wordt aangemaakt tijdens een melding en de melding is nog niet afgerond",
   "TOGGLE DELETE OPTION": "Schakel delete optie aan/uit",
   "DELETE THE SELECTED ANIMAL RESIDENCE?": "Verwijder het geselecteerde DierUBNhistory record?",
-  "DELETE ANIMAL RESIDENCE": "Verwijder DierUBNhistory record"
+  "DELETE ANIMAL RESIDENCE": "Verwijder DierUBNhistory record",
+  "CREATE_TAGS": "Oormerken aanmaken",
+  "DELETE_TAG": "Oormerk verwijderen"
 }
