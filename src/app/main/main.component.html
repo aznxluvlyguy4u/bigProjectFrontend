@@ -42,7 +42,7 @@
                 {{ 'REPORTS' | translate }}
             </a>
         </li>
-        <li>
+        <li *ngIf="isInvoicesActive">
             <a routerLink="/invoice" routerLinkActive="active">
                 <i class="fa fa-file-text-o fa-fw" aria-hidden="true"></i>
                 {{ 'INVOICES' | translate }}

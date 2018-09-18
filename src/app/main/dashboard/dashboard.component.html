@@ -32,7 +32,7 @@
         </div>
 
         <!--INVOICES CARD-->
-        <div class="large-4 columns">
+        <div class="large-4 columns" *ngIf="isInvoicesActive">
             <div class="card callout">
                 <div class="card-header">{{ 'INVOICE MANAGEMENT' | translate }}</div>
                 <div class="card-body">

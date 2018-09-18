@@ -4,6 +4,7 @@ import {Dashboard} from "./dashboard.model";
 import {ROUTER_DIRECTIVES, Router} from "@angular/router";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import { SpinnerComponent } from '../../global/components/spinner/spinner.component';
+import { IS_INVOICES_ACTIVE } from '../../global/constants/feature.activation';
 
 @Component({
     directives: [ROUTER_DIRECTIVES, SpinnerComponent],
@@ -14,6 +15,8 @@ import { SpinnerComponent } from '../../global/components/spinner/spinner.compon
 export class DashboardComponent {
     loadingInfo = false;
     private dashboard: Dashboard = new Dashboard;
+
+    public isInvoicesActive = IS_INVOICES_ACTIVE;
 
     constructor(private nsfo: NSFOService, private router: Router) {
         this.getDashboardValues();
