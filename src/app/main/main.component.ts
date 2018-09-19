@@ -9,6 +9,7 @@ import { DownloadService } from '../global/services/download/download.service';
 import { DownloadModalComponent } from '../global/components/downloadmodal/download-modal.component';
 import {ReportModalComponent} from "../global/components/reportmodal/report-modal.component";
 import {ReportService} from "../global/services/report/report.service";
+import { IS_INVOICES_ACTIVE } from '../global/constants/feature.activation';
 
 @Component({
     directives: [ROUTER_DIRECTIVES, DownloadModalComponent, ReportModalComponent],
@@ -24,6 +25,8 @@ export class MainComponent {
     private isActiveUserMenu: boolean = false;
     private admin: Admin = new Admin();
     private adminDetails$: Observable;
+
+	  public isInvoicesActive = IS_INVOICES_ACTIVE;
 
     constructor(private nsfo: NSFOService,
                 private reportService: ReportService,

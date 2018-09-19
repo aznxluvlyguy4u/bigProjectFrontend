@@ -12,6 +12,8 @@ export class SettingsService {
 
     private ENV: string = ENVIRONMENT;
 
+    // Feature activation
+    public static isInvoicesActive = false;
 
     public isDevEnv() {
         return this.ENV === 'LOCAL';

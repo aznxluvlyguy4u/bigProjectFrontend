@@ -54,7 +54,7 @@
         <table class="stack client-overview">
             <thead>
                 <tr>
-                    <td>{{ 'DEBTORS' | translate }} #</td>
+                    <td *ngIf="isInvoicesActive">{{ 'DEBTORS' | translate }} #</td>
                     <td>{{ 'COMPANY NAME' | translate }}</td>
                     <td>{{ 'PLACE' | translate }}</td>
                     <td>{{ 'COUNTRY' | translate }}</td>
@@ -78,7 +78,7 @@
                     </td>
                 </tr>
                 <tr *ngFor="let client of clientList | clientFilter:[filterSearch, filterInvoices, filterCountryName] | paginate: {itemsPerPage: filterAmount, currentPage: page}; let i = index">
-                    <td>
+                    <td *ngIf="isInvoicesActive">
                         <span *ngIf="client.debtor_number">{{ client.debtor_number }}</span>
                         <span *ngIf="!client.debtor_number">--</span>
                     </td>

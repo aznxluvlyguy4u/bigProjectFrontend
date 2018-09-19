@@ -10,6 +10,7 @@ import {SettingsService} from "../../../global/services/settings/settings.servic
 import { CheckMarkComponent } from '../../../global/components/checkmark/check-mark.component';
 import { CountryNameToCountryCodePipe } from '../../../global/pipes/country-name-to-country-code.pipe';
 import { SortService } from '../../../global/services/utils/sort.service';
+import { IS_INVOICES_ACTIVE } from '../../../global/constants/feature.activation';
 
 declare var $;
 
@@ -36,6 +37,8 @@ export class ClientOverviewComponent implements AfterViewChecked{
 
     public currentCountryNames: string[] = [];
     public countryNameNullFiller = '--';
+
+    public isInvoicesActive = IS_INVOICES_ACTIVE;
 
     constructor(private nsfo: NSFOService, private router: Router, private settings: SettingsService,
                 private sort: SortService) {

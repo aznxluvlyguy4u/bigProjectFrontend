@@ -17,6 +17,7 @@ import {ControlGroup, FormBuilder} from "@angular/common";
 import {DownloadService} from "../../../global/services/download/download.service";
 import {Invoice} from "../../invoice/invoice.model";
 import { SpinnerBounceComponent } from '../../../global/components/spinner-bounce/spinner-bounce.component';
+import { IS_INVOICES_ACTIVE } from '../../../global/constants/feature.activation';
 
 @Component({
     directives: [REACTIVE_FORM_DIRECTIVES, Datepicker, SpinnerBounceComponent],
@@ -50,6 +51,8 @@ export class ClientDetailsComponent {
     private maediVisnaStatusOptions: string[] = MAEDI_VISNA_STATUS_OPTIONS;
     private scrapieStatusOptions: string[] = SCRAPIE_STATUS_OPTIONS;
     private form: ControlGroup;
+
+    public isInvoicesActive = IS_INVOICES_ACTIVE;
     
     constructor(
         private downloadService: DownloadService,

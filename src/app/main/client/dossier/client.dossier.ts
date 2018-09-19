@@ -16,6 +16,7 @@ import { ClientsStorage } from '../../../global/services/storage/clients.storage
 import { Country } from '../../../global/models/country.model';
 import { SpinnerComponent } from '../../../global/components/spinner/spinner.component';
 import { SpinnerBounceComponent } from '../../../global/components/spinner-bounce/spinner-bounce.component';
+import { IS_INVOICES_ACTIVE } from '../../../global/constants/feature.activation';
 
 @Component({
     directives: [REACTIVE_FORM_DIRECTIVES, LocationsDisplay, UsersDisplay, Datepicker, SpinnerComponent, SpinnerBounceComponent],
@@ -54,6 +55,8 @@ export class ClientDossierComponent {
 
     public isClientDataLoaded = false;
 
+    public isInvoicesActive = IS_INVOICES_ACTIVE;
+
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
@@ -63,32 +66,60 @@ export class ClientDossierComponent {
         private fb: FormBuilder,
         private nsfo: NSFOService
     ) {
-        this.form = fb.group({
-            company_name: ['', Validators.required],
-            telephone_number: [''],
-            company_relation_number: [''],
-            debtor_number: [''],
-            vat_number: [''],
-            chamber_of_commerce_number: [''],
-            address_street_name: ['', Validators.required],
-            address_address_number: ['', Validators.required],
-            address_suffix: [''],
-            address_postal_code: ['', Validators.required],
-            address_city: ['', Validators.required],
-            address_state: [''],
-            address_country: ['', Validators.required],
-            billing_address_street_name: ['', Validators.required],
-            billing_address_address_number: ['', Validators.required],
-            billing_address_suffix: [''],
-            billing_address_postal_code: ['', Validators.required],
-            billing_address_city: ['', Validators.required],
-            billing_address_state: [''],
-            billing_address_country: ['', Validators.required],
-            animal_health_subscription: ['NO'],
-            subscription_date: [''],
-            twinfield_code: [0, Validators.required],
-            twinfield_administration_code: ['', Validators.required]
-        });
+        if (this.isInvoicesActive) {
+					this.form = fb.group({
+						company_name: ['', Validators.required],
+						telephone_number: [''],
+						company_relation_number: [''],
+						debtor_number: [''],
+						vat_number: [''],
+						chamber_of_commerce_number: [''],
+						address_street_name: ['', Validators.required],
+						address_address_number: ['', Validators.required],
+						address_suffix: [''],
+						address_postal_code: ['', Validators.required],
+						address_city: ['', Validators.required],
+						address_state: [''],
+						address_country: ['', Validators.required],
+						billing_address_street_name: ['', Validators.required],
+						billing_address_address_number: ['', Validators.required],
+						billing_address_suffix: [''],
+						billing_address_postal_code: ['', Validators.required],
+						billing_address_city: ['', Validators.required],
+						billing_address_state: [''],
+						billing_address_country: ['', Validators.required],
+						animal_health_subscription: ['NO'],
+						subscription_date: [''],
+						twinfield_code: [0, Validators.required],
+						twinfield_administration_code: ['', Validators.required]
+					});
+        } else {
+					this.form = fb.group({
+						company_name: ['', Validators.required],
+						telephone_number: [''],
+						company_relation_number: [''],
+						debtor_number: [''],
+						vat_number: [''],
+						chamber_of_commerce_number: [''],
+						address_street_name: ['', Validators.required],
+						address_address_number: ['', Validators.required],
+						address_suffix: [''],
+						address_postal_code: ['', Validators.required],
+						address_city: ['', Validators.required],
+						address_state: [''],
+						address_country: ['', Validators.required],
+						billing_address_street_name: ['', Validators.required],
+						billing_address_address_number: ['', Validators.required],
+						billing_address_suffix: [''],
+						billing_address_postal_code: ['', Validators.required],
+						billing_address_city: ['', Validators.required],
+						billing_address_state: [''],
+						billing_address_country: ['', Validators.required],
+						animal_health_subscription: ['NO'],
+						subscription_date: [''],
+					});
+        }
+
         this.clearInvoiceId();
     }
 
@@ -180,7 +211,7 @@ export class ClientDossierComponent {
                     user.primary_contactperson = true;
                     this.client.users.push(user);
 
-                    if (this.client.twinfield_administration_code) {
+                    if (this.isInvoicesActive && this.client.twinfield_administration_code) {
                         this.getTwinfieldCustomersDirect(this.client.twinfield_administration_code);
                     }
 
@@ -196,6 +227,10 @@ export class ClientDossierComponent {
     };
 
     private getTwinfieldAdministrations() {
+			if (!this.isInvoicesActive) {
+				return;
+			}
+
 			  this.loadingTwinFieldOffices = true;
         this.nsfo.doGetRequest(this.nsfo.URI_EXTERNAL_PROVIDER + '/offices').subscribe(
             res => {
@@ -211,6 +246,9 @@ export class ClientDossierComponent {
     }
 
     private getTwinfieldCustomersDirect(office) {
+        if (!this.isInvoicesActive) {
+            return;
+        }
 			  this.loadingTwinFieldCodes = true;
         this.nsfo.doGetRequest(this.nsfo.URI_EXTERNAL_PROVIDER + '/offices/' + office + '/customers').subscribe(
             res => {
@@ -221,6 +259,9 @@ export class ClientDossierComponent {
     }
 
     getTwinfieldCustomers(office) {
+			if (!this.isInvoicesActive) {
+				return;
+			}
         this.loadingTwinFieldCodes = true;
         this.nsfo.doGetRequest(this.nsfo.URI_EXTERNAL_PROVIDER + '/offices/' + office.value + '/customers').subscribe(
             res => {
@@ -264,9 +305,6 @@ export class ClientDossierComponent {
     public saveClient(): void {
         this.isValidForm = true;
         this.errorMessage = '';
-
-        console.log(this.form.controls['twinfield_administration_code'].value);
-        console.log(this.form.controls['twinfield_code'].value);
 
         if (this.client.users.length == 0) {
             this.isValidForm = false;
@@ -333,7 +371,8 @@ export class ClientDossierComponent {
 
                 let newClient = _.cloneDeep(this.client);
 
-                if (this.form.controls['twinfield_administration_code'].value && this.form.controls['twinfield_code'].value) {
+                if (this.isInvoicesActive &&
+                  this.form.controls['twinfield_administration_code'].value && this.form.controls['twinfield_code'].value) {
                     newClient.twinfield_administration_code = this.form.controls['twinfield_administration_code'].value;
                     newClient.twinfield_code = this.form.controls['twinfield_code'].value;
                 }
