@@ -796,5 +796,6 @@
   "DELETE THE SELECTED ANIMAL RESIDENCE?": "Verwijder het geselecteerde DierUBNhistory record?",
   "DELETE ANIMAL RESIDENCE": "Verwijder DierUBNhistory record",
   "CREATE_TAGS": "Oormerken aanmaken",
-  "DELETE_TAG": "Oormerk verwijderen"
+  "DELETE_TAG": "Oormerk verwijderen",
+  "NO BREEDER NUMBERS REGISTERED": "Geen fokkersnummers geregistreerd"
 }
