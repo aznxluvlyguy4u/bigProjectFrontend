@@ -797,5 +797,6 @@
   "DELETE ANIMAL RESIDENCE": "Verwijder DierUBNhistory record",
   "CREATE_TAGS": "Oormerken aanmaken",
   "DELETE_TAG": "Oormerk verwijderen",
-  "NO BREEDER NUMBERS REGISTERED": "Geen fokkersnummers geregistreerd"
+  "NO BREEDER NUMBERS REGISTERED": "Geen fokkersnummers geregistreerd",
+  "INCLUDES COUNTRY DATA OF COMPANY AND ALL ACTIVE UBNS": "Bevat landgegevens van bedrijf en actieve UBNs"
 }

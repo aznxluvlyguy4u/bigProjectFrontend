@@ -31,6 +31,9 @@
     <div class="large-1 columns">
         <label>
             {{ 'COUNTRY' | translate }}
+            <i class="fa fa-info-circle" aria-hidden="true"
+               title="{{'INCLUDES COUNTRY DATA OF COMPANY AND ALL ACTIVE UBNS' | translate}}">
+            </i>
             <select [(ngModel)]="filterCountryName" [disabled]="currentCountryNames.length === 0">
                 <option value="ALL">{{ 'ALL' | translate }}</option>
                 <option *ngFor="let countryName of currentCountryNames" value="{{ countryName }}">{{ countryName | countryNameToCountryCodePipe }}</option>
