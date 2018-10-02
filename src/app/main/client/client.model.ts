@@ -1,6 +1,7 @@
 import { Invoice } from '../invoice/invoice.model';
 import { Person } from '../../global/models/person.model';
 import { PedigreeRegisterRegistration } from '../../global/models/pedigree-register-registration.model';
+import { Country } from '../../global/models/country.model';
 
 export class Client {
 	  public id: number;
@@ -20,6 +21,7 @@ export class Client {
     public address: Address = new Address();
     public billing_address: Address = new Address();
     public locations: Location[] = [];
+    public locations_details: LocationDetails[] = [];
     public deleted_locations: Location[] = [];
     public users: User[] = [];
     public deleted_users: User[] = [];
@@ -37,6 +39,11 @@ export class Location {
 	  public location_holder: string;
     public company ?: Client;
     public pedigree_register_registrations: PedigreeRegisterRegistration[] = [];
+}
+
+export class LocationDetails {
+    public ubn: string;
+    public country_details: Country;
 }
 
 export class User extends Person {

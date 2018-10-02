@@ -72,6 +72,12 @@ export class ClientOverviewComponent implements AfterViewChecked{
 							    this.currentCountryNames.push(client.address.country);
               }
             }
+            for (let locationDetails of client.locations_details) {
+                if (!!locationDetails.country_details && !!locationDetails.country_details.name
+                && this.currentCountryNames.indexOf(locationDetails.country_details.name) < 0) {
+									this.currentCountryNames.push(locationDetails.country_details.name);
+                }
+            }
         }
         this.currentCountryNames = this.sort.sortCountryNames(this.currentCountryNames, true);
     }

@@ -1,4 +1,5 @@
 import {Pipe, PipeTransform} from "@angular/core";
+import { Client } from '../../client.model';
 
 @Pipe({
     name: 'clientFilter'
@@ -42,13 +43,25 @@ export class ClientFilterPipe implements PipeTransform {
 			// FILTER: COUNTRY NAME
 			if (countryName !== 'ALL') {
 				filtered = filtered.filter(client => (
-					(client.address != null ?
-              (client.address.country != null && client.address.country != undefined && client.address.country != '') ?
-              client.address.country
-                : '' : '' )
+          ClientFilterPipe.getClientCountryNamesAsString(client)
 				).indexOf(countryName) !== -1);
 			}
 
         return filtered
     }
+
+    private static getClientCountryNamesAsString(client: Client): string {
+      let countryNamesString = client.address != null ?
+					(client.address.country != null && client.address.country != undefined && client.address.country != '') ?
+						client.address.country
+						: '' : '';
+      for (const locationDetails of client.locations_details) {
+          if (locationDetails.country_details != null && locationDetails.country_details.name != null
+            && locationDetails.country_details.name != undefined && locationDetails.country_details.name != '')
+          {
+              countryNamesString += locationDetails.country_details.name;
+          }
+      }
+      return countryNamesString;
+		}
 }
