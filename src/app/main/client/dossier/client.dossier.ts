@@ -70,7 +70,7 @@ export class ClientDossierComponent {
 					this.form = fb.group({
 						company_name: ['', Validators.required],
 						telephone_number: [''],
-						company_relation_number: [''],
+						company_relation_number: ['', Validators.required],
 						debtor_number: [''],
 						vat_number: [''],
 						chamber_of_commerce_number: [''],
@@ -97,7 +97,7 @@ export class ClientDossierComponent {
 					this.form = fb.group({
 						company_name: ['', Validators.required],
 						telephone_number: [''],
-						company_relation_number: [''],
+						company_relation_number: ['', Validators.required],
 						debtor_number: [''],
 						vat_number: [''],
 						chamber_of_commerce_number: [''],
