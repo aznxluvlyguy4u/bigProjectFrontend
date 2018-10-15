@@ -207,6 +207,9 @@ export class ClientDossierComponent {
                         user.primary_contactperson = false;
                     }
 
+                    //filter out inactive clients
+                    this.client.users = this.client.users.filter(user => user.is_active);
+
                     let user = this.client.owner;
                     user.primary_contactperson = true;
                     this.client.users.push(user);
