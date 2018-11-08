@@ -9,7 +9,9 @@ export class SortService {
 
 	sort(list: any[], options: SortOrder[], undefinedValuesOnTop: boolean = false): any[] {
 		let sortedList = list;
-		for(let sortOrder of options.reverse()) {
+
+		const reversedOptions = [...options].reverse();
+		for(let sortOrder of reversedOptions) {
 			sortedList = this.sortObjectWithSingleSortOrder(sortedList, sortOrder, undefinedValuesOnTop);
 		}
 
