@@ -9,7 +9,6 @@ var packageJson = JSON.parse(fs.readFileSync('./package.json'));
 var version = packageJson.version;
 var filename = 'nsfo-admin-build';
 
-const zip_files_bucket = 'nsfo/deployments/frontend';
 const staging_admin_frontend_bucket = 'dev-admin.nsfo.nl';
 const production_admin_frontend_bucket = 'admin.nsfo.nl';
 const public_read = 'public-read';
@@ -100,34 +99,6 @@ gulp.task('publish:prod:maintenance', function() {
 			ACL:    public_read
 		}, {
 			maxRetries: retry_count
-		}))
-		;
-});
-
-/**
- * Task to deploy the zip file to AWS S3 Bucket
- */
-
-gulp.task('publish:zip:staging', function() {
-	let zipname = filename + '-staging-';
-	return gulp.src('dist/'+zipname+version+'.zip')
-		.pipe(s3({
-			Bucket: zip_files_bucket,
-			ACL:    public_read
-		}, {
-			maxRetries: retry_count
-		}))
-		;
-});
-
-gulp.task('publish:zip:prod', function() {
-	let zipname = filename + '-production-';
-  return gulp.src('dist/'+zipname+version+'.zip')
-		.pipe(s3({
-				Bucket: zip_files_bucket,
-				ACL:    public_read
-		}, {
-				maxRetries: retry_count
 		}))
 		;
 });
