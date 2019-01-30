@@ -9,11 +9,6 @@ var packageJson = JSON.parse(fs.readFileSync('./package.json'));
 var version = packageJson.version;
 var filename = 'nsfo-admin-build';
 
-const staging_admin_frontend_bucket = 'dev-admin.nsfo.nl';
-const production_admin_frontend_bucket = 'admin.nsfo.nl';
-const public_read = 'public-read';
-const retry_count = 5;
-
 /**
  * Load environment variables from JSON File.
  */
@@ -22,6 +17,12 @@ env({
     file: 'env.json'
 });
 
+// Bucket settings
+
+const staging_admin_frontend_bucket = process.env.S3_STAGING_BUCKET;
+const production_admin_frontend_bucket = process.env.S3_PRODUCTION_BUCKET;
+const public_read = 'public-read';
+const retry_count = 5;
 
 /**
  * Initialize AWS Config
