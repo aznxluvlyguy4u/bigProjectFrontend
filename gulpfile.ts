@@ -56,7 +56,7 @@ gulp.task('zip:prod', () => {
  * Task to deploy build files directly to AWS S3 hosted website Bucket.
  */
 
-gulp.task('publish:staging', function() {
+gulp.task('deploy:staging', function() {
 	return gulp.src(['build/**/*'])
 		.pipe(s3({
 			Bucket: staging_admin_frontend_bucket,
@@ -67,7 +67,7 @@ gulp.task('publish:staging', function() {
 		;
 });
 
-gulp.task('publish:prod', function() {
+gulp.task('deploy:prod', function() {
 	return gulp.src(['build/**/*'])
 		.pipe(s3({
 			Bucket: production_admin_frontend_bucket,
@@ -82,7 +82,7 @@ gulp.task('publish:prod', function() {
  * Task to deploy maintenance page directly to AWS S3 hosted website Bucket.
  */
 
-gulp.task('publish:staging:maintenance', function() {
+gulp.task('deploy:staging:maintenance', function() {
 	return gulp.src(['src/maintenance-page/*'])
 		.pipe(s3({
 			Bucket: staging_admin_frontend_bucket,
@@ -93,7 +93,7 @@ gulp.task('publish:staging:maintenance', function() {
 		;
 });
 
-gulp.task('publish:prod:maintenance', function() {
+gulp.task('deploy:prod:maintenance', function() {
 	return gulp.src(['src/maintenance-page/*'])
 		.pipe(s3({
 			Bucket: production_admin_frontend_bucket,
