@@ -27,7 +27,7 @@ const retry_count = 5;
  * Initialize AWS Config
  */
 
-var awsConfig = {
+const awsConfig = {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
     useIAM: true
