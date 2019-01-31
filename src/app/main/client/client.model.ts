@@ -31,14 +31,14 @@ export class Client {
 }
 
 export class Location {
-	  public id: number;
+	public id ?: number;
     public location_id ?: string;
     public ubn: string;
     public address ?: Address = new Address();
     public is_active ?: boolean;
-	  public location_holder: string;
+	public location_holder ?: string;
     public company ?: Client;
-    public pedigree_register_registrations: PedigreeRegisterRegistration[] = [];
+    public pedigree_register_registrations ?: PedigreeRegisterRegistration[] = [];
 }
 
 export class LocationDetails {
@@ -47,9 +47,9 @@ export class LocationDetails {
 }
 
 export class User extends Person {
-    public primary_contactperson: string | boolean;
-    public relation_number_keeper: string;
-    public companies: Client[]
+    public primary_contactperson ?: string | boolean;
+    public relation_number_keeper ?: string;
+    public companies ?: Client[]
 }
 
 export class ActionLog {

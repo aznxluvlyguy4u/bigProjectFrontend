@@ -18,6 +18,7 @@ export class ProfileComponent {
     private profile: AdminProfile = new AdminProfile();
     private isValidForm: boolean = true;
     private isSaving: boolean = false;
+    private errorMessage: string;
 
     constructor(private fb: FormBuilder, private nsfo: NSFOService, private router: Router, private utils: UtilsService) {
         this.form = fb.group({
