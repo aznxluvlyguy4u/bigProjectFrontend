@@ -2,7 +2,6 @@ const gulp = require("gulp");
 const clean = require("gulp-clean");
 const zip = require('gulp-zip');
 const env = require('gulp-env');
-const s3 = require('gulp-s3-upload')(awsConfig);
 
 var fs = require('fs');
 var packageJson = JSON.parse(fs.readFileSync('./package.json'));
@@ -33,6 +32,8 @@ var awsConfig = {
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
     useIAM: true
 };
+
+const s3 = require('gulp-s3-upload')(awsConfig);
 
 /**
  * Task to zip the build directory
