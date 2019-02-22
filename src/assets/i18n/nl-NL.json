@@ -719,6 +719,7 @@
   "THE REFERENCE DATE IS ON DECEMBER 31ST OF THE GIVEN REFERENCE YEAR": "De referentiedatum is op 31 december van het referentiejaar",
   "THERE ARE NO STANDARD INVOICE RULES YET": "Er zijn nog geen standaard factuurregels in het systeem ingevoerd.",
   "ANIMAL REPORTS TAB INFO TEXT": "Hier staan alleen de globale dierrapportages. Dierrapportages die bij specifieke dieren horen, zitten in het Diergegevens>Batchbewerking scherm na het ophalen van de dieren.",
+  "REPORT MEMBERS AND USERS OVERVIEW INFO TEXT": "Alleen gegevens van huidig actieve bedrijven zitten in de rapportage, ongeacht de gekozen peildatum",
   "TWINFIELD ADMINISTRATION CODE": "Twinfield administratie code",
   "FIRST SELECT A": "Selecteer eerst een",
   "ARTICLE CODE": "Artikel code",
