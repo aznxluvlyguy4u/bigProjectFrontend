@@ -47,6 +47,8 @@ import { AnnualActiveLivestockComponent } from './main/report/animals-overviews/
 import { AnnualActiveLivestockRamMatesComponent } from './main/report/animals-overviews/annual-active-livestock-ram-mates/annual-active-livestock-ram-mates.component';
 import { DownloadLandingPageComponent } from './download/download-landing-page.component';
 import {AnimalEditComponent} from "./main/animals/animals-edit/animal-edit.component";
+import {MembersAndUsersOverviewComponent} from "./main/report/clients-overviews/members-and-users-overview/members-and-users-overview.component";
+import {ClientReportsComponent} from "./main/report/clients-overviews/client-reports.component";
 
 
 const routes: RouterConfig = [
@@ -116,10 +118,18 @@ const routes: RouterConfig = [
 											{path: 'annual-te100-production', component: AnnualTe100ProductionComponent},
 											{path: 'annual-active-livestock', component: AnnualActiveLivestockComponent},
 											{path: 'annual-active-livestock-ram-mates', component: AnnualActiveLivestockRamMatesComponent},
-										]},
-                ]},
-					  {path: 'log', terminal: true, component: TechnicalLogOverviewComponent},
-					  {path: 'error-log', terminal: true, component: ErrorLogOverviewComponent},
+										]
+                                    },
+                                    {path: 'client-reports', component: ClientReportsComponent,
+                                        children: [
+                                            {path: '', terminal: true, redirectTo: 'members-and-users-overview'},
+                                            {path: 'members-and-users-overview', component: MembersAndUsersOverviewComponent},
+                                        ]
+                                    },
+                         ]
+            },
+			{path: 'log', terminal: true, component: TechnicalLogOverviewComponent},
+			{path: 'error-log', terminal: true, component: ErrorLogOverviewComponent},
             {path: 'profile', terminal: true, component: ProfileComponent},
 					  // {path: 'treatment', terminal: true, component: TreatmentMainComponent}
 					  {path: 'treatment', component: TreatmentMainComponent,

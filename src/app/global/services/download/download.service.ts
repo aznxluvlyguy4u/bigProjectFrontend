@@ -4,6 +4,7 @@ import {DownloadRequest} from './download-request.model';
 
 import _ = require("lodash");
 import {
+    MUST_HAVE_ANIMAL_HEALTH_SUBSCRIPTION, PEDIGREE_REGISTER,
     QUERY_PARAM_CONCAT_VALUE_AND_ACCURACY, QUERY_PARAM_FILE_TYPE, REFERENCE_DATE,
     YEAR
 } from '../../variables/query-param.constant';
@@ -355,6 +356,25 @@ export class DownloadService {
         let queryParam = '?' + YEAR + '=' + year;
         this.doDownloadGetRequestByReportWorker(this.nsfo.URI_GET_ANNUAL_ACTIVE_LIVESTOCK_RAM_MATES_REPORT + queryParam);
     }
+
+
+    doMembersAndUsersOverviewReportRequest(
+        referenceDateString: string,
+        mustHaveAnimalHealthSubscription: boolean = true,
+        pedigreeRegister: string = null
+    ) {
+
+        const concatBooleanString = UtilsService.getBoolValAsString(mustHaveAnimalHealthSubscription);
+        const pedigreeRegisterQueryString = pedigreeRegister != null && pedigreeRegister != '' ?
+            '&' + PEDIGREE_REGISTER + '=' + pedigreeRegister : '';
+
+        let queryParam = '?' + REFERENCE_DATE + '=' + referenceDateString
+            + '&' + MUST_HAVE_ANIMAL_HEALTH_SUBSCRIPTION + '=' + concatBooleanString
+            + pedigreeRegisterQueryString
+        ;
+
+        this.doDownloadPostRequestByReportWorker(this.nsfo.URI_POST_MEMBERS_AND_USERS_OVERVIEW + queryParam,'{}');
+	}
 
 
     private parseFilteredLivestockReportPostBody(animals: Animal[]) {
