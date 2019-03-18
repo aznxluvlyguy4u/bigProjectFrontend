@@ -342,6 +342,10 @@ export class DownloadService {
         this.doDownloadGetRequestByReportWorker(this.nsfo.URI_GET_ANNUAL_TE100_UBN_PRODUCTION_REPORT + queryParam);
     }
 
+    doAnimalHealthStatusReportGetRequest() {
+
+        this.doDownloadGetRequestByReportWorker(this.nsfo.URI_GET_ANIMAL_HEALTH_STATUS_REPORT);
+    }
 
     doAnnualActiveLivestockReportGetRequest(year: number) {
 
