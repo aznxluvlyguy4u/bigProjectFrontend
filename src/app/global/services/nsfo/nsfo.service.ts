@@ -74,6 +74,7 @@ export class NSFOService {
 		public URI_GET_ANNUAL_TE100_UBN_PRODUCTION_REPORT = '/v1/reports/annual-te100-ubn-production';
 		public URI_GET_ANNUAL_ACTIVE_LIVESTOCK_REPORT = '/v1/reports/annual-active-livestock';
 		public URI_GET_ANNUAL_ACTIVE_LIVESTOCK_RAM_MATES_REPORT = '/v1/reports/annual-active-livestock-ram-mates';
+		public URI_GET_ANIMAL_HEALTH_STATUS_REPORT = '/v1/reports/animal-health-status';
 		public URI_POST_MEMBERS_AND_USERS_OVERVIEW = '/v1/reports/members-and-users-overview';
 
 	  public URI_TREATMENTS = '/v1/treatments';

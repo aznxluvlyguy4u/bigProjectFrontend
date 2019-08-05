@@ -49,6 +49,7 @@ import { DownloadLandingPageComponent } from './download/download-landing-page.c
 import {AnimalEditComponent} from "./main/animals/animals-edit/animal-edit.component";
 import {MembersAndUsersOverviewComponent} from "./main/report/clients-overviews/members-and-users-overview/members-and-users-overview.component";
 import {ClientReportsComponent} from "./main/report/clients-overviews/client-reports.component";
+import {AnimalHealthStatusComponent} from "./main/report/animals-overviews/animal-health-status/animal-health-status.component";
 
 
 const routes: RouterConfig = [
@@ -118,6 +119,7 @@ const routes: RouterConfig = [
 											{path: 'annual-te100-production', component: AnnualTe100ProductionComponent},
 											{path: 'annual-active-livestock', component: AnnualActiveLivestockComponent},
 											{path: 'annual-active-livestock-ram-mates', component: AnnualActiveLivestockRamMatesComponent},
+                                            {path: 'animal-health-status', component: AnimalHealthStatusComponent},
 										]
                                     },
                                     {path: 'client-reports', component: ClientReportsComponent,
