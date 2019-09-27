@@ -187,6 +187,27 @@ export class ClientDetailsComponent {
         }
     }
 
+    private downloadClientNotesOverview(): void {
+        let request = {
+            "client_id": this.clientId
+        };
+
+        this.nsfo.doPostRequest(this.nsfo.URI_POST_CLIENT_NOTES_OVERVIEW, request)
+            .subscribe(res => {
+
+                // console.log(res)
+
+                // let note: ClientNote = res.result;
+                // this.clientNote.creator.first_name = note.creator.first_name;
+                // this.clientNote.creator.last_name = note.creator.last_name;
+                // this.clientNote.creation_date = moment().format();
+                // this.clientNotes.push(this.clientNote);
+                // this.clientNotes = _.orderBy(this.clientNotes, ['creation_date'], ['desc']);
+                // this.clientNote = new ClientNote();
+                // this.isSavingNote = false;
+            });
+    }
+
     private loginAsGhost(personID: string) {
         window.open(window.location.origin + '/ghostlogin/' + personID);
     };
