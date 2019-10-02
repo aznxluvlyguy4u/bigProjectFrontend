@@ -4,6 +4,7 @@ import {DownloadRequest} from './download-request.model';
 
 import _ = require("lodash");
 import {
+    COMPANY_ID,
     MUST_HAVE_ANIMAL_HEALTH_SUBSCRIPTION, PEDIGREE_REGISTER,
     QUERY_PARAM_CONCAT_VALUE_AND_ACCURACY, QUERY_PARAM_FILE_TYPE, REFERENCE_DATE,
     YEAR
@@ -379,6 +380,17 @@ export class DownloadService {
 
         this.doDownloadPostRequestByReportWorker(this.nsfo.URI_POST_MEMBERS_AND_USERS_OVERVIEW + queryParam,'{}');
 	}
+
+	doClientNotesOverviewReportRequest(
+        companyId: string,
+        fileType?: string
+    ) {
+        let queryParam = "?" + COMPANY_ID + '=' + companyId;
+        queryParam += typeof fileType === "string" ? '&' + QUERY_PARAM_FILE_TYPE + '=' + fileType.toLowerCase() : '';
+
+
+        this.doDownloadPostRequestByReportWorker(this.nsfo.URI_POST_CLIENT_NOTES_OVERVIEW + queryParam, '{}');
+    }
 
 
     private parseFilteredLivestockReportPostBody(animals: Animal[]) {
