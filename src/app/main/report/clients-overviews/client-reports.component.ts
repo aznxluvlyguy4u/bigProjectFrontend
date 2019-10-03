@@ -24,8 +24,7 @@ export class ClientReportsComponent {
 
     getClientReportOptions(): string[] {
         return [
-            MEMBERS_AND_USERS_OVERVIEW_REPORT,
-            CLIENT_NOTES_OVERVIEW_REPORT
+            MEMBERS_AND_USERS_OVERVIEW_REPORT
         ];
     }
 
@@ -33,7 +32,6 @@ export class ClientReportsComponent {
         let url = this.reportBaseUrl;
         switch (this.selectedOption) {
             case MEMBERS_AND_USERS_OVERVIEW_REPORT: url += 'members-and-users-overview'; break;
-            case CLIENT_NOTES_OVERVIEW_REPORT: url += 'client-notes-overview'; break;
             default: return;
         }
         this.navigateTo(url);

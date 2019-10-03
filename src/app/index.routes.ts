@@ -49,7 +49,6 @@ import { DownloadLandingPageComponent } from './download/download-landing-page.c
 import {AnimalEditComponent} from "./main/animals/animals-edit/animal-edit.component";
 import {MembersAndUsersOverviewComponent} from "./main/report/clients-overviews/members-and-users-overview/members-and-users-overview.component";
 import {ClientReportsComponent} from "./main/report/clients-overviews/client-reports.component";
-import {ClientNotesOverviewComponent} from "./main/report/clients-overviews/client-notes-overview/client-notes-overview.component";
 import {AnimalHealthStatusComponent} from "./main/report/animals-overviews/animal-health-status/animal-health-status.component";
 
 
@@ -126,8 +125,7 @@ const routes: RouterConfig = [
                                     {path: 'client-reports', component: ClientReportsComponent,
                                         children: [
                                             {path: '', terminal: true, redirectTo: 'members-and-users-overview'},
-                                            {path: 'members-and-users-overview', component: MembersAndUsersOverviewComponent},
-                                            {path: 'client-notes-overview', component: ClientNotesOverviewComponent}
+                                            {path: 'members-and-users-overview', component: MembersAndUsersOverviewComponent}
                                         ]
                                     },
                          ]
