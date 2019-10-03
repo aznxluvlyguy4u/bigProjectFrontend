@@ -187,6 +187,10 @@ export class ClientDetailsComponent {
         }
     }
 
+    private downloadClientNotesOverview(): void {
+        this.downloadService.doClientNotesOverviewReportRequest(this.clientId);
+    }
+
     private loginAsGhost(personID: string) {
         window.open(window.location.origin + '/ghostlogin/' + personID);
     };

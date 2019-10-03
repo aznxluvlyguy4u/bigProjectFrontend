@@ -311,6 +311,7 @@
                         {{ 'NOTES' | translate }}
                         <textarea [(ngModel)]="clientNote.message" rows="7"></textarea>
                     </label>
+
                     <button type="button" (click)="addClientNote()" [disabled]="isSavingNote" class="small primary button expanded">
                      <span *ngIf="!isSavingNote">
                         {{ 'SAVE' | translate }}
@@ -319,6 +320,16 @@
                         <i class="fa fa-gear fa-spin fa-fw"></i>
                     </span>
                     </button>
+
+                    <button type="button" (click)="downloadClientNotesOverview()" [disabled]="isSavingNote" class="small primary button expanded">
+                     <span *ngIf="!isSavingNote">
+                        {{ 'DOWNLOAD ALL NOTES' | translate }}
+                    </span>
+                        <span *ngIf="isSavingNote">
+                        <i class="fa fa-gear fa-spin fa-fw"></i>
+                    </span>
+                    </button>
+
                 </ng-template>
             </div>
         </div>

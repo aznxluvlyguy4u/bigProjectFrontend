@@ -60,27 +60,28 @@ export class NSFOService {
     public URI_ERRORS_HIDDEN_STATUS: string = '/v1/errors-hidden-status';
     public URI_ERRORS_NON_IR: string = '/v1/errors/non-ir';
 
-	  public URI_TECHNICAL_LOG = '/v1/log/action';
+    public URI_TECHNICAL_LOG = '/v1/log/action';
 
-	  public URI_PEDIGREE_REGISTERS = '/v1/pedigreeregisters';
+    public URI_PEDIGREE_REGISTERS = '/v1/pedigreeregisters';
     public API_URI_GET_REPORTS = '/v1/reports';
 
-		//REPORT
-		public URI_GET_LINEAGE_PROOF = '/v1/reports/pedigree-certificates';
-		public URI_GET_INBREEDING_COEFFICIENT = '/v1/reports/inbreeding-coefficients';
-		public URI_GET_LIVESTOCK_DOCUMENT = '/v1/reports/livestock';
-		public URI_GET_OFFSPRING = '/v1/reports/offspring';
-		public URI_GET_ANIMALS_OVERVIEW_REPORT = '/v1/reports/animals-overview';
-		public URI_GET_ANNUAL_TE100_UBN_PRODUCTION_REPORT = '/v1/reports/annual-te100-ubn-production';
-		public URI_GET_ANNUAL_ACTIVE_LIVESTOCK_REPORT = '/v1/reports/annual-active-livestock';
-		public URI_GET_ANNUAL_ACTIVE_LIVESTOCK_RAM_MATES_REPORT = '/v1/reports/annual-active-livestock-ram-mates';
-		public URI_GET_ANIMAL_HEALTH_STATUS_REPORT = '/v1/reports/animal-health-status';
-		public URI_POST_MEMBERS_AND_USERS_OVERVIEW = '/v1/reports/members-and-users-overview';
+    //REPORT
+    public URI_GET_LINEAGE_PROOF = '/v1/reports/pedigree-certificates';
+    public URI_GET_INBREEDING_COEFFICIENT = '/v1/reports/inbreeding-coefficients';
+    public URI_GET_LIVESTOCK_DOCUMENT = '/v1/reports/livestock';
+    public URI_GET_OFFSPRING = '/v1/reports/offspring';
+    public URI_GET_ANIMALS_OVERVIEW_REPORT = '/v1/reports/animals-overview';
+    public URI_GET_ANNUAL_TE100_UBN_PRODUCTION_REPORT = '/v1/reports/annual-te100-ubn-production';
+    public URI_GET_ANNUAL_ACTIVE_LIVESTOCK_REPORT = '/v1/reports/annual-active-livestock';
+    public URI_GET_ANNUAL_ACTIVE_LIVESTOCK_RAM_MATES_REPORT = '/v1/reports/annual-active-livestock-ram-mates';
+    public URI_GET_ANIMAL_HEALTH_STATUS_REPORT = '/v1/reports/animal-health-status';
+    public URI_POST_MEMBERS_AND_USERS_OVERVIEW = '/v1/reports/members-and-users-overview';
+    public URI_POST_CLIENT_NOTES_OVERVIEW = '/v1/reports/client-notes-overview';
 
-	  public URI_TREATMENTS = '/v1/treatments';
-	  public URI_TREATMENT_TYPES = '/v1/treatment-types';
+    public URI_TREATMENTS = '/v1/treatments';
+    public URI_TREATMENT_TYPES = '/v1/treatment-types';
 
-	  public URI_UBNS = '/v1/ubns';
+    public URI_UBNS = '/v1/ubns';
 
     public URI_VWA_EMPLOYEE: string = '/v1/vwa-employee';
 

@@ -125,7 +125,7 @@ const routes: RouterConfig = [
                                     {path: 'client-reports', component: ClientReportsComponent,
                                         children: [
                                             {path: '', terminal: true, redirectTo: 'members-and-users-overview'},
-                                            {path: 'members-and-users-overview', component: MembersAndUsersOverviewComponent},
+                                            {path: 'members-and-users-overview', component: MembersAndUsersOverviewComponent}
                                         ]
                                     },
                          ]

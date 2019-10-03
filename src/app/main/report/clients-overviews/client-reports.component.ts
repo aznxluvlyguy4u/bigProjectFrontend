@@ -1,5 +1,6 @@
 import {Router, ROUTER_DIRECTIVES} from "@angular/router";
 import {
+    CLIENT_NOTES_OVERVIEW_REPORT,
     MEMBERS_AND_USERS_OVERVIEW_REPORT
 } from "../../../global/constants/report-type.constant";
 import {Component} from "@angular/core";
