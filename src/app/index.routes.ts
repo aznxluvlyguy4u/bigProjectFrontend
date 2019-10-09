@@ -50,6 +50,7 @@ import {AnimalEditComponent} from "./main/animals/animals-edit/animal-edit.compo
 import {MembersAndUsersOverviewComponent} from "./main/report/clients-overviews/members-and-users-overview/members-and-users-overview.component";
 import {ClientReportsComponent} from "./main/report/clients-overviews/client-reports.component";
 import {AnimalHealthStatusComponent} from "./main/report/animals-overviews/animal-health-status/animal-health-status.component";
+import {WeightsPerYearOfBirthComponent} from "./main/report/animals-overviews/weights-per-year-of-birth/weights-per-year-of-birth.component";
 
 
 const routes: RouterConfig = [
@@ -120,6 +121,7 @@ const routes: RouterConfig = [
 											{path: 'annual-active-livestock', component: AnnualActiveLivestockComponent},
 											{path: 'annual-active-livestock-ram-mates', component: AnnualActiveLivestockRamMatesComponent},
                                             {path: 'animal-health-status', component: AnimalHealthStatusComponent},
+                                            {path: 'weights-per-year-of-birth', component: WeightsPerYearOfBirthComponent}
 										]
                                     },
                                     {path: 'client-reports', component: ClientReportsComponent,
