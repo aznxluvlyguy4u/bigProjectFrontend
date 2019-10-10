@@ -7,7 +7,7 @@ import {
     COMPANY_ID,
     MUST_HAVE_ANIMAL_HEALTH_SUBSCRIPTION, PEDIGREE_REGISTER,
     QUERY_PARAM_CONCAT_VALUE_AND_ACCURACY, QUERY_PARAM_FILE_TYPE, REFERENCE_DATE,
-    YEAR
+    YEAR, YEAR_OF_BIRTH
 } from '../../variables/query-param.constant';
 import {QueryParamsService} from '../utils/query-params.service';
 import {Ewe} from '../../models/ewe.model';
@@ -341,6 +341,13 @@ export class DownloadService {
         let queryParam = '?' + YEAR + '=' + year;
 
         this.doDownloadGetRequestByReportWorker(this.nsfo.URI_GET_ANNUAL_TE100_UBN_PRODUCTION_REPORT + queryParam);
+    }
+
+    doWeightsPerYearOfBirthReportGetRequest(yearOfBirth: number) {
+
+        let queryParam = '?' + YEAR_OF_BIRTH + '=' + yearOfBirth;
+
+        this.doDownloadPostRequestByReportWorker(this.nsfo.URI_GET_WEIGHTS_PER_YEAR_OF_BIRTH_REPORT + queryParam, '{}');
     }
 
     doAnimalHealthStatusReportGetRequest() {

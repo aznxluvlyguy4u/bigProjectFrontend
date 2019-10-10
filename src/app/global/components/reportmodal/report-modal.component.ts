@@ -92,6 +92,8 @@ export class ReportModalComponent implements OnInit, OnDestroy {
             return this.translate.instant('REPORT_ANIMAL_HEALTH_STATUS');
         case ReportType.CLIENT_NOTES_OVERVIEW:
             return this.translate.instant('REPORT_CLIENT_NOTES_OVERVIEW');
+        case ReportType.WEIGHTS_PER_YEAR_OF_BIRTH_REPORT:
+            return this.translate.instant('WEIGHTS PER YEAR OF BIRTH REPORT');
         default:
           return this.translate.instant('REPORT_UNKNOWN');
     }

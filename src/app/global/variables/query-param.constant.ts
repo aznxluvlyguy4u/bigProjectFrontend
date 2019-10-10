@@ -4,4 +4,5 @@ export const MUST_HAVE_ANIMAL_HEALTH_SUBSCRIPTION = 'must_have_animal_health_sub
 export const PEDIGREE_REGISTER = 'pedigree_register';
 export const REFERENCE_DATE = 'reference_date';
 export const YEAR = 'year';
+export const YEAR_OF_BIRTH = 'year_of_birth';
 export const COMPANY_ID = 'company_id';
