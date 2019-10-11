@@ -347,7 +347,18 @@ export class DownloadService {
 
         let queryParam = '?' + YEAR_OF_BIRTH + '=' + yearOfBirth;
 
-        this.doDownloadPostRequestByReportWorker(this.nsfo.URI_GET_WEIGHTS_PER_YEAR_OF_BIRTH_REPORT + queryParam, '{}');
+        this.doDownloadPostRequestByReportWorker(this.nsfo.URI_POST_WEIGHTS_PER_YEAR_OF_BIRTH_REPORT + queryParam, '{}');
+    }
+
+    doPopRepInputFileReportGetRequest(
+        pedigreeRegister: string = null
+    ) {
+        const pedigreeRegisterQueryString = pedigreeRegister != null && pedigreeRegister != '' ?
+            '&' + PEDIGREE_REGISTER + '=' + pedigreeRegister : '';
+
+        let queryParam = '?' + pedigreeRegisterQueryString;
+
+        this.doDownloadPostRequestByReportWorker(this.nsfo.URI_POST_POPREP_INPUT_FILE + queryParam, '{}');
     }
 
     doAnimalHealthStatusReportGetRequest() {
