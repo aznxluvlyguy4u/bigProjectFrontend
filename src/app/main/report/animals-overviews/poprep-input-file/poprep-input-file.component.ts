@@ -11,7 +11,7 @@ import {PedigreeRegister} from "../../../../global/models/pedigree-register.mode
 	directives: [PedigreeRegisterDropdownComponent],
 	pipes: [TranslatePipe]
 })
-export class PoprepInputFileComponent {
+export class PopRepInputFileComponent {
 	title = POPREP_INPUT_FILE;
 
 	pedigreeRegister: PedigreeRegister;
