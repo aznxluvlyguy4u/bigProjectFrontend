@@ -27,6 +27,7 @@
                 <button
                         class="button primary"
                         (click)="download()"
+                        [disabled]="!pedigreeRegister"
                 >{{ 'DOWNLOAD' | translate }}</button>
             </div>
         </div>
