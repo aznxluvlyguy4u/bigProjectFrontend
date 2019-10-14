@@ -353,8 +353,7 @@ export class DownloadService {
     doPopRepInputFileReportGetRequest(
         pedigreeRegister: string = null
     ) {
-        const pedigreeRegisterQueryString = pedigreeRegister != null && pedigreeRegister != '' ?
-            '&' + PEDIGREE_REGISTER + '=' + pedigreeRegister : '';
+        const pedigreeRegisterQueryString = pedigreeRegister != null && pedigreeRegister != '' ? PEDIGREE_REGISTER + '=' + pedigreeRegister : '';
 
         let queryParam = '?' + pedigreeRegisterQueryString;
 
