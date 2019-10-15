@@ -121,7 +121,6 @@ const routes: RouterConfig = [
 											{path: 'annual-te100-production', component: AnnualTe100ProductionComponent},
 											{path: 'annual-active-livestock', component: AnnualActiveLivestockComponent},
 											{path: 'annual-active-livestock-ram-mates', component: AnnualActiveLivestockRamMatesComponent},
-                                            {path: 'animal-health-status', component: AnimalHealthStatusComponent},
                                             {path: 'weights-per-year-of-birth', component: WeightsPerYearOfBirthComponent},
                                             {path: 'poprep-input-file', component: PopRepInputFileComponent}
 										]
@@ -129,7 +128,8 @@ const routes: RouterConfig = [
                                     {path: 'client-reports', component: ClientReportsComponent,
                                         children: [
                                             {path: '', terminal: true, redirectTo: 'members-and-users-overview'},
-                                            {path: 'members-and-users-overview', component: MembersAndUsersOverviewComponent}
+                                            {path: 'members-and-users-overview', component: MembersAndUsersOverviewComponent},
+                                            {path: 'animal-health-status', component: AnimalHealthStatusComponent}
                                         ]
                                     },
                          ]
