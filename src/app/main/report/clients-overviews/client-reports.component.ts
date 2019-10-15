@@ -1,6 +1,6 @@
 import {Router, ROUTER_DIRECTIVES} from "@angular/router";
 import {
-    CLIENT_NOTES_OVERVIEW_REPORT,
+    ANIMAL_HEALTH_STATUS_REPORT,
     MEMBERS_AND_USERS_OVERVIEW_REPORT
 } from "../../../global/constants/report-type.constant";
 import {Component} from "@angular/core";
@@ -24,7 +24,8 @@ export class ClientReportsComponent {
 
     getClientReportOptions(): string[] {
         return [
-            MEMBERS_AND_USERS_OVERVIEW_REPORT
+            MEMBERS_AND_USERS_OVERVIEW_REPORT,
+            ANIMAL_HEALTH_STATUS_REPORT
         ];
     }
 
@@ -32,6 +33,7 @@ export class ClientReportsComponent {
         let url = this.reportBaseUrl;
         switch (this.selectedOption) {
             case MEMBERS_AND_USERS_OVERVIEW_REPORT: url += 'members-and-users-overview'; break;
+            case ANIMAL_HEALTH_STATUS_REPORT: url += 'animal-health-status'; break;
             default: return;
         }
         this.navigateTo(url);
