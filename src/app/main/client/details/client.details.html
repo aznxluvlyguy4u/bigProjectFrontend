@@ -321,15 +321,6 @@
                     </span>
                     </button>
 
-                    <button type="button" (click)="downloadClientNotesOverview()" [disabled]="isSavingNote" class="small primary button expanded">
-                     <span *ngIf="!isSavingNote">
-                        {{ 'DOWNLOAD ALL NOTES' | translate }}
-                    </span>
-                        <span *ngIf="isSavingNote">
-                        <i class="fa fa-gear fa-spin fa-fw"></i>
-                    </span>
-                    </button>
-
                 </ng-template>
             </div>
         </div>

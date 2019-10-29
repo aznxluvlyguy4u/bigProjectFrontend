@@ -49,9 +49,10 @@ import { DownloadLandingPageComponent } from './download/download-landing-page.c
 import {AnimalEditComponent} from "./main/animals/animals-edit/animal-edit.component";
 import {MembersAndUsersOverviewComponent} from "./main/report/clients-overviews/members-and-users-overview/members-and-users-overview.component";
 import {ClientReportsComponent} from "./main/report/clients-overviews/client-reports.component";
-import {AnimalHealthStatusComponent} from "./main/report/animals-overviews/animal-health-status/animal-health-status.component";
+import {AnimalHealthStatusComponent} from "./main/report/clients-overviews/animal-health-status/animal-health-status.component";
 import {WeightsPerYearOfBirthComponent} from "./main/report/animals-overviews/weights-per-year-of-birth/weights-per-year-of-birth.component";
 import {PopRepInputFileComponent} from "./main/report/animals-overviews/poprep-input-file/poprep-input-file.component";
+import {ClientNotesOverviewComponent} from "./main/report/clients-overviews/client-notes-overview/client-notes-overview.component";
 
 
 const routes: RouterConfig = [
@@ -129,7 +130,8 @@ const routes: RouterConfig = [
                                         children: [
                                             {path: '', terminal: true, redirectTo: 'members-and-users-overview'},
                                             {path: 'members-and-users-overview', component: MembersAndUsersOverviewComponent},
-                                            {path: 'animal-health-status', component: AnimalHealthStatusComponent}
+                                            {path: 'animal-health-status', component: AnimalHealthStatusComponent},
+                                            {path: 'client-notes-overview', component: ClientNotesOverviewComponent},
                                         ]
                                     },
                          ]

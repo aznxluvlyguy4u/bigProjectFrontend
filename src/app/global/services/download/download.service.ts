@@ -22,6 +22,7 @@ import {
 import {CSV, PDF} from '../../variables/file-type.enum';
 import {Invoice} from "../../../main/invoice/invoice.model";
 import {ReportService} from "../report/report.service";
+import {END_DATE, START_DATE} from "../../constants/query-params.constant";
 
 export const INBREEDING_COEFFICIENT_REPORT = 'INBREEDING_COEFFICIENT_REPORT';
 export const INVOICE_PDF = "INVOICE_PDF";
@@ -399,12 +400,13 @@ export class DownloadService {
 	}
 
 	doClientNotesOverviewReportRequest(
-        companyId: string,
-        fileType?: string
+        startDate: string,
+        endDate: string,
+        companyId?: string
     ) {
-        let queryParam = "?" + COMPANY_ID + '=' + companyId;
-        queryParam += typeof fileType === "string" ? '&' + QUERY_PARAM_FILE_TYPE + '=' + fileType.toLowerCase() : '';
-
+        let queryParam = "?" + START_DATE + '=' + startDate + '&' + END_DATE + '=' + endDate + '&' + QUERY_PARAM_FILE_TYPE + '=' + CSV.toLowerCase();
+        const companyQueryParam = companyId != null && companyId != '' ? '&' + COMPANY_ID + '=' + companyId : '';
+        queryParam = queryParam + companyQueryParam;
 
         this.doDownloadPostRequestByReportWorker(this.nsfo.URI_POST_CLIENT_NOTES_OVERVIEW + queryParam, '{}');
     }

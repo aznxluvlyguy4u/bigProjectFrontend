@@ -6,3 +6,5 @@ export const REFERENCE_DATE = 'reference_date';
 export const YEAR = 'year';
 export const YEAR_OF_BIRTH = 'year_of_birth';
 export const COMPANY_ID = 'company_id';
+export const START_DATE = 'start_date';
+export const END_DATE = 'end_date';
