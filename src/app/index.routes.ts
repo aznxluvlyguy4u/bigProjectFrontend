@@ -53,6 +53,7 @@ import {AnimalHealthStatusComponent} from "./main/report/clients-overviews/anima
 import {WeightsPerYearOfBirthComponent} from "./main/report/animals-overviews/weights-per-year-of-birth/weights-per-year-of-birth.component";
 import {PopRepInputFileComponent} from "./main/report/animals-overviews/poprep-input-file/poprep-input-file.component";
 import {ClientNotesOverviewComponent} from "./main/report/clients-overviews/client-notes-overview/client-notes-overview.component";
+import {AnimalFeaturesPerYearOfBirthComponent} from "./main/report/animals-overviews/animal-features-per-year-of-birth/animal-features-per-year-of-birth.component";
 
 
 const routes: RouterConfig = [
@@ -123,7 +124,8 @@ const routes: RouterConfig = [
 											{path: 'annual-active-livestock', component: AnnualActiveLivestockComponent},
 											{path: 'annual-active-livestock-ram-mates', component: AnnualActiveLivestockRamMatesComponent},
                                             {path: 'weights-per-year-of-birth', component: WeightsPerYearOfBirthComponent},
-                                            {path: 'poprep-input-file', component: PopRepInputFileComponent}
+                                            {path: 'poprep-input-file', component: PopRepInputFileComponent},
+                                            {path: 'animal-features-per-year-of-birth', component: AnimalFeaturesPerYearOfBirthComponent}
 										]
                                     },
                                     {path: 'client-reports', component: ClientReportsComponent,
