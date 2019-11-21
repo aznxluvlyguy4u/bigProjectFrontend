@@ -1,0 +1,30 @@
+<div id="calculations">
+
+    <!--BREADCRUMBS-->
+    <div class="row">
+        <div class="large-12 columns">
+            <ul class="breadcrumbs">
+                <li class="disabled">{{ 'NSFO ONLINE' | translate }}</li>
+                <li>{{ 'CALCULATIONS' | translate }}</li>
+            </ul>
+        </div>
+    </div>
+
+    <!--CARDS-->
+    <div class="row">
+
+        <!--STAR EWES CARD-->
+        <div class="large-4 columns">
+            <div class="card callout">
+                <div class="card-header">{{ 'STAR EWES' | translate }}</div>
+                <div class="card-body">
+                    <label>{{ 'CALCULATE STAR EWES INFO' | translate }}</label>
+                </div>
+                <div class="card-footer text-center">
+                    <button (click)="calculateStarEwes()" class="tiny button">{{ 'CALCULATE STAR EWES' | translate }}</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
