@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Subject} from 'rxjs/Subject';
 
-import _ = require("lodash");
 import {NSFOService} from '../nsfo/nsfo.service';
 import {ReportService} from "../report/report.service";
 import {DownloadRequest} from "../download/download-request.model";
@@ -30,10 +29,10 @@ export class CalculateService {
         private nsfo: NSFOService,
         private reportService: ReportService,
     ) {
-        // this.resetDownloadList();
+        // this.resetTaskList();
     }
     //
-    // resetDownloadList() {
+    // resetTaskList() {
     //     this.downloadRequests = [];
     //     this.lastId = 0;
     //     this.notifyDownloadListsChanged();

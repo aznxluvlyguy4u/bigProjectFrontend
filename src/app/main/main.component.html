@@ -6,9 +6,9 @@
     <a routerLink="/dashboard" class="brand-name"> NSFO <span>Online</span></a>
     <span class="subtitle">{{'ADMIN'}}</span>
     <div class="empty-block"></div>
-    <ng-template *ngIf="true">
+    <ng-template *ngIf="!isTaskModalEmpty()">
         <button type="button" (click)="toggleTaskModal()" [class.active]="isActiveTaskModal" class="download-toggle">
-            <i class="fa fa-tasks"><span *ngIf="true"> {{ taskCount() }}</span></i>
+            <i class="fa fa-tasks"><span *ngIf="taskCount() > 0"> {{ taskCount() }}</span></i>
         </button>
     </ng-template>
     <ng-template *ngIf="!isDownloadModalEmpty()">
@@ -118,3 +118,4 @@
 
 <app-download-modal></app-download-modal>
 <app-report-modal></app-report-modal>
+<app-task-modal></app-task-modal>

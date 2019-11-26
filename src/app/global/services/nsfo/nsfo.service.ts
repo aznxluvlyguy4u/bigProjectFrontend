@@ -64,6 +64,7 @@ export class NSFOService {
 
     public URI_PEDIGREE_REGISTERS = '/v1/pedigreeregisters';
     public API_URI_GET_REPORTS = '/v1/reports';
+    public URI_GET_TASKS = '/v1/tasks';
 
     //REPORT
     public URI_GET_LINEAGE_PROOF = '/v1/reports/pedigree-certificates';

@@ -11,9 +11,10 @@ import {ReportModalComponent} from "../global/components/reportmodal/report-moda
 import {ReportService} from "../global/services/report/report.service";
 import { IS_INVOICES_ACTIVE } from '../global/constants/feature.activation';
 import {TaskService} from "../global/services/task/task.service";
+import {TaskModalComponent} from "../global/components/taskmodal/task-modal.component";
 
 @Component({
-    directives: [ROUTER_DIRECTIVES, DownloadModalComponent, ReportModalComponent],
+    directives: [ROUTER_DIRECTIVES, DownloadModalComponent, ReportModalComponent, TaskModalComponent],
     template: require('./main.component.html'),
     pipes: [TranslatePipe]
 })
@@ -116,14 +117,13 @@ export class MainComponent {
     }
 
     toggleTaskModal() {
-        // this.taskService.toggleTaskModal();
+        this.taskService.toggleTaskModal();
         this.isActiveUserMenu = false;
         this.isActiveSideMenu = false;
     }
 
     taskCount(): number {
-        return 1
-        // return this.taskService.getTasksInModalCount();
+        return this.taskService.getTasksInModalCount();
     }
 
     isTaskModalEmpty(): boolean {
