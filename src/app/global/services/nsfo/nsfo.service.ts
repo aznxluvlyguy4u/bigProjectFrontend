@@ -64,7 +64,6 @@ export class NSFOService {
 
     public URI_PEDIGREE_REGISTERS = '/v1/pedigreeregisters';
     public API_URI_GET_REPORTS = '/v1/reports';
-    public URI_GET_TASKS = '/v1/tasks';
 
     //REPORT
     public URI_GET_LINEAGE_PROOF = '/v1/reports/pedigree-certificates';
@@ -80,6 +79,10 @@ export class NSFOService {
     public URI_POST_MEMBERS_AND_USERS_OVERVIEW = '/v1/reports/members-and-users-overview';
     public URI_POST_CLIENT_NOTES_OVERVIEW = '/v1/reports/client-notes-overview';
     public URI_POST_POPREP_INPUT_FILE = '/v1/reports/poprep-input-file';
+
+    //TASKS
+    public URI_GET_TASKS = '/v1/tasks';
+    public URI_GET_STAR_EWES_CALCULATIONS_TASK = '/v1/tasks/star-ewes-calculation';
 
     public URI_TREATMENTS = '/v1/treatments';
     public URI_TREATMENT_TYPES = '/v1/treatment-types';

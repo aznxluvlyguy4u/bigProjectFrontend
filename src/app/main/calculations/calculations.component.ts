@@ -1,5 +1,5 @@
 import {Component} from "@angular/core";
-import {ROUTER_DIRECTIVES, Router} from "@angular/router";
+import {ROUTER_DIRECTIVES} from "@angular/router";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import { SpinnerComponent } from '../../global/components/spinner/spinner.component';
 import {CalculateService} from "../../global/services/calculate/calculate.service";
@@ -13,13 +13,9 @@ import {CalculateService} from "../../global/services/calculate/calculate.servic
 export class CalculationsComponent {
     loadingInfo = false;
 
-    constructor(private router: Router, private calculateService: CalculateService) { }
-
-    private navigateTo(route: string) {
-        this.router.navigate([route]);
-    }
+    constructor(private calculateService: CalculateService) { }
 
     private calculateStarEwes() {
-        this.calculateService.doAnimalHealthStatusReportGetRequest();
+        this.calculateService.doStarEwesCalculationTaskGetRequest();
     }
 }

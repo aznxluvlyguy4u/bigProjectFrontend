@@ -41,6 +41,9 @@
               <i class="fa fa-spinner fa-pulse fa-2x fa-fw"
                  title="{{ 'YOUR TASK IS NOW BEING EXECUTED' | translate }}"></i>
             </td>
+            <td *ngIf="taskRequest.finished_at && !taskRequest.error_code">
+              {{ 'IS COMPLETED' | translate }}
+            </td>
             <td *ngIf="taskRequest.error_code">
               {{ 'FAILED' | translate }}
               <i class="fa fa-info-circle"
