@@ -64,6 +64,10 @@ export class TaskModalComponent implements OnInit, OnDestroy {
         switch (updateType) {
             case UpdateType.STAR_EWES:
                 return this.translate.instant('CALCULATE STAR EWES');
+            case UpdateType.INBREEDING_COEFFICIENT_CALCULATION:
+                return this.translate.instant('CALCULATE INBREEDING COEFFICIENT');
+            case UpdateType.INBREEDING_COEFFICIENT_RECALCULATION:
+                return this.translate.instant('RECALCULATE INBREEDING COEFFICIENT');
             default:
                 return this.translate.instant('TASK_UNKNOWN');
         }

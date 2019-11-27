@@ -14,5 +14,7 @@ export class TaskRequest extends TaskWorker {
 }
 
 export enum UpdateType {
-  STAR_EWES = 1
+	STAR_EWES = 1,
+	INBREEDING_COEFFICIENT_CALCULATION = 2,
+	INBREEDING_COEFFICIENT_RECALCULATION = 3
 }

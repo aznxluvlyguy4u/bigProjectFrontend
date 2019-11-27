@@ -83,6 +83,8 @@ export class NSFOService {
     //TASKS
     public URI_GET_TASKS = '/v1/tasks';
     public URI_GET_STAR_EWES_CALCULATIONS_TASK = '/v1/tasks/star-ewes-calculation';
+    public URI_GET_INBREEDING_COEFFICIENT_CALCULATIONS_TASK = '/v1/tasks/inbreeding-coefficient-calculation';
+    public URI_GET_INBREEDING_COEFFICIENT_RECALCULATIONS_TASK = '/v1/tasks/inbreeding-coefficient-recalculation';
 
     public URI_TREATMENTS = '/v1/treatments';
     public URI_TREATMENT_TYPES = '/v1/treatment-types';

@@ -27,4 +27,12 @@ export class CalculateService {
     doStarEwesCalculationTaskGetRequest() {
         this.doTaskRequestByReportWorker(this.nsfo.URI_GET_STAR_EWES_CALCULATIONS_TASK);
     }
+
+    doInbreedingCoefficientCalculationTaskGetRequest() {
+        this.doTaskRequestByReportWorker(this.nsfo.URI_GET_INBREEDING_COEFFICIENT_CALCULATIONS_TASK);
+    }
+
+    doInbreedingCoefficientRecalculationTaskGetRequest() {
+        this.doTaskRequestByReportWorker(this.nsfo.URI_GET_INBREEDING_COEFFICIENT_RECALCULATIONS_TASK);
+    }
 }

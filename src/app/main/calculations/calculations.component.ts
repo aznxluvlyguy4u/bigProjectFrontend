@@ -18,4 +18,12 @@ export class CalculationsComponent {
     private calculateStarEwes() {
         this.calculateService.doStarEwesCalculationTaskGetRequest();
     }
+
+    private calculateInbreedingCoefficient() {
+        this.calculateService.doInbreedingCoefficientCalculationTaskGetRequest();
+    }
+
+    private recalculateInbreedingCoefficient() {
+        this.calculateService.doInbreedingCoefficientRecalculationTaskGetRequest();
+    }
 }
