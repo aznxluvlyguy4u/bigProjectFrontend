@@ -25,7 +25,7 @@ export class ClientReportsComponent {
     getClientReportOptions(): string[] {
         return [
             MEMBERS_AND_USERS_OVERVIEW_REPORT,
-            ANIMAL_HEALTH_STATUS_REPORT,
+            // ANIMAL_HEALTH_STATUS_REPORT,
             CLIENT_NOTES_OVERVIEW_REPORT
         ];
     }
@@ -34,7 +34,7 @@ export class ClientReportsComponent {
         let url = this.reportBaseUrl;
         switch (this.selectedOption) {
             case MEMBERS_AND_USERS_OVERVIEW_REPORT: url += 'members-and-users-overview'; break;
-            case ANIMAL_HEALTH_STATUS_REPORT: url += 'animal-health-status'; break;
+            // case ANIMAL_HEALTH_STATUS_REPORT: url += 'animal-health-status'; break;
             case CLIENT_NOTES_OVERVIEW_REPORT: url += 'client-notes-overview'; break;
             default: return;
         }
