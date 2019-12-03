@@ -16,7 +16,7 @@
         <!--STAR EWES CARD-->
         <div class="large-4 columns">
             <div class="card callout">
-                <div class="card-header">{{ 'STAR EWES' | translate }}</div>
+                <div class="card-header">{{ 'STAR EWES CALCULATION' | translate }}</div>
                 <div class="card-body">
                     <label>{{ 'CALCULATE STAR EWES INFO' | translate }}</label>
                 </div>
@@ -29,7 +29,7 @@
         <!--INBREEDING COEFFICIENT CALCULATION CARD-->
         <div class="large-4 columns">
             <div class="card callout">
-                <div class="card-header">{{ 'INBREEDING COEFFICIENT' | translate }}</div>
+                <div class="card-header">{{ 'INBREEDING COEFFICIENT CALCULATION' | translate }}</div>
                 <div class="card-body">
                     <label>{{ 'CALCULATE INBREEDING COEFFICIENT INFO' | translate }}</label>
                 </div>
@@ -42,15 +42,40 @@
         <!--INBREEDING COEFFICIENT RECALCULATION CARD-->
         <div class="large-4 columns">
             <div class="card callout">
-                <div class="card-header">{{ 'INBREEDING COEFFICIENT' | translate }}</div>
+                <div class="card-header">{{ 'INBREEDING COEFFICIENT RECALCULATION' | translate }}</div>
                 <div class="card-body">
                     <label>{{ 'RECALCULATE INBREEDING COEFFICIENT INFO' | translate }}</label>
                 </div>
                 <div class="card-footer text-center">
-                    <button (click)="recalculateInbreedingCoefficient()" class="tiny button">{{ 'RECALCULATE INBREEDING COEFFICIENT' | translate }}</button>
+                    <button class="tiny button" data-open="inbreeding-coefficient-recalculation-warning-modal">{{ 'RECALCULATE INBREEDING COEFFICIENT' | translate }}</button>
                 </div>
             </div>
         </div>
 
+    </div>
+
+    <!-- RECALCULATION WARNING MODAL -->
+    <div class="reveal" id="inbreeding-coefficient-recalculation-warning-modal" data-reveal>
+        <!--<div class="modal-header">-->
+            <!--<button class="close-button" data-close aria-label="Close modal" type="button">-->
+                <!--<span aria-hidden="true">&times;</span>-->
+            <!--</button>-->
+        <!--</div>-->
+        <div class="modal-header-download">
+            {{ 'INBREEDING COEFFICIENT RECALCULATION' | translate }}
+
+            <button type="button" class="pull-right close-button" aria-label="Close modal" data-close>
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            <p>{{ 'INBREEDING COEFFICIENT RECALCULATION WARNING' | translate}}</p>
+        </div>
+
+        <div class="modal-footer text-center">
+            <button (click)="recalculateInbreedingCoefficient()" class="tiny button">{{ 'RECALCULATE INBREEDING COEFFICIENT' | translate }}</button>
+            <button class="tiny alert button" data-close aria-label="Close modal" type="button">{{ 'CLOSE' | translate}}</button>
+        </div>
     </div>
 </div>
