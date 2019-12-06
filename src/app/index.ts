@@ -20,7 +20,9 @@ import { InvoiceRuleStorage } from './global/services/storage/invoice-rule.stora
 import { DownloadService } from './global/services/download/download.service';
 import { AnimalReportDownloaderService } from './global/services/download/animal-report-downloader.service';
 import { SortService } from './global/services/utils/sort.service';
-import {ReportService} from "./global/services/report/report.service";
+import { ReportService } from "./global/services/report/report.service";
+import { TaskService } from "./global/services/task/task.service";
+import {CalculateService} from "./global/services/calculate/calculate.service";
 
 require('font-awesome-loader');
 
@@ -38,17 +40,19 @@ bootstrap(IndexComponent, [
     LocationStorage,
     ClientsStorage,
     CollarStorage,
-	  DownloadService,
+    DownloadService,
+    CalculateService,
     LedgerCategoryStorage,
     PedigreeRegisterStorage,
     AnimalReportDownloaderService,
     NSFOService,
     ReportService,
+    TaskService,
     FormatService,
     ParentsStorage,
     InvoiceRuleStorage,
     TranslateService,
     SettingsService,
-	  SortService,
+    SortService,
     UtilsService
 ]);
