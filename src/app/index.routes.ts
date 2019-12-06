@@ -54,6 +54,7 @@ import {WeightsPerYearOfBirthComponent} from "./main/report/animals-overviews/we
 import {PopRepInputFileComponent} from "./main/report/animals-overviews/poprep-input-file/poprep-input-file.component";
 import {ClientNotesOverviewComponent} from "./main/report/clients-overviews/client-notes-overview/client-notes-overview.component";
 import {AnimalFeaturesPerYearOfBirthComponent} from "./main/report/animals-overviews/animal-features-per-year-of-birth/animal-features-per-year-of-birth.component";
+import {CalculationsComponent} from "./main/calculations/calculations.component";
 
 
 const routes: RouterConfig = [
@@ -141,14 +142,14 @@ const routes: RouterConfig = [
 			{path: 'log', terminal: true, component: TechnicalLogOverviewComponent},
 			{path: 'error-log', terminal: true, component: ErrorLogOverviewComponent},
             {path: 'profile', terminal: true, component: ProfileComponent},
-					  // {path: 'treatment', terminal: true, component: TreatmentMainComponent}
-					  {path: 'treatment', component: TreatmentMainComponent,
-							children: [
-								{path: '', terminal: true, redirectTo: 'templates'},
-								{path: 'prescriptions', component: TreatmentPrescriptionComponent},
-								{path: 'templates', component: TreatmentTemplateComponent},
-								{path: 'types', component: TreatmentTypeComponent},
-							]},
+            {path: 'treatment', component: TreatmentMainComponent,
+                children: [
+                    {path: '', terminal: true, redirectTo: 'templates'},
+                    {path: 'prescriptions', component: TreatmentPrescriptionComponent},
+                    {path: 'templates', component: TreatmentTemplateComponent},
+                    {path: 'types', component: TreatmentTypeComponent},
+                ]},
+            {path: 'calculations', terminal: true, component: CalculationsComponent},
         ]
     },
     {path: 'ghostlogin/:person', component: GhostLoginComponent, canActivate: [AuthenticatedGuard]},
