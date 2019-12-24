@@ -30,7 +30,7 @@ export class AnimalReportsComponent {
 			TE100_ANNUAL_PRODUCTION,
 			ANNUAL_ACTIVE_LIVESTOCK_REPORT,
 			ANNUAL_ACTIVE_LIVESTOCK_RAM_MATES_REPORT,
-			// WEIGHTS_PER_YEAR_OF_BIRTH_REPORT,
+			WEIGHTS_PER_YEAR_OF_BIRTH_REPORT,
 			POPREP_INPUT_FILE
 		];
 	}
@@ -42,7 +42,7 @@ export class AnimalReportsComponent {
 			case TE100_ANNUAL_PRODUCTION: url += 'annual-te100-production'; break;
 			case ANNUAL_ACTIVE_LIVESTOCK_REPORT: url += 'annual-active-livestock'; break;
 			case ANNUAL_ACTIVE_LIVESTOCK_RAM_MATES_REPORT: url += 'annual-active-livestock-ram-mates'; break;
-			// case WEIGHTS_PER_YEAR_OF_BIRTH_REPORT: url += 'weights-per-year-of-birth'; break;
+			case WEIGHTS_PER_YEAR_OF_BIRTH_REPORT: url += 'weights-per-year-of-birth'; break;
 			case POPREP_INPUT_FILE: url += 'poprep-input-file'; break;
 			default: return;
 		}
