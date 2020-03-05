@@ -351,6 +351,13 @@ export class DownloadService {
         this.doDownloadPostRequestByReportWorker(this.nsfo.URI_POST_WEIGHTS_PER_YEAR_OF_BIRTH_REPORT + queryParam, '{}');
     }
 
+    doAnimalFeaturesPerYearOfBirthReportGetRequest(yearOfBirth: number) {
+
+        let queryParam = '?' + YEAR_OF_BIRTH + '=' + yearOfBirth;
+
+        this.doDownloadPostRequestByReportWorker(this.nsfo.URI_GET_ANIMAL_FEATURES_PER_YEAR_OF_BIRTH_REPORT + queryParam, '{}');
+    }
+
     doPopRepInputFileReportGetRequest(
         pedigreeRegister: string = null
     ) {

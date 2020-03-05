@@ -1,0 +1,72 @@
+<div id="task-modal" class="reveal-overlay" [ngStyle]="{'display': modalDisplay}">
+  <div class="reveal large" [ngStyle]="{'display': modalDisplay}">
+
+    <!--<div class="modal-header" style="min-height: 2em; background: #48A770" >-->
+    <div class="modal-header-download">
+      {{ title | translate }}
+      <button type="button" class="pull-right" aria-label="Close modal" (click)="closeModal()">
+        <i class="fa fa-times" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <ng-template *ngIf="isModalEmpty()">
+      <div class="modal-body">
+        <p>{{ 'THERE ARE NO TASKS YET' | translate }}</p>
+      </div>
+    </ng-template>
+
+    <ng-template *ngIf="!isModalEmpty()">
+      <div class="modal-body">
+
+        <p>{{ 'THE NEWEST TASKS ARE AT THE TOP' | translate }}.</p>
+
+        <table>
+          <thead>
+          <tr>
+            <th>#</th>
+            <th>{{ 'START_TIME' | translate }}</th>
+            <th>{{ 'END_TIME' | translate }}</th>
+            <th>{{ 'TASK TYPE' | translate }}</th>
+            <th>{{ 'STATUS' | translate }}</th>
+          </tr>
+          </thead>
+          <tbody>
+
+          <tr *ngFor="let taskRequest of taskRequestsShownInModal | paginate: {itemsPerPage: filterAmount, currentPage: page}; let i = index">
+            <td>{{i + 1}}</td>
+            <td>{{taskRequest.started_at | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+            <td>{{taskRequest.finished_at | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+            <td><ng-template *ngIf="taskRequest">{{ getTaskTypeString(taskRequest.update_type)}}</ng-template></td>
+            <td *ngIf="!taskRequest.finished_at">
+              <i class="fa fa-spinner fa-pulse fa-2x fa-fw"
+                 title="{{ 'YOUR TASK IS NOW BEING EXECUTED' | translate }}"></i>
+            </td>
+            <td *ngIf="taskRequest.finished_at && !taskRequest.error_code">
+              {{ 'IS COMPLETED' | translate }}
+            </td>
+            <td *ngIf="taskRequest.error_code">
+              {{ 'FAILED' | translate }}
+              <i class="fa fa-info-circle"
+                 aria-hidden="true"
+                 title="{{(taskRequest.error_message != null ? taskRequest.error_message : 'TASK MODAL FAILED DEFAULT INFO TEXT') | translate}}">
+              </i>
+            </td>
+
+          </tr>
+          </tbody>
+        </table>
+
+        <pagination (pageChange)="page = $event"></pagination>
+        <button *ngIf="hasFailedTasks()"
+                type="button"
+                class="button alert pull-right"
+                aria-label="Clear list"
+                (click)="removeDownloadedAndFailedTasks()">
+          {{ 'REMOVE FAILED TASKS' | translate }}
+        </button>
+      </div>
+    </ng-template>
+
+
+  </div>
+</div>

@@ -10,29 +10,35 @@ import { DownloadModalComponent } from '../global/components/downloadmodal/downl
 import {ReportModalComponent} from "../global/components/reportmodal/report-modal.component";
 import {ReportService} from "../global/services/report/report.service";
 import { IS_INVOICES_ACTIVE } from '../global/constants/feature.activation';
+import {TaskService} from "../global/services/task/task.service";
+import {TaskModalComponent} from "../global/components/taskmodal/task-modal.component";
 
 @Component({
-    directives: [ROUTER_DIRECTIVES, DownloadModalComponent, ReportModalComponent],
+    directives: [ROUTER_DIRECTIVES, DownloadModalComponent, ReportModalComponent, TaskModalComponent],
     template: require('./main.component.html'),
     pipes: [TranslatePipe]
 })
 
 export class MainComponent {
-	  isActiveDownloadModal: boolean = false;
+    isActiveDownloadModal: boolean = false;
 
-	  public isActiveReportModal: boolean = false;
+    public isActiveReportModal: boolean = false;
+    public isActiveTaskModal: boolean = false;
     private isActiveSideMenu: boolean = false;
     private isActiveUserMenu: boolean = false;
     private admin: Admin = new Admin();
-    private adminDetails$: Observable;
+    private adminDetails$;
 
-	  public isInvoicesActive = IS_INVOICES_ACTIVE;
+    public isInvoicesActive = IS_INVOICES_ACTIVE;
 
-    constructor(private nsfo: NSFOService,
-                private reportService: ReportService,
-                private router: Router,
-                private utils: UtilsService,
-                private downloadService: DownloadService) {
+    constructor (
+        private nsfo: NSFOService,
+        private reportService: ReportService,
+        private taskService: TaskService,
+        private router: Router,
+        private utils: UtilsService,
+        private downloadService: DownloadService
+    ) {
         this.getAdminDetails();
         this.validateToken();
     }
@@ -82,11 +88,11 @@ export class MainComponent {
         this.downloadService.closeDownloadModal();
     }
 
-	  toggleDownloadModal() {
-		    this.downloadService.toggleDownloadModal();
-		    this.isActiveUserMenu = false;
-		    this.isActiveSideMenu = false;
-	  }
+    toggleDownloadModal() {
+        this.downloadService.toggleDownloadModal();
+        this.isActiveUserMenu = false;
+        this.isActiveSideMenu = false;
+    }
 
     downloadCount(): number {
         return this.downloadService.getDownloadsInModalCount();
@@ -102,18 +108,30 @@ export class MainComponent {
         this.isActiveSideMenu = false;
     }
 
+    isReportModalEmpty(): boolean {
+        return this.reportService.isModalEmpty();
+    }
+
     reportCount(): number {
         return this.reportService.getReportsInModalCount();
     }
 
-    isReportModalEmpty(): boolean {
-        return this.reportService.isModalEmpty();
+    toggleTaskModal() {
+        this.taskService.toggleTaskModal();
+        this.isActiveUserMenu = false;
+        this.isActiveSideMenu = false;
+    }
+
+    taskCount(): number {
+        return this.taskService.getTasksInModalCount();
+    }
+
+    isTaskModalEmpty(): boolean {
+        return this.taskService.isModalEmpty();
     }
 
     private logout() {
         localStorage.removeItem('access_token');
         this.router.navigate(['/login']);
     }
-
-
 }

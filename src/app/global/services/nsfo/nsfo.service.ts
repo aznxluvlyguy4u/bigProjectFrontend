@@ -75,10 +75,17 @@ export class NSFOService {
     public URI_GET_ANNUAL_ACTIVE_LIVESTOCK_REPORT = '/v1/reports/annual-active-livestock';
     public URI_GET_ANNUAL_ACTIVE_LIVESTOCK_RAM_MATES_REPORT = '/v1/reports/annual-active-livestock-ram-mates';
     public URI_GET_ANIMAL_HEALTH_STATUS_REPORT = '/v1/reports/animal-health-status';
+    public URI_GET_ANIMAL_FEATURES_PER_YEAR_OF_BIRTH_REPORT = '/v1/reports/animal-features-per-year-of-birth';
     public URI_POST_WEIGHTS_PER_YEAR_OF_BIRTH_REPORT = '/v1/reports/weights-per-year-of-birth';
     public URI_POST_MEMBERS_AND_USERS_OVERVIEW = '/v1/reports/members-and-users-overview';
     public URI_POST_CLIENT_NOTES_OVERVIEW = '/v1/reports/client-notes-overview';
     public URI_POST_POPREP_INPUT_FILE = '/v1/reports/poprep-input-file';
+
+    //TASKS
+    public URI_GET_TASKS = '/v1/tasks';
+    public URI_GET_STAR_EWES_CALCULATIONS_TASK = '/v1/tasks/star-ewes-calculation';
+    public URI_GET_INBREEDING_COEFFICIENT_CALCULATIONS_TASK = '/v1/tasks/inbreeding-coefficient-calculation';
+    public URI_GET_INBREEDING_COEFFICIENT_RECALCULATIONS_TASK = '/v1/tasks/inbreeding-coefficient-recalculation';
 
     public URI_TREATMENTS = '/v1/treatments';
     public URI_TREATMENT_TYPES = '/v1/treatment-types';
