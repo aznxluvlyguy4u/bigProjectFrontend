@@ -251,8 +251,12 @@ export class ClientDetailsComponent {
     private getLocationHealthErrorMessage(err: any): string {
         const body = err.json();
 
-        if (body.code === 500) {
+        if (body.code === 500 || body.result.code === 500) {
             return "SOMETHING WENT WRONG. TRY ANOTHER TIME.";
+        }
+
+        if (typeof body.result !== 'undefined') {
+            return this.translate.instant(body.result.message);
         }
 
 			  const errors = body.errors;
