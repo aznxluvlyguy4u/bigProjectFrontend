@@ -255,7 +255,7 @@ export class ClientDetailsComponent {
             return "SOMETHING WENT WRONG. TRY ANOTHER TIME.";
         }
 
-        if (typeof body.result !== 'undefined') {
+        if (typeof body.result !== 'undefined' || body.code === 417 || body.result.code === 417) {
             return this.translate.instant(body.result.message);
         }
 
