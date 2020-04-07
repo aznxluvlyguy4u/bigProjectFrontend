@@ -23,7 +23,6 @@ import { TreatmentMedicineFilterPipe } from './treatment-medicine-filter.pipe';
 export class TreatmentMedicineComponent {
 	// FILTER
 	private filterSearch: string;
-	private filterType: string;
 	private filterIsActiveStatus: boolean;
 	private activeStatuses: boolean[] = [undefined, true, false];
 
@@ -161,7 +160,6 @@ export class TreatmentMedicineComponent {
 		this.closeReactivateModal();
 	}
 
-
 	private openModal(editMode: boolean, treatmentMedicine: TreatmentMedicine): void {
 			this.isModalEditMode = editMode;
 			this.displayModal = 'block';
@@ -209,14 +207,12 @@ export class TreatmentMedicineComponent {
 	getFilterOptions(): any[] {
 		return [
 			this.filterSearch,
-			this.filterType,
 			this.filterIsActiveStatus,
 		];
 	}
 
 	resetFilterOptions() {
 		this.filterSearch = '';
-		this.filterType = 'ALL';
 		this.filterIsActiveStatus = true;
 	}
 

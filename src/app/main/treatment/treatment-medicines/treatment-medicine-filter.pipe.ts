@@ -8,7 +8,7 @@ export class TreatmentMedicineFilterPipe implements PipeTransform {
     transform(list: any, args: any[]): any {
 
         let search_input: string = args[0];
-        // let is_active_option: boolean = this.getBoolVal(args[1]);
+        let is_active_option: boolean = TreatmentMedicineFilterPipe.getBoolVal(args[1]);
 
         let filtered = list;
 
@@ -29,21 +29,21 @@ export class TreatmentMedicineFilterPipe implements PipeTransform {
 				});
 		}
 
-        // FILTER IS ACTIVE
-		// if (typeof is_active_option === 'boolean') {
-		// 		filtered = filtered.filter(treatmentMedicine => {
-		// 				return treatmentMedicine.is_active === is_active_option;
-		// 		});
-		// }
+        //FILTER IS ACTIVE
+		if (typeof is_active_option === 'boolean') {
+			filtered = filtered.filter(treatmentMedicine => {
+				return treatmentMedicine.is_active === is_active_option;
+			});
+		}
 
         return filtered
     }
 
-    // private getBoolVal(string: string): any {
-    // 	switch (string) {
-	// 			case 'true': return true;
-	// 			case 'false': return false;
-	// 			default: return string;
-	// 		}
-	// 	}
+    private static getBoolVal(string: string): any {
+	switch (string) {
+			case 'true': return true;
+			case 'false': return false;
+			default: return string;
+		}
+	}
 }

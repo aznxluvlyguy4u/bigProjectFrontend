@@ -1,5 +1,5 @@
 <ng-template *ngIf="loadingTreatmentMedicines">
-    <p class="text-center">{{'TREATMENT MEDICINES ARE BEING RETRIEVED'|translate}}</p>
+    <p class="text-center">{{'TREATMENT MEDICATIONS ARE BEING RETRIEVED'|translate}}</p>
     <div class="spinner">
         <div class="bounce1"></div>
         <div class="bounce2"></div>
@@ -45,7 +45,7 @@
                         <td>
                             <button type="button" (click)="openModal(false)" class="small primary button pull-right">
                                 <i class="fa fa-user-plus fa-fw" aria-hidden="true"></i>
-                                {{ 'ADD MEDICATION' | translate }}
+                                {{ 'ADD TREATMENT MEDICATION' | translate }}
                             </button>
                         </td>
                     </tr>
@@ -77,8 +77,8 @@
 <div class="reveal-overlay" [ngStyle]="{'display': displayModal}">
     <div class="tiny reveal" [ngStyle]="{'display': displayModal}">
         <div class="modal-header">
-            <span *ngIf="!isModalEditMode">{{ 'ADD MEDICATION' | translate }}</span>
-            <span *ngIf="isModalEditMode">{{ 'EDIT TREATMENT MEDICINE DATA' | translate }}</span>
+            <span *ngIf="!isModalEditMode">{{ 'ADD TREATMENT MEDICATION' | translate }}</span>
+            <span *ngIf="isModalEditMode">{{ 'EDIT TREATMENT MEDICATION DATA' | translate }}</span>
             <button type="button" class="pull-right" aria-label="Close modal" (click)="closeModal()">
                 <i class="fa fa-times" aria-hidden="true"></i>
             </button>
@@ -130,12 +130,12 @@
 <div class="reveal-overlay" [ngStyle]="{'display': displayRemoveModal}">
     <div class="tiny reveal" [ngStyle]="{'display': displayRemoveModal}">
         <div class="modal-header">
-            {{ 'REMOVE TREATMENT MEDICINE' | translate }}
+            {{ 'REMOVE TREATMENT MEDICATION' | translate }}
             <button type="button" (click)="closeRemoveModal()" class="pull-right" aria-label="Close modal">
                 <i class="fa fa-times" aria-hidden="true"></i>
             </button>
         </div>
-        <div class="modal-body"> {{ 'ARE YOU SURE YOU WANT TO REMOVE THIS TREATMENT MEDICINE' | translate }} </div>
+        <div class="modal-body"> {{ 'ARE YOU SURE YOU WANT TO REMOVE THIS TREATMENT MEDICATION' | translate }} </div>
         <div class="modal-footer">
             <span class="pull-left">
                 <label *ngIf="errorMessage" class="input-error-msg">{{ errorMessage | translate }}</label>
@@ -150,6 +150,35 @@
                 </span>
             </button>
             <button class="tiny primary button" [disabled]="isSaving" (click)="closeRemoveModal()">{{ 'CANCEL' | translate}}</button>
+            </span>
+        </div>
+    </div>
+</div>
+
+<!--REACTIVATE MODAL-->
+<div class="reveal-overlay" [ngStyle]="{'display': displayReactivateModal}">
+    <div class="tiny reveal" [ngStyle]="{'display': displayReactivateModal}">
+        <div class="modal-header">
+            {{ 'REACTIVATE TREATMENT MEDICATION' | translate }}
+            <button type="button" (click)="closeReactivateModal()" class="pull-right" aria-label="Close modal">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="modal-body"> {{ 'ARE YOU SURE YOU WANT TO REACTIVATE THIS TREATMENT MEDICATION' | translate }} </div>
+        <div class="modal-footer">
+            <span class="pull-left">
+                <label *ngIf="errorMessage" class="input-error-msg">{{ errorMessage | translate }}</label>
+            </span>
+            <span class="pull-right">
+            <button class="tiny alert button" [disabled]="isSaving" (click)="reactivateTreatmentMedicine()">
+                <span *ngIf="!isSaving">
+                    {{ 'REACTIVATE' | translate}}
+                </span>
+                <span *ngIf="isSaving">
+                    <i class="fa fa-gear fa-spin fa-fw"></i>
+                </span>
+            </button>
+            <button class="tiny primary button" [disabled]="isSaving" (click)="closeReactivateModal()">{{ 'CANCEL' | translate}}</button>
             </span>
         </div>
     </div>

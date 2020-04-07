@@ -17,6 +17,7 @@ import { TreatmentType } from '../treatment-type/treatment-type.model';
 import { Location } from '../../client/client.model';
 import { MedicationOption } from './medication-option.model';
 import { MedicineFormEntryComponent } from './medicine-form-entry/medicine-form-entry.component';
+import {TreatmentMedicine} from "../treatment-medicines/treatment-medicine.model";
 
 @Component({
 	selector: 'app-treatment-template',
@@ -74,6 +75,8 @@ export class TreatmentTemplateComponent implements OnInit {
 	private errorMessage: string = '';
 	private isSaving: boolean = false;
 
+	private treatmentMedicines: TreatmentMedicine[];
+
 	constructor(private nsfo: NSFOService,
 							private fb: FormBuilder,
 							private formUtilService: FormUtilService,
@@ -85,6 +88,7 @@ export class TreatmentTemplateComponent implements OnInit {
 		this.resetFilterOptions();
 		this.resetCreateOptions();
 		this.getGeneralData();
+		this.getTreatmentMedicines();
 	}
 
 	ngOnInit() {
@@ -199,6 +203,7 @@ export class TreatmentTemplateComponent implements OnInit {
 						this.treatmentTemplates.push(this.treatmentTemplate);
 						this.resetCreateOptions();
 						this.sortByDescription();
+						this.getTreatmentData();
 						this.closeModal();
 						this.isSaving = false;
 					},
@@ -242,19 +247,19 @@ export class TreatmentTemplateComponent implements OnInit {
 	}
 
 	validateForm(): boolean {
-			const hasValidLocationData = this.newIsDefaultTemplate === true ? this.newSelectedUbn == null : this.newSelectedUbn != null;
+		const hasValidLocationData = this.newIsDefaultTemplate === true ? this.newSelectedUbn == null : this.newSelectedUbn != null;
 
-			let hasCompleteMedicationData = true;
-			for(let medication of this.newMedications) {
-				if (medication.description == null || medication.dosage == null) {
-					hasCompleteMedicationData = false;
-				}
+		let hasCompleteMedicationData = true;
+		for(let medication of this.newMedications) {
+			if (medication.dosage == null) {
+				hasCompleteMedicationData = false;
 			}
+		}
 
-			this.isValidForm = this.newTreatmentTemplate.type != null &&
-				this.newTreatmentTemplate.description != null && hasValidLocationData && hasCompleteMedicationData && this.hasAtLeastOneMedication();
+		this.isValidForm = this.newTreatmentTemplate.type != null &&
+			this.newTreatmentTemplate.description != null && hasValidLocationData && hasCompleteMedicationData && this.hasAtLeastOneMedication();
 
-			return this.isValidForm;
+		return this.isValidForm;
 	}
 
 	hasAtLeastOneMedication() {
@@ -266,11 +271,7 @@ export class TreatmentTemplateComponent implements OnInit {
 		this.isSaving = true;
 
 		if(this.isValidForm) {
-
 			const treatmentTemplate = this.getFormattedTreatmentTypeBody();
-
-			console.log(treatmentTemplate);
-
 			const type = this.newTreatmentTemplate.type.toLowerCase();
 
 			this.nsfo.doPutRequest(this.nsfo.URI_TREATMENTS + '/' + type + '/template/' + treatmentTemplate.id, treatmentTemplate)
@@ -335,12 +336,10 @@ export class TreatmentTemplateComponent implements OnInit {
 			);
 	}
 
-
 	updateInTreatmentTemplates(treatmentTemplate: TreatmentTemplate) {
 		const index = _.findIndex(this.treatmentTemplates, {id: treatmentTemplate.id});
 		this.treatmentTemplates.splice(index, 1, treatmentTemplate);
 	}
-
 
 	private openModal(editMode: boolean, treatmentTemplate: TreatmentTemplate): void {
 		this.isModalEditMode = editMode;
@@ -418,7 +417,6 @@ export class TreatmentTemplateComponent implements OnInit {
 		this.isValidForm = true;
 	}
 
-
 	getFilterOptions(): any[] {
 		return [
 			this.filterSearch,
@@ -490,5 +488,14 @@ export class TreatmentTemplateComponent implements OnInit {
 		sortOrder.ascending = this.isDescriptionSortAscending;
 
 		this.treatmentTemplates = this.sortService.sort(this.treatmentTemplates, [sortOrder]);
+	}
+
+	private getTreatmentMedicines(): void {
+		this.nsfo.doGetRequest(this.nsfo.URI_TREATMENT_MEDICINES + '?active_only=true')
+		.subscribe(
+			res => {
+				this.treatmentMedicines= <TreatmentMedicine[]> res.result;
+			}
+		);
 	}
 }
