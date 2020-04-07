@@ -55,6 +55,7 @@ import {PopRepInputFileComponent} from "./main/report/animals-overviews/poprep-i
 import {ClientNotesOverviewComponent} from "./main/report/clients-overviews/client-notes-overview/client-notes-overview.component";
 import {AnimalFeaturesPerYearOfBirthComponent} from "./main/report/animals-overviews/animal-features-per-year-of-birth/animal-features-per-year-of-birth.component";
 import {CalculationsComponent} from "./main/calculations/calculations.component";
+import {TreatmentMedicineComponent} from "./main/treatment/treatment-medicines/treatment-medicine.component";
 
 
 const routes: RouterConfig = [
@@ -148,6 +149,7 @@ const routes: RouterConfig = [
                     {path: 'prescriptions', component: TreatmentPrescriptionComponent},
                     {path: 'templates', component: TreatmentTemplateComponent},
                     {path: 'types', component: TreatmentTypeComponent},
+                    {path: 'medicines', component: TreatmentMedicineComponent},
                 ]},
             {path: 'calculations', terminal: true, component: CalculationsComponent},
         ]
