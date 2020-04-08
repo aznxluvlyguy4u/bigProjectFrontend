@@ -1,5 +1,5 @@
 import { TreatmentTemplate } from './treatment-template.model';
-import {TreatmentMedicine} from "../treatment-medicines/treatment-medicine.model";
+import {TreatmentMedicine} from "../treatment-medication/treatment-medication.model";
 
 export class MedicationOption {
 	id: number;

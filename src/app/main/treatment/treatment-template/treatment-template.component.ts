@@ -17,7 +17,7 @@ import { TreatmentType } from '../treatment-type/treatment-type.model';
 import { Location } from '../../client/client.model';
 import { MedicationOption } from './medication-option.model';
 import { MedicineFormEntryComponent } from './medicine-form-entry/medicine-form-entry.component';
-import {TreatmentMedicine} from "../treatment-medicines/treatment-medicine.model";
+import {TreatmentMedicine} from "../treatment-medication/treatment-medication.model";
 
 @Component({
 	selector: 'app-treatment-template',

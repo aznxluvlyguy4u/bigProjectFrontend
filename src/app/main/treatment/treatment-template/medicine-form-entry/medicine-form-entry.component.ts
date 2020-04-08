@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { MedicationOption } from '../medication-option.model';
 import { TranslatePipe } from 'ng2-translate';
-import {TreatmentMedicine} from "../../treatment-medicines/treatment-medicine.model";
+import {TreatmentMedicine} from "../../treatment-medication/treatment-medication.model";
 
 @Component({
 	selector: 'app-medicine-form-entry',

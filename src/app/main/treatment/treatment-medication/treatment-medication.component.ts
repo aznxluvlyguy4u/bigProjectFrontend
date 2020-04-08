@@ -6,21 +6,21 @@ import { TranslatePipe } from 'ng2-translate';
 import _ = require("lodash");
 
 import { FormUtilService } from '../../../global/services/utils/form-util.service';
-import { TreatmentMedicine } from './treatment-medicine.model';
+import { TreatmentMedication } from './treatment-medication.model';
 import { NSFOService } from '../../../global/services/nsfo/nsfo.service';
 import { CheckMarkComponent } from '../../../global/components/checkmark/check-mark.component';
 import { SortSwitchComponent } from '../../../global/components/sortswitch/sort-switch.component';
 import { SortOrder, SortService } from '../../../global/services/utils/sort.service';
-import { TreatmentMedicineFilterPipe } from './treatment-medicine-filter.pipe';
+import { TreatmentMedicationFilterPipe } from './treatment-medication-filter.pipe';
 
 @Component({
 	selector: 'app-treatment-medicines',
 	directives: [CheckMarkComponent, REACTIVE_FORM_DIRECTIVES, SortSwitchComponent],
-	template: require('./treatment-medicine.component.html'),
-	pipes: [TranslatePipe, TreatmentMedicineFilterPipe],
+	template: require('./treatment-medication.component.html'),
+	pipes: [TranslatePipe, TreatmentMedicationFilterPipe],
 	providers: [FormUtilService, SortService]
 })
-export class TreatmentMedicineComponent {
+export class TreatmentMedicationComponent {
 	// FILTER
 	private filterSearch: string;
 	private filterIsActiveStatus: boolean;
@@ -30,10 +30,10 @@ export class TreatmentMedicineComponent {
 	private isDescriptionSortAscending: boolean;
 
 	// DATA
-	private loadingTreatmentMedicines: boolean = false;
-	private treatmentMedicines: TreatmentMedicine[] = [];
-	private treatmentMedicine: TreatmentMedicine = new TreatmentMedicine();
-	private treatmentMedicineTemp: TreatmentMedicine = new TreatmentMedicine();
+	private loadingTreatmentMedications: boolean = false;
+	private treatmentMedications: TreatmentMedication[] = [];
+	private treatmentMedication: TreatmentMedication = new TreatmentMedication();
+	private treatmentMedicationTemp: TreatmentMedication = new TreatmentMedication();
 
 	// FORM
 	private form: FormGroup;
@@ -53,7 +53,7 @@ export class TreatmentMedicineComponent {
 							private sortService: SortService,
 	) {
 		this.resetFilterOptions();
-		this.getTreatmentMedicines();
+		this.getTreatmentMedications();
 
 		this.form = fb.group({
 			name: ['', Validators.required]
@@ -64,14 +64,14 @@ export class TreatmentMedicineComponent {
 		return this.formUtilService.getBoolDrowDownText(string);
 	}
 
-	private getTreatmentMedicines(): void {
-		this.loadingTreatmentMedicines = true;
+	private getTreatmentMedications(): void {
+		this.loadingTreatmentMedications = true;
 		this.nsfo.doGetRequest(this.nsfo.URI_TREATMENT_MEDICINES + '?active_only=false')
 		.subscribe(
 			res => {
-				this.treatmentMedicines= <TreatmentMedicine[]> res.result;
-				console.log(this.treatmentMedicines);
-				this.loadingTreatmentMedicines = false;
+				this.treatmentMedications= <TreatmentMedication[]> res.result;
+				console.log(this.treatmentMedications);
+				this.loadingTreatmentMedications = false;
 				this.isDescriptionSortAscending = true;
 				this.sortByDescription();
 				this.resetFilterOptions();
@@ -79,20 +79,20 @@ export class TreatmentMedicineComponent {
 		);
 	}
 
-	addTreatmentMedicine() {
+	addTreatmentMedication() {
 		this.isValidForm = true;
 		this.isSaving = true;
 
 		if(this.form.valid && this.isValidForm) {
 
-			this.nsfo.doPostRequest(this.nsfo.URI_TREATMENT_MEDICINES, this.treatmentMedicine)
+			this.nsfo.doPostRequest(this.nsfo.URI_TREATMENT_MEDICINES, this.treatmentMedication)
 				.subscribe(
 					res => {
-						if (this.treatmentMedicineTemp) {
-							_.remove(this.treatmentMedicines, {id: this.treatmentMedicineTemp.id});
+						if (this.treatmentMedicationTemp) {
+							_.remove(this.treatmentMedications, {id: this.treatmentMedicationTemp.id});
 						}
-						this.treatmentMedicine = res.result;
-						this.treatmentMedicines.push(this.treatmentMedicine);
+						this.treatmentMedication = res.result;
+						this.treatmentMedications.push(this.treatmentMedication);
 						this.isSaving = false;
 						this.sortByDescription();
 						this.closeModal();
@@ -109,15 +109,15 @@ export class TreatmentMedicineComponent {
 		}
 	}
 
-	editTreatmentMedicine() {
+	editTreatmentMedication() {
 		this.isSaving = true;
 		if(this.form.valid && this.isValidForm) {
-			this.nsfo.doPutRequest(this.nsfo.URI_TREATMENT_MEDICINES + '/' + this.treatmentMedicine.id, this.treatmentMedicine)
+			this.nsfo.doPutRequest(this.nsfo.URI_TREATMENT_MEDICINES + '/' + this.treatmentMedication.id, this.treatmentMedication)
 				.subscribe(
 					res => {
-						_.remove(this.treatmentMedicines, {id: this.treatmentMedicineTemp.id});
-						this.treatmentMedicine = res.result;
-						this.treatmentMedicines.push(this.treatmentMedicine);
+						_.remove(this.treatmentMedications, {id: this.treatmentMedicationTemp.id});
+						this.treatmentMedication = res.result;
+						this.treatmentMedications.push(this.treatmentMedication);
 						this.isSaving = false;
 						this.sortByDescription();
 						this.closeModal();
@@ -133,15 +133,15 @@ export class TreatmentMedicineComponent {
 		}
 	}
 
-	removeTreatmentMedicine() {
+	removeTreatmentMedication() {
 		this.isSaving = true;
 
-		_.remove(this.treatmentMedicines, {id: this.treatmentMedicine.id});
-		this.nsfo.doDeleteRequest(this.nsfo.URI_TREATMENT_MEDICINES + '/' + this.treatmentMedicine.id, this.treatmentMedicine)
+		_.remove(this.treatmentMedications, {id: this.treatmentMedication.id});
+		this.nsfo.doDeleteRequest(this.nsfo.URI_TREATMENT_MEDICINES + '/' + this.treatmentMedication.id, this.treatmentMedication)
 			.subscribe(
 				res => {
-					this.treatmentMedicine = res.result;
-					this.treatmentMedicines.push(this.treatmentMedicine);
+					this.treatmentMedication = res.result;
+					this.treatmentMedications.push(this.treatmentMedication);
 					this.isSaving = false;
 					this.sortByDescription();
 					this.closeRemoveModal();
@@ -149,38 +149,38 @@ export class TreatmentMedicineComponent {
 				err => {
 					this.isSaving = false;
 					this.errorMessage = this.nsfo.getErrorMessage(err);
-					this.treatmentMedicines.push(this.treatmentMedicine);
+					this.treatmentMedications.push(this.treatmentMedication);
 				}
 			);
 	}
 
-	reactivateTreatmentMedicine() {
-		_.remove(this.treatmentMedicines, {id: this.treatmentMedicine.id});
-		this.addTreatmentMedicine();
+	reactivateTreatmentMedication() {
+		_.remove(this.treatmentMedications, {id: this.treatmentMedication.id});
+		this.addTreatmentMedication();
 		this.closeReactivateModal();
 	}
 
-	private openModal(editMode: boolean, treatmentMedicine: TreatmentMedicine): void {
+	private openModal(editMode: boolean, treatmentMedication: TreatmentMedication): void {
 			this.isModalEditMode = editMode;
 			this.displayModal = 'block';
 			this.isValidForm = true;
 
-			this.treatmentMedicineTemp = _.cloneDeep(treatmentMedicine);
+			this.treatmentMedicationTemp = _.cloneDeep(treatmentMedication);
 
 			if(editMode) {
-				this.treatmentMedicine = _.cloneDeep(treatmentMedicine);
+				this.treatmentMedication = _.cloneDeep(treatmentMedication);
 			}
 	}
 
 	private closeModal(): void {
 			this.displayModal = 'none';
 			this.errorMessage = '';
-			this.treatmentMedicine = new TreatmentMedicine();
+			this.treatmentMedication = new TreatmentMedication();
 			this.resetValidation();
 	}
 
-	private openRemoveModal(treatmentMedicine: TreatmentMedicine) {
-			this.treatmentMedicine = treatmentMedicine;
+	private openRemoveModal(treatmentMedication: TreatmentMedication) {
+			this.treatmentMedication = treatmentMedication;
 			this.displayRemoveModal = 'block';
 	}
 
@@ -189,8 +189,8 @@ export class TreatmentMedicineComponent {
 			this.displayRemoveModal = 'none';
 	}
 
-	private openReactivateModal(treatmentMedicine: TreatmentMedicine) {
-		this.treatmentMedicine = treatmentMedicine;
+	private openReactivateModal(treatmentMedication: TreatmentMedication) {
+		this.treatmentMedication = treatmentMedication;
 		this.displayReactivateModal = 'block';
 	}
 
@@ -228,6 +228,6 @@ export class TreatmentMedicineComponent {
 		sortOrder.isDate = false; //it is a dateString
 		sortOrder.ascending = this.isDescriptionSortAscending;
 
-		this.treatmentMedicines = this.sortService.sort(this.treatmentMedicines, [sortOrder]);
+		this.treatmentMedications = this.sortService.sort(this.treatmentMedications, [sortOrder]);
 	}
 }

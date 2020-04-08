@@ -1,14 +1,14 @@
 import {Pipe, PipeTransform} from "@angular/core";
 
 @Pipe({
-    name: 'treatmentMedicineFilter'
+    name: 'TreatmentMedicationFilterPipe'
 })
-export class TreatmentMedicineFilterPipe implements PipeTransform {
+export class TreatmentMedicationFilterPipe implements PipeTransform {
 
     transform(list: any, args: any[]): any {
 
         let search_input: string = args[0];
-        let is_active_option: boolean = TreatmentMedicineFilterPipe.getBoolVal(args[1]);
+        let is_active_option: boolean = TreatmentMedicationFilterPipe.getBoolVal(args[1]);
 
         let filtered = list;
 
