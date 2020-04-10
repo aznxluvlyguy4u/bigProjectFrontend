@@ -255,14 +255,14 @@ export class ClientDetailsComponent {
             return "SOMETHING WENT WRONG. TRY ANOTHER TIME.";
         }
 
-        if (typeof body.result !== 'undefined' || body.code === 417 || body.result.code === 417) {
+        if (typeof body.result !== 'undefined' && (body.result.message !== '' || body.result.message !== null)) {
             return this.translate.instant(body.result.message);
         }
 
-			  const errors = body.errors;
-			  let errorMessages = (Object.keys(errors).length === 1 ? 'Error': 'Errors') + ': ';
-			  let i = 1;
-			  console.log(Object.keys(errors).length);
+        const errors = body.errors;
+        let errorMessages = (Object.keys(errors).length === 1 ? 'Error': 'Errors') + ': ';
+        let i = 1;
+        console.log(Object.keys(errors).length);
         for (let errorMessageKey in errors) {
 					  errorMessages += i + '. ' + this.translate.instant(errors[errorMessageKey]) + '.   ';
 					  i++;
