@@ -52,6 +52,8 @@ export class ClientDetailsComponent {
     private scrapieStatusOptions: string[] = SCRAPIE_STATUS_OPTIONS;
     private form: ControlGroup;
 
+    private scrapieStatus = '';
+
     public isInvoicesActive = IS_INVOICES_ACTIVE;
     
     constructor(
@@ -164,6 +166,7 @@ export class ClientDetailsComponent {
         this.form.controls['maedi_visna_check_date'].updateValue(LocationHealthStatus.maedi_visna_check_date);
         this.form.controls['scrapie_reason_of_edit'].updateValue(LocationHealthStatus.scrapie_reason_of_edit);
         this.form.controls['maedi_visna_reason_of_edit'].updateValue(LocationHealthStatus.maedi_visna_reason_of_edit);
+        this.scrapieStatus = LocationHealthStatus.scrapie_status;
     }
     
     private addClientNote(): void {
@@ -213,7 +216,7 @@ export class ClientDetailsComponent {
             let request = {
                 "maedi_visna_status": this.selectedLocation.maedi_visna_status,
                 "maedi_visna_check_date": maediVisnaCheckDate,
-                "scrapie_status": this.selectedLocation.scrapie_status,
+                "scrapie_status": this.scrapieStatus,
                 "scrapie_check_date": scrapieCheckDate,
                 "maedi_visna_reason_of_edit": this.form.controls['maedi_visna_reason_of_edit'].value,
                 "scrapie_reason_of_edit": this.form.controls['scrapie_reason_of_edit'].value,
@@ -251,11 +254,19 @@ export class ClientDetailsComponent {
     private getLocationHealthErrorMessage(err: any): string {
         const body = err.json();
 
-        if (body.code === 500 || body.result.code === 500) {
+        if (typeof body === 'undefined') {
             return "SOMETHING WENT WRONG. TRY ANOTHER TIME.";
         }
 
-        if (typeof body.result !== 'undefined' && (body.result.message !== '' || body.result.message !== null)) {
+        if (typeof body.result !== 'undefined' && (body.code === 500 || body.result.code === 500)) {
+            return "SOMETHING WENT WRONG. TRY ANOTHER TIME.";
+        }
+
+        if (
+            typeof body.result !== 'undefined' &&
+            (body.result.message !== '' || body.result.message !== null) &&
+            typeof body.errors === 'undefined'
+        ) {
             return this.translate.instant(body.result.message);
         }
 
