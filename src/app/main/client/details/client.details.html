@@ -482,7 +482,7 @@
                                 <label class="middle"> {{ 'STATUS' | translate }} </label>
                             </div>
                             <div class="large-4 columns" [ngClass]="{end: !showScrapieDatePicker}">
-                                <select [(ngModel)]="selectedLocation.scrapie_status" (click)="updateScrapieInput()">
+                                <select [(ngModel)]="scrapieStatus" (click)="updateScrapieInput()">
                                     <option *ngFor="let healthStatus of scrapieStatusOptions" value="{{ healthStatus }}">
                                         {{ healthStatus | translate }}
                                     </option>
