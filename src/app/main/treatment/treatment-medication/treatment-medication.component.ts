@@ -70,7 +70,6 @@ export class TreatmentMedicationComponent {
 		.subscribe(
 			res => {
 				this.treatmentMedications= <TreatmentMedication[]> res.result;
-				console.log(this.treatmentMedications);
 				this.loadingTreatmentMedications = false;
 				this.isDescriptionSortAscending = true;
 				this.sortByDescription();

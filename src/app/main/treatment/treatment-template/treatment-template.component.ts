@@ -17,7 +17,7 @@ import { TreatmentType } from '../treatment-type/treatment-type.model';
 import { Location } from '../../client/client.model';
 import { MedicationOption } from './medication-option.model';
 import { MedicineFormEntryComponent } from './medicine-form-entry/medicine-form-entry.component';
-import {TreatmentMedicine} from "../treatment-medication/treatment-medication.model";
+import {TreatmentMedication} from "../treatment-medication/treatment-medication.model";
 
 @Component({
 	selector: 'app-treatment-template',
@@ -75,12 +75,13 @@ export class TreatmentTemplateComponent implements OnInit {
 	private errorMessage: string = '';
 	private isSaving: boolean = false;
 
-	private treatmentMedicines: TreatmentMedicine[];
+	private treatmentMedicines: TreatmentMedication[];
 
-	constructor(private nsfo: NSFOService,
-							private fb: FormBuilder,
-							private formUtilService: FormUtilService,
-							private sortService: SortService,
+	constructor(
+		private nsfo: NSFOService,
+		private fb: FormBuilder,
+		private formUtilService: FormUtilService,
+		private sortService: SortService,
 	) {
 		this.isDefaultTemplate = false;
 		this.wasCaseSelected = false;
@@ -472,6 +473,12 @@ export class TreatmentTemplateComponent implements OnInit {
 		let medicationOption = new MedicationOption();
 		medicationOption.id = this.medicationId++;
 		medicationOption.is_active = false;
+		if (this.treatmentMedicines.length > 1) {
+			medicationOption.treatment_medication = this.treatmentMedicines[0];
+		} else {
+			medicationOption.treatment_medication = new TreatmentMedication();
+		}
+
 		this.newMedications.push(medicationOption);
 	}
 

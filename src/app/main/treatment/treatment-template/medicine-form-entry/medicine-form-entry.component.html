@@ -1,8 +1,10 @@
 <div class="row">
     <div class="large-7 columns">
-        <label class="pull-left" for="treatmentMedication"> {{ 'TREATMENT MEDICATION' | translate }} *</label>
-        <select id="treatmentMedication" [(ngModel)]="treatment_medicine" (ngModelChange)="onEdit($event, 'treatment_medication')" [disabled]="isSaving">
-            <option *ngFor="let treatmentMedicine of treatmentMedicines" [ngValue]="treatmentMedicine">{{ treatmentMedicine.name }}</option>
+        <label class="pull-left"> {{ 'TREATMENT MEDICATION' | translate }} *</label>
+        <select [(ngModel)]="treatmentMedicationId" (ngModelChange)="onEdit()" [disabled]="isSaving">
+            <option *ngFor="let treatmentMedicine of treatmentMedicines" [ngValue]="treatmentMedicine.id">
+                {{ treatmentMedicine.name }}
+            </option>
         </select>
     </div>
     <div class="large-4 columns">
@@ -11,11 +13,12 @@
     </div>
     <div class="large-4 columns">
         <label class="pull-left" for="dosageUnit"> {{ 'DOSAGE UNIT' | translate }} *</label>
-        <select id="dosageUnit" [(ngModel)]="medicationOption.dosage_unit" (ngModelChange)="onEdit($event, 'dosage_unit')" [disabled]="isSaving">
-            <option value="mg">MG</option>
-            <option value="g">G</option>
-            <option value="ml">ML</option>
-            <option value="l">L</option>
+        <select id="dosageUnit" [(ngModel)]="medicationOption.dosage_unit" (ngModelChange)="onEdit()" [disabled]="isSaving">
+            <option value="aantal">aantal</option>
+            <option value="mg">mg</option>
+            <option value="ml">ml</option>
+            <option value="g">g</option>
+            <option value="l">l</option>
         </select>
     </div>
     <div class="large-4 columns">

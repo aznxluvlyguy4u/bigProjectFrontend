@@ -1,10 +1,10 @@
 import { TreatmentTemplate } from './treatment-template.model';
-import {TreatmentMedicine} from "../treatment-medication/treatment-medication.model";
+import {TreatmentMedication} from "../treatment-medication/treatment-medication.model";
 
 export class MedicationOption {
 	id: number;
 	treatment_template: TreatmentTemplate;
-	treatment_medication: TreatmentMedicine;
+	treatment_medication: TreatmentMedication;
 	dosage: number;
 	dosage_unit: string;
 	waiting_days: number;
