@@ -89,6 +89,7 @@ export class NSFOService {
 
     public URI_TREATMENTS = '/v1/treatments';
     public URI_TREATMENT_TYPES = '/v1/treatment-types';
+    public URI_TREATMENT_MEDICINES = '/v1/treatment-medications';
 
     public URI_UBNS = '/v1/ubns';
 

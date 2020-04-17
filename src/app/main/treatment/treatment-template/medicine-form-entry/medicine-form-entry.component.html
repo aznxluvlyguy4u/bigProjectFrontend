@@ -1,11 +1,33 @@
 <div class="row">
     <div class="large-7 columns">
-        <label class="pull-left"> {{ 'DESCRIPTION' | translate }} *</label>
-        <input type="text" [(ngModel)]="medicationOption.description" (change)="onEdit()" [disabled]="isSaving">
+        <label class="pull-left"> {{ 'TREATMENT MEDICATION' | translate }} *</label>
+        <select [(ngModel)]="treatmentMedicationId" (ngModelChange)="onEdit()" [disabled]="isSaving">
+            <option *ngFor="let treatmentMedicine of treatmentMedicines" [ngValue]="treatmentMedicine.id">
+                {{ treatmentMedicine.name }}
+            </option>
+        </select>
     </div>
     <div class="large-4 columns">
-        <label class="pull-left"> {{ 'DOSAGE' | translate }} *</label>
-        <input type="number" min="0" [(ngModel)]="medicationOption.dosage" (change)="onEdit()" [disabled]="isSaving">
+        <label class="pull-left" for="dosage"> {{ 'DOSAGE' | translate }} *</label>
+        <input id="dosage" type="number" min="0" [(ngModel)]="medicationOption.dosage" (change)="onEdit()" [disabled]="isSaving">
+    </div>
+    <div class="large-4 columns">
+        <label class="pull-left" for="dosageUnit"> {{ 'DOSAGE UNIT' | translate }} *</label>
+        <select id="dosageUnit" [(ngModel)]="medicationOption.dosage_unit" (ngModelChange)="onEdit()" [disabled]="isSaving">
+            <option value="aantal">aantal</option>
+            <option value="mg">mg</option>
+            <option value="ml">ml</option>
+            <option value="g">g</option>
+            <option value="l">l</option>
+        </select>
+    </div>
+    <div class="large-4 columns">
+        <label class="pull-left" for="waitingDays">{{ 'WAITING DAYS' | translate }}</label>
+        <input id="waitingDays" type="number" min="0" max="14" [(ngModel)]="medicationOption.waiting_days" (change)="onEdit()" [disabled]="isSaving">
+    </div>
+    <div class="large-4 columns">
+        <label class="pull-left" for="regNL">{{ 'REG NL' | translate }}</label>
+        <input id="regNL" type="text" [(ngModel)]="medicationOption.reg_nl" (change)="onEdit()" [disabled]="isSaving">
     </div>
     <div class="large-1 columns" style="margin-top: 1.5em">
         <button class="button alert" (click)="onRemove()" [disabled]="isSaving">

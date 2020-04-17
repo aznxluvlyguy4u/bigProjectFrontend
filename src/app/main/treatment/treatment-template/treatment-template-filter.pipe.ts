@@ -12,30 +12,30 @@ export class TreatmentTemplateFilterPipe implements PipeTransform {
 
         let filtered = list;
 
-				// FILTER: SEARCH
-				if (search_input) {
-						const needle = args[0].toLowerCase();
+		// FILTER: SEARCH
+		if (search_input) {
+			const needle = args[0].toLowerCase();
 
-						filtered = filtered.filter(treatmentTemplate => {
+			filtered = filtered.filter(treatmentTemplate => {
 
-							let description = null;
-							if (typeof treatmentTemplate.description === 'string') {
-								description = treatmentTemplate.description.toLowerCase();
-							}
-
-							let haystack = description; // + add other variables to search in here
-
-							if (treatmentTemplate.medications != null) {
-								for(let medication of treatmentTemplate.medications) {
-									if (typeof medication.description === 'string') {
-										haystack = haystack + medication.description.toLowerCase();
-									}
-								}
-							}
-
-							return haystack.indexOf(needle) !== -1;
-						});
+				let description = null;
+				if (typeof treatmentTemplate.description === 'string') {
+					description = treatmentTemplate.description.toLowerCase();
 				}
+
+				let haystack = description; // + add other variables to search in here
+
+				if (treatmentTemplate.medications != null) {
+					for(let medication of treatmentTemplate.medications) {
+						if (typeof medication.description === 'string') {
+							haystack = haystack + medication.description.toLowerCase();
+						}
+					}
+				}
+
+				return haystack.indexOf(needle) !== -1;
+			});
+		}
 
         // FILTER IS ACTIVE
 				if (typeof is_active_option === 'boolean') {

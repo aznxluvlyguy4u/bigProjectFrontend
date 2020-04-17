@@ -121,7 +121,7 @@
                             <td>
                                 <button type="button" (click)="openModal(false)" class="small primary button pull-right">
                                     <i class="fa fa-user-plus fa-fw" aria-hidden="true"></i>
-                                    {{ 'ADD TREATMENT TYPE' | translate }}
+                                    {{ 'ADD TREATMENT TEMPLATE' | translate }}
                                 </button>
                             </td>
                         </tr>
@@ -164,8 +164,8 @@
 <div class="reveal-overlay" [ngStyle]="{'display': displayModal}">
     <div class="tiny reveal" [ngStyle]="{'display': displayModal}" style="padding: 2em; width: 50em; max-width: 95vw">
         <div class="modal-header">
-            <span *ngIf="!isModalEditMode">{{ 'NEW TREATMENT TYPE' | translate }}</span>
-            <span *ngIf="isModalEditMode">{{ 'EDIT TREATMENT TYPE DATA' | translate }}</span>
+            <span *ngIf="!isModalEditMode">{{ 'NEW TREATMENT TEMPLATE' | translate }}</span>
+            <span *ngIf="isModalEditMode">{{ 'EDIT TREATMENT TEMPLATE DATA' | translate }}</span>
             <button type="button" class="pull-right" aria-label="Close modal" (click)="closeModal()">
                 <i class="fa fa-times" aria-hidden="true"></i>
             </button>
@@ -235,7 +235,7 @@
                     <label class="middle"> {{ 'KIND' | translate }} <span *ngIf="!isModalEditMode">*</span></label>
                 </div>
                 <div class="large-8 columns">
-                    <select type="text"
+                    <select
                             [(ngModel)]="newTreatmentTemplate.type"
                             formControlName="type"
                             (change)="page = 1"
@@ -282,6 +282,7 @@
                     (removeMedicationOption)="removeMedication($event)"
                     [medicationOption]="medicine"
                     [isSaving]="isSaving"
+                    [treatmentMedicines]="treatmentMedicines"
             ></app-medicine-form-entry>
 
             <div class="row">
@@ -395,14 +396,18 @@
         <table class="stacked">
             <thead>
             <tr>
-                <td>{{ 'DESCRIPTION' | translate}}</td>
+                <td>{{ 'NAME' | translate}}</td>
                 <td>{{ 'DOSAGE' | translate}}</td>
+                <td>{{ 'WAITING DAYS' | translate}}</td>
+                <td>{{ 'REG NL' | translate}}</td>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let medication of treatmentTemplate.medications">
-                <td>{{ medication.description }}</td>
-                <td>{{ medication.dosage }}</td>
+                <td>{{ medication.treatment_medication.name }}</td>
+                <td>{{ medication.dosage }} {{ medication.dosage_unit }}</td>
+                <td>{{ medication.waiting_days }}</td>
+                <td>{{ medication.reg_nl }}</td>
             </tr>
             </tbody>
         </table>
