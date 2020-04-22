@@ -465,8 +465,10 @@ export class TreatmentTemplateComponent implements OnInit {
 	}
 
 	updateMedication(medicationOption: MedicationOption) {
-		const index = _.findIndex(this.newMedications, {id: medicationOption.id});
-		this.newMedications.splice(index, 1, medicationOption);
+		if (typeof medicationOption.id !== 'undefined') {
+			const index = _.findIndex(this.newMedications, {id: medicationOption.id});
+			this.newMedications.splice(index, 1, medicationOption);
+		}
 	}
 
 	onAddNewBlankMedication() {
