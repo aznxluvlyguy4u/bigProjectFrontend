@@ -22,7 +22,7 @@
         </select>
     </div>
     <div class="large-4 columns">
-        <label class="pull-left" for="waitingDays">{{ 'WAITING DAYS' | translate }}</label>
+        <label class="pull-left" for="waitingDays">{{ 'WAITING DAYS' | translate }} *</label>
         <input id="waitingDays" type="number" min="0" max="14" [(ngModel)]="medicationOption.waiting_days" (change)="onEdit()" [disabled]="isSaving">
     </div>
     <div class="large-4 columns">
