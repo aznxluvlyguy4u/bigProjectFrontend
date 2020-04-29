@@ -52,7 +52,7 @@ export class NSFOService {
     public URI_HEALTH_LOCATION_LETTERS: string = '/v1/health_location_letters';
 
     public URI_LIVESTOCK: string = '/v1/animals-livestock';
-    
+
     public URI_SETTINGS: string = '/v1/settings';
 
     public URI_ERRORS: string = '/v1/errors';
@@ -86,6 +86,7 @@ export class NSFOService {
     public URI_GET_STAR_EWES_CALCULATIONS_TASK = '/v1/tasks/star-ewes-calculation';
     public URI_GET_INBREEDING_COEFFICIENT_CALCULATIONS_TASK = '/v1/tasks/inbreeding-coefficient-calculation';
     public URI_GET_INBREEDING_COEFFICIENT_RECALCULATIONS_TASK = '/v1/tasks/inbreeding-coefficient-recalculation';
+    public URI_DELETE_INBREEDING_COEFFICIENT_RECALCULATIONS_TASK = '/v1/tasks/inbreeding-coefficient-calculation';
 
     public URI_TREATMENTS = '/v1/treatments';
     public URI_TREATMENT_TYPES = '/v1/treatment-types';
@@ -98,7 +99,7 @@ export class NSFOService {
     private content_type: string = "Content-Type";
     private authorization: string = "Authorization";
     public access_token: string = "AccessToken";
-    
+
     private ACCESS_TOKEN_NAMESPACE: string = 'access_token';
 
 		countryCodeList: Country[] = [];

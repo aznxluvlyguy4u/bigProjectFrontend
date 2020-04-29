@@ -37,7 +37,7 @@ export class TaskService implements OnInit {
         if (hasUnfinished.length > 0) {
             setTimeout(() => {
                 this.fetchTasks();
-            }, 2000);
+            }, 30000);
         } else {
             if (this.TaskRequestShownInModal.length > 0 && !this.isFirstFetch) {
                 this.updateModalNotificationStatus(true);

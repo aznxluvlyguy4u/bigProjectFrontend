@@ -1,11 +1,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 
-import { Subscription } from 'rxjs/Subscription';
+import {Subscription} from 'rxjs/Subscription';
 import {TranslatePipe, TranslateService} from "ng2-translate";
 import {PaginatePipe, PaginationService} from "ng2-pagination";
 import {PaginationComponent} from "../pagination/pagination.component";
 import {TaskRequest, UpdateType} from "../../services/task/task-request.model";
 import {TaskService} from "../../services/task/task.service";
+import {NSFOService} from "../../services/nsfo/nsfo.service";
 
 @Component({
     selector: 'app-task-modal',
@@ -25,7 +26,10 @@ export class TaskModalComponent implements OnInit, OnDestroy {
     public page: number =1;
 	public title = 'TASK OVERVIEW';
 
+	public isCancellingInbreedingCoefficient = false;
+
     constructor(
+        private nsfo: NSFOService,
         private translate: TranslateService,
         private taskService: TaskService) {
     }
@@ -58,6 +62,30 @@ export class TaskModalComponent implements OnInit, OnDestroy {
                 }
             }
         );
+    }
+
+    public cancelInbreedingCoefficient() {
+
+        if (!this.isCancellingInbreedingCoefficient) {
+            this.isCancellingInbreedingCoefficient = true;
+            this.nsfo.doDeleteRequest(this.nsfo.URI_DELETE_INBREEDING_COEFFICIENT_RECALCULATIONS_TASK, {})
+                .finally(()=>{
+                    this.isCancellingInbreedingCoefficient = false;
+                    this.taskService.fetchTasks();
+                })
+                .subscribe(
+                    res => {
+                        this.closeModal();
+                    }, error => {
+                        alert(this.nsfo.getErrorMessage(error));
+                    }
+                );
+        }
+    }
+
+    public isInbreedingCoefficientTask(updateType: UpdateType): boolean {
+        return updateType === UpdateType.INBREEDING_COEFFICIENT_CALCULATION ||
+            updateType === UpdateType.INBREEDING_COEFFICIENT_RECALCULATION;
     }
 
     public getTaskTypeString(updateType: UpdateType) {
