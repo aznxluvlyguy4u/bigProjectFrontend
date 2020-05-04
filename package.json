@@ -5,6 +5,7 @@
     "typings": "typings",
     "postinstall": "typings install",
     "start": "webpack-dev-server --port 8081 --config webpack/webpack.local.js",
+    "start:staging": "webpack-dev-server --port 8081 --config webpack/webpack.development.js",
     "build:staging": "webpack --config webpack/webpack.development.js",
     "build:prod": "webpack --config webpack/webpack.production.js",
     "zip:staging": "gulp zip:staging",
