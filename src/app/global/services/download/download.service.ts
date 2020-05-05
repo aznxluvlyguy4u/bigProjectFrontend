@@ -358,9 +358,9 @@ export class DownloadService {
         this.doDownloadPostRequestByReportWorker(this.nsfo.URI_GET_ANIMAL_FEATURES_PER_YEAR_OF_BIRTH_REPORT + queryParam, '{}');
     }
 
-    doAnimalTreatmentsPerYearOfBirthReportGetRequest(yearOfBirth: number) {
-        let queryParam = '?' + YEAR_OF_BIRTH + '=' + yearOfBirth + '&process_as_worker_task=true';
-        this.doDownloadGetRequestByReportWorker(this.nsfo.URI_GET_ANIMAL_TREATMENTS_PER_YEAR_OF_BIRTH_REPORT + queryParam);
+    doAnimalTreatmentsPerYearReportGetRequest(year: number) {
+        let queryParam = '?' + YEAR + '=' + year + '&process_as_worker_task=true';
+        this.doDownloadGetRequestByReportWorker(this.nsfo.URI_GET_ANIMAL_TREATMENTS_PER_YEAR_REPORT + queryParam);
     }
 
     doPopRepInputFileReportGetRequest(
