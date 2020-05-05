@@ -56,6 +56,7 @@ import {ClientNotesOverviewComponent} from "./main/report/clients-overviews/clie
 import {AnimalFeaturesPerYearOfBirthComponent} from "./main/report/animals-overviews/animal-features-per-year-of-birth/animal-features-per-year-of-birth.component";
 import {CalculationsComponent} from "./main/calculations/calculations.component";
 import {TreatmentMedicationComponent} from "./main/treatment/treatment-medication/treatment-medication.component";
+import {AnimalTreatmentsPerYearOfBirthComponent} from "./main/report/animals-overviews/animal-treatments-per-year-of-birth/animal-treatments-per-year-of-birth.component";
 
 const routes: RouterConfig = [
     {
@@ -116,28 +117,29 @@ const routes: RouterConfig = [
                 ]},
             {path: 'report', component: ReportComponent,
                 children: [
-									{path: '', terminal: true, redirectTo: 'animal-reports'},
-									{path: 'animal-reports', component: AnimalReportsComponent,
-										children: [
-											{path: '', terminal: true, redirectTo: 'all-animals-overview'},
-											{path: 'all-animals-overview', component: AllAnimalsOverviewComponent},
-											{path: 'annual-te100-production', component: AnnualTe100ProductionComponent},
-											{path: 'annual-active-livestock', component: AnnualActiveLivestockComponent},
-											{path: 'annual-active-livestock-ram-mates', component: AnnualActiveLivestockRamMatesComponent},
-                                            {path: 'weights-per-year-of-birth', component: WeightsPerYearOfBirthComponent},
-                                            {path: 'poprep-input-file', component: PopRepInputFileComponent},
-                                            {path: 'animal-features-per-year-of-birth', component: AnimalFeaturesPerYearOfBirthComponent}
-										]
-                                    },
-                                    {path: 'client-reports', component: ClientReportsComponent,
-                                        children: [
-                                            {path: '', terminal: true, redirectTo: 'members-and-users-overview'},
-                                            {path: 'members-and-users-overview', component: MembersAndUsersOverviewComponent},
-                                            {path: 'animal-health-status', component: AnimalHealthStatusComponent},
-                                            {path: 'client-notes-overview', component: ClientNotesOverviewComponent},
-                                        ]
-                                    },
-                         ]
+                    {path: '', terminal: true, redirectTo: 'animal-reports'},
+                    {path: 'animal-reports', component: AnimalReportsComponent,
+                        children: [
+                            {path: '', terminal: true, redirectTo: 'all-animals-overview'},
+                            {path: 'all-animals-overview', component: AllAnimalsOverviewComponent},
+                            {path: 'annual-te100-production', component: AnnualTe100ProductionComponent},
+                            {path: 'annual-active-livestock', component: AnnualActiveLivestockComponent},
+                            {path: 'annual-active-livestock-ram-mates', component: AnnualActiveLivestockRamMatesComponent},
+                            {path: 'weights-per-year-of-birth', component: WeightsPerYearOfBirthComponent},
+                            {path: 'poprep-input-file', component: PopRepInputFileComponent},
+                            {path: 'animal-features-per-year-of-birth', component: AnimalFeaturesPerYearOfBirthComponent},
+                            {path: 'animal-treatments-per-year-of-birth', component: AnimalTreatmentsPerYearOfBirthComponent}
+                        ]
+                    },
+                    {path: 'client-reports', component: ClientReportsComponent,
+                        children: [
+                            {path: '', terminal: true, redirectTo: 'members-and-users-overview'},
+                            {path: 'members-and-users-overview', component: MembersAndUsersOverviewComponent},
+                            {path: 'animal-health-status', component: AnimalHealthStatusComponent},
+                            {path: 'client-notes-overview', component: ClientNotesOverviewComponent},
+                        ]
+                    },
+                ]
             },
 			{path: 'log', terminal: true, component: TechnicalLogOverviewComponent},
 			{path: 'error-log', terminal: true, component: ErrorLogOverviewComponent},
