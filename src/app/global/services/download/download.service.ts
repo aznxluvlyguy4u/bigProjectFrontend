@@ -210,28 +210,28 @@ export class DownloadService {
         this.addDownload(download);
 
         this.nsfo.doGetRequest(uri)
-            .subscribe(
-                res => {
+        .subscribe(
+        res => {
                 download.url = res.result;
                 this.completeDownloadPreparation(download);
             },
-                error => {
-									this.failDownload(download, error);
-                }
-            );
+        error => {
+                this.failDownload(download, error);
+            }
+        );
     }
 
     private doDownloadPostRequestByReportWorker(uri: string, request: any) {
 
         this.nsfo.doPostRequest(uri, request)
-            .subscribe(
-                res => {
-                    this.reportService.fetchReports();
-                },
-                error => {
-									alert(this.nsfo.getErrorMessage(error));
-                }
-            );
+        .subscribe(
+            res => {
+                this.reportService.fetchReports();
+            },
+            error => {
+                alert(this.nsfo.getErrorMessage(error));
+            }
+        );
     }
 
 	/**
@@ -278,14 +278,14 @@ export class DownloadService {
 
     private doDownloadGetRequestByReportWorker(uri: string) {
         this.nsfo.doGetRequest(uri)
-            .subscribe(
-                res => {
-                    this.reportService.fetchReports();
-                },
-                error => {
-									alert(this.nsfo.getErrorMessage(error));
-                }
-            );
+        .subscribe(
+            res => {
+                this.reportService.fetchReports();
+            },
+            error => {
+                alert(this.nsfo.getErrorMessage(error));
+            }
+        );
     }
 
     doLineageProofPostRequest(animals: Animal[], fileType: string = 'PDF') {
@@ -356,6 +356,11 @@ export class DownloadService {
         let queryParam = '?' + YEAR_OF_BIRTH + '=' + yearOfBirth;
 
         this.doDownloadPostRequestByReportWorker(this.nsfo.URI_GET_ANIMAL_FEATURES_PER_YEAR_OF_BIRTH_REPORT + queryParam, '{}');
+    }
+
+    doAnimalTreatmentsPerYearReportGetRequest(year: number) {
+        let queryParam = '?' + YEAR + '=' + year + '&process_as_worker_task=true';
+        this.doDownloadGetRequestByReportWorker(this.nsfo.URI_GET_ANIMAL_TREATMENTS_PER_YEAR_REPORT + queryParam);
     }
 
     doPopRepInputFileReportGetRequest(
