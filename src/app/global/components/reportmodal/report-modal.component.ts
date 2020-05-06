@@ -70,6 +70,8 @@ export class ReportModalComponent implements OnInit, OnDestroy {
           return this.translate.instant('REPORT_ANNUAL_ACTIVE_LIVE_STOCK');
         case ReportType.ANNUAL_TE_100:
           return this.translate.instant('REPORT_ANNUAL_TE_100');
+        case ReportType.ANIMAL_TREATMENTS_PER_YEAR_REPORT:
+            return this.translate.instant('ANIMAL TREATMENTS PER YEAR REPORT');
         case ReportType.FERTILIZER_ACCOUNTING:
           return this.translate.instant('REPORT_FERTILIZER_ACCOUNTING');
         case ReportType.INBREEDING_COEFFICIENT:
