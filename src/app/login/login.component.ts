@@ -56,6 +56,7 @@ export class LoginComponent {
                             this.isValidForm = false;
                             this.isAuthenticating = false;
                         }
+                        this.nsfo.retrieveDataAfterLogin();
                     },
                     err => {
                         this.isValidForm = false;

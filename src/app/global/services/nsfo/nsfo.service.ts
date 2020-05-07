@@ -107,23 +107,30 @@ export class NSFOService {
 		countries: Country[] = [];
 
     constructor(private http:Http, private translate: TranslateService, private sort: SortService) {
-				this.doGetCountryCodeList(); // if in OnInit it is loaded too late
+                if (this.isLoggedIn()) {
+                    this.doGetCountryCodeList(); // if in OnInit it is loaded too late
+                }
 		}
 
-		private doGetCountryCodeList() {
-			this.doGetRequest(this.URI_GET_COUNTRY_CODES)
-				.subscribe(
-					res => {
-						const countriesForCountryCodeList = _.cloneDeep(res.result);
-						const countries = _.cloneDeep(res.result);
-						this.countryCodeList = this.sort.sortCountries(countriesForCountryCodeList, 'code', false);
-						this.countries = this.sort.sortCountries(countries, 'name', true);
-					},
-					error => {
-						alert(this.getErrorMessage(error));
-					}
-				);
-		}
+	public retrieveDataAfterLogin() {
+        this.doGetCountryCodeList();
+    }
+
+    private doGetCountryCodeList() {
+        this.doGetRequest(this.URI_GET_COUNTRY_CODES)
+            .subscribe(
+                res => {
+                    const countriesForCountryCodeList = _.cloneDeep(res.result);
+                    const countries = _.cloneDeep(res.result);
+                    this.countryCodeList = this.sort.sortCountries(countriesForCountryCodeList, 'code', false);
+                    this.countries = this.sort.sortCountries(countries, 'name', true);
+                },
+                error => {
+                    alert(this.getErrorMessage(error));
+                }
+            );
+    }
+
     public doLoginRequest(username:string, password:string) {
         let headers = new Headers();
         headers.append(this.content_type, "application/json");
@@ -139,6 +146,10 @@ export class NSFOService {
 			headers.append(this.access_token, localStorage[this.ACCESS_TOKEN_NAMESPACE]);
 			return headers;
 	  }
+
+	private isLoggedIn(): boolean {
+        return localStorage[this.ACCESS_TOKEN_NAMESPACE] != null;
+    }
 
     public doPostRequest(uri:string, data) {
         return this.http.post(this.API_SERVER_URL + uri, JSON.stringify(data), {headers: this.getHeadersWithToken()})
