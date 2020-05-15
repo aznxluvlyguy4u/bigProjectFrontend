@@ -1,12 +1,13 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 
-import {Subscription} from 'rxjs/Subscription';
 import {TranslatePipe, TranslateService} from "ng2-translate";
 import {PaginatePipe, PaginationService} from "ng2-pagination";
 import {PaginationComponent} from "../pagination/pagination.component";
 import {TaskRequest, UpdateType} from "../../services/task/task-request.model";
 import {TaskService} from "../../services/task/task.service";
 import {NSFOService} from "../../services/nsfo/nsfo.service";
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'app-task-modal',
@@ -19,14 +20,13 @@ import {NSFOService} from "../../services/nsfo/nsfo.service";
 export class TaskModalComponent implements OnInit, OnDestroy {
     public taskRequestsShownInModal: TaskRequest[];
     private modalDisplay = 'none';
-    private taskRequestSubscription: Subscription;
-    private isModalActiveSubscription: Subscription;
-    private toggleModalSubscription: Subscription;
     public filterAmount: number = 5;
     public page: number =1;
 	public title = 'TASK OVERVIEW';
 
 	public isCancellingInbreedingCoefficient = false;
+
+    private onDestroy$: Subject<void> = new Subject<void>();
 
     constructor(
         private nsfo: NSFOService,
@@ -34,10 +34,10 @@ export class TaskModalComponent implements OnInit, OnDestroy {
         private taskService: TaskService) {
     }
 
-
     ngOnInit() {
-
-        this.taskRequestSubscription = this.taskService.tasksShownInModelChanged.subscribe(
+        this.taskService.tasksShownInModelChanged
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(
             (taskRequests: TaskRequest[]) => {
             this.taskRequestsShownInModal = taskRequests;
             this.closeIfEmpty();
@@ -45,7 +45,9 @@ export class TaskModalComponent implements OnInit, OnDestroy {
         );
         this.taskRequestsShownInModal = this.taskService.getTaskRequestsShownInModal();
 
-        this.isModalActiveSubscription = this.taskService.isModalActive.subscribe(
+        this.taskService.isModalActive
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(
             (notifyUser: boolean) => {
                 if (notifyUser) {
                     this.openModal();
@@ -55,13 +57,19 @@ export class TaskModalComponent implements OnInit, OnDestroy {
             }
         );
 
-        this.toggleModalSubscription = this.taskService.toggleIsModalActive.subscribe(
+        this.taskService.toggleIsModalActive
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(
             (toggleModal: boolean) => {
                 if (toggleModal) {
                     this.toggleModal();
                 }
             }
         );
+    }
+
+    ngOnDestroy() {
+        this.onDestroy$.next();
     }
 
     public cancelInbreedingCoefficient() {
@@ -73,6 +81,7 @@ export class TaskModalComponent implements OnInit, OnDestroy {
                     this.isCancellingInbreedingCoefficient = false;
                     this.taskService.fetchTasks();
                 })
+                .pipe(takeUntil(this.onDestroy$))
                 .subscribe(
                     res => {
                         this.closeModal();
@@ -105,12 +114,6 @@ export class TaskModalComponent implements OnInit, OnDestroy {
         if (this.taskRequestsShownInModal.length === 0) {
             this.closeModal();
         }
-    }
-
-    ngOnDestroy() {
-        this.taskRequestSubscription.unsubscribe();
-        this.isModalActiveSubscription.unsubscribe();
-        this.toggleModalSubscription.unsubscribe();
     }
 
     public openModal() {

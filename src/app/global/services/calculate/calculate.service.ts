@@ -2,18 +2,23 @@ import {Injectable} from '@angular/core';
 
 import {NSFOService} from '../nsfo/nsfo.service';
 import {TaskService} from "../task/task.service";
-
+import { Subscription } from 'rxjs/Subscription';
 
 @Injectable()
 export class CalculateService {
+    private requestSub: Subscription;
 
     constructor(
         private nsfo: NSFOService,
         private taskService: TaskService
     ) {}
 
+    ngOnDestroy() {
+        this.requestSub.unsubscribe();
+    }
+
     private doTaskRequestByReportWorker(uri: string) {
-        this.nsfo.doGetRequest(uri)
+       this.requestSub = this.nsfo.doGetRequest(uri)
             .subscribe(
                 res => {
                     this.taskService.fetchTasks();

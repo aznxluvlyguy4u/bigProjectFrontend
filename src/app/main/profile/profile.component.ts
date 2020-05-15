@@ -6,6 +6,8 @@ import {AdminProfile} from "./profile.model";
 import {PasswordValidator} from "./validator/profile.validator";
 import {Router} from "@angular/router";
 import {UtilsService} from "../../global/services/utils/utils.service";
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     directives: [REACTIVE_FORM_DIRECTIVES],
@@ -20,6 +22,8 @@ export class ProfileComponent {
     private isSaving: boolean = false;
     private errorMessage: string;
 
+    private onDestroy$: Subject<void> = new Subject<void>();
+
     constructor(private fb: FormBuilder, private nsfo: NSFOService, private router: Router, private utils: UtilsService) {
         this.form = fb.group({
             first_name: ['', Validators.required],
@@ -33,8 +37,13 @@ export class ProfileComponent {
         this.getProfile();
     }
 
+    ngOnDestroy() {
+        this.onDestroy$.next();
+    }
+
     private getProfile() {
         this.nsfo.doGetRequest(this.nsfo.URI_ADMIN_PROFILE)
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(
                 res => {
                     this.profile = res.result;
@@ -56,6 +65,7 @@ export class ProfileComponent {
             };
 
             this.nsfo.doPutRequest(this.nsfo.URI_ADMIN_PROFILE, request)
+                .pipe(takeUntil(this.onDestroy$))
                 .subscribe(
                     res => {
                         this.utils.initAdminDetails();

@@ -5,6 +5,8 @@ import {CKEditor} from 'ng2-ckeditor';
 import {NSFOService} from "../../../../../global/services/nsfo/nsfo.service";
 import {HealthLetter} from "../../../config.model";
 import {SettingsService} from "../../../../../global/services/settings/settings.service";
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 declare var $;
 
@@ -20,7 +22,9 @@ export class ScrapieAnnouncementComponent {
     private letter_type: string = 'announcement';
     private letter: HealthLetter = new HealthLetter();
     private isLoaded: boolean = false;
-    
+
+    private onDestroy$: Subject<void> = new Subject<void>();
+
     private editorConfig = {
         language: 'nl',
         resize_enabled: false,
@@ -41,9 +45,14 @@ export class ScrapieAnnouncementComponent {
 
     }
 
+    ngOnDestroy() {
+        this.onDestroy$.next();
+    }
+
     private getHTMLData(): void {
         this.isSaving = true;
         this.nsfo.doGetRequest(this.nsfo.URI_HEALTH_LOCATION_LETTERS + '/' + this.illness + '/'+ this.letter_type)
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(
                 res => {
                     this.letter = res.result;

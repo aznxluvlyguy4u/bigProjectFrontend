@@ -23,6 +23,7 @@ import {CSV, PDF} from '../../variables/file-type.enum';
 import {Invoice} from "../../../main/invoice/invoice.model";
 import {ReportService} from "../report/report.service";
 import {END_DATE, START_DATE} from "../../constants/query-params.constant";
+import { takeUntil } from 'rxjs/operators';
 
 export const INBREEDING_COEFFICIENT_REPORT = 'INBREEDING_COEFFICIENT_REPORT';
 export const INVOICE_PDF = "INVOICE_PDF";
@@ -44,11 +45,17 @@ export class DownloadService {
 
     failedDownloadsCount: number;
 
+    private onDestroy$: Subject<void> = new Subject<void>();
+
     constructor(
         private nsfo: NSFOService,
         private reportService: ReportService,
     ) {
         this.resetDownloadList();
+    }
+
+    ngOnDestroy() {
+        this.onDestroy$.next();
     }
 
     resetDownloadList() {
@@ -190,6 +197,7 @@ export class DownloadService {
         this.addDownload(download);
 
         this.nsfo.doPostRequest(uri, request)
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(
             res => {
 							download.url = res.result;
@@ -210,6 +218,7 @@ export class DownloadService {
         this.addDownload(download);
 
         this.nsfo.doGetRequest(uri)
+            .pipe(takeUntil(this.onDestroy$))
         .subscribe(
         res => {
                 download.url = res.result;
@@ -224,6 +233,7 @@ export class DownloadService {
     private doDownloadPostRequestByReportWorker(uri: string, request: any) {
 
         this.nsfo.doPostRequest(uri, request)
+            .pipe(takeUntil(this.onDestroy$))
         .subscribe(
             res => {
                 this.reportService.fetchReports();
@@ -243,6 +253,7 @@ export class DownloadService {
 		const win = window.open(newTabUrl, '_blank');
 
 		this.nsfo.doGetRequest(uri)
+            .pipe(takeUntil(this.onDestroy$))
 			.subscribe(
 				res => {
 				    const downloadUrl = res.result;
@@ -265,6 +276,7 @@ export class DownloadService {
 		const win = window.open(newTabUrl, '_blank');
 
 		this.nsfo.doPostRequest(uri, request)
+            .pipe(takeUntil(this.onDestroy$))
 			.subscribe(
 				res => {
 					const downloadUrl = res.result;
@@ -278,6 +290,7 @@ export class DownloadService {
 
     private doDownloadGetRequestByReportWorker(uri: string) {
         this.nsfo.doGetRequest(uri)
+            .pipe(takeUntil(this.onDestroy$))
         .subscribe(
             res => {
                 this.reportService.fetchReports();

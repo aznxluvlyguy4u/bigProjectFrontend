@@ -5,6 +5,7 @@ import {AnimalHealthRequest} from "../../../health.model";
 import {Router} from "@angular/router";
 import {AuthorizationComponent} from "./authorization/tableAuthorization.authorization";
 import {NSFOService} from "../../../../../global/services/nsfo/nsfo.service";
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
     selector: 'health-table-authorization',
@@ -19,12 +20,18 @@ export class HealthTableAuthorization {
     private showAuthPage = false;
     private selectedRequest: AnimalHealthRequest = new AnimalHealthRequest();
 
+    private requestSub: Subscription;
+
     @Input() animalHealthRequests: AnimalHealthRequest[];
 
     constructor(private settings: SettingsService, private router: Router, private nsfo: NSFOService) {}
     
     ngOnChanges() {
         this.getRequests();
+    }
+
+    ngOnDestroy() {
+        this.requestSub.unsubscribe();
     }
 
     private getRequests(): void {
@@ -37,7 +44,7 @@ export class HealthTableAuthorization {
     }
 
     private getResults(inspectionId) {
-        this.nsfo.doGetRequest(this.nsfo.URI_HEALTH_INSPECTIONS + '/' + inspectionId + '/results')
+       this.requestSub = this.nsfo.doGetRequest(this.nsfo.URI_HEALTH_INSPECTIONS + '/' + inspectionId + '/results')
             .subscribe(
                 res => {
                     this.results = res.result;

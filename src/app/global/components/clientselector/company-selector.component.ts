@@ -7,6 +7,7 @@ import { ClientFilterPipe } from '../../../main/client/overview/pipes/clientFilt
 import { PaginationComponent } from '../pagination/pagination.component';
 import { PaginatePipe, PaginationService } from 'ng2-pagination';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
 	selector: 'app-company-selector',
@@ -26,6 +27,7 @@ export class CompanySelectorComponent implements OnInit {
 	public displayModal: string;
 	public initialSelectedClient: Client;
 
+	private clientStorageSub: Subscription;
 
 	@Input() selectedClient: Client;
 	@Input() disabled: boolean = false;
@@ -41,7 +43,7 @@ export class CompanySelectorComponent implements OnInit {
 
 		if (this.clientsStorage.clients.length === 0) {
 
-			this.clientsStorage.clientsChanged.takeLast(1)
+			this.clientStorageSub =  this.clientsStorage.clientsChanged.takeLast(1)
 				.subscribe(
 					res => {
 						this.isLoaded = true;
@@ -54,6 +56,10 @@ export class CompanySelectorComponent implements OnInit {
 		}
 
 		this.clientsStorage.refresh();
+	}
+
+	ngOnDestroy() {
+		this.clientStorageSub.unsubscribe();
 	}
 
 	private setInitialValues() {

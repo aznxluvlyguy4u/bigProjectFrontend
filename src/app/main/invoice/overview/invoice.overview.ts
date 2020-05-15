@@ -11,6 +11,8 @@ import {ROUTER_DIRECTIVES, Router} from "@angular/router";
 import {DownloadService} from "../../../global/services/download/download.service";
 import { LocalNumberFormat } from '../../../global/pipes/local-number-format';
 import { invoiceSortPipe } from './pipes/invoiceSort.pipe';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     providers: [PaginationService],
@@ -31,12 +33,19 @@ export class InvoiceOverviewComponent {
     private filterAmount: number = 10;
     private showBatch: string = "all";
 
+    private onDestroy$: Subject<void> = new Subject<void>();
+
     constructor(private nsfo: NSFOService, private settings: SettingsService, private router: Router, private downloadService: DownloadService) {
         this.getInvoicesList();
     }
 
+    ngOnDestroy() {
+        this.onDestroy$.next();
+    }
+
     private getInvoicesList() {
         this.nsfo.doGetRequest(this.nsfo.URI_INVOICE)
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(
                 res => {
                     this.invoices = <Invoice[]> res.result;
@@ -56,7 +65,9 @@ export class InvoiceOverviewComponent {
 
     setInvoicePaid() {
         this.selectedInvoice.status = "PAID";
-        this.nsfo.doPutRequest(this.nsfo.URI_INVOICE + "/" + this.selectedInvoice.id, this.selectedInvoice).subscribe(
+        this.nsfo.doPutRequest(this.nsfo.URI_INVOICE + "/" + this.selectedInvoice.id, this.selectedInvoice)
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(
             res => {
                 this.closeModal();
                 this.getInvoicesList();

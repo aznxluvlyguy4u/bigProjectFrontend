@@ -3,6 +3,7 @@ import { NSFOService } from '../nsfo/nsfo.service';
 import { LedgerCategory } from '../../models/ledger-category.model';
 import { Client } from '../../../main/client/client.model';
 import { Subject } from 'rxjs/Subject';
+import { Subscription } from 'rxjs/Subscription';
 
 @Injectable()
 export class LedgerCategoryStorage {
@@ -11,7 +12,13 @@ export class LedgerCategoryStorage {
 
 	ledgerCategoriesChanged = new Subject<LedgerCategory[]>();
 
+	private requestSub: Subscription;
+
 	constructor(private nsfo: NSFOService) {}
+
+	ngOnDestroy() {
+		this.requestSub.unsubscribe();
+	}
 
 	initialize() {
 		if (this.ledgerCategories.length === 0) {
@@ -24,7 +31,7 @@ export class LedgerCategoryStorage {
 	}
 
 	private getLedgerCategories() {
-		this.nsfo
+		this.requestSub = this.nsfo
 			.doGetRequest(this.nsfo.URI_LEDGER_CATEGORIES + '?active_only=false')
 			.subscribe(
 				res => {
