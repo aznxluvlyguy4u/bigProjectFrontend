@@ -16,6 +16,7 @@ import { Location } from '../../../client/client.model';
 import { AnimalEditService } from '../animal-edit.service';
 import { AnimalResidenceHistory } from '../../../../global/models/animal-residence-history.model';
 import { UtilsService } from '../../../../global/services/utils/utils.service';
+import {Subscription} from "rxjs/Subscription";
 
 @Component({
 	selector: 'app-create-animal-modal',
@@ -40,7 +41,7 @@ export class CreateAnimalModalComponent implements OnInit {
 	@Output() clearNewAnimalEvent = new EventEmitter<boolean>();
 	@Output() closeModalEvent = new EventEmitter<boolean>();
 
-
+	private requestSub: Subscription;
 
 	constructor(
 		private fb: FormBuilder,
@@ -55,7 +56,9 @@ export class CreateAnimalModalComponent implements OnInit {
 		this.resetCreateForm();
 	}
 
-
+	ngOnDestroy() {
+		this.requestSub.unsubscribe();
+	}
 
 	initializeCreateForm(): void {
 		this.form = this.fb.group({
@@ -146,7 +149,7 @@ export class CreateAnimalModalComponent implements OnInit {
 				this.newAnimal.animal_residence_history = [startResidence];
 			}
 
-			this.nsfo.doPostRequest(this.nsfo.URI_ANIMALS_CREATE, this.newAnimal)
+			this.requestSub = this.nsfo.doPostRequest(this.nsfo.URI_ANIMALS_CREATE, this.newAnimal)
 				.finally(()=>{
 					this.isCreating = false;
 				})

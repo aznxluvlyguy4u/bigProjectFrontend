@@ -2,6 +2,8 @@ import {Component} from "@angular/core";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {CKEditor} from 'ng2-ckeditor';
 import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 declare var $;
 
@@ -27,8 +29,14 @@ export class ConfigCMSComponent {
         ]
     };
 
+    private onDestroy$: Subject<void> = new Subject<void>();
+
     constructor(private nsfo: NSFOService) {
         this.getCMSData();
+    }
+
+    ngOnDestroy() {
+        this.onDestroy$.next();
     }
 
     ngAfterViewInit() {
@@ -37,6 +45,7 @@ export class ConfigCMSComponent {
 
     private getCMSData() {
         this.nsfo.doGetRequest(this.nsfo.URI_CMS)
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(res => {
                 if (!this.isLoaded) {
                     CKEDITOR.replace('dashboardtext', this.editorConfig);
@@ -68,6 +77,7 @@ export class ConfigCMSComponent {
         };
 
         this.nsfo.doPutRequest(this.nsfo.URI_CMS, request)
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(
                 res => {
                     this.isSaved = true;

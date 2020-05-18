@@ -6,6 +6,7 @@ import { FormatService } from '../utils/format.service';
 import { NSFOService } from '../nsfo/nsfo.service';
 import { TranslateService } from 'ng2-translate';
 import { Subject } from 'rxjs/Subject';
+import {Subscription} from "rxjs/Subscription";
 
 @Injectable()
 export class ParentsStorage {
@@ -14,7 +15,13 @@ export class ParentsStorage {
 
 	getByUlnChanged = new Subject<Animal>();
 
+	private requestSub: Subscription;
+
 	constructor(private api: NSFOService, private translator: TranslateService) {}
+
+	ngOnDestroy() {
+		this.requestSub.unsubscribe();
+	}
 
 	clear() {
 		this.parents = [];
@@ -50,7 +57,7 @@ export class ParentsStorage {
 			return;
 		}
 
-		this.api.doGetRequest(this.api.URI_ANIMALS_DETAILS + '/' + ulnCountryCode + ulnNumber
+		this.requestSub = this.api.doGetRequest(this.api.URI_ANIMALS_DETAILS + '/' + ulnCountryCode + ulnNumber
 			+ '?minimal_output=true&is_admin_env=true')
 			.subscribe(
 				res => {
