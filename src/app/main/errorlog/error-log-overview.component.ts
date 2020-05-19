@@ -36,6 +36,8 @@ import { DeclareTagTransfer } from '../../global/models/declare-tag-transfer.mod
 import { TagTransferItemResponse } from '../../global/models/tag-transfer-item-response.model';
 import { DeclareTagTransferFilterPipe } from './pipes/declare-tag-transfer-filter.pipe';
 import { UcFirstPipe } from '../../global/pipes/uc-first.pipe';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
 		providers: [PaginationService, SortService, DateTimeService, FormUtilService, ErrorLogFilterPipe],
@@ -97,6 +99,8 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 		isEventDateSortAscending: boolean;
 		isEventDateSortNeutral: boolean;
 
+		private onDestroy$: Subject<void> = new Subject<void>();
+
 		constructor(private nsfo: NSFOService, private formBuilder: FormBuilder,
 								private settings: SettingsService, private sortService: SortService,
 								private dateTimeService: DateTimeService, private formUtilService: FormUtilService,
@@ -130,6 +134,7 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 
 		ngOnDestroy() {
 				this.initializeValues();
+				this.onDestroy$.next();
 		}
 
 
@@ -142,6 +147,7 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 				const queryParam = includeHiddenForAdmin ? '?'+SHOW_HIDDEN+'=true' : '';
 
 				this.nsfo.doGetRequest(this.nsfo.URI_ERRORS + queryParam)
+					.pipe(takeUntil(this.onDestroy$))
 						.subscribe(
 						res => {
 							this.errors = <ErrorMessage[]> res.result;
@@ -159,6 +165,7 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 
 		private getMessageDetails(requestId: string) {
 				this.nsfo.doGetRequest(this.nsfo.URI_ERRORS + '/' + requestId)
+					.pipe(takeUntil(this.onDestroy$))
 					.subscribe(
 						res => {
 							switch (res.result.type) {
@@ -175,6 +182,7 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 
 		private getLitterDetails(nonIrRequestId: string) {
 				this.nsfo.doGetRequest(this.nsfo.URI_ERRORS_NON_IR + '/' + nonIrRequestId)
+					.pipe(takeUntil(this.onDestroy$))
 					.subscribe(
 						res => {
 							this.selectedLitterDetails = res.result;
@@ -201,6 +209,7 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 			const queryParam = '?'+FORMAL+'=' + (useFormalDeclareNames ? 'true' : 'false');
 
 			this.nsfo.doGetRequest(this.nsfo.URI_ERRORS_DECLARE_TYPES + queryParam)
+				.pipe(takeUntil(this.onDestroy$))
 				.subscribe(
 					res => {
 						for(let key in res.result) {
@@ -250,6 +259,7 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 				const queryParam = '?include_ghost_login_data=true';
 
 				this.nsfo.doGetRequest(this.nsfo.URI_UBNS + queryParam)
+					.pipe(takeUntil(this.onDestroy$))
 						.subscribe(
 								res => {
 										this.ghostLoginData = res.result;
@@ -370,6 +380,7 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 				}
 
 				this.nsfo.doPutRequest(this.nsfo.URI_ERRORS_HIDDEN_STATUS, body)
+					.pipe(takeUntil(this.onDestroy$))
 						.subscribe(
 						res => {
 										this.updateErrorMessagesFromUpdateResponse(res);

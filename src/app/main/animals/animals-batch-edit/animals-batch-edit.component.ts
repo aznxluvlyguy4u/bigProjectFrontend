@@ -36,6 +36,8 @@ import { ParentSelectorComponent } from '../../../global/components/parentselect
 import { ParentsStorage } from '../../../global/services/storage/parents.storage';
 import { AnimalReportDownloaderComponent } from '../../../global/components/animalreportdownloader/animal-report-downloader.component';
 import { AnimalReportDownloaderService } from '../../../global/services/download/animal-report-downloader.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
 		providers: [PaginationService, AnimalsBatchEditFilterPipe],
@@ -133,6 +135,7 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 		filterPredicate: string;
 		filterPredicateScore: number;
 
+		private onDestroy$: Subject<void> = new Subject<void>();
 
 		constructor(private nsfo: NSFOService,
 								private translate: TranslateService,
@@ -204,6 +207,7 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 		ngOnDestroy() {
 				this.initializeValues();
 				this.parentStorage.clear();
+				this.onDestroy$.next();
 		}
 
 		isDataLoaded() {
@@ -230,6 +234,7 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 				const queryParam = '?plain_text_input=true';
 
 				this.nsfo.doPostRequest(this.nsfo.URI_ANIMALS + queryParam, getAnimalsBody)
+					.pipe(takeUntil(this.onDestroy$))
 					.subscribe(
 					res => {
 									this.retrievedAnimals = res.result.animals;
@@ -288,6 +293,7 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 				};
 
 				this.nsfo.doPutRequest(this.nsfo.URI_ANIMALS_DETAILS, updateBody)
+						.pipe(takeUntil(this.onDestroy$))
 						.subscribe(
 							res => {
 

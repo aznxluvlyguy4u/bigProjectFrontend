@@ -12,6 +12,8 @@ import {ReportService} from "../global/services/report/report.service";
 import { IS_INVOICES_ACTIVE } from '../global/constants/feature.activation';
 import {TaskService} from "../global/services/task/task.service";
 import {TaskModalComponent} from "../global/components/taskmodal/task-modal.component";
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     directives: [ROUTER_DIRECTIVES, DownloadModalComponent, ReportModalComponent, TaskModalComponent],
@@ -31,6 +33,8 @@ export class MainComponent {
 
     public isInvoicesActive = IS_INVOICES_ACTIVE;
 
+    private onDestroy$: Subject<void> = new Subject<void>();
+
     constructor (
         private nsfo: NSFOService,
         private reportService: ReportService,
@@ -43,12 +47,17 @@ export class MainComponent {
         this.validateToken();
     }
 
+    ngOnDestroy() {
+        this.onDestroy$.next();
+    }
+
     private validateToken() {
         let request = {
             "env": "ADMIN"
         };
 
         this.nsfo.doPostRequest(this.nsfo.URI_VALIDATE_TOKEN, request)
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(
                 res => {},
                 err => {this.router.navigate(['/login'])}
@@ -57,6 +66,7 @@ export class MainComponent {
     
     private getAdminDetails() {
         this.adminDetails$ = this.utils.getAdminDetails()
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(
                 res => {
                     this.admin.first_name = res.first_name;

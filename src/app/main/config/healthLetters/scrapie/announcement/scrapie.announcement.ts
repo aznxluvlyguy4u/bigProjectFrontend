@@ -85,6 +85,7 @@ export class ScrapieAnnouncementComponent {
         };
 
         this.nsfo.doPostRequest(this.nsfo.URI_HEALTH_LOCATION_LETTERS, request)
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(
                 res => {
                     this.getHTMLData();

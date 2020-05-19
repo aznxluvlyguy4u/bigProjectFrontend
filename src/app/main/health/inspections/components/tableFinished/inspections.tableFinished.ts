@@ -3,7 +3,8 @@ import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {SettingsService} from "../../../../../global/services/settings/settings.service";
 import {AnimalHealthRequest} from "../../../health.model";
 import {NSFOService} from "../../../../../global/services/nsfo/nsfo.service";
-import {Subscription} from "rxjs/Subscription";
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'health-table-finished',
@@ -16,7 +17,7 @@ export class HealthTableFinished {
 
     @Input() animalHealthRequests: AnimalHealthRequest[];
 
-    private requestSub: Subscription;
+    private onDestroy$: Subject<void> = new Subject<void>();
 
     constructor(
         private settings: SettingsService,
@@ -24,7 +25,7 @@ export class HealthTableFinished {
     ) {}
 
     ngOnDestroy() {
-        this.requestSub.unsubscribe();
+
     }
 
     ngOnChanges() {
@@ -44,7 +45,8 @@ export class HealthTableFinished {
         button.disabled = true;
         button.innerHTML = '<i class="fa fa-gear fa-spin fa-fw"></i>';
 
-        this.requestSub = this.nsfo.doPutRequest(this.nsfo.URI_HEALTH_INSPECTIONS, request)
+        this.nsfo.doPutRequest(this.nsfo.URI_HEALTH_INSPECTIONS, request)
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(
                 res => {
                     let result = res.result;
@@ -57,6 +59,7 @@ export class HealthTableFinished {
                 err => {
                     button.disabled = false;
                     this.translate.get('AUTHORIZE')
+                        .pipe(takeUntil(this.onDestroy$))
                         .subscribe(val => button.innerHTML = val);
                 }
             )

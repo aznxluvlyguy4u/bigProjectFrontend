@@ -4,6 +4,8 @@ import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {AnimalHealthRequest} from "../../../health.model";
 import {SettingsService} from "../../../../../global/services/settings/settings.service";
 import {NSFOService} from "../../../../../global/services/nsfo/nsfo.service";
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'health-table-ongoing',
@@ -16,7 +18,13 @@ export class HealthTableOngoing {
 
     @Input() animalHealthRequests: AnimalHealthRequest[];
 
+    private onDestroy$: Subject<void> = new Subject<void>();
+
     constructor(private settings: SettingsService, private nsfo: NSFOService) {}
+
+    ngOnDestroy() {
+        this.onDestroy$.next();
+    }
 
     ngOnChanges() {
         this.getRequests();
@@ -39,6 +47,7 @@ export class HealthTableOngoing {
 
         request.is_canceled = isToCancel;
         this.nsfo.doPutRequest(this.nsfo.URI_HEALTH_INSPECTIONS, request)
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(
                 res => {
                     let result = res.result;
@@ -59,6 +68,7 @@ export class HealthTableOngoing {
                 err => {
                     button.disabled = false;
                     this.translate.get('START INSPECTION')
+                        .pipe(takeUntil(this.onDestroy$))
                         .subscribe(val => button.innerHTML = val);
                 }
             )
