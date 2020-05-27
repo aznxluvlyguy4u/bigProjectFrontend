@@ -116,7 +116,9 @@ export class NSFOService {
     }
 
     ngOnDestroy() {
-        this.requestSub.unsubscribe();
+        if (this.requestSub) {
+            this.requestSub.unsubscribe();
+        }
     }
 
     public retrieveDataAfterLogin() {

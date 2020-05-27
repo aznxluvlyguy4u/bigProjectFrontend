@@ -61,7 +61,9 @@ export class ParentSelectorComponent implements OnInit {
 	}
 
 	ngOnDestroy() {
-		this.requestSub.unsubscribe();
+		if (this.requestSub) {
+			this.requestSub.unsubscribe();
+		}
 	}
 
 	private setUlnVarsOfParent() {

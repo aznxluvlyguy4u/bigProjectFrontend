@@ -20,7 +20,9 @@ export class ParentsStorage {
 	constructor(private api: NSFOService, private translator: TranslateService) {}
 
 	ngOnDestroy() {
-		this.requestSub.unsubscribe();
+		if (this.requestSub) {
+			this.requestSub.unsubscribe();
+		}
 	}
 
 	clear() {

@@ -57,7 +57,9 @@ export class CreateAnimalModalComponent implements OnInit {
 	}
 
 	ngOnDestroy() {
-		this.requestSub.unsubscribe();
+		if (this.requestSub) {
+			this.requestSub.unsubscribe();
+		}
 	}
 
 	initializeCreateForm(): void {

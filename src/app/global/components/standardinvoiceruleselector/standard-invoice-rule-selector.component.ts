@@ -60,7 +60,9 @@ export class StandardInvoiceRuleSelectorComponent {
 	}
 
 	ngOnDestroy() {
-		this.requestSub.unsubscribe();
+		if (this.requestSub) {
+			this.requestSub.unsubscribe();
+		}
 	}
 
 	isInvoiceRulesEmpty(): boolean {

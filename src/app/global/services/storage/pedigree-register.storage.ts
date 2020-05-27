@@ -15,7 +15,9 @@ export class PedigreeRegisterStorage {
 	constructor(private api: NSFOService) {}
 
 	ngOnDestroy() {
-		this.requestSub.unsubscribe();
+		if (this.requestSub) {
+			this.requestSub.unsubscribe();
+		}
 	}
 
 	initialize() {

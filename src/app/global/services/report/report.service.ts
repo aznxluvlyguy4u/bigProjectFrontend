@@ -28,7 +28,9 @@ export class ReportService implements OnInit {
   }
 
     ngOnDestroy() {
-        this.requestSub.unsubscribe();
+        if (this.requestSub) {
+            this.requestSub.unsubscribe();
+        }
     }
 
   fetchReports() {

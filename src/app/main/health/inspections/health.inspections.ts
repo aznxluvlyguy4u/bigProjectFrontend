@@ -34,7 +34,9 @@ export class HealthInspectionsComponent {
     }
 
     ngOnDestroy() {
-        this.requestSub.unsubscribe();
+        if (this.requestSub) {
+            this.requestSub.unsubscribe();
+        }
     }
     
     private selectTab(selectedTab: string): void {

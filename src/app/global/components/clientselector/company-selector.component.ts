@@ -59,7 +59,9 @@ export class CompanySelectorComponent implements OnInit {
 	}
 
 	ngOnDestroy() {
-		this.clientStorageSub.unsubscribe();
+		if (this.clientStorageSub) {
+			this.clientStorageSub.unsubscribe();
+		}
 	}
 
 	private setInitialValues() {

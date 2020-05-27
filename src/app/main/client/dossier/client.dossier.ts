@@ -160,8 +160,12 @@ export class ClientDossierComponent {
     }
 
     ngOnDestroy() {
-        this.provinces$.unsubscribe();
-        this.dataSub.unsubscribe();
+        if (this.provinces$) {
+            this.provinces$.unsubscribe();
+        }
+        if (this.dataSub) {
+            this.dataSub.unsubscribe();
+        }
         this.clearInvoiceId();
         this.onDestroy$.next();
         this.onDestroy$.complete();

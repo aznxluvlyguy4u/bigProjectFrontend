@@ -65,7 +65,9 @@ export class LedgerCategoryDropdownComponent implements OnInit {
 	}
 
 	ngOnDestroy() {
-		this.ledgerCategorySub.unsubscribe();
+		if (this.ledgerCategorySub) {
+			this.ledgerCategorySub.unsubscribe();
+		}
 	}
 
 	private setInitialValues() {

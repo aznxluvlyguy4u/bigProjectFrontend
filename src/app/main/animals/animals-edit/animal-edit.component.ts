@@ -61,7 +61,9 @@ export class AnimalEditComponent implements OnInit, OnDestroy {
 
 	ngOnDestroy() {
 		this.parentStorage.clear();
-		this.requestSub.unsubscribe();
+		if (this.requestSub) {
+			this.requestSub.unsubscribe();
+		}
 	}
 
 	getGeneralData() {

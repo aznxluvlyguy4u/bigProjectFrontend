@@ -31,7 +31,9 @@ export class HealthTableAuthorization {
     }
 
     ngOnDestroy() {
-        this.requestSub.unsubscribe();
+        if (this.requestSub) {
+            this.requestSub.unsubscribe();
+        }
     }
 
     private getRequests(): void {

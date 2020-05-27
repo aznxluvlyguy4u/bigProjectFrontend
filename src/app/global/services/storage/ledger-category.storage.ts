@@ -17,7 +17,9 @@ export class LedgerCategoryStorage {
 	constructor(private nsfo: NSFOService) {}
 
 	ngOnDestroy() {
-		this.requestSub.unsubscribe();
+		if (this.requestSub) {
+			this.requestSub.unsubscribe();
+		}
 	}
 
 	initialize() {

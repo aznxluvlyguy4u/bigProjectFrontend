@@ -14,7 +14,9 @@ export class CalculateService {
     ) {}
 
     ngOnDestroy() {
-        this.requestSub.unsubscribe();
+        if (this.requestSub) {
+            this.requestSub.unsubscribe();
+        }
     }
 
     private doTaskRequestByReportWorker(uri: string) {

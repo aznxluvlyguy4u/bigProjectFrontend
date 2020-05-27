@@ -94,7 +94,9 @@ export class ClientDetailsComponent {
     }
     
     ngOnDestroy() {
-        this.dataSub.unsubscribe();
+        if (this.dataSub) {
+            this.dataSub.unsubscribe();
+        }
         this.onDestroy$.next();
         this.onDestroy$.complete();
     }

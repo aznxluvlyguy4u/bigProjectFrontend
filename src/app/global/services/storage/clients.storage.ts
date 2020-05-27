@@ -18,7 +18,9 @@ export class ClientsStorage {
 	constructor(private nsfo: NSFOService) {}
 
 	ngOnDestroy() {
-		this.requestSub.unsubscribe();
+		if (this.requestSub) {
+			this.requestSub.unsubscribe();
+		}
 	}
 
 	isInitialized(): boolean {

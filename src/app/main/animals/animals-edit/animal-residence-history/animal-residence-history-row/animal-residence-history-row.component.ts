@@ -49,7 +49,9 @@ export class AnimalResidenceHistoryRowComponent implements OnInit {
 	}
 
 	ngOnDestroy() {
-		this.requestSub.unsubscribe();
+		if (this.requestSub) {
+			this.requestSub.unsubscribe();
+		}
 	}
 
 	public startEdit() {
