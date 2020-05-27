@@ -9,7 +9,7 @@ import _ = require("lodash");
 	template: require('./medicine-form-entry.component.html'),
 	pipes: [TranslatePipe]
 })
-export class MedicineFormEntryComponent implements AfterViewChecked, AfterViewInit{
+export class MedicineFormEntryComponent implements AfterViewInit{
 	@Input() medicationOption: MedicationOption;
 	@Input() treatmentMedicines: TreatmentMedication[];
 	@Input() isSaving: boolean;
