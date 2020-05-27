@@ -24,6 +24,7 @@ export class HealthTableOngoing {
 
     ngOnDestroy() {
         this.onDestroy$.next();
+        this.onDestroy$.complete();
     }
 
     ngOnChanges() {

@@ -66,6 +66,7 @@ export class TreatmentMedicationComponent {
 
 	ngOnDestroy() {
 		this.onDestroy$.next();
+		this.onDestroy$.complete();
 	}
 
 	getBoolDrowDownText(string: string|boolean): string {

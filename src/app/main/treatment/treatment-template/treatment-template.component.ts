@@ -98,6 +98,7 @@ export class TreatmentTemplateComponent implements OnInit {
 
 	ngOnDestroy() {
 		this.onDestroy$.next();
+		this.onDestroy$.complete();
 	}
 
 	ngOnInit() {

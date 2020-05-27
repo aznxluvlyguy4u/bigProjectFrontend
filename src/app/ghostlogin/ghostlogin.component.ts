@@ -26,6 +26,7 @@ export class GhostLoginComponent {
 
     ngOnDestroy() {
         this.onDestroy$.next();
+        this.onDestroy$.complete();
     }
 
     private loginAsGhost(personID: string) {

@@ -50,6 +50,7 @@ export class InvoiceRuleEditComponent {
 
     ngOnDestroy() {
         this.onDestroy$.next();
+        this.onDestroy$.complete();
     }
 
     getVatPercentages(): number[] {

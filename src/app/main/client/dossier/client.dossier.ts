@@ -164,6 +164,7 @@ export class ClientDossierComponent {
         this.dataSub.unsubscribe();
         this.clearInvoiceId();
         this.onDestroy$.next();
+        this.onDestroy$.complete();
     }
 
     clearRemovedLocations(locations: Location[]) {

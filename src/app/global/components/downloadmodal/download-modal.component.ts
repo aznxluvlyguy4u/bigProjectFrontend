@@ -69,6 +69,7 @@ export class DownloadModalComponent implements OnInit, OnDestroy {
 
 	ngOnDestroy() {
 		this.onDestroy$.next();
+		this.onDestroy$.complete();
 	}
 
 	public openModal() {

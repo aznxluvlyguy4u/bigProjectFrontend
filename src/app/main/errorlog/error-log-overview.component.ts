@@ -135,6 +135,7 @@ export class ErrorLogOverviewComponent implements OnInit, OnDestroy {
 		ngOnDestroy() {
 				this.initializeValues();
 				this.onDestroy$.next();
+			this.onDestroy$.complete();
 		}
 
 

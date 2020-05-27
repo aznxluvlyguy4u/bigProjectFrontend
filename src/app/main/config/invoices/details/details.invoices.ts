@@ -48,6 +48,7 @@ export class InvoicesNSFODetailsComponent {
 
     ngOnDestroy() {
         this.onDestroy$.next();
+        this.onDestroy$.complete();
     }
 
     ngAfterViewInit() {

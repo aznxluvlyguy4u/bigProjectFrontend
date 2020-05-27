@@ -30,6 +30,7 @@ export class AnimalEditService {
 
 	ngOnDestroy() {
 		this.onDestroy$.next();
+		this.onDestroy$.complete();
 	}
 
 	openGenderEditModal(): void {

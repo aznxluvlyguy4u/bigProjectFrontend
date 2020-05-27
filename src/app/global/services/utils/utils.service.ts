@@ -21,6 +21,7 @@ export class UtilsService {
 
     ngOnDestroy() {
         this.onDestroy$.next();
+        this.onDestroy$.complete();
     }
 
     // USER DETAILS

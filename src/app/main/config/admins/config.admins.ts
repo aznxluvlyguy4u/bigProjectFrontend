@@ -50,6 +50,7 @@ export class ConfigAdminsComponent {
 
     ngOnDestroy() {
         this.onDestroy$.next();
+        this.onDestroy$.complete();
     }
     
     private getAdminDetails(): void {

@@ -25,6 +25,7 @@ export class HealthTableAll {
 
     ngOnDestroy() {
         this.onDestroy$.next();
+        this.onDestroy$.complete();
     }
 
     ngOnChanges() {

@@ -40,8 +40,9 @@ export class EditGenderModalComponent implements OnInit, OnDestroy {
 		);
 	}
 
-	ngOnDestroy() {
+	ngOnDestroy(): void {
 		this.onDestroy$.next();
+		this.onDestroy$.complete();
 	}
 
 	private setAnimal() {

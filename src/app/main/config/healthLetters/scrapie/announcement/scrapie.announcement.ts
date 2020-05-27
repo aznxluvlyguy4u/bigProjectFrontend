@@ -47,6 +47,7 @@ export class ScrapieAnnouncementComponent {
 
     ngOnDestroy() {
         this.onDestroy$.next();
+        this.onDestroy$.complete();
     }
 
     private getHTMLData(): void {

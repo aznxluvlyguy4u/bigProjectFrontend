@@ -49,6 +49,7 @@ export class MainComponent {
 
     ngOnDestroy() {
         this.onDestroy$.next();
+        this.onDestroy$.complete();
     }
 
     private validateToken() {

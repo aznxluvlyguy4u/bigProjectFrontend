@@ -70,6 +70,7 @@ export class TaskModalComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.onDestroy$.next();
+        this.onDestroy$.complete();
     }
 
     public cancelInbreedingCoefficient() {

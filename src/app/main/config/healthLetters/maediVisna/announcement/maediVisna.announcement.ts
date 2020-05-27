@@ -43,6 +43,7 @@ export class MaediVisnaAnnouncementComponent {
 
     ngOnDestroy() {
         this.onDestroy$.next();
+        this.onDestroy$.complete();
     }
 
     ngAfterViewInit() {

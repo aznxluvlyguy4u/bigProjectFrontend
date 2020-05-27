@@ -41,6 +41,7 @@ export class InvoiceOverviewComponent {
 
     ngOnDestroy() {
         this.onDestroy$.next();
+        this.onDestroy$.complete();
     }
 
     private getInvoicesList() {

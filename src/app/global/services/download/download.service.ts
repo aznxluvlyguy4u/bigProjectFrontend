@@ -56,6 +56,7 @@ export class DownloadService {
 
     ngOnDestroy() {
         this.onDestroy$.next();
+        this.onDestroy$.complete();
     }
 
     resetDownloadList() {

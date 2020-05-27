@@ -96,6 +96,7 @@ export class ClientDetailsComponent {
     ngOnDestroy() {
         this.dataSub.unsubscribe();
         this.onDestroy$.next();
+        this.onDestroy$.complete();
     }
 
     private getClientDetails(): void {

@@ -51,6 +51,7 @@ export class ClientOverviewComponent implements AfterViewChecked{
 
     ngOnDestroy() {
         this.onDestroy$.next();
+        this.onDestroy$.complete();
     }
 
     ngAfterViewChecked() {

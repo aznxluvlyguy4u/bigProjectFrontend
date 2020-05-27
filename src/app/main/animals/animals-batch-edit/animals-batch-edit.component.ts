@@ -205,9 +205,10 @@ export class AnimalsBatchEditComponent implements OnInit, OnDestroy {
 		}
 
 		ngOnDestroy() {
-				this.initializeValues();
-				this.parentStorage.clear();
-				this.onDestroy$.next();
+			this.initializeValues();
+			this.parentStorage.clear();
+			this.onDestroy$.next();
+			this.onDestroy$.complete();
 		}
 
 		isDataLoaded() {

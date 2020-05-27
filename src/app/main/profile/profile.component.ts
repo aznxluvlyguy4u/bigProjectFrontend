@@ -39,6 +39,7 @@ export class ProfileComponent {
 
     ngOnDestroy() {
         this.onDestroy$.next();
+        this.onDestroy$.complete();
     }
 
     private getProfile() {

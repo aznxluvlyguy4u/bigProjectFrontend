@@ -43,6 +43,7 @@ export class ConfigVwaEmployeesComponent {
 
     ngOnDestroy() {
         this.onDestroy$.next();
+        this.onDestroy$.complete();
     }
 
     private getVwaEmployees(): void {

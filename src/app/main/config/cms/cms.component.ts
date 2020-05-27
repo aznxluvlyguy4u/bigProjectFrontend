@@ -37,6 +37,7 @@ export class ConfigCMSComponent {
 
     ngOnDestroy() {
         this.onDestroy$.next();
+        this.onDestroy$.complete();
     }
 
     ngAfterViewInit() {
