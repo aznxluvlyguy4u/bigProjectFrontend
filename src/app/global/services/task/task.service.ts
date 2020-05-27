@@ -26,9 +26,7 @@ export class TaskService implements OnInit {
   }
 
     ngOnDestroy() {
-      if (this.requestSub) {
-          this.requestSub.unsubscribe();
-      }
+      this.requestSub.unsubscribe();
     }
 
   fetchTasks() {

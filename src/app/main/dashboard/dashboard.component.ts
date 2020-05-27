@@ -26,9 +26,7 @@ export class DashboardComponent {
     }
 
     ngOnDestroy() {
-        if (this.requestSub) {
-            this.requestSub.unsubscribe();
-        }
+        this.requestSub.unsubscribe();
     }
 
     private getDashboardValues() {

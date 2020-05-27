@@ -17,9 +17,7 @@ export class CollarStorage {
 	}
 
 	ngOnDestroy() {
-		if (this.requestSub) {
-			this.requestSub.unsubscribe();
-		}
+		this.requestSub.unsubscribe();
 	}
 
 	refreshCollars() {

@@ -56,9 +56,7 @@ export class InvoicesRuleTemplatesComponent implements OnDestroy {
 
     ngOnDestroy() {
     	this.invoiceRuleStorage.refresh();
-    	if (this.requestSub) {
-            this.requestSub.unsubscribe();
-        }
+        this.requestSub.unsubscribe();
     }
 
     private getInvoiceRules() {
