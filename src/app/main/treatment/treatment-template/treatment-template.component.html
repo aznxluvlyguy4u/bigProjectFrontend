@@ -282,6 +282,7 @@
                     (removeMedicationOption)="removeMedication($event)"
                     [medicationOption]="medicine"
                     [isSaving]="isSaving"
+                    [isEdit]="isModalEditMode"
                     [treatmentMedicines]="treatmentMedicines"
             ></app-medicine-form-entry>
 
@@ -399,6 +400,7 @@
                 <td>{{ 'NAME' | translate}}</td>
                 <td>{{ 'DOSAGE' | translate}}</td>
                 <td>{{ 'WAITING DAYS' | translate}}</td>
+                <td>{{ 'TREATMENT DURATION' | translate}}</td>
                 <td>{{ 'REG NL' | translate}}</td>
             </tr>
             </thead>
@@ -407,6 +409,7 @@
                 <td>{{ medication.treatment_medication.name }}</td>
                 <td>{{ medication.dosage }} {{ medication.dosage_unit }}</td>
                 <td>{{ medication.waiting_days }}</td>
+                <td>{{ medication.treatment_duration }}</td>
                 <td>{{ medication.reg_nl }}</td>
             </tr>
             </tbody>

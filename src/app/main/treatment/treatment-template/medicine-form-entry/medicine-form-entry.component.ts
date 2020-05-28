@@ -13,6 +13,7 @@ export class MedicineFormEntryComponent implements AfterViewInit{
 	@Input() medicationOption: MedicationOption;
 	@Input() treatmentMedicines: TreatmentMedication[];
 	@Input() isSaving: boolean;
+	@Input() isEdit: boolean;
 	@Output() updateMedicationOption: EventEmitter<MedicationOption> = new EventEmitter<MedicationOption>();
 	@Output() removeMedicationOption: EventEmitter<MedicationOption> = new EventEmitter<MedicationOption>();
 
