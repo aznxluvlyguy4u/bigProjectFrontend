@@ -1,7 +1,7 @@
 <div class="row">
     <div class="large-7 columns">
         <label class="pull-left"> {{ 'TREATMENT MEDICATION' | translate }} *</label>
-        <select [(ngModel)]="treatmentMedicationId" (ngModelChange)="onEdit()" [disabled]="isSaving">
+        <select [(ngModel)]="treatmentMedicationId" required (ngModelChange)="onEdit()" [disabled]="isSaving">
             <option *ngFor="let treatmentMedicine of treatmentMedicines" [ngValue]="treatmentMedicine.id">
                 {{ treatmentMedicine.name }}
             </option>
@@ -9,11 +9,11 @@
     </div>
     <div class="large-4 columns">
         <label class="pull-left" for="dosage"> {{ 'DOSAGE' | translate }} *</label>
-        <input id="dosage" type="number" min="0" [(ngModel)]="medicationOption.dosage" (change)="onEdit()" [disabled]="isSaving">
+        <input id="dosage" required type="number" min="0" [(ngModel)]="medicationOption.dosage" (change)="onEdit()" [disabled]="isSaving">
     </div>
     <div class="large-4 columns">
         <label class="pull-left" for="dosageUnit"> {{ 'DOSAGE UNIT' | translate }} *</label>
-        <select id="dosageUnit" [(ngModel)]="medicationOption.dosage_unit" (ngModelChange)="onEdit()" [disabled]="isSaving">
+        <select id="dosageUnit" required [(ngModel)]="medicationOption.dosage_unit" (ngModelChange)="onEdit()" [disabled]="isSaving">
             <option value="aantal">aantal</option>
             <option value="mg">mg</option>
             <option value="ml">ml</option>
@@ -23,11 +23,37 @@
     </div>
     <div class="large-4 columns">
         <label class="pull-left" for="waitingDays">{{ 'WAITING DAYS' | translate }} *</label>
-        <input id="waitingDays" type="number" min="0" max="14" [(ngModel)]="medicationOption.waiting_days" (change)="onEdit()" [disabled]="isSaving">
+        <input id="waitingDays" required type="number" min="0" max="14" [(ngModel)]="medicationOption.waiting_days" (change)="onEdit()" [disabled]="isSaving">
     </div>
     <div class="large-4 columns">
-        <label class="pull-left" for="regNL">{{ 'REG NL' | translate }}</label>
-        <input id="regNL" type="text" [(ngModel)]="medicationOption.reg_nl" (change)="onEdit()" [disabled]="isSaving">
+        <label class="pull-left" for="regNL">{{ 'REG NL' | translate }} *</label>
+        <input id="regNL" required type="text" [(ngModel)]="medicationOption.reg_nl" (change)="onEdit()" [disabled]="isSaving">
+    </div>
+    <div class="large-4 columns">
+        <label class="pull-left" for="treatmentDuration">{{ 'TREATMENT DURATION' | translate }} *</label>
+        <select id="treatmentDuration" required [(ngModel)]="medicationOption.treatment_duration" (change)="onEdit()">
+            <option value="1.5">1.5</option>
+            <option value="2">2</option>
+            <option value="2.5">2.5</option>
+            <option value="3">3</option>
+            <option value="3.5">3.5</option>
+            <option value="4">4</option>
+            <option value="4.5">4.5</option>
+            <option value="5">5</option>
+            <option value="5.5">5.5</option>
+            <option value="6">6</option>
+            <option value="6.5">6.5</option>
+            <option value="7">7</option>
+            <option value="7.5">7.5</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+        </select>
     </div>
     <div class="large-1 columns" style="margin-top: 1.5em">
         <button class="button alert" (click)="onRemove()" [disabled]="isSaving">

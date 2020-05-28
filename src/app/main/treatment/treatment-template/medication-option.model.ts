@@ -9,5 +9,6 @@ export class MedicationOption {
 	dosage_unit: string;
 	waiting_days: number;
 	reg_nl: string;
+	treatment_duration: string;
 	is_active: boolean; // !note remove inactive MedicationOptions when sending them to the API
 }
