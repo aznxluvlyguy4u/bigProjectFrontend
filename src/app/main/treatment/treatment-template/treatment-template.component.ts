@@ -239,7 +239,6 @@ export class TreatmentTemplateComponent implements OnInit {
 		}
 
 		this.newTreatmentTemplate.medications = medications;
-		const type = this.newTreatmentTemplate.type.toLowerCase();
 
 		let treatmentTemplate = _.cloneDeep(this.newTreatmentTemplate);
 		delete treatmentTemplate.type;

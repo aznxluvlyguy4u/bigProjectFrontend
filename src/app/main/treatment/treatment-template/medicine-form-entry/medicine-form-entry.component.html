@@ -22,10 +22,10 @@
             <option value="l">l</option>
         </select>
     </div>
-    <div class="large-4 columns">
-        <label class="pull-left" for="waitingDays">{{ 'WAITING DAYS' | translate }} *</label>
-        <input id="waitingDays" required type="number" [readOnly]="isEdit" min="0" max="14" [(ngModel)]="medicationOption.waiting_days" (change)="onEdit()" [disabled]="isSaving">
-    </div>
+<!--    <div class="large-4 columns">-->
+<!--        <label class="pull-left" for="waitingDays">{{ 'WAITING DAYS' | translate }} *</label>-->
+<!--        <input id="waitingDays" required type="number" [readOnly]="isEdit" min="0" max="14" [(ngModel)]="medicationOption.waiting_days" (change)="onEdit()" [disabled]="isSaving">-->
+<!--    </div>-->
     <div class="large-4 columns">
         <label class="pull-left" for="regNL">{{ 'REG NL' | translate }} *</label>
         <input id="regNL" required type="text" [readOnly]="isEdit" [(ngModel)]="medicationOption.reg_nl" (change)="onEdit()" [disabled]="isSaving">
@@ -34,6 +34,7 @@
 <!--        <input type="hidden" readonly [(ngModel)]="medicationOption.treatment_duration">-->
         <label class="pull-left" for="treatmentDuration">{{ 'TREATMENT DURATION' | translate }} *</label>
         <select id="treatmentDuration" required [(ngModel)]="medicationOption.treatment_duration" (change)="onEdit()" [disabled]="isSaving || isEdit">
+            <option value="eenmalig">Eenmalig</option>
             <option value="1.5">1.5</option>
             <option value="2">2</option>
             <option value="2.5">2.5</option>
