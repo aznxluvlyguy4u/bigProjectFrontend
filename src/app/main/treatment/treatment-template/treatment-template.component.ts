@@ -341,7 +341,7 @@ export class TreatmentTemplateComponent implements OnInit {
 		this.treatmentTemplates.splice(index, 1, treatmentTemplate);
 	}
 
-	private openModal(editMode: boolean, treatmentTemplate: TreatmentTemplate): void {
+	private openModal(editMode: boolean, treatmentTemplate: TreatmentTemplate = null): void {
 		this.isModalEditMode = editMode;
 		this.displayModal = 'block';
 		this.isValidForm = true;

@@ -19,6 +19,15 @@ export class MedicineFormEntryComponent implements AfterViewInit{
 
 	private treatmentMedicationId;
 
+	public editing: boolean;
+
+	ngOnInit() {
+		this.editing = this.isEdit;
+		if (typeof this.medicationOption.is_active !== 'undefined') {
+			this.editing = false;
+		}
+	}
+
 	ngAfterViewInit() {
 		setTimeout(() => {
 			if (typeof this.medicationOption.treatment_medication === 'undefined' && this.treatmentMedicines.length > 0) {
