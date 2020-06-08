@@ -1,7 +1,8 @@
 import {Component} from "@angular/core";
 import {ROUTER_DIRECTIVES, ActivatedRoute} from "@angular/router";
-import {Subscription} from "rxjs/Rx";
 import {NSFOService} from "../global/services/nsfo/nsfo.service";
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     directives: [ROUTER_DIRECTIVES],
@@ -9,19 +10,23 @@ import {NSFOService} from "../global/services/nsfo/nsfo.service";
 })
 
 export class GhostLoginComponent {
-    private dataSub: Subscription;
+
+    private onDestroy$: Subject<void> = new Subject<void>();
 
     constructor(private nsfo: NSFOService, private activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
-        this.dataSub = this.activatedRoute.params.subscribe(params => {
+       this.activatedRoute.params
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(params => {
             let personID = params['person'];
             this.loginAsGhost(personID);
         })
     }
 
     ngOnDestroy() {
-        this.dataSub.unsubscribe();
+        this.onDestroy$.next();
+        this.onDestroy$.complete();
     }
 
     private loginAsGhost(personID: string) {
@@ -30,6 +35,7 @@ export class GhostLoginComponent {
         };
 
         this.nsfo.doPostRequest(this.nsfo.URI_GHOST_LOGIN, request)
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(
                 res => {
                     let ghostToken = res.result.ghost_token;

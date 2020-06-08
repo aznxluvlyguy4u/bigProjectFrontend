@@ -7,6 +7,7 @@ import { TranslateService } from 'ng2-translate';
 import { Country } from '../../models/country.model';
 import { Animal } from '../../components/livestock/livestock.model';
 import { SortService } from '../utils/sort.service';
+import {Subscription} from "rxjs/Subscription";
 
 @Injectable()
 export class NSFOService {
@@ -101,23 +102,31 @@ export class NSFOService {
     private authorization: string = "Authorization";
     public access_token: string = "AccessToken";
 
+    private requestSub: Subscription;
+
     private ACCESS_TOKEN_NAMESPACE: string = 'access_token';
 
 		countryCodeList: Country[] = [];
 		countries: Country[] = [];
 
     constructor(private http:Http, private translate: TranslateService, private sort: SortService) {
-                if (this.isLoggedIn()) {
-                    this.doGetCountryCodeList(); // if in OnInit it is loaded too late
-                }
-		}
+        if (this.isLoggedIn()) {
+            this.doGetCountryCodeList(); // if in OnInit it is loaded too late
+        }
+    }
 
-	public retrieveDataAfterLogin() {
+    ngOnDestroy() {
+        if (this.requestSub) {
+            this.requestSub.unsubscribe();
+        }
+    }
+
+    public retrieveDataAfterLogin() {
         this.doGetCountryCodeList();
     }
 
     private doGetCountryCodeList() {
-        this.doGetRequest(this.URI_GET_COUNTRY_CODES)
+        this.requestSub = this.doGetRequest(this.URI_GET_COUNTRY_CODES)
             .subscribe(
                 res => {
                     const countriesForCountryCodeList = _.cloneDeep(res.result);

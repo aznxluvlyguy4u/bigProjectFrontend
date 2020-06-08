@@ -5,8 +5,10 @@ import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
 import {Validators} from "@angular/common";
 import {FormGroup, FormBuilder, REACTIVE_FORM_DIRECTIVES} from "@angular/forms";
 import {UtilsService} from "../../../global/services/utils/utils.service";
-import {Observable} from "rxjs/Rx";
+import {Observable, Subscription} from "rxjs/Rx";
 import { Admin } from '../../../global/models/admin.model';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     directives: [REACTIVE_FORM_DIRECTIVES],
@@ -20,7 +22,7 @@ export class ConfigAdminsComponent {
     private adminTemp: Admin;
     private selectedAdmin: Admin;
     private superAdminDetails: [] = [];
-    private superAdminDetails$: Observable;
+    private superAdminDetails$: Subscription;
     private isModalEditMode: boolean = false;
     private isValidForm: boolean = true;
     private isSaving: boolean = false;
@@ -30,6 +32,8 @@ export class ConfigAdminsComponent {
     private errorMessage: string = '';
 
     private form: FormGroup;
+
+    private onDestroy$: Subject<void> = new Subject<void>();
 
     constructor(private nsfo: NSFOService, private fb: FormBuilder, private utils: UtilsService) {
         this.getAdminDetails();
@@ -43,9 +47,15 @@ export class ConfigAdminsComponent {
 
         });
     }
+
+    ngOnDestroy() {
+        this.onDestroy$.next();
+        this.onDestroy$.complete();
+    }
     
     private getAdminDetails(): void {
         this.superAdminDetails$ = this.utils.getAdminDetails()
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(res => {
                 this.superAdminDetails['email'] = res.email_address;
             });
@@ -53,6 +63,7 @@ export class ConfigAdminsComponent {
 
     private getAdmins(): void {
         this.nsfo.doGetRequest(this.nsfo.URI_ADMIN)
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(
                 res => {
                     this.admins= <Admin[]> res.result;
@@ -69,6 +80,7 @@ export class ConfigAdminsComponent {
 
             if(isUniqueEmail) {
                 this.nsfo.doPostRequest(this.nsfo.URI_ADMIN, this.admin)
+                    .pipe(takeUntil(this.onDestroy$))
                     .subscribe(
                         res => {
                             let result = res.result;
@@ -97,6 +109,7 @@ export class ConfigAdminsComponent {
 
         _.remove(this.admins, this.selectedAdmin);
         this.nsfo.doPutRequest(this.nsfo.URI_ADMIN + '-deactivate', this.selectedAdmin)
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(
                 res => {
                     this.isSaving = false;
@@ -116,6 +129,7 @@ export class ConfigAdminsComponent {
 
             if(isUniqueEmail) {
                 this.nsfo.doPutRequest(this.nsfo.URI_ADMIN, this.admin)
+                    .pipe(takeUntil(this.onDestroy$))
                     .subscribe(
                         res => {
                             _.remove(this.admins, this.adminTemp);

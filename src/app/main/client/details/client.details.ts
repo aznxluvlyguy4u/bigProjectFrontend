@@ -18,6 +18,8 @@ import {DownloadService} from "../../../global/services/download/download.servic
 import {Invoice} from "../../invoice/invoice.model";
 import { SpinnerBounceComponent } from '../../../global/components/spinner-bounce/spinner-bounce.component';
 import { IS_INVOICES_ACTIVE } from '../../../global/constants/feature.activation';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     directives: [REACTIVE_FORM_DIRECTIVES, Datepicker, SpinnerBounceComponent],
@@ -55,6 +57,8 @@ export class ClientDetailsComponent {
     private scrapieStatus = '';
 
     public isInvoicesActive = IS_INVOICES_ACTIVE;
+
+    private onDestroy$: Subject<void> = new Subject<void>();
     
     constructor(
         private downloadService: DownloadService,
@@ -90,7 +94,11 @@ export class ClientDetailsComponent {
     }
     
     ngOnDestroy() {
-        this.dataSub.unsubscribe()
+        if (this.dataSub) {
+            this.dataSub.unsubscribe();
+        }
+        this.onDestroy$.next();
+        this.onDestroy$.complete();
     }
 
     private getClientDetails(): void {
@@ -110,6 +118,7 @@ export class ClientDetailsComponent {
     private getClientNotes(): void {
         this.loadingClientNotes = true;
         this.nsfo.doGetRequest(this.nsfo.URI_CLIENTS + '/' + this.clientId  + '/notes')
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(res => {
                 this.clientNotes = <ClientNote[]> res.result;
                 this.clientNotes = _.orderBy(this.clientNotes, ['creation_date'], ['desc']);
@@ -125,6 +134,7 @@ export class ClientDetailsComponent {
     private getHealthStatusses(): void {
         this.loadingHealthStatusses = true;
         this.nsfo.doGetRequest(this.nsfo.URI_HEALTH_COMPANY + '/' + this.clientId)
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(res => {
                 this.setHealthResults(res);
             },
@@ -177,6 +187,7 @@ export class ClientDetailsComponent {
             };
 
             this.nsfo.doPostRequest(this.nsfo.URI_CLIENTS + '/' + this.clientId + '/notes', request)
+                .pipe(takeUntil(this.onDestroy$))
                 .subscribe(res => {
                     let note: ClientNote = res.result;
                     this.clientNote.creator.first_name = note.creator.first_name;
@@ -201,6 +212,7 @@ export class ClientDetailsComponent {
         };
 
         this.nsfo.doPutRequest(this.nsfo.URI_CLIENTS + '/' + this.clientDetails.company_id + '/status', request)
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(res => {
                 this.clientDetails.status = is_active;
                 this.isSending = false;
@@ -238,6 +250,7 @@ export class ClientDetailsComponent {
 			this.isChangingLocationHealth = true;
 
 			this.nsfo.doPutRequest(this.nsfo.URI_HEALTH_UBN + '/' + this.selectedLocation.ubn, request)
+                .pipe(takeUntil(this.onDestroy$))
 				.subscribe(
 					res => {
 						this.setHealthResults(res);

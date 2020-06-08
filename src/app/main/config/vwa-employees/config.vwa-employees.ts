@@ -5,6 +5,8 @@ import { VwaEmployee } from '../../../global/models/vwa-employee.model';
 import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
 import {Validators} from "@angular/common";
 import {FormGroup, FormBuilder, REACTIVE_FORM_DIRECTIVES} from "@angular/forms";
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     directives: [REACTIVE_FORM_DIRECTIVES],
@@ -27,6 +29,8 @@ export class ConfigVwaEmployeesComponent {
 
     private form: FormGroup;
 
+    private onDestroy$: Subject<void> = new Subject<void>();
+
     constructor(private nsfo: NSFOService, private fb: FormBuilder) {
         this.getVwaEmployees();
         
@@ -37,8 +41,14 @@ export class ConfigVwaEmployeesComponent {
         });
     }
 
+    ngOnDestroy() {
+        this.onDestroy$.next();
+        this.onDestroy$.complete();
+    }
+
     private getVwaEmployees(): void {
         this.nsfo.doGetRequest(this.nsfo.URI_VWA_EMPLOYEE + '?active_only=true')
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(
                 res => {
                     this.vwaEmployees= <VwaEmployee[]> res.result;
@@ -55,6 +65,7 @@ export class ConfigVwaEmployeesComponent {
 
             if(isUniqueEmail) {
                 this.nsfo.doPostRequest(this.nsfo.URI_VWA_EMPLOYEE, this.vwaEmployee)
+                    .pipe(takeUntil(this.onDestroy$))
                     .subscribe(
                         res => {
                             let result = res.result;
@@ -83,6 +94,7 @@ export class ConfigVwaEmployeesComponent {
 
         _.remove(this.vwaEmployees, this.selectedVwaEmployee);
         this.nsfo.doDeleteRequest(this.nsfo.URI_VWA_EMPLOYEE + '/' + this.selectedVwaEmployee.person_id, this.selectedVwaEmployee)
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(
                 res => {
                     this.isSaving = false;
@@ -102,6 +114,7 @@ export class ConfigVwaEmployeesComponent {
 
             if(isUniqueEmail) {
                 this.nsfo.doPutRequest(this.nsfo.URI_VWA_EMPLOYEE + '/' + this.vwaEmployee.person_id, this.vwaEmployee)
+                    .pipe(takeUntil(this.onDestroy$))
                     .subscribe(
                         res => {
                             _.remove(this.vwaEmployees, this.vwaEmployeeTemp);

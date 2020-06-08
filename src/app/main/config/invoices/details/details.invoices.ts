@@ -7,6 +7,8 @@ import {NSFOService} from "../../../../global/services/nsfo/nsfo.service";
 import { Address } from '../../../client/client.model';
 import { CountrySelectorComponent } from '../../../../global/components/countryselector/country-selector.component';
 import { SpinnerComponent } from '../../../../global/components/spinner/spinner.component';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, CountrySelectorComponent, SpinnerComponent],
@@ -22,6 +24,8 @@ export class InvoicesNSFODetailsComponent {
     private senderAddress: Address = new Address();
     isUpdating: boolean;
     displayingSaveConfirmation: boolean;
+
+    private onDestroy$: Subject<void> = new Subject<void>();
 
     constructor(private fb: FormBuilder, private nsfo: NSFOService, private translate: TranslateService) {
         this.getInvoiceSenderDetails();
@@ -42,13 +46,20 @@ export class InvoicesNSFODetailsComponent {
         this.displayingSaveConfirmation = false;
     }
 
+    ngOnDestroy() {
+        this.onDestroy$.next();
+        this.onDestroy$.complete();
+    }
+
     ngAfterViewInit() {
         this.editText = document.getElementById("result-text");
     }
 
     getInvoiceSenderDetails(){
         let details = new InvoiceSenderDetails();
-        this.nsfo.doGetRequest(this.nsfo.URI_INVOICE_SENDER_DETAILS).subscribe(
+        this.nsfo.doGetRequest(this.nsfo.URI_INVOICE_SENDER_DETAILS)
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(
             res => {
                 details = res.result;
                 if (details != undefined && details.address.address_number_suffix == undefined) {
@@ -74,7 +85,9 @@ export class InvoicesNSFODetailsComponent {
             }
             this.isUpdating = true;
             this.invoiceSenderDetails.address = this.senderAddress;
-            this.nsfo.doPostRequest(this.nsfo.URI_INVOICE_SENDER_DETAILS , this.invoiceSenderDetails).subscribe(
+            this.nsfo.doPostRequest(this.nsfo.URI_INVOICE_SENDER_DETAILS , this.invoiceSenderDetails)
+                .pipe(takeUntil(this.onDestroy$))
+                .subscribe(
                 res => {
                     this.invoiceSenderDetails = res.result;
                     this.isUpdating = false;
@@ -105,6 +118,7 @@ export class InvoicesNSFODetailsComponent {
     UpdateInvoiceSenderDetails(){
         this.invoiceSenderDetails.address = this.senderAddress;
             this.nsfo.doPutRequest(this.nsfo.URI_INVOICE_SENDER_DETAILS + "/" + this.invoiceSenderDetails.id.toString() , this.invoiceSenderDetails)
+                .pipe(takeUntil(this.onDestroy$))
                 .subscribe(
                 res => {
                     this.invoiceSenderDetails = res.result;

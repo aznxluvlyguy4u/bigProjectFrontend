@@ -9,6 +9,7 @@ import {HealthTableFinished} from "./components/tableFinished/inspections.tableF
 import {HealthTableAnnounced} from "./components/tableAnnounced/inspections.tableAnnounced";
 import {NSFOService} from "../../../global/services/nsfo/nsfo.service";
 import {AnimalHealthRequest} from "../health.model";
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
     directives: [
@@ -26,9 +27,14 @@ import {AnimalHealthRequest} from "../health.model";
 export class HealthInspectionsComponent {
     private selectedTab: string = 'ALL REQUESTS';
     private animalHealthRequests: AnimalHealthRequest[] = [];
-    
+    private requestSub: Subscription;
+
     constructor(private nsfo: NSFOService) {
         this.getAnimalHealthRequests();
+    }
+
+    ngOnDestroy() {
+        this.requestSub.unsubscribe();
     }
     
     private selectTab(selectedTab: string): void {
@@ -36,7 +42,7 @@ export class HealthInspectionsComponent {
     }
     
     private getAnimalHealthRequests(): void {
-        this.nsfo.doGetRequest(this.nsfo.URI_HEALTH_INSPECTIONS)
+       this.requestSub = this.nsfo.doGetRequest(this.nsfo.URI_HEALTH_INSPECTIONS)
             .subscribe(
                 res => {
                     this.animalHealthRequests = res.result;
