@@ -5,6 +5,10 @@ import {TreatmentMedication} from "../../treatment-medication/treatment-medicati
 import _ = require("lodash");
 import {MEDICATION_DOSAGE_UNIT} from "../../../../global/constants/medication-dosage-unit.constant";
 import {UcFirstPipe} from "../../../../global/pipes/uc-first.pipe";
+import {
+	TREATMENT_DURATION_OPTION,
+	TreatmentDurationOption
+} from "../../../../global/constants/treatment-duration-option.constant";
 
 @Component({
 	selector: 'app-medicine-form-entry',
@@ -15,12 +19,23 @@ export class MedicineFormEntryComponent implements AfterViewInit{
 	@Input() medicationOption: MedicationOption;
 	@Input() treatmentMedicines: TreatmentMedication[];
 	@Input() isSaving: boolean;
+	@Input() isEdit: boolean;
 	@Output() updateMedicationOption: EventEmitter<MedicationOption> = new EventEmitter<MedicationOption>();
 	@Output() removeMedicationOption: EventEmitter<MedicationOption> = new EventEmitter<MedicationOption>();
 
 	public medicationDosageUnits: string[] = MEDICATION_DOSAGE_UNIT;
+	public treatmentDurationOptions: TreatmentDurationOption[] = TREATMENT_DURATION_OPTION;
 
 	private treatmentMedicationId;
+
+	public editing: boolean;
+
+	ngOnInit() {
+		this.editing = this.isEdit;
+		if (typeof this.medicationOption.is_active !== 'undefined') {
+			this.editing = false;
+		}
+	}
 
 	ngAfterViewInit() {
 		setTimeout(() => {
