@@ -5,6 +5,10 @@ import {TreatmentMedication} from "../../treatment-medication/treatment-medicati
 import _ = require("lodash");
 import {MEDICATION_DOSAGE_UNIT} from "../../../../global/constants/medication-dosage-unit.constant";
 import {UcFirstPipe} from "../../../../global/pipes/uc-first.pipe";
+import {
+	TREATMENT_DURATION_OPTION,
+	TreatmentDurationOption
+} from "../../../../global/constants/treatment-duration-option.constant";
 
 @Component({
 	selector: 'app-medicine-form-entry',
@@ -20,6 +24,7 @@ export class MedicineFormEntryComponent implements AfterViewInit{
 	@Output() removeMedicationOption: EventEmitter<MedicationOption> = new EventEmitter<MedicationOption>();
 
 	public medicationDosageUnits: string[] = MEDICATION_DOSAGE_UNIT;
+	public treatmentDurationOptions: TreatmentDurationOption[] = TREATMENT_DURATION_OPTION;
 
 	private treatmentMedicationId;
 
