@@ -77,7 +77,7 @@ export class TreatmentTemplateComponent implements OnInit {
 	private errorMessage: string = '';
 	private isSaving: boolean = false;
 
-	private treatmentMedicines: TreatmentMedication[];
+	private treatmentMedications: TreatmentMedication[];
 
 	private onDestroy$: Subject<void> = new Subject<void>();
 
@@ -491,8 +491,8 @@ export class TreatmentTemplateComponent implements OnInit {
 		let medicationOption = new MedicationOption();
 		medicationOption.id = this.medicationId++;
 		medicationOption.is_active = false;
-		if (this.treatmentMedicines.length > 1) {
-			medicationOption.treatment_medication = this.treatmentMedicines[0];
+		if (this.treatmentMedications.length > 1) {
+			medicationOption.treatment_medication = this.treatmentMedications[0];
 		} else {
 			medicationOption.treatment_medication = new TreatmentMedication();
 		}
@@ -520,7 +520,7 @@ export class TreatmentTemplateComponent implements OnInit {
 			.pipe(takeUntil(this.onDestroy$))
 		.subscribe(
 			res => {
-				this.treatmentMedicines= <TreatmentMedicine[]> res.result;
+				this.treatmentMedications= <TreatmentMedication[]> res.result;
 			}
 		);
 	}
