@@ -3,11 +3,13 @@ import { MedicationOption } from '../medication-option.model';
 import { TranslatePipe } from 'ng2-translate';
 import {TreatmentMedication} from "../../treatment-medication/treatment-medication.model";
 import _ = require("lodash");
+import {MEDICATION_DOSAGE_UNIT} from "../../../../global/constants/medication-dosage-unit.constant";
+import {UcFirstPipe} from "../../../../global/pipes/uc-first.pipe";
 
 @Component({
 	selector: 'app-medicine-form-entry',
 	template: require('./medicine-form-entry.component.html'),
-	pipes: [TranslatePipe]
+	pipes: [TranslatePipe, UcFirstPipe]
 })
 export class MedicineFormEntryComponent implements AfterViewInit{
 	@Input() medicationOption: MedicationOption;
@@ -15,6 +17,8 @@ export class MedicineFormEntryComponent implements AfterViewInit{
 	@Input() isSaving: boolean;
 	@Output() updateMedicationOption: EventEmitter<MedicationOption> = new EventEmitter<MedicationOption>();
 	@Output() removeMedicationOption: EventEmitter<MedicationOption> = new EventEmitter<MedicationOption>();
+
+	public medicationDosageUnits: string[] = MEDICATION_DOSAGE_UNIT;
 
 	private treatmentMedicationId;
 

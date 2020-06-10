@@ -14,11 +14,7 @@
     <div class="large-4 columns">
         <label class="pull-left" for="dosageUnit"> {{ 'DOSAGE UNIT' | translate }} *</label>
         <select id="dosageUnit" [(ngModel)]="medicationOption.dosage_unit" (ngModelChange)="onEdit()" [disabled]="isSaving">
-            <option value="aantal">aantal</option>
-            <option value="mg">mg</option>
-            <option value="ml">ml</option>
-            <option value="g">g</option>
-            <option value="l">l</option>
+            <option *ngFor="let unit of medicationDosageUnits" value="{{ unit }}">{{ unit | ucFirstPipe }}</option>
         </select>
     </div>
     <div class="large-4 columns">
