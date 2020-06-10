@@ -17,6 +17,8 @@ import { Country } from '../../../global/models/country.model';
 import { SpinnerComponent } from '../../../global/components/spinner/spinner.component';
 import { SpinnerBounceComponent } from '../../../global/components/spinner-bounce/spinner-bounce.component';
 import { IS_INVOICES_ACTIVE } from '../../../global/constants/feature.activation';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     directives: [REACTIVE_FORM_DIRECTIVES, LocationsDisplay, UsersDisplay, Datepicker, SpinnerComponent, SpinnerBounceComponent],
@@ -56,6 +58,8 @@ export class ClientDossierComponent {
     public isClientDataLoaded = false;
 
     public isInvoicesActive = IS_INVOICES_ACTIVE;
+
+    private onDestroy$: Subject<void> = new Subject<void>();
 
     constructor(
         private router: Router,
@@ -144,7 +148,9 @@ export class ClientDossierComponent {
             this.getTwinfieldAdministrations();
         });
 
-        this.router.routerState.queryParams.subscribe(params => {
+        this.router.routerState.queryParams
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(params => {
             if (!!params['invoice_id']) {
 							  this.invoiceId = params['invoice_id'];
             } else {
@@ -154,9 +160,15 @@ export class ClientDossierComponent {
     }
 
     ngOnDestroy() {
-        this.provinces$.unsubscribe();
-        this.dataSub.unsubscribe();
+        if (this.provinces$) {
+            this.provinces$.unsubscribe();
+        }
+        if (this.dataSub) {
+            this.dataSub.unsubscribe();
+        }
         this.clearInvoiceId();
+        this.onDestroy$.next();
+        this.onDestroy$.complete();
     }
 
     clearRemovedLocations(locations: Location[]) {
@@ -173,6 +185,7 @@ export class ClientDossierComponent {
 
     private initProvinces(): void {
         this.provinces$ = this.utils.getProvinces()
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(res => {
                 this.provinces = _.sortBy(res, ['code']);
             });
@@ -180,6 +193,7 @@ export class ClientDossierComponent {
     
     private getClientInfo() {
         this.nsfo.doGetRequest(this.nsfo.URI_CLIENTS + '/' + this.clientId)
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(
                 res => {
                     this.client = res.result;
@@ -235,7 +249,9 @@ export class ClientDossierComponent {
 			}
 
 			  this.loadingTwinFieldOffices = true;
-        this.nsfo.doGetRequest(this.nsfo.URI_EXTERNAL_PROVIDER + '/offices').subscribe(
+        this.nsfo.doGetRequest(this.nsfo.URI_EXTERNAL_PROVIDER + '/offices')
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(
             res => {
                 this.twinfieldOffices = res.result;
             },
@@ -253,7 +269,9 @@ export class ClientDossierComponent {
             return;
         }
 			  this.loadingTwinFieldCodes = true;
-        this.nsfo.doGetRequest(this.nsfo.URI_EXTERNAL_PROVIDER + '/offices/' + office + '/customers').subscribe(
+        this.nsfo.doGetRequest(this.nsfo.URI_EXTERNAL_PROVIDER + '/offices/' + office + '/customers')
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(
             res => {
                 this.twinfieldCodes = res.result;
 							  this.loadingTwinFieldCodes = false;
@@ -266,7 +284,9 @@ export class ClientDossierComponent {
 				return;
 			}
         this.loadingTwinFieldCodes = true;
-        this.nsfo.doGetRequest(this.nsfo.URI_EXTERNAL_PROVIDER + '/offices/' + office.value + '/customers').subscribe(
+        this.nsfo.doGetRequest(this.nsfo.URI_EXTERNAL_PROVIDER + '/offices/' + office.value + '/customers')
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(
             res => {
                 this.twinfieldCodes = res.result;
             },
@@ -337,6 +357,7 @@ export class ClientDossierComponent {
                 newClient.deleted_users = [];
 
                 this.nsfo.doPostRequest(this.nsfo.URI_CLIENTS, newClient)
+                    .pipe(takeUntil(this.onDestroy$))
                     .subscribe(
                         res => {
                             this.savingInProgress = false;
@@ -394,6 +415,7 @@ export class ClientDossierComponent {
                 newClient.owner = owner;
 
                 this.nsfo.doPutRequest(this.nsfo.URI_CLIENTS + '/' + this.client.company_id, newClient)
+                    .pipe(takeUntil(this.onDestroy$))
                     .subscribe(
                         res => {
 													  this.clientsStorage.refresh();

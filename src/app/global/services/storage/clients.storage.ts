@@ -4,6 +4,7 @@ import { Client } from '../../../main/client/client.model';
 import { Subject } from 'rxjs/Subject';
 
 import _ = require('lodash');
+import {Subscription} from "rxjs/Subscription";
 
 @Injectable()
 export class ClientsStorage {
@@ -12,7 +13,15 @@ export class ClientsStorage {
 
 	clientsChanged = new Subject<Client[]>();
 
+	private requestSub: Subscription;
+
 	constructor(private nsfo: NSFOService) {}
+
+	ngOnDestroy() {
+		if (this.requestSub) {
+			this.requestSub.unsubscribe();
+		}
+	}
 
 	isInitialized(): boolean {
 		return this.clients.length > 0;
@@ -29,7 +38,7 @@ export class ClientsStorage {
 	}
 
 	private doGetClientList() {
-		this.nsfo.doGetRequest(this.nsfo.URI_CLIENTS)
+		this.requestSub = this.nsfo.doGetRequest(this.nsfo.URI_CLIENTS)
 			.subscribe(
 				res => {
 					this.clients = this.cleanClientsListFormatting(<Client[]> res.result);

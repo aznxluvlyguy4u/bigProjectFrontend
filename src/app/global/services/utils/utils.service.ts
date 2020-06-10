@@ -3,6 +3,8 @@ import {NSFOService} from "../nsfo/nsfo.service";
 import {ReplaySubject} from "rxjs/Rx";
 import { User } from '../../../main/client/client.model';
 import { GENDER_TYPES } from '../../constants/gender-type.contant';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Injectable()
 export class UtilsService {
@@ -10,14 +12,22 @@ export class UtilsService {
     private adminDetails: ReplaySubject<any> = new ReplaySubject();
     isDeveloper = false;
 
+    private onDestroy$: Subject<void> = new Subject<void>();
+
     constructor(private nsfo: NSFOService) {
         this.initAdminDetails();
         this.initProvinces();
     }
 
+    ngOnDestroy() {
+        this.onDestroy$.next();
+        this.onDestroy$.complete();
+    }
+
     // USER DETAILS
     public initAdminDetails() {
         this.nsfo.doGetRequest(this.nsfo.URI_MENUBAR)
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(res => {
                 this.setAdminDetails(res.result);
                 this.isDeveloper = res.result.access_level === 'DEVELOPER';
@@ -35,6 +45,7 @@ export class UtilsService {
     // PROVINCES
     private initProvinces() {
         this.nsfo.doGetRequest(this.nsfo.URI_PROVINCES)
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(res => {
                 this.setProvinces(res.result);
             })

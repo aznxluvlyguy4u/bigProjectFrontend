@@ -6,6 +6,7 @@ import { Animal } from '../livestock/livestock.model';
 import { ParentsStorage } from '../../services/storage/parents.storage';
 import { Subject } from 'rxjs/Subject';
 import { SpinnerComponent } from '../spinner/spinner.component';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
 	selector: 'app-parent-selector',
@@ -37,6 +38,8 @@ export class ParentSelectorComponent implements OnInit {
 	private getByUlnSubscription: Subject<Animal>;
 	private isGetByUlnSubscribed: boolean;
 
+	private requestSub: Subscription;
+
 	constructor(private parentStorage: ParentsStorage,
 							private translateService: TranslateService
 	) {}
@@ -55,6 +58,12 @@ export class ParentSelectorComponent implements OnInit {
 
 		this.getByUlnSubscription = this.parentStorage.getByUlnChanged;
 		this.isGetByUlnSubscribed = false;
+	}
+
+	ngOnDestroy() {
+		if (this.requestSub) {
+			this.requestSub.unsubscribe();
+		}
 	}
 
 	private setUlnVarsOfParent() {
@@ -91,7 +100,7 @@ export class ParentSelectorComponent implements OnInit {
 
 				this.isSearchingParent = true;
 
-				this.getByUlnSubscription
+				this.requestSub = this.getByUlnSubscription
 					.take(1)
 					.subscribe(
 						result => {

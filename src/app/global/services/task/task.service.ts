@@ -3,6 +3,7 @@ import {Subject} from 'rxjs';
 import { NSFOService } from '../nsfo/nsfo.service';
 import {TaskRequest} from "./task-request.model";
 import * as _ from 'lodash';
+import {Subscription} from "rxjs/Subscription";
 
 @Injectable()
 export class TaskService implements OnInit {
@@ -14,6 +15,8 @@ export class TaskService implements OnInit {
   private TaskRequestShownInModal: TaskRequest[];
   private isFirstFetch = true;
 
+  private requestSub: Subscription;
+
   constructor(private nsfo: NSFOService) {
       this.resetTaskList();
       this.fetchTasks();
@@ -22,8 +25,12 @@ export class TaskService implements OnInit {
   ngOnInit() {
   }
 
+    ngOnDestroy() {
+      this.requestSub.unsubscribe();
+    }
+
   fetchTasks() {
-    this.nsfo.doGetRequest(this.nsfo.URI_GET_TASKS).subscribe((res) => {
+    this.requestSub = this.nsfo.doGetRequest(this.nsfo.URI_GET_TASKS).subscribe((res) => {
         this.resetTaskList();
         const TaskRequest: TaskRequest[] = res.result;
         TaskRequest.forEach((report) => {

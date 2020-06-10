@@ -12,6 +12,8 @@ import { CheckMarkComponent } from '../../../global/components/checkmark/check-m
 import { SortSwitchComponent } from '../../../global/components/sortswitch/sort-switch.component';
 import { SortOrder, SortService } from '../../../global/services/utils/sort.service';
 import { TreatmentMedicationFilterPipe } from './treatment-medication-filter.pipe';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
 	selector: 'app-treatment-medicines',
@@ -47,6 +49,8 @@ export class TreatmentMedicationComponent {
 	
 	private page: number = 1;
 
+	private onDestroy$: Subject<void> = new Subject<void>();
+
 	constructor(private nsfo: NSFOService,
 							private fb: FormBuilder,
 							private formUtilService: FormUtilService,
@@ -60,6 +64,11 @@ export class TreatmentMedicationComponent {
 		});
 	}
 
+	ngOnDestroy() {
+		this.onDestroy$.next();
+		this.onDestroy$.complete();
+	}
+
 	getBoolDrowDownText(string: string|boolean): string {
 		return this.formUtilService.getBoolDrowDownText(string);
 	}
@@ -67,15 +76,16 @@ export class TreatmentMedicationComponent {
 	private getTreatmentMedications(): void {
 		this.loadingTreatmentMedications = true;
 		this.nsfo.doGetRequest(this.nsfo.URI_TREATMENT_MEDICINES + '?active_only=false')
-		.subscribe(
-			res => {
-				this.treatmentMedications= <TreatmentMedication[]> res.result;
-				this.loadingTreatmentMedications = false;
-				this.isDescriptionSortAscending = true;
-				this.sortByDescription();
-				this.resetFilterOptions();
-			}
-		);
+			.pipe(takeUntil(this.onDestroy$))
+			.subscribe(
+				res => {
+					this.treatmentMedications= <TreatmentMedication[]> res.result;
+					this.loadingTreatmentMedications = false;
+					this.isDescriptionSortAscending = true;
+					this.sortByDescription();
+					this.resetFilterOptions();
+				}
+			);
 	}
 
 	addTreatmentMedication() {
@@ -85,6 +95,7 @@ export class TreatmentMedicationComponent {
 		if(this.form.valid && this.isValidForm) {
 
 			this.nsfo.doPostRequest(this.nsfo.URI_TREATMENT_MEDICINES, this.treatmentMedication)
+				.pipe(takeUntil(this.onDestroy$))
 				.subscribe(
 					res => {
 						if (this.treatmentMedicationTemp) {
@@ -112,6 +123,7 @@ export class TreatmentMedicationComponent {
 		this.isSaving = true;
 		if(this.form.valid && this.isValidForm) {
 			this.nsfo.doPutRequest(this.nsfo.URI_TREATMENT_MEDICINES + '/' + this.treatmentMedication.id, this.treatmentMedication)
+				.pipe(takeUntil(this.onDestroy$))
 				.subscribe(
 					res => {
 						_.remove(this.treatmentMedications, {id: this.treatmentMedicationTemp.id});
@@ -137,6 +149,7 @@ export class TreatmentMedicationComponent {
 
 		_.remove(this.treatmentMedications, {id: this.treatmentMedication.id});
 		this.nsfo.doDeleteRequest(this.nsfo.URI_TREATMENT_MEDICINES + '/' + this.treatmentMedication.id, this.treatmentMedication)
+			.pipe(takeUntil(this.onDestroy$))
 			.subscribe(
 				res => {
 					this.treatmentMedication = res.result;
