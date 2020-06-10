@@ -8,6 +8,8 @@ import {REACTIVE_FORM_DIRECTIVES} from "@angular/forms";
 import {ControlGroup, FormBuilder} from "@angular/common";
 import {AnimalHealthRequest} from "../../../../health.model";
 import {NSFOService} from "../../../../../../global/services/nsfo/nsfo.service";
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'request-auth',
@@ -29,12 +31,19 @@ export class AuthorizationComponent {
     @Input() request: AnimalHealthRequest = new AnimalHealthRequest();
     @Output() showOverviewPage: EventEmitter<boolean> = new EventEmitter<boolean>();
 
+    private onDestroy$: Subject<void> = new Subject<void>();
+
     constructor(private settings: SettingsService, private fb: FormBuilder, private nsfo: NSFOService) {
         this.form = fb.group({
             health_status: [''],
             date_since: [''],
             date_till: [''],
         })
+    }
+
+    ngOnDestroy(): void {
+        this.onDestroy$.next();
+        this.onDestroy$.complete();
     }
 
     ngOnChanges() {
@@ -45,6 +54,7 @@ export class AuthorizationComponent {
 
     private getCurrentHealthStatus(): void {
         this.nsfo.doGetRequest(this.nsfo.URI_HEALTH_UBN + '/' + this.request.ubn)
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(
                 res => {
                     let location = res.result;
@@ -78,6 +88,7 @@ export class AuthorizationComponent {
 
     private getRequiredResultCount(): void {
         this.nsfo.doGetRequest(this.nsfo.URI_HEALTH_INSPECTIONS + '/' + this.request.ubn + '/required-results-amount')
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(
                 res => {
                     let count = res.result;
@@ -163,6 +174,7 @@ export class AuthorizationComponent {
         }
         
         this.nsfo.doPutRequest(this.nsfo.URI_HEALTH_INSPECTIONS, request)
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(
                 res => {
                     let result = res.result;

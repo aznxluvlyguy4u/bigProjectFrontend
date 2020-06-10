@@ -18,6 +18,8 @@ import { Location } from '../../client/client.model';
 import { MedicationOption } from './medication-option.model';
 import { MedicineFormEntryComponent } from './medicine-form-entry/medicine-form-entry.component';
 import {TreatmentMedication} from "../treatment-medication/treatment-medication.model";
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
 	selector: 'app-treatment-template',
@@ -75,7 +77,9 @@ export class TreatmentTemplateComponent implements OnInit {
 	private errorMessage: string = '';
 	private isSaving: boolean = false;
 
-	private treatmentMedicines: TreatmentMedication[];
+	private treatmentMedications: TreatmentMedication[];
+
+	private onDestroy$: Subject<void> = new Subject<void>();
 
 	constructor(
 		private nsfo: NSFOService,
@@ -90,6 +94,11 @@ export class TreatmentTemplateComponent implements OnInit {
 		this.resetCreateOptions();
 		this.getGeneralData();
 		this.getTreatmentMedicines();
+	}
+
+	ngOnDestroy() {
+		this.onDestroy$.next();
+		this.onDestroy$.complete();
 	}
 
 	ngOnInit() {
@@ -112,6 +121,7 @@ export class TreatmentTemplateComponent implements OnInit {
 		// only get active ubns.
 		// For inactive ubns add "?active_only=false"
 		this.nsfo.doGetRequest(this.nsfo.URI_UBNS)
+			.pipe(takeUntil(this.onDestroy$))
 			.subscribe(
 				res => {
 					this.locations = <Location[]> res.result;
@@ -121,6 +131,7 @@ export class TreatmentTemplateComponent implements OnInit {
 			);
 
 		this.nsfo.doGetRequest(this.nsfo.URI_TREATMENT_TYPES) // only get active treatment types
+			.pipe(takeUntil(this.onDestroy$))
 			.subscribe(
 				res => {
 					this.treatmentTypes= <TreatmentType[]> res.result;
@@ -164,6 +175,7 @@ export class TreatmentTemplateComponent implements OnInit {
 		const kindPart = this.selectedTreatmentTypeKind.toLowerCase();
 
 		this.nsfo.doGetRequest(this.nsfo.URI_TREATMENTS + '/template/' + kindPart + ubnPart + '?active_only=false')
+			.pipe(takeUntil(this.onDestroy$))
 			.subscribe(
 				res => {
 					this.treatmentTemplates= <TreatmentTemplate[]> res.result;
@@ -198,6 +210,7 @@ export class TreatmentTemplateComponent implements OnInit {
 			const type = this.newTreatmentTemplate.type.toLowerCase();
 
 			this.nsfo.doPostRequest(this.nsfo.URI_TREATMENTS + '/' + type + '/template', this.getFormattedTreatmentTypeBody())
+				.pipe(takeUntil(this.onDestroy$))
 				.subscribe(
 					res => {
 						this.treatmentTemplate = res.result;
@@ -275,6 +288,7 @@ export class TreatmentTemplateComponent implements OnInit {
 			const type = this.newTreatmentTemplate.type.toLowerCase();
 
 			this.nsfo.doPutRequest(this.nsfo.URI_TREATMENTS + '/' + type + '/template/' + treatmentTemplate.id, treatmentTemplate)
+				.pipe(takeUntil(this.onDestroy$))
 				.subscribe(
 					res => {
 						this.treatmentTemplate = res.result;
@@ -300,6 +314,7 @@ export class TreatmentTemplateComponent implements OnInit {
 		const type = this.treatmentTemplate.type.toLowerCase();
 
 		this.nsfo.doDeleteRequest(this.nsfo.URI_TREATMENTS + '/' + type + '/template/' + this.treatmentTemplate.id, this.treatmentTemplate)
+			.pipe(takeUntil(this.onDestroy$))
 			.subscribe(
 				res => {
 					this.treatmentTemplate = res.result;
@@ -321,6 +336,7 @@ export class TreatmentTemplateComponent implements OnInit {
 		const type = this.treatmentTemplate.type.toLowerCase();
 
 		this.nsfo.doPatchRequest(this.nsfo.URI_TREATMENTS + '/' + type + '/template/' + this.treatmentTemplate.id, this.treatmentTemplate)
+			.pipe(takeUntil(this.onDestroy$))
 			.subscribe(
 				res => {
 					this.treatmentTemplate = res.result;
@@ -474,8 +490,8 @@ export class TreatmentTemplateComponent implements OnInit {
 		let medicationOption = new MedicationOption();
 		medicationOption.id = this.medicationId++;
 		medicationOption.is_active = false;
-		if (this.treatmentMedicines.length > 1) {
-			medicationOption.treatment_medication = this.treatmentMedicines[0];
+		if (this.treatmentMedications.length > 1) {
+			medicationOption.treatment_medication = this.treatmentMedications[0];
 		} else {
 			medicationOption.treatment_medication = new TreatmentMedication();
 		}
@@ -500,9 +516,10 @@ export class TreatmentTemplateComponent implements OnInit {
 
 	private getTreatmentMedicines(): void {
 		this.nsfo.doGetRequest(this.nsfo.URI_TREATMENT_MEDICINES + '?active_only=true')
+			.pipe(takeUntil(this.onDestroy$))
 		.subscribe(
 			res => {
-				this.treatmentMedicines= <TreatmentMedicine[]> res.result;
+				this.treatmentMedications= <TreatmentMedication[]> res.result;
 			}
 		);
 	}

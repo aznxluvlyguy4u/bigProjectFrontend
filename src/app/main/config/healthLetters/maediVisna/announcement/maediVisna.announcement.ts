@@ -5,6 +5,8 @@ import {CKEditor} from 'ng2-ckeditor';
 import {NSFOService} from "../../../../../global/services/nsfo/nsfo.service";
 import {HealthLetter} from "../../../config.model";
 import {SettingsService} from "../../../../../global/services/settings/settings.service";
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 declare var $;
 
@@ -33,8 +35,15 @@ export class MaediVisnaAnnouncementComponent {
         ]
     };
 
+    private onDestroy$: Subject<void> = new Subject<void>();
+
     constructor(private nsfo: NSFOService, private settings: SettingsService) {
         this.getHTMLData();
+    }
+
+    ngOnDestroy() {
+        this.onDestroy$.next();
+        this.onDestroy$.complete();
     }
 
     ngAfterViewInit() {
@@ -44,6 +53,7 @@ export class MaediVisnaAnnouncementComponent {
     private getHTMLData(): void {
         this.isSaving = true;
         this.nsfo.doGetRequest(this.nsfo.URI_HEALTH_LOCATION_LETTERS + '/' + this.illness + '/'+ this.letter_type)
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(
                 res => {
                     this.letter = res.result;
@@ -76,6 +86,7 @@ export class MaediVisnaAnnouncementComponent {
         };
 
         this.nsfo.doPostRequest(this.nsfo.URI_HEALTH_LOCATION_LETTERS, request)
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(
                 res => {
                     this.getHTMLData();

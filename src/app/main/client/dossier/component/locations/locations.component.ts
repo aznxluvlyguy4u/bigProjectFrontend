@@ -56,7 +56,9 @@ export class LocationsDisplay {
     }
 
     ngOnDestroy() {
-        this.provinces$.unsubscribe();
+        if (this.provinces$) {
+            this.provinces$.unsubscribe();
+        }
     }
 
     public getCountries(): Country[] {

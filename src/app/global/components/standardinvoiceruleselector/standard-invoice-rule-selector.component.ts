@@ -8,6 +8,7 @@ import { PaginatePipe, PaginationService } from 'ng2-pagination';
 import { PaginationComponent } from '../pagination/pagination.component';
 import { InvoiceRulePipe } from '../../pipes/invoice-rule.pipe';
 import { Router } from '@angular/router';
+import {Subscription} from "rxjs/Subscription";
 
 @Component({
 	selector: 'app-standard-invoice-rule-selector',
@@ -32,6 +33,8 @@ export class StandardInvoiceRuleSelectorComponent {
 	@Output() selectedInvoiceRuleChanged = new EventEmitter<InvoiceRule>();
 
 	isLoadedEvent = new EventEmitter<boolean>();
+
+	private requestSub: Subscription;
 	
 	constructor(private invoiceRuleStorage: InvoiceRuleStorage, private router: Router) {}
 
@@ -41,7 +44,7 @@ export class StandardInvoiceRuleSelectorComponent {
 
 		if (this.isInvoiceRulesEmpty()) {
 
-			this.invoiceRuleStorage.invoiceRulesChanged.takeLast(1)
+			this.requestSub = this.invoiceRuleStorage.invoiceRulesChanged.takeLast(1)
 				.subscribe(
 					res => {
 						this.isLoaded = true;
@@ -54,6 +57,12 @@ export class StandardInvoiceRuleSelectorComponent {
 		}
 
 		this.invoiceRuleStorage.refresh();
+	}
+
+	ngOnDestroy() {
+		if (this.requestSub) {
+			this.requestSub.unsubscribe();
+		}
 	}
 
 	isInvoiceRulesEmpty(): boolean {

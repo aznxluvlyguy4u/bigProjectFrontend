@@ -3,6 +3,7 @@ import { Animal } from '../../../global/components/livestock/livestock.model';
 import { Subject } from 'rxjs/Subject';
 import { NSFOService } from '../../../global/services/nsfo/nsfo.service';
 import { AnimalResidenceHistory } from '../../../global/models/animal-residence-history.model';
+import { takeUntil } from 'rxjs/operators';
 
 /**
  * This is not used as a global service
@@ -23,7 +24,14 @@ export class AnimalEditService {
 	genderEditModalButtonClicked = new Subject<boolean>();
 	isEditSuccessFul = new Subject<boolean>();
 
+	private onDestroy$: Subject<void> = new Subject<void>();
+
 	constructor(private nsfo: NSFOService) {}
+
+	ngOnDestroy() {
+		this.onDestroy$.next();
+		this.onDestroy$.complete();
+	}
 
 	openGenderEditModal(): void {
 		this.genderEditModalStatus = 'block';
@@ -80,6 +88,7 @@ export class AnimalEditService {
 			.finally(()=>{
 				this.isSearchingResidences = false;
 			})
+			.pipe(takeUntil(this.onDestroy$))
 			.subscribe(
 				res => {
 					this.foundAnimal.animal_residence_history = res.result;
@@ -104,6 +113,7 @@ export class AnimalEditService {
 					this.isDeleting = false;
 					this.isProcessingChanges = false;
 				})
+				.pipe(takeUntil(this.onDestroy$))
 				.subscribe(
 					res => {
 						this.foundAnimal.animal_residence_history = res.result;
@@ -122,6 +132,7 @@ export class AnimalEditService {
 			.finally(()=>{
 				this.isProcessingChanges = false;
 			})
+			.pipe(takeUntil(this.onDestroy$))
 			.subscribe(
 				res => {
 					this.foundAnimal.animal_residence_history = res.result;
@@ -139,6 +150,7 @@ export class AnimalEditService {
 			.finally(()=>{
 				this.isProcessingChanges = false;
 			})
+			.pipe(takeUntil(this.onDestroy$))
 			.subscribe(
 				res => {
 					this.foundAnimal.animal_residence_history = res.result;

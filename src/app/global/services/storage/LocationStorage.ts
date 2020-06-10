@@ -3,6 +3,7 @@ import { Location } from '../../../main/client/client.model';
 
 import _ = require("lodash");
 import { Injectable } from '@angular/core';
+import {Subscription} from "rxjs/Rx";
 
 @Injectable()
 export class LocationStorage {
@@ -11,8 +12,14 @@ export class LocationStorage {
 		// locationsAll: Location[] = [];
 		loadingLocations = false;
 
+		private requestSub: Subscription;
+
 		constructor(private nsfo: NSFOService) {
 				this.getLocations();
+		}
+
+		ngOnDestroy() {
+			this.requestSub.unsubscribe()
 		}
 
 		refreshLocations() {
@@ -25,7 +32,7 @@ export class LocationStorage {
 			// only get active ubns.
 			// For inactive ubns add "?active_only=false"
 			const query = '?active_only=false';
-			this.nsfo.doGetRequest(this.nsfo.URI_UBNS + query)
+			this.requestSub = this.nsfo.doGetRequest(this.nsfo.URI_UBNS + query)
 				.subscribe(
 					res => {
 						const locations = <Location[]> res.result;

@@ -14,6 +14,7 @@ import { Country } from '../../../../../global/models/country.model';
 import _ = require('lodash');
 import { BooleanInputComponent } from '../../../../../global/components/booleaninput/boolean-input.component';
 import { Location } from '../../../../client/client.model';
+import {Subscription} from "rxjs/Subscription";
 
 @Component({
 	selector: '[app-animal-residence-history-row]',
@@ -34,6 +35,8 @@ export class AnimalResidenceHistoryRowComponent implements OnInit {
 
 	public displayRemoveConfirmationModal = 'none';
 
+	private requestSub: Subscription;
+
 	constructor(public animalEditService: AnimalEditService, public settings: SettingsService,
 							private nsfo: NSFOService) {}
 
@@ -43,6 +46,12 @@ export class AnimalResidenceHistoryRowComponent implements OnInit {
 		}
 
 		this.afterApplyCheck();
+	}
+
+	ngOnDestroy() {
+		if (this.requestSub) {
+			this.requestSub.unsubscribe();
+		}
 	}
 
 	public startEdit() {
@@ -70,7 +79,7 @@ export class AnimalResidenceHistoryRowComponent implements OnInit {
 	}
 
 	public afterApplyCheck() {
-		this.animalEditService.isEditSuccessFul.subscribe(
+		this.requestSub = this.animalEditService.isEditSuccessFul.subscribe(
 			(isEditSuccessFul: boolean) => {
 				if (isEditSuccessFul) {
 					this.isForm = false;

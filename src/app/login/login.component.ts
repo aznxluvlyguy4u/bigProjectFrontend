@@ -3,6 +3,8 @@ import {Router} from "@angular/router";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import {REACTIVE_FORM_DIRECTIVES, FormGroup, FormControl, FormBuilder, Validators} from "@angular/forms";
 import {NSFOService} from "../global/services/nsfo/nsfo.service";
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     directives: [REACTIVE_FORM_DIRECTIVES],
@@ -19,6 +21,8 @@ export class LoginComponent {
     private form: FormGroup;
     private formPasswordRecovery: FormGroup;
 
+    private onDestroy$: Subject<void> = new Subject<void>();
+
     constructor(private nsfo: NSFOService, private fb:FormBuilder, private router: Router) {
         this.form = fb.group({
             username: ['', Validators.required],
@@ -30,8 +34,14 @@ export class LoginComponent {
         });
     }
 
+    ngOnDestroy() {
+        this.onDestroy$.next();
+        this.onDestroy$.complete();
+    }
+
     private requestNewPassword() {
         this.nsfo.doPutRequest(this.nsfo.URI_RESET_PASSWORD, this.formPasswordRecovery.value)
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(()=>{});
         this.hasSendEmail = true;
     }
@@ -46,6 +56,7 @@ export class LoginComponent {
             this.isValidForm = true;
             this.isAuthenticating = true;
             this.nsfo.doLoginRequest((this.form.controls['username'].value).toLowerCase(), this.form.controls['password'].value)
+                .pipe(takeUntil(this.onDestroy$))
                 .subscribe(
                     res => {
                         let result = res.result;

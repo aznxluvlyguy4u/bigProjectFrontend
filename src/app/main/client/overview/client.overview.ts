@@ -11,6 +11,8 @@ import { CheckMarkComponent } from '../../../global/components/checkmark/check-m
 import { CountryNameToCountryCodePipe } from '../../../global/pipes/country-name-to-country-code.pipe';
 import { SortService } from '../../../global/services/utils/sort.service';
 import { IS_INVOICES_ACTIVE } from '../../../global/constants/feature.activation';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 declare var $;
 
@@ -40,9 +42,16 @@ export class ClientOverviewComponent implements AfterViewChecked{
 
     public isInvoicesActive = IS_INVOICES_ACTIVE;
 
+    private onDestroy$: Subject<void> = new Subject<void>();
+
     constructor(private nsfo: NSFOService, private router: Router, private settings: SettingsService,
                 private sort: SortService) {
         this.getClientList();
+    }
+
+    ngOnDestroy() {
+        this.onDestroy$.next();
+        this.onDestroy$.complete();
     }
 
     ngAfterViewChecked() {
@@ -51,6 +60,7 @@ export class ClientOverviewComponent implements AfterViewChecked{
 
     private getClientList() {
         this.nsfo.doGetRequest(this.nsfo.URI_CLIENTS)
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(
                 res => {
                     this.clientList = <Client[]> res.result;
@@ -93,6 +103,7 @@ export class ClientOverviewComponent implements AfterViewChecked{
         };
 
         this.nsfo.doPutRequest(this.nsfo.URI_CLIENTS + '/' + client.company_id + '/status', request)
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(res => {
                 client.status = is_active;
                 this.isSending = false;

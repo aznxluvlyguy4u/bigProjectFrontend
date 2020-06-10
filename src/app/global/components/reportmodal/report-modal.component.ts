@@ -1,12 +1,14 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 
 import {PDF} from '../../variables/file-type.enum';
-import { Subscription } from 'rxjs/Subscription';
+import {Subscription} from 'rxjs/Subscription';
 import {ReportRequest, ReportType} from '../../services/report/report-request.model';
 import {ReportService} from '../../services/report/report.service';
 import {TranslatePipe, TranslateService} from "ng2-translate";
 import {PaginatePipe, PaginationService} from "ng2-pagination";
 import {PaginationComponent} from "../pagination/pagination.component";
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'app-report-modal',
@@ -16,11 +18,11 @@ import {PaginationComponent} from "../pagination/pagination.component";
     pipes: [PaginatePipe, TranslatePipe]
 })
 export class ReportModalComponent implements OnInit, OnDestroy {
-  public reportRequestsShownInModal: ReportRequest[];
-  private modalDisplay = 'none';
-  private reportRequestSubscription: Subscription;
-  private isModalActiveSubscription: Subscription;
-  private toggleModalSubscription: Subscription;
+    public reportRequestsShownInModal: ReportRequest[];
+    private modalDisplay = 'none';
+
+    private onDestroy$: Subject<void> = new Subject<void>();
+
     public filterAmount: number = 5;
     public page: number =1;
 	public title = 'REPORT OVERVIEW';
@@ -33,7 +35,9 @@ export class ReportModalComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    this.reportRequestSubscription = this.reportService.reportsShownInModelChanged.subscribe(
+    this.reportService.reportsShownInModelChanged
+        .pipe(takeUntil(this.onDestroy$))
+        .subscribe(
       (downloadRequests: ReportRequest[]) => {
         this.reportRequestsShownInModal = downloadRequests;
         this.closeIfEmpty();
@@ -41,8 +45,9 @@ export class ReportModalComponent implements OnInit, OnDestroy {
     );
     this.reportRequestsShownInModal = this.reportService.getReportRequestsShownInModal();
 
-
-    this.isModalActiveSubscription = this.reportService.isModalActive.subscribe(
+    this.reportService.isModalActive
+        .pipe(takeUntil(this.onDestroy$))
+        .subscribe(
       (notifyUser: boolean) => {
         if (notifyUser) {
           this.openModal();
@@ -53,7 +58,9 @@ export class ReportModalComponent implements OnInit, OnDestroy {
     );
 
 
-    this.toggleModalSubscription = this.reportService.toggleIsModalActive.subscribe(
+   this.reportService.toggleIsModalActive
+       .pipe(takeUntil(this.onDestroy$))
+       .subscribe(
       (toggleModal: boolean) => {
         if (toggleModal) {
           this.toggleModal();
@@ -111,11 +118,10 @@ export class ReportModalComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
-    this.reportRequestSubscription.unsubscribe();
-    this.isModalActiveSubscription.unsubscribe();
-    this.toggleModalSubscription.unsubscribe();
-  }
+    ngOnDestroy() {
+        this.onDestroy$.next();
+        this.onDestroy$.complete();
+    }
 
   public openModal() {
     this.modalDisplay = 'block';
