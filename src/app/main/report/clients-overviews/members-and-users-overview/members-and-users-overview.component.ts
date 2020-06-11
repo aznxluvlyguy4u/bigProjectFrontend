@@ -7,6 +7,7 @@ import {DownloadService} from "../../../../global/services/download/download.ser
 import {SettingsService} from "../../../../global/services/settings/settings.service";
 import {PedigreeRegister} from "../../../../global/models/pedigree-register.model";
 import { PedigreeRegisterDropdownComponent } from "../../../../global/components/pedigreeregisterdropdown/pedigree-register-dropdown.component";
+import {DATE_MIN_UBN_HISTORY} from "../../../../global/constants/date.constant";
 
 @Component({
     selector: 'app-members-and-users-overview',
@@ -16,6 +17,7 @@ import { PedigreeRegisterDropdownComponent } from "../../../../global/components
 })
 export class MembersAndUsersOverviewComponent {
     title = MEMBERS_AND_USERS_OVERVIEW_REPORT;
+    minRefDate = DATE_MIN_UBN_HISTORY;
 
     referenceDateString: string;
     mustHaveAnimalHealthSubscription: boolean;

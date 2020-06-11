@@ -852,6 +852,7 @@
   "CREATE_TAGS": "Oormerken aanmaken",
   "DELETE_TAG": "Oormerk verwijderen",
   "ONE TIME": "Eenmalig",
+  "UBN HISTORY MIN RELIABLE DATE INFO TEXT": "De minimum betrouwbare datum gebaseerd op de UBN dierhistorie records is ",
   "NO BREEDER NUMBERS REGISTERED": "Geen fokkersnummers geregistreerd",
   "INCLUDES COUNTRY DATA OF COMPANY AND ALL ACTIVE UBNS": "Bevat landgegevens van bedrijf en actieve UBNs",
   "Not all animals on the livestock list got ARR/ARR as scrapie genotype": "Niet alle dieren op de stallijst hebben ARR/ARR als scrapie genotype"

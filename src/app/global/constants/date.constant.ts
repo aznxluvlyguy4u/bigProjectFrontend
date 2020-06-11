@@ -1,0 +1,1 @@
+export const DATE_MIN_UBN_HISTORY = '2020-06-25';
