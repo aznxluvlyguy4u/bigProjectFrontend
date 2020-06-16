@@ -29,7 +29,13 @@ export class TreatmentMedicationComponent {
 	private activeStatuses: boolean[] = [undefined, true, false];
 
 	// SORT
-	private isDescriptionSortAscending: boolean;
+	private sort = {
+		nameAscending: true,
+		dosageAscending: true,
+		regNLAscending: true,
+		treatmentDurationAscending: true,
+		waitingDaysAscending: true
+	};
 
 	// DATA
 	private loadingTreatmentMedications: boolean = false;
@@ -60,7 +66,12 @@ export class TreatmentMedicationComponent {
 		this.getTreatmentMedications();
 
 		this.form = fb.group({
-			name: ['', Validators.required]
+			name: ['', Validators.required],
+			dosage: ['', Validators.required],
+			dosage_unit: ['', Validators.required],
+			reg_nl: ['', Validators.required],
+			waiting_days: ['', Validators.required],
+			treatment_duration: ['', Validators.required]
 		});
 	}
 
@@ -79,10 +90,10 @@ export class TreatmentMedicationComponent {
 			.pipe(takeUntil(this.onDestroy$))
 			.subscribe(
 				res => {
-					this.treatmentMedications= <TreatmentMedication[]> res.result;
+					this.treatmentMedications = <TreatmentMedication[]> res.result;
 					this.loadingTreatmentMedications = false;
-					this.isDescriptionSortAscending = true;
-					this.sortByDescription();
+					this.isNameSortAscending = true;
+					this.sortByColumn();
 					this.resetFilterOptions();
 				}
 			);
@@ -104,7 +115,7 @@ export class TreatmentMedicationComponent {
 						this.treatmentMedication = res.result;
 						this.treatmentMedications.push(this.treatmentMedication);
 						this.isSaving = false;
-						this.sortByDescription();
+						this.sortByColumn();
 						this.closeModal();
 					},
 					err => {
@@ -130,7 +141,7 @@ export class TreatmentMedicationComponent {
 						this.treatmentMedication = res.result;
 						this.treatmentMedications.push(this.treatmentMedication);
 						this.isSaving = false;
-						this.sortByDescription();
+						this.sortByColumn();
 						this.closeModal();
 					},
 					err => {
@@ -155,7 +166,7 @@ export class TreatmentMedicationComponent {
 					this.treatmentMedication = res.result;
 					this.treatmentMedications.push(this.treatmentMedication);
 					this.isSaving = false;
-					this.sortByDescription();
+					this.sortByColumn();
 					this.closeRemoveModal();
 				},
 				err => {
@@ -172,7 +183,7 @@ export class TreatmentMedicationComponent {
 		this.closeReactivateModal();
 	}
 
-	private openModal(editMode: boolean, treatmentMedication: TreatmentMedication): void {
+	private openModal(editMode: boolean, treatmentMedication: TreatmentMedication = new TreatmentMedication()): void {
 			this.isModalEditMode = editMode;
 			this.displayModal = 'block';
 			this.isValidForm = true;
@@ -228,17 +239,50 @@ export class TreatmentMedicationComponent {
 		this.filterIsActiveStatus = true;
 	}
 
-	onSortByDescriptionToggle() {
+	onSortByColumnToggle(column = 'name') {
 		//toggle sort direction
-		this.isDescriptionSortAscending = !this.isDescriptionSortAscending;
-		this.sortByDescription();
+		switch (column) {
+			case "dosage":
+				this.sort.dosageAscending = !this.sort.dosageAscending;
+			break;
+			case "regNL":
+				this.sort.regNLAscending = !this.sort.regNLAscending;
+			break;
+			case "treatmentDuration":
+				this.sort.treatmentDurationAscending = !this.sort.treatmentDurationAscending;
+			break;
+			case "waitingDays":
+				this.sort.waitingDaysAscending = !this.sort.waitingDaysAscending;
+			break;
+			default:
+				this.sort.nameAscending = !this.sort.nameAscending;
+			break;
+		}
+		this.sortByColumn(column);
 	}
 
-	sortByDescription() {
+	sortByColumn(column = 'name') {
 		const sortOrder = new SortOrder();
-		sortOrder.variableName = 'name';
+		sortOrder.variableName = column;
 		sortOrder.isDate = false; //it is a dateString
-		sortOrder.ascending = this.isDescriptionSortAscending;
+
+		switch (column) {
+			case "dosage":
+				sortOrder.ascending = this.sort.dosageAscending;
+			break;
+			case "regNL":
+				sortOrder.ascending = this.sort.regNLAscending;
+			break;
+			case "treatmentDuration":
+				sortOrder.ascending = this.sort.treatmentDurationAscending;
+			break;
+			case "waitingDays":
+				sortOrder.ascending = this.sort.waitingDaysAscending;
+			break;
+			default:
+				sortOrder.ascending = this.sort.nameAscending;
+			break;
+		}
 
 		this.treatmentMedications = this.sortService.sort(this.treatmentMedications, [sortOrder]);
 	}
