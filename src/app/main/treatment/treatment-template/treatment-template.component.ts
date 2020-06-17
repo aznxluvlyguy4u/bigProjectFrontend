@@ -15,7 +15,6 @@ import { SortSwitchComponent } from '../../../global/components/sortswitch/sort-
 import { SortOrder, SortService } from '../../../global/services/utils/sort.service';
 import { TreatmentType } from '../treatment-type/treatment-type.model';
 import { Location } from '../../client/client.model';
-import { MedicationOption } from './medication-option.model';
 import { MedicineFormEntryComponent } from './medicine-form-entry/medicine-form-entry.component';
 import {TreatmentMedication} from "../treatment-medication/treatment-medication.model";
 import { Subject } from 'rxjs';
@@ -55,7 +54,7 @@ export class TreatmentTemplateComponent implements OnInit {
 	private medicationId: number;
 	private defaultType = LOCATION;
 	private newTreatmentTemplate: TreatmentTemplate;
-	private newMedications: MedicationOption[] = [];
+	private newMedications: TreatmentMedication[] = [];
 
 	// FILTER
 	private activeStatuses: boolean[] = [undefined, true, false];
@@ -237,7 +236,7 @@ export class TreatmentTemplateComponent implements OnInit {
 			this.newTreatmentTemplate.location = {ubn: this.newSelectedUbn};
 		}
 
-		let medications: MedicationOption[] = [];
+		let medications: TreatmentMedication[] = [];
 		for(let medication of this.newMedications) {
 			if (medication.is_active !== false) {
 				medications.push(medication);
@@ -251,7 +250,7 @@ export class TreatmentTemplateComponent implements OnInit {
 			delete medication.is_active;
 		}
 
-		this.newTreatmentTemplate.medications = medications;
+		this.newTreatmentTemplate.treatment_medications = medications;
 
 		let treatmentTemplate = _.cloneDeep(this.newTreatmentTemplate);
 		delete treatmentTemplate.type;
@@ -263,7 +262,7 @@ export class TreatmentTemplateComponent implements OnInit {
 		const hasValidLocationData = this.newIsDefaultTemplate === true ? this.newSelectedUbn == null : this.newSelectedUbn != null;
 
 		let hasCompleteMedicationData = true;
-		for(let medication of this.newMedications) {
+		for(let medication of this.newTreatmentTemplate.treatment_medications) {
 			if (medication.dosage == null) {
 				hasCompleteMedicationData = false;
 			}
@@ -377,10 +376,12 @@ export class TreatmentTemplateComponent implements OnInit {
 				}
 			}
 
-			for(let medication of this.newTreatmentTemplate.medications) {
-				medication.id = this.medicationId++;
-				this.newMedications.push(medication);
-			}
+			// if (typeof this.newTreatmentTemplate.medications !== 'undefined') {
+			// 	for(let medication of this.newTreatmentTemplate.medications) {
+			// 		medication.id = this.medicationId++;
+			// 		this.newMedications.push(medication);
+			// 	}
+			// }
 		}
 	}
 
@@ -460,6 +461,7 @@ export class TreatmentTemplateComponent implements OnInit {
 	resetCreateOptions() {
 		this.newTreatmentTemplate = new TreatmentTemplate();
 		this.newTreatmentTemplate.type = this.defaultType;
+		this.newTreatmentTemplate.treatment_medications = [];
 		this.newIsDefaultTemplate = false;
 		this.newSelectedUbn = null;
 		this.newMedications = [];
@@ -475,28 +477,31 @@ export class TreatmentTemplateComponent implements OnInit {
 		});
 	}
 
-	removeMedication(medicationOption: MedicationOption) {
-		_.remove(this.newMedications, {id: medicationOption.id});
+	removeMedication(treatmentMedication: TreatmentMedication) {
+		_.remove(this.newTreatmentTemplate.treatment_medications, {id: treatmentMedication.id});
 	}
 
-	updateMedication(medicationOption: MedicationOption) {
-		if (typeof medicationOption.id !== 'undefined') {
-			const index = _.findIndex(this.newMedications, {id: medicationOption.id});
-			this.newMedications.splice(index, 1, medicationOption);
+	updateMedication(treatmentMedication: TreatmentMedication) {
+		if (typeof treatmentMedication.id !== 'undefined') {
+			const index = _.findIndex(this.treatmentMedications, {id: treatmentMedication.id});
+
+			this.newTreatmentTemplate.treatment_medications.splice(index, 1, treatmentMedication);
 		}
 	}
 
 	onAddNewBlankMedication() {
-		let medicationOption = new MedicationOption();
-		medicationOption.id = this.medicationId++;
-		medicationOption.is_active = false;
+		let treatmentMedication = new TreatmentMedication();
+		treatmentMedication.id = this.medicationId++;
+		treatmentMedication.is_active = false;
 		if (this.treatmentMedications.length > 1) {
-			medicationOption.treatment_medication = this.treatmentMedications[0];
+			treatmentMedication = this.treatmentMedications[0];
 		} else {
-			medicationOption.treatment_medication = new TreatmentMedication();
+			treatmentMedication = new TreatmentMedication();
 		}
 
-		this.newMedications.push(medicationOption);
+		// console.log(this.newTreatmentTemplate);
+
+		this.newMedications.push(treatmentMedication);
 	}
 
 	onSortByDescriptionToggle() {
@@ -517,10 +522,10 @@ export class TreatmentTemplateComponent implements OnInit {
 	private getTreatmentMedicines(): void {
 		this.nsfo.doGetRequest(this.nsfo.URI_TREATMENT_MEDICINES + '?active_only=true')
 			.pipe(takeUntil(this.onDestroy$))
-		.subscribe(
-			res => {
-				this.treatmentMedications= <TreatmentMedication[]> res.result;
-			}
-		);
+			.subscribe(
+				res => {
+					this.treatmentMedications= <TreatmentMedication[]> res.result;
+				}
+			);
 	}
 }

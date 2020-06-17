@@ -1,14 +1,9 @@
-import { Component, EventEmitter, Input, Output, AfterViewChecked, AfterViewInit, OnInit } from '@angular/core';
-import { MedicationOption } from '../medication-option.model';
+import { Component, EventEmitter, Input, Output, AfterViewInit, OnInit } from '@angular/core';
+
 import { TranslatePipe } from 'ng2-translate';
 import {TreatmentMedication} from "../../treatment-medication/treatment-medication.model";
 import _ = require("lodash");
-import {MEDICATION_DOSAGE_UNIT} from "../../../../global/constants/medication-dosage-unit.constant";
 import {UcFirstPipe} from "../../../../global/pipes/uc-first.pipe";
-import {
-	TREATMENT_DURATION_OPTION,
-	TreatmentDurationOption
-} from "../../../../global/constants/treatment-duration-option.constant";
 
 @Component({
 	selector: 'app-medicine-form-entry',
@@ -16,15 +11,14 @@ import {
 	pipes: [TranslatePipe, UcFirstPipe]
 })
 export class MedicineFormEntryComponent implements AfterViewInit{
-	@Input() medicationOption: MedicationOption;
+	@Input() treatmentMedication: TreatmentMedication;
 	@Input() treatmentMedicines: TreatmentMedication[];
 	@Input() isSaving: boolean;
 	@Input() isEdit: boolean;
-	@Output() updateMedicationOption: EventEmitter<MedicationOption> = new EventEmitter<MedicationOption>();
-	@Output() removeMedicationOption: EventEmitter<MedicationOption> = new EventEmitter<MedicationOption>();
+	@Output() updateTreatmentMedication: EventEmitter<TreatmentMedication> = new EventEmitter<TreatmentMedication>();
+	@Output() removeTreatmentMedication: EventEmitter<TreatmentMedication> = new EventEmitter<TreatmentMedication>();
 
-	public medicationDosageUnits: string[] = MEDICATION_DOSAGE_UNIT;
-	public treatmentDurationOptions: TreatmentDurationOption[] = TREATMENT_DURATION_OPTION;
+	public selectedTreatmentMedication: TreatmentMedication;
 
 	private treatmentMedicationId;
 
@@ -32,35 +26,39 @@ export class MedicineFormEntryComponent implements AfterViewInit{
 
 	ngOnInit() {
 		this.editing = this.isEdit;
-		if (typeof this.medicationOption.is_active !== 'undefined') {
+		if (typeof this.treatmentMedication.is_active !== 'undefined') {
 			this.editing = false;
 		}
+		this.treatmentMedicationId = this.treatmentMedicines[0].id;
+		this.onEdit();
 	}
 
 	ngAfterViewInit() {
 		setTimeout(() => {
-			if (typeof this.medicationOption.treatment_medication === 'undefined' && this.treatmentMedicines.length > 0) {
+			if (typeof this.treatmentMedication === 'undefined' && this.treatmentMedicines.length > 0) {
 				this.treatmentMedicationId = this.treatmentMedicines[0].id;
 			} else {
-				this.treatmentMedicationId = this.medicationOption.treatment_medication.id;
+				this.treatmentMedicationId = this.treatmentMedication.id;
 			}
 		});
 	}
 
 	onEdit() {
 		let treatmentMedicationIndex = _.findIndex(this.treatmentMedicines, {id: this.treatmentMedicationId});
+
 		if (treatmentMedicationIndex >= 0) {
-			this.medicationOption.treatment_medication = this.treatmentMedicines[treatmentMedicationIndex];
+			this.treatmentMedication = this.treatmentMedicines[treatmentMedicationIndex];
+			// this.selectedTreatmentMedication = this.treatmentMedicines[treatmentMedicationIndex];
 		}
 
-		this.medicationOption.is_active = true;
+		this.treatmentMedication.is_active = true;
 
-		this.updateMedicationOption.emit(this.medicationOption);
+		this.updateTreatmentMedication.emit(this.treatmentMedication);
 	}
 
 	onRemove() {
-		this.medicationOption.is_active = false;
-		this.removeMedicationOption.emit(this.medicationOption);
+		this.treatmentMedication.is_active = false;
+		this.removeTreatmentMedication.emit(this.treatmentMedication);
 	}
 
 	isDefined(val) {

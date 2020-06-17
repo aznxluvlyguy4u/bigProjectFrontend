@@ -271,15 +271,15 @@
             <div class="row">
             {{ 'MEDICATIONS' | translate }}
                 <span class="pull-right" *ngIf="!hasAtLeastOneMedication()">
-                    <p>   {{ 'INCLUDE AT LEAST ONE MEDICATION' | translate }}</p>
+                    <p>{{ 'INCLUDE AT LEAST ONE MEDICATION' | translate }}</p>
                 </span>
             </div>
 
             <app-medicine-form-entry
-                    *ngFor="let medicine of newMedications"
-                    (updateMedicationOption)="updateMedication($event)"
-                    (removeMedicationOption)="removeMedication($event)"
-                    [medicationOption]="medicine"
+                    *ngFor="let treatmentMedication of newMedications"
+                    (updateTreatmentMedication)="updateMedication($event)"
+                    (removeTreatmentMedication)="removeMedication($event)"
+                    [treatmentMedication]="treatmentMedication"
                     [isSaving]="isSaving"
                     [isEdit]="isModalEditMode"
                     [treatmentMedicines]="treatmentMedications"
