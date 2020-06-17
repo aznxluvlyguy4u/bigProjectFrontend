@@ -1,5 +1,6 @@
 <div class="row">
     <div class="large-4 columns">
+        {{treatmentMedicationId}}
         <label class="pull-left"> {{ 'TREATMENT MEDICATION' | translate }} *</label>
         <select [(ngModel)]="treatmentMedicationId" required (ngModelChange)="onEdit()" [disabled]="isSaving || editing">
             <option *ngFor="let treatmentMedicine of treatmentMedicines" [ngValue]="treatmentMedicine.id">

@@ -29,7 +29,6 @@ export class MedicineFormEntryComponent implements AfterViewInit{
 		if (typeof this.treatmentMedication.is_active !== 'undefined') {
 			this.editing = false;
 		}
-		this.treatmentMedicationId = this.treatmentMedicines[0].id;
 		this.onEdit();
 	}
 

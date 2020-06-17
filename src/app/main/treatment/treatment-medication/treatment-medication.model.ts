@@ -2,6 +2,7 @@ import {TreatmentTemplate} from "../treatment-template/treatment-template.model"
 
 export class TreatmentMedication {
 	id: number;
+	temp_id: number;
 	name: string;
 	dosage: number;
 	dosage_unit: string;

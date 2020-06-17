@@ -294,7 +294,7 @@ export class TreatmentTemplateComponent implements OnInit {
 			const treatmentTemplate = this.getFormattedTreatmentTypeBody();
 			const type = this.newTreatmentTemplate.type.toLowerCase();
 
-			this.nsfo.doPutRequest(this.nsfo.URI_TREATMENTS + '/' + type + '/template/' + treatmentTemplate.id, treatmentTemplate)
+			this.nsfo.doPutRequest(this.nsfo.URI_TREATMENTS + '/' + type + '/template/' + treatmentTemplate.id+'?minimal_output=false', treatmentTemplate)
 				.pipe(takeUntil(this.onDestroy$))
 				.subscribe(
 					res => {
@@ -386,8 +386,6 @@ export class TreatmentTemplateComponent implements OnInit {
 
 			if (typeof this.newTreatmentTemplate.treatment_medications !== 'undefined') {
 				for(let medication of this.newTreatmentTemplate.treatment_medications) {
-					console.log(medication.id);
-					// medication.id = this.medicationId++;
 					this.newMedications.push(medication);
 				}
 			}
@@ -487,28 +485,26 @@ export class TreatmentTemplateComponent implements OnInit {
 	}
 
 	removeMedication(treatmentMedication: TreatmentMedication) {
-		_.remove(this.newTreatmentTemplate.treatment_medications, {id: treatmentMedication.id});
+		_.remove(this.newMedications, {id: treatmentMedication.id});
 	}
 
 	updateMedication(treatmentMedication: TreatmentMedication) {
 		if (typeof treatmentMedication.id !== 'undefined') {
-			const index = _.findIndex(this.treatmentMedications, {id: treatmentMedication.id});
+			const index = _.findIndex(this.newMedications, {temp_id: treatmentMedication.temp_id});
 
-			this.newTreatmentTemplate.treatment_medications.splice(index, 1, treatmentMedication);
+			this.newMedications.splice(index, 1, treatmentMedication);
 		}
 	}
 
 	onAddNewBlankMedication() {
 		let treatmentMedication = new TreatmentMedication();
-		treatmentMedication.id = this.medicationId++;
-		treatmentMedication.is_active = false;
+
 		if (this.treatmentMedications.length > 1) {
 			treatmentMedication = this.treatmentMedications[0];
-		} else {
-			treatmentMedication = new TreatmentMedication();
 		}
 
-		// console.log(this.newTreatmentTemplate);
+		treatmentMedication.temp_id = this.medicationId++;
+		treatmentMedication.is_active = false;
 
 		this.newMedications.push(treatmentMedication);
 	}
