@@ -173,11 +173,14 @@ export class TreatmentTemplateComponent implements OnInit {
 		const ubnPart = this.selectedUbn != null ? '/' + this.selectedUbn : '';
 		const kindPart = this.selectedTreatmentTypeKind.toLowerCase();
 
-		this.nsfo.doGetRequest(this.nsfo.URI_TREATMENTS + '/template/' + kindPart + ubnPart + '?active_only=false')
+		this.nsfo.doGetRequest(this.nsfo.URI_TREATMENTS + '/template/' + kindPart + ubnPart + '?active_only=false&minimal_output=false')
 			.pipe(takeUntil(this.onDestroy$))
 			.subscribe(
 				res => {
 					this.treatmentTemplates= <TreatmentTemplate[]> res.result;
+					if (this.isModalEditMode) {
+						this.newMedications = this.treatmentTemplate.treatment_medications;
+					}
 					this.loadingTreatmentTemplates = false;
 					this.isDescriptionSortAscending = true;
 					this.sortByDescription();
@@ -243,11 +246,16 @@ export class TreatmentTemplateComponent implements OnInit {
 			}
 		}
 
-		// Only delete the keys of the duplicate to make sure that during an error returned from the API
-		// no data is lost.
+		// removes the keys and values not necessary for the request
 		for(let medication of medications) {
 			delete medication.id;
 			delete medication.is_active;
+			delete medication.dosage_unit;
+			delete medication.dosage;
+			delete medication.waiting_days;
+			delete medication.treatment_duration;
+			delete medication.treatment_templates;
+			delete medication.reg_nl;
 		}
 
 		this.newTreatmentTemplate.treatment_medications = medications;
@@ -376,12 +384,13 @@ export class TreatmentTemplateComponent implements OnInit {
 				}
 			}
 
-			// if (typeof this.newTreatmentTemplate.medications !== 'undefined') {
-			// 	for(let medication of this.newTreatmentTemplate.medications) {
-			// 		medication.id = this.medicationId++;
-			// 		this.newMedications.push(medication);
-			// 	}
-			// }
+			if (typeof this.newTreatmentTemplate.treatment_medications !== 'undefined') {
+				for(let medication of this.newTreatmentTemplate.treatment_medications) {
+					console.log(medication.id);
+					// medication.id = this.medicationId++;
+					this.newMedications.push(medication);
+				}
+			}
 		}
 	}
 
