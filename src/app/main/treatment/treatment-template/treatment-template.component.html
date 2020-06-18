@@ -276,7 +276,8 @@
             </div>
 
             <app-medicine-form-entry
-                    *ngFor="let treatmentMedication of newMedications"
+                    *ngFor="let treatmentMedication of newMedications; let i = index"
+                    [index]="i"
                     (updateTreatmentMedication)="updateMedication($event)"
                     (removeTreatmentMedication)="removeMedication($event)"
                     [treatmentMedication]="treatmentMedication"

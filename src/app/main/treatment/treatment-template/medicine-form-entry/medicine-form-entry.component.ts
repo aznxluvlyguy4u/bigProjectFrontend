@@ -15,7 +15,8 @@ export class MedicineFormEntryComponent implements AfterViewInit{
 	@Input() treatmentMedicines: TreatmentMedication[];
 	@Input() isSaving: boolean;
 	@Input() isEdit: boolean;
-	@Output() updateTreatmentMedication: EventEmitter<TreatmentMedication> = new EventEmitter<TreatmentMedication>();
+	@Input() index;
+	@Output() updateTreatmentMedication: EventEmitter<any> = new EventEmitter();
 	@Output() removeTreatmentMedication: EventEmitter<TreatmentMedication> = new EventEmitter<TreatmentMedication>();
 
 	public selectedTreatmentMedication: TreatmentMedication;
@@ -29,7 +30,6 @@ export class MedicineFormEntryComponent implements AfterViewInit{
 		if (typeof this.treatmentMedication.is_active !== 'undefined') {
 			this.editing = false;
 		}
-		this.onEdit();
 	}
 
 	ngAfterViewInit() {
@@ -47,12 +47,11 @@ export class MedicineFormEntryComponent implements AfterViewInit{
 
 		if (treatmentMedicationIndex >= 0) {
 			this.treatmentMedication = this.treatmentMedicines[treatmentMedicationIndex];
-			// this.selectedTreatmentMedication = this.treatmentMedicines[treatmentMedicationIndex];
 		}
 
 		this.treatmentMedication.is_active = true;
 
-		this.updateTreatmentMedication.emit(this.treatmentMedication);
+		this.updateTreatmentMedication.emit({medication: this.treatmentMedication, index: this.index});
 	}
 
 	onRemove() {

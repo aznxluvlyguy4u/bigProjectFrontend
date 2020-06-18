@@ -2,7 +2,6 @@ import {TreatmentTemplate} from "../treatment-template/treatment-template.model"
 
 export class TreatmentMedication {
 	id: number;
-	temp_id: number;
 	name: string;
 	dosage: number;
 	dosage_unit: string;
@@ -12,9 +11,11 @@ export class TreatmentMedication {
 	is_active: boolean;
 	treatment_templates: TreatmentTemplate[];
 
-	constructor() {
-		this.id = 0;
-		this.name = '';
-		this.is_active = true;
+	constructor(preparingForApi = false) {
+		if (!preparingForApi) {
+			this.id = 0;
+			this.name = '';
+			this.is_active = true;
+		}
 	}
 }
