@@ -132,7 +132,7 @@
                             <td>{{ treatmentTemplate.description }}</td>
                             <td>{{ treatmentTemplate.location ? treatmentTemplate.location.ubn : 'ALL UBNS' | translate }}</td>
                             <td>
-                                {{treatmentTemplate.medications ? treatmentTemplate.medications.length: '0'}}x
+                                {{treatmentTemplate.treatment_medications ? treatmentTemplate.treatment_medications.length: '0'}}x
                                 <span>
                                     <a (click)="openInfoModal(treatmentTemplate)" class="overview-controls">
                                         <i class="fa fa-info-circle" aria-hidden="true"></i>
@@ -159,7 +159,7 @@
 
 </ng-template>
 
-<!--CREATE MODAL-->
+<!--CREATE AND EDIT MODAL-->
 <div class="reveal-overlay" [ngStyle]="{'display': displayModal}">
     <div class="tiny reveal" [ngStyle]="{'display': displayModal}" style="padding: 2em; width: 50em; max-width: 95vw">
         <div class="modal-header">
@@ -187,7 +187,7 @@
                                    name="allUbnSwitch"
                                    [(ngModel)]="newIsDefaultTemplate"
                                    [disabled]="isSaving || isModalEditMode"
-                                   (click)="resetNewSelectedUbn()">
+                                   (click)="resetNewSelectedUbn();setDescriptionValues()">
                             <label class="switch-paddle" for="yes-no-for-create-edit">
                                 <span class="show-for-sr">{{ 'CREATE DEFAULT TEMPLATE FOR ALL UBNS' | translate }}</span>
                                 <span class="switch-active" aria-hidden="true"
@@ -219,6 +219,7 @@
                     <select
                             [disabled]="newIsDefaultTemplate || isSaving || isModalEditMode"
                             [(ngModel)]="newSelectedUbn"
+                            (click)="setDescriptionValues(null)"
                             name="ubn"
                     >
                         <option
@@ -253,10 +254,11 @@
                 <div class="large-8 columns">
                     <select
                             [disabled]="isSaving || isModalEditMode"
-                            [(ngModel)]="newTreatmentTemplate.description"
+                            [(ngModel)]="descriptionBase"
                             name="description"
                             formControlName="description"
                             (keydown)="resetValidation()"
+                            (click)="setDescriptionValues(descriptionBase)"
                     >
                         <option
                                 *ngFor="let treatmentType of getTreatmentTypesByKindInCreateUpdateModal()"
@@ -266,20 +268,28 @@
                 </div>
             </div>
 
+            <div class="row">
+                <div class="large-4 columns">&nbsp;</div>
+                <div class="large-8 columns end">
+                    <p>{{newTreatmentTemplate.description}}</p>
+                </div>
+            </div>
+
             <hr>
 
             <div class="row">
             {{ 'MEDICATIONS' | translate }}
                 <span class="pull-right" *ngIf="!hasAtLeastOneMedication()">
-                    <p>   {{ 'INCLUDE AT LEAST ONE MEDICATION' | translate }}</p>
+                    <p>{{ 'INCLUDE AT LEAST ONE MEDICATION' | translate }}</p>
                 </span>
             </div>
 
             <app-medicine-form-entry
-                    *ngFor="let medicine of newMedications"
-                    (updateMedicationOption)="updateMedication($event)"
-                    (removeMedicationOption)="removeMedication($event)"
-                    [medicationOption]="medicine"
+                    *ngFor="let treatmentMedication of newMedications; let i = index"
+                    [index]="i"
+                    (updateTreatmentMedication)="updateMedication($event)"
+                    (removeTreatmentMedication)="removeMedication($event)"
+                    [treatmentMedication]="treatmentMedication"
                     [isSaving]="isSaving"
                     [isEdit]="isModalEditMode"
                     [treatmentMedicines]="treatmentMedications"
@@ -404,8 +414,8 @@
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let medication of treatmentTemplate.medications">
-                <td>{{ medication.treatment_medication.name }}</td>
+            <tr *ngFor="let medication of treatmentTemplate.treatment_medications">
+                <td>{{ medication.name }}</td>
                 <td>{{ medication.dosage }} {{ medication.dosage_unit }}</td>
                 <td>{{ medication.treatment_duration }}</td>
                 <td>{{ medication.waiting_days }}</td>

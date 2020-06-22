@@ -100,7 +100,7 @@ export class TreatmentMedicationComponent {
 				res => {
 					this.treatmentMedications = <TreatmentMedication[]> res.result;
 					this.loadingTreatmentMedications = false;
-					this.isNameSortAscending = true;
+					// this.isNameSortAscending = true;
 					this.sortByColumn();
 					this.resetFilterOptions();
 				}

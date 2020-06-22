@@ -1,3 +1,5 @@
+import {TreatmentTemplate} from "../treatment-template/treatment-template.model";
+
 export class TreatmentMedication {
 	id: number;
 	name: string;
@@ -7,10 +9,13 @@ export class TreatmentMedication {
 	treatment_duration: number;
 	waiting_days: number;
 	is_active: boolean;
+	treatment_templates: TreatmentTemplate[];
 
-	constructor() {
-		this.id = 0;
-		this.name = '';
-		this.is_active = true;
+	constructor(preparingForApi = false) {
+		if (!preparingForApi) {
+			this.id = 0;
+			this.name = '';
+			this.is_active = true;
+		}
 	}
 }
