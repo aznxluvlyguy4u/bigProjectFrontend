@@ -14,6 +14,11 @@ import { SortOrder, SortService } from '../../../global/services/utils/sort.serv
 import { TreatmentMedicationFilterPipe } from './treatment-medication-filter.pipe';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import {MEDICATION_DOSAGE_UNIT} from "../../../global/constants/medication-dosage-unit.constant";
+import {
+	TREATMENT_DURATION_OPTION,
+	TreatmentDurationOption
+} from "../../../global/constants/treatment-duration-option.constant";
 
 @Component({
 	selector: 'app-treatment-medicines',
@@ -24,30 +29,39 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class TreatmentMedicationComponent {
 	// FILTER
-	private filterSearch: string;
-	private filterIsActiveStatus: boolean;
-	private activeStatuses: boolean[] = [undefined, true, false];
+	public filterSearch: string;
+	public filterIsActiveStatus: boolean;
+	public activeStatuses: boolean[] = [undefined, true, false];
+
+	public medicationDosageUnits: string[] = MEDICATION_DOSAGE_UNIT;
+	public treatmentDurationOptions: TreatmentDurationOption[] = TREATMENT_DURATION_OPTION;
 
 	// SORT
-	private isDescriptionSortAscending: boolean;
+	public sort = {
+		nameAscending: true,
+		dosageAscending: true,
+		regNLAscending: true,
+		treatmentDurationAscending: true,
+		waitingDaysAscending: true
+	};
 
 	// DATA
-	private loadingTreatmentMedications: boolean = false;
-	private treatmentMedications: TreatmentMedication[] = [];
-	private treatmentMedication: TreatmentMedication = new TreatmentMedication();
+	public loadingTreatmentMedications: boolean = false;
+	public treatmentMedications: TreatmentMedication[] = [];
+	public treatmentMedication: TreatmentMedication = new TreatmentMedication();
 	private treatmentMedicationTemp: TreatmentMedication = new TreatmentMedication();
 
 	// FORM
-	private form: FormGroup;
-	private displayModal: string = 'none';
-	private displayRemoveModal: string = 'none';
-	private displayReactivateModal: string = 'none';
-	private isModalEditMode: boolean = false;
-	private isValidForm: boolean = true;
-	private errorMessage: string = '';
-	private isSaving: boolean = false;
-	
-	private page: number = 1;
+	public form: FormGroup;
+	public displayModal: string = 'none';
+	public displayRemoveModal: string = 'none';
+	public displayReactivateModal: string = 'none';
+	public isModalEditMode: boolean = false;
+	public isValidForm: boolean = true;
+	public errorMessage: string = '';
+	public isSaving: boolean = false;
+
+	public page: number = 1;
 
 	private onDestroy$: Subject<void> = new Subject<void>();
 
@@ -60,7 +74,12 @@ export class TreatmentMedicationComponent {
 		this.getTreatmentMedications();
 
 		this.form = fb.group({
-			name: ['', Validators.required]
+			name: ['', Validators.required],
+			dosage: ['', Validators.required],
+			dosage_unit: ['', Validators.required],
+			reg_nl: [''],
+			waiting_days: ['', Validators.required],
+			treatment_duration: ['', Validators.required]
 		});
 	}
 
@@ -79,10 +98,10 @@ export class TreatmentMedicationComponent {
 			.pipe(takeUntil(this.onDestroy$))
 			.subscribe(
 				res => {
-					this.treatmentMedications= <TreatmentMedication[]> res.result;
+					this.treatmentMedications = <TreatmentMedication[]> res.result;
 					this.loadingTreatmentMedications = false;
-					this.isDescriptionSortAscending = true;
-					this.sortByDescription();
+					this.isNameSortAscending = true;
+					this.sortByColumn();
 					this.resetFilterOptions();
 				}
 			);
@@ -104,7 +123,7 @@ export class TreatmentMedicationComponent {
 						this.treatmentMedication = res.result;
 						this.treatmentMedications.push(this.treatmentMedication);
 						this.isSaving = false;
-						this.sortByDescription();
+						this.sortByColumn();
 						this.closeModal();
 					},
 					err => {
@@ -130,7 +149,7 @@ export class TreatmentMedicationComponent {
 						this.treatmentMedication = res.result;
 						this.treatmentMedications.push(this.treatmentMedication);
 						this.isSaving = false;
-						this.sortByDescription();
+						this.sortByColumn();
 						this.closeModal();
 					},
 					err => {
@@ -155,7 +174,7 @@ export class TreatmentMedicationComponent {
 					this.treatmentMedication = res.result;
 					this.treatmentMedications.push(this.treatmentMedication);
 					this.isSaving = false;
-					this.sortByDescription();
+					this.sortByColumn();
 					this.closeRemoveModal();
 				},
 				err => {
@@ -172,7 +191,7 @@ export class TreatmentMedicationComponent {
 		this.closeReactivateModal();
 	}
 
-	private openModal(editMode: boolean, treatmentMedication: TreatmentMedication): void {
+	private openModal(editMode: boolean, treatmentMedication: TreatmentMedication = new TreatmentMedication()): void {
 			this.isModalEditMode = editMode;
 			this.displayModal = 'block';
 			this.isValidForm = true;
@@ -228,17 +247,50 @@ export class TreatmentMedicationComponent {
 		this.filterIsActiveStatus = true;
 	}
 
-	onSortByDescriptionToggle() {
+	onSortByColumnToggle(column = 'name') {
 		//toggle sort direction
-		this.isDescriptionSortAscending = !this.isDescriptionSortAscending;
-		this.sortByDescription();
+		switch (column) {
+			case "dosage":
+				this.sort.dosageAscending = !this.sort.dosageAscending;
+			break;
+			case "regNL":
+				this.sort.regNLAscending = !this.sort.regNLAscending;
+			break;
+			case "treatmentDuration":
+				this.sort.treatmentDurationAscending = !this.sort.treatmentDurationAscending;
+			break;
+			case "waitingDays":
+				this.sort.waitingDaysAscending = !this.sort.waitingDaysAscending;
+			break;
+			default:
+				this.sort.nameAscending = !this.sort.nameAscending;
+			break;
+		}
+		this.sortByColumn(column);
 	}
 
-	sortByDescription() {
+	sortByColumn(column = 'name') {
 		const sortOrder = new SortOrder();
-		sortOrder.variableName = 'name';
+		sortOrder.variableName = column;
 		sortOrder.isDate = false; //it is a dateString
-		sortOrder.ascending = this.isDescriptionSortAscending;
+
+		switch (column) {
+			case "dosage":
+				sortOrder.ascending = this.sort.dosageAscending;
+			break;
+			case "regNL":
+				sortOrder.ascending = this.sort.regNLAscending;
+			break;
+			case "treatmentDuration":
+				sortOrder.ascending = this.sort.treatmentDurationAscending;
+			break;
+			case "waitingDays":
+				sortOrder.ascending = this.sort.waitingDaysAscending;
+			break;
+			default:
+				sortOrder.ascending = this.sort.nameAscending;
+			break;
+		}
 
 		this.treatmentMedications = this.sortService.sort(this.treatmentMedications, [sortOrder]);
 	}

@@ -37,11 +37,34 @@
                         <td>{{ 'ACTIVE' | translate}}</td>
                         <td>{{ 'NAME' | translate}}
                             <app-sort-switch
-                                    [pointsUp]="isDescriptionSortAscending"
-                                    (sortSwitchToggled)="onSortByDescriptionToggle(); page = 1">
+                                    [pointsUp]="sort.nameAscending"
+                                    (sortSwitchToggled)="onSortByColumnToggle(); page = 1">
                             </app-sort-switch>
                         </td>
-<!--                        <td>{{ 'LOG DATE' | translate}}</td>-->
+                        <td>{{ 'DOSAGE' | translate }}
+<!--                            <app-sort-switch-->
+<!--                                    [pointsUp]="sort.dosageAscending"-->
+<!--                                    (sortSwitchToggled)="onSortByColumnToggle('dosage'); page = 1">-->
+<!--                            </app-sort-switch>-->
+                        </td>
+                        <td>{{ 'REG NL' | translate }}
+<!--                            <app-sort-switch-->
+<!--                                    [pointsUp]="sort.regNLAscending"-->
+<!--                                    (sortSwitchToggled)="onSortByColumnToggle('regNL'); page = 1">-->
+<!--                            </app-sort-switch>-->
+                        </td>
+                        <td>{{ 'WAITING DAYS' | translate }}
+<!--                            <app-sort-switch-->
+<!--                                    [pointsUp]="sort.waitingDaysAscending"-->
+<!--                                    (sortSwitchToggled)="onSortByColumnToggle('waitingDays'); page = 1">-->
+<!--                            </app-sort-switch>-->
+                        </td>
+                        <td>{{ 'TREATMENT DURATION' | translate }}
+<!--                            <app-sort-switch-->
+<!--                                    [pointsUp]="sort.treatmentDurationAscending"-->
+<!--                                    (sortSwitchToggled)="onSortByColumnToggle('treatmentDuration'); page = 1">-->
+<!--                            </app-sort-switch>-->
+                        </td>
                         <td>
                             <button type="button" (click)="openModal(false)" class="small primary button pull-right">
                                 <i class="fa fa-user-plus fa-fw" aria-hidden="true"></i>
@@ -54,7 +77,10 @@
                     <tr *ngFor="let treatmentMedication of treatmentMedications | TreatmentMedicationFilterPipe:getFilterOptions() ">
                         <td><app-check-mark [boolVal]="treatmentMedication.is_active"></app-check-mark></td>
                         <td>{{ treatmentMedication.name }}</td>
-<!--                        <td>{{ treatmentMedication.log_date ? (treatmentMedication.log_date | date: 'dd-MM-yyyy @ HH:mm:ss') : '' }}</td>-->
+                        <td>{{ treatmentMedication.dosage }} {{ treatmentMedication.dosage_unit }}</td>
+                        <td>{{ treatmentMedication.reg_nl }} </td>
+                        <td>{{ treatmentMedication.waiting_days }} </td>
+                        <td>{{ treatmentMedication.treatment_duration }} </td>
                         <td>
                         <span *ngIf="treatmentMedication.is_active" class="pull-right overview-controls">
                             <a (click)="openModal(true, treatmentMedication)"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
@@ -86,10 +112,58 @@
         <div [formGroup]="form" class="modal-body">
             <div class="row">
                 <div class="large-4 columns">
-                    <label class="middle"> {{ 'NAME' | translate }} * </label>
+                    <label class="middle" for="name"> {{ 'NAME' | translate }} * </label>
                 </div>
                 <div class="large-8 columns">
-                    <input type="text" [(ngModel)]="treatmentMedication.name" formControlName="name" maxlength="250" (keydown)="resetValidation()">
+                    <input type="text" id="name" [(ngModel)]="treatmentMedication.name" formControlName="name" maxlength="250" (keydown)="resetValidation()">
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-4 columns">
+                    <label class="middle" for="dosage"> {{ 'DOSAGE' | translate }} * </label>
+                </div>
+                <div class="large-8 columns">
+                    <input type="number" id="dosage" [(ngModel)]="treatmentMedication.dosage" formControlName="dosage" maxlength="250" (keydown)="resetValidation()">
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-4 columns">
+                    <label class="middle" for="dosage_unit"> {{ 'DOSAGE UNIT' | translate }} * </label>
+                </div>
+                <div class="large-8 columns">
+                    <select id="dosage_unit" [(ngModel)]="treatmentMedication.dosage_unit" formControlName="dosage_unit">
+                        <option *ngFor="let option of medicationDosageUnits" [value]="option">{{option}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-4 columns">
+                    <label class="middle" for="reg_nl"> {{ 'REG NL' | translate }}
+                            <i class="fa fa-info-circle"
+                               aria-hidden="true"
+                               title="{{'LEAVE EMPTY FOR NON (OFFICIAL) MEDICATION' | translate}}">
+                            </i></label>
+                </div>
+                <div class="large-8 columns">
+                    <input type="text" id="reg_nl" [(ngModel)]="treatmentMedication.reg_nl" formControlName="reg_nl" maxlength="250" (keydown)="resetValidation()">
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-4 columns">
+                    <label class="middle" for="waiting_days"> {{ 'WAITING DAYS' | translate }} * </label>
+                </div>
+                <div class="large-8 columns">
+                    <input type="number" id="waiting_days" [(ngModel)]="treatmentMedication.waiting_days" formControlName="waiting_days" maxlength="250" (keydown)="resetValidation()">
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-4 columns">
+                    <label class="middle" for="treatment_duration"> {{ 'TREATMENT DURATION' | translate }} * </label>
+                </div>
+                <div class="large-8 columns">
+                    <select id="treatment_duration" [(ngModel)]="treatmentMedication.treatment_duration" formControlName="treatment_duration">
+                        <option *ngFor="let option of treatmentDurationOptions" value="{{ option.value }}">{{ option.display | translate }}</option>
+                    </select>
                 </div>
             </div>
         </div>
