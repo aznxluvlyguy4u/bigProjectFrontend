@@ -77,7 +77,7 @@ export class TreatmentMedicationComponent {
 			name: ['', Validators.required],
 			dosage: ['', Validators.required],
 			dosage_unit: ['', Validators.required],
-			reg_nl: ['', Validators.required],
+			reg_nl: [''],
 			waiting_days: ['', Validators.required],
 			treatment_duration: ['', Validators.required]
 		});

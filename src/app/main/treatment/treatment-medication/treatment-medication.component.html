@@ -138,7 +138,11 @@
             </div>
             <div class="row">
                 <div class="large-4 columns">
-                    <label class="middle" for="reg_nl"> {{ 'REG NL' | translate }} * </label>
+                    <label class="middle" for="reg_nl"> {{ 'REG NL' | translate }}
+                            <i class="fa fa-info-circle"
+                               aria-hidden="true"
+                               title="{{'LEAVE EMPTY FOR NON (OFFICIAL) MEDICATION' | translate}}">
+                            </i></label>
                 </div>
                 <div class="large-8 columns">
                     <input type="text" id="reg_nl" [(ngModel)]="treatmentMedication.reg_nl" formControlName="reg_nl" maxlength="250" (keydown)="resetValidation()">
