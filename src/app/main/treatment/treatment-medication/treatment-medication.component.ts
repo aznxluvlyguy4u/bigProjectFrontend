@@ -14,6 +14,11 @@ import { SortOrder, SortService } from '../../../global/services/utils/sort.serv
 import { TreatmentMedicationFilterPipe } from './treatment-medication-filter.pipe';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import {MEDICATION_DOSAGE_UNIT} from "../../../global/constants/medication-dosage-unit.constant";
+import {
+	TREATMENT_DURATION_OPTION,
+	TreatmentDurationOption
+} from "../../../global/constants/treatment-duration-option.constant";
 
 @Component({
 	selector: 'app-treatment-medicines',
@@ -24,12 +29,15 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class TreatmentMedicationComponent {
 	// FILTER
-	private filterSearch: string;
-	private filterIsActiveStatus: boolean;
-	private activeStatuses: boolean[] = [undefined, true, false];
+	public filterSearch: string;
+	public filterIsActiveStatus: boolean;
+	public activeStatuses: boolean[] = [undefined, true, false];
+
+	public medicationDosageUnits: string[] = MEDICATION_DOSAGE_UNIT;
+	public treatmentDurationOptions: TreatmentDurationOption[] = TREATMENT_DURATION_OPTION;
 
 	// SORT
-	private sort = {
+	public sort = {
 		nameAscending: true,
 		dosageAscending: true,
 		regNLAscending: true,
@@ -38,22 +46,22 @@ export class TreatmentMedicationComponent {
 	};
 
 	// DATA
-	private loadingTreatmentMedications: boolean = false;
-	private treatmentMedications: TreatmentMedication[] = [];
-	private treatmentMedication: TreatmentMedication = new TreatmentMedication();
+	public loadingTreatmentMedications: boolean = false;
+	public treatmentMedications: TreatmentMedication[] = [];
+	public treatmentMedication: TreatmentMedication = new TreatmentMedication();
 	private treatmentMedicationTemp: TreatmentMedication = new TreatmentMedication();
 
 	// FORM
-	private form: FormGroup;
-	private displayModal: string = 'none';
-	private displayRemoveModal: string = 'none';
-	private displayReactivateModal: string = 'none';
-	private isModalEditMode: boolean = false;
-	private isValidForm: boolean = true;
-	private errorMessage: string = '';
-	private isSaving: boolean = false;
-	
-	private page: number = 1;
+	public form: FormGroup;
+	public displayModal: string = 'none';
+	public displayRemoveModal: string = 'none';
+	public displayReactivateModal: string = 'none';
+	public isModalEditMode: boolean = false;
+	public isValidForm: boolean = true;
+	public errorMessage: string = '';
+	public isSaving: boolean = false;
+
+	public page: number = 1;
 
 	private onDestroy$: Subject<void> = new Subject<void>();
 
@@ -69,7 +77,7 @@ export class TreatmentMedicationComponent {
 			name: ['', Validators.required],
 			dosage: ['', Validators.required],
 			dosage_unit: ['', Validators.required],
-			reg_nl: ['', Validators.required],
+			reg_nl: [''],
 			waiting_days: ['', Validators.required],
 			treatment_duration: ['', Validators.required]
 		});
