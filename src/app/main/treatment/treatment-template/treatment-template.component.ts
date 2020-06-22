@@ -248,18 +248,6 @@ export class TreatmentTemplateComponent implements OnInit {
 			}
 		}
 
-		// removes the keys and values not necessary for the request
-		// for(let medication of medications) {
-		// 	delete medication.id;
-		// 	delete medication.is_active;
-		// 	delete medication.dosage_unit;
-		// 	delete medication.dosage;
-		// 	delete medication.waiting_days;
-		// 	delete medication.treatment_duration;
-		// 	delete medication.treatment_templates;
-		// 	delete medication.reg_nl;
-		// }
-
 		this.newTreatmentTemplate.treatment_medications = medications;
 
 		let treatmentTemplate = _.cloneDeep(this.newTreatmentTemplate);
@@ -449,7 +437,7 @@ export class TreatmentTemplateComponent implements OnInit {
 		if (descriptionBase != null && descriptionBase != '') {
 			this.descriptionBase = descriptionBase;
 		}
-		
+
 		if (this.newSelectedUbn != null) {
 			this.descriptionSuffix = ' - UBN ' + this.newSelectedUbn;
 		} else {
