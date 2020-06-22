@@ -449,11 +449,7 @@ export class TreatmentTemplateComponent implements OnInit {
 		if (descriptionBase != null && descriptionBase != '') {
 			this.descriptionBase = descriptionBase;
 		}
-
-
-
-		console.log(this.newIsDefaultTemplate, this.newSelectedUbn, this.descriptionSuffix, this.descriptionBase)
-
+		
 		if (this.newSelectedUbn != null) {
 			this.descriptionSuffix = ' - UBN ' + this.newSelectedUbn;
 		} else {
