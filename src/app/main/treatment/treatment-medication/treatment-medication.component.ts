@@ -14,6 +14,11 @@ import { SortOrder, SortService } from '../../../global/services/utils/sort.serv
 import { TreatmentMedicationFilterPipe } from './treatment-medication-filter.pipe';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import {MEDICATION_DOSAGE_UNIT} from "../../../global/constants/medication-dosage-unit.constant";
+import {
+	TREATMENT_DURATION_OPTION,
+	TreatmentDurationOption
+} from "../../../global/constants/treatment-duration-option.constant";
 
 @Component({
 	selector: 'app-treatment-medicines',
@@ -27,6 +32,9 @@ export class TreatmentMedicationComponent {
 	public filterSearch: string;
 	public filterIsActiveStatus: boolean;
 	public activeStatuses: boolean[] = [undefined, true, false];
+
+	public medicationDosageUnits: string[] = MEDICATION_DOSAGE_UNIT;
+	public treatmentDurationOptions: TreatmentDurationOption[] = TREATMENT_DURATION_OPTION;
 
 	// SORT
 	public sort = {

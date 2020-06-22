@@ -132,16 +132,7 @@
                 </div>
                 <div class="large-8 columns">
                     <select id="dosage_unit" [(ngModel)]="treatmentMedication.dosage_unit" formControlName="dosage_unit">
-                        <option value="ml">Milliliter</option>
-                        <option value="g">Gram</option>
-                        <option value="kg">Kilogram</option>
-                        <option value="bolus">Bolus</option>
-                        <option value="pil">Pil</option>
-                        <option value="l">Liter</option>
-                        <option value="oplossing">Oplossing</option>
-                        <option value="fles">Fles</option>
-                        <option value="poeder">Poeder</option>
-                        <option value="overig">Overig</option>
+                        <option *ngFor="let option of medicationDosageUnits" [value]="option">{{option}}</option>
                     </select>
                 </div>
             </div>
@@ -167,29 +158,7 @@
                 </div>
                 <div class="large-8 columns">
                     <select id="treatment_duration" [(ngModel)]="treatmentMedication.treatment_duration" formControlName="treatment_duration">
-                        <option value="eenmalig ">Eenmalig </option>
-                        <option value="1">1</option>
-                        <option value="1.5">1,5</option>
-                        <option value="2">2</option>
-                        <option value="2.5">2,5</option>
-                        <option value="3">3</option>
-                        <option value="3.5">3,5</option>
-                        <option value="4">4</option>
-                        <option value="4.5">4,5</option>
-                        <option value="5">5</option>
-                        <option value="5.5">5,5</option>
-                        <option value="6">6</option>
-                        <option value="6.5">6,5</option>
-                        <option value="7">7</option>
-                        <option value="7.5">7,5</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
-                        <option value="13">13</option>
-                        <option value="14">14</option>
-                        <option value="15">15</option>
+                        <option *ngFor="let option of treatmentDurationOptions" value="{{ option.value }}">{{ option.display | translate }}</option>
                     </select>
                 </div>
             </div>
