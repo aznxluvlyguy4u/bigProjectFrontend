@@ -261,7 +261,7 @@ export class TreatmentTemplateComponent implements OnInit {
 
 		let hasCompleteMedicationData = true;
 		for(let medication of this.newTreatmentTemplate.treatment_medications) {
-			if (medication.dosage == null) {
+			if (medication.name == null) {
 				hasCompleteMedicationData = false;
 			}
 		}
