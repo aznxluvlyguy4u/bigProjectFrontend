@@ -254,6 +254,7 @@
   "USERNAME AND PASSWORD ARE REQUIRED": "Gebruikersnaam en Wachtwoord zijn verplicht.",
   "THE PASSWORD NEEDS TO BE LONGER THAN 6 CHARACTERS": "Wachtwoord moet langer zijn dan 5 karakters.",
   "SOMETHING WENT WRONG. TRY ANOTHER TIME.": "Iets ging verkeerd. Probeer het op een later tijdstip.",
+  "FAILED TO SAVE.": "Opslaan mislukt.",
   "ACCESS LEVEL": "Rechten",
   "SUPER_ADMIN": "Superbeheerder",
   "ADD ADMIN": "Beheerder toevoegen",
