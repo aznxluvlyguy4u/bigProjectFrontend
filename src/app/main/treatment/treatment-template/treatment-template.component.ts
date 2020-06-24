@@ -267,13 +267,9 @@ export class TreatmentTemplateComponent implements OnInit {
 		}
 
 		this.isValidForm = this.newTreatmentTemplate.type != null &&
-			this.newTreatmentTemplate.description != null && hasValidLocationData && hasCompleteMedicationData && this.hasAtLeastOneMedication();
+			this.newTreatmentTemplate.description != null && hasValidLocationData && hasCompleteMedicationData;
 
 		return this.isValidForm;
-	}
-
-	hasAtLeastOneMedication() {
-		return this.newMedications != null ? this.newMedications.length > 0 : false;
 	}
 
 	editTreatmentTemplate() {
