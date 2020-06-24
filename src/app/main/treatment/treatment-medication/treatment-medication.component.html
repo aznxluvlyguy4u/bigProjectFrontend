@@ -101,101 +101,140 @@
 
 <!--ADD/EDIT MEDICATION MODAL-->
 <div class="reveal-overlay" [ngStyle]="{'display': displayModal}">
-    <div class="tiny reveal" [ngStyle]="{'display': displayModal}">
-        <div class="modal-header">
-            <span *ngIf="!isModalEditMode">{{ 'ADD TREATMENT MEDICATION' | translate }}</span>
-            <span *ngIf="isModalEditMode">{{ 'EDIT TREATMENT MEDICATION DATA' | translate }}</span>
+    <div class="large reveal" [ngStyle]="{'display': displayModal}">
+        <div class="modal-header" style="text-align: center; padding-top: 50px">
+            <h5 *ngIf="!isModalEditMode">{{ 'ADD TREATMENT MEDICATION' | translate }}</h5>
+            <h5 *ngIf="isModalEditMode">{{ 'EDIT TREATMENT MEDICATION DATA' | translate }}</h5>
             <button type="button" class="pull-right" aria-label="Close modal" (click)="closeModal()">
                 <i class="fa fa-times" aria-hidden="true"></i>
             </button>
+
+            <hr>
         </div>
+
         <div [formGroup]="form" class="modal-body">
+
             <div class="row">
-                <div class="large-4 columns">
-                    <label class="middle" for="name"> {{ 'NAME' | translate }} * </label>
+                <div *ngIf="isModalEditMode" class="small-12 show-for-small-only column">
+                    <i class="fa fa-exclamation-triangle"></i> {{ 'MEDICATION_EDIT_WARNING_TEXT_PART_1' | translate }}<br>
+                    <b>{{ 'MEDICATION_EDIT_WARNING_TEXT_PART_2' | translate }}</b><br>
+                    {{ 'MEDICATION_EDIT_WARNING_TEXT_PART_3' | translate }}
+                    <hr>
                 </div>
-                <div class="large-8 columns">
-                    <input type="text" id="name" [(ngModel)]="treatmentMedication.name" formControlName="name" maxlength="250" (keydown)="resetValidation()">
+
+                <div class="large-offset-2 medium-offset-1 large-6 medium-6 column">
+                    <div class="row">
+                        <div class="large-4 columns">
+                            <label class="middle" for="name"> {{ 'NAME' | translate }} * </label>
+                        </div>
+                        <div class="large-8 columns">
+                            <input type="text" id="name" [(ngModel)]="treatmentMedication.name" formControlName="name" maxlength="250" (keydown)="resetValidation()">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="large-4 columns">
+                            <label class="middle" for="dosage"> {{ 'DOSAGE' | translate }} * </label>
+                        </div>
+                        <div class="large-8 columns">
+                            <input type="number" id="dosage" [(ngModel)]="treatmentMedication.dosage" formControlName="dosage" maxlength="250" (keydown)="resetValidation()">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="large-4 columns">
+                            <label class="middle" for="dosage_unit"> {{ 'DOSAGE UNIT' | translate }} * </label>
+                        </div>
+                        <div class="large-8 columns">
+                            <select id="dosage_unit" [(ngModel)]="treatmentMedication.dosage_unit" formControlName="dosage_unit">
+                                <option *ngFor="let option of medicationDosageUnits" [value]="option">{{option}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="large-4 columns">
+                            <label class="middle" for="reg_nl"> {{ 'REG NL' | translate }}
+                                <i class="fa fa-info-circle"
+                                   aria-hidden="true"
+                                   title="{{'LEAVE EMPTY FOR NON (OFFICIAL) MEDICATION' | translate}}">
+                                </i></label>
+                        </div>
+                        <div class="large-8 columns">
+                            <input type="text" id="reg_nl" [(ngModel)]="treatmentMedication.reg_nl" formControlName="reg_nl" maxlength="250" (keydown)="resetValidation()">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="large-4 columns">
+                            <label class="middle" for="waiting_days"> {{ 'WAITING DAYS' | translate }} * </label>
+                        </div>
+                        <div class="large-8 columns">
+                            <input type="number" id="waiting_days" [(ngModel)]="treatmentMedication.waiting_days" formControlName="waiting_days" maxlength="250" (keydown)="resetValidation()">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="large-4 columns">
+                            <label class="middle" for="treatment_duration"> {{ 'TREATMENT DURATION' | translate }} * </label>
+                        </div>
+                        <div class="large-8 columns">
+                            <select id="treatment_duration" [(ngModel)]="treatmentMedication.treatment_duration" formControlName="treatment_duration">
+                                <option *ngFor="let option of treatmentDurationOptions" value="{{ option.value }}">{{ option.display | translate }}</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
+
+                <div *ngIf="isModalEditMode" class="large-3 medium-4 hide-for-small-only column">
+                    <i class="fa fa-exclamation-triangle"></i> {{ 'MEDICATION_EDIT_WARNING_TEXT_PART_1' | translate }}
+                    <b>{{ 'MEDICATION_EDIT_WARNING_TEXT_PART_2' | translate }}</b>
+                    {{ 'MEDICATION_EDIT_WARNING_TEXT_PART_3' | translate }}
+                </div>
+                <div class="large-1 show-for-large-only"></div>
             </div>
-            <div class="row">
-                <div class="large-4 columns">
-                    <label class="middle" for="dosage"> {{ 'DOSAGE' | translate }} * </label>
-                </div>
-                <div class="large-8 columns">
-                    <input type="number" id="dosage" [(ngModel)]="treatmentMedication.dosage" formControlName="dosage" maxlength="250" (keydown)="resetValidation()">
-                </div>
-            </div>
-            <div class="row">
-                <div class="large-4 columns">
-                    <label class="middle" for="dosage_unit"> {{ 'DOSAGE UNIT' | translate }} * </label>
-                </div>
-                <div class="large-8 columns">
-                    <select id="dosage_unit" [(ngModel)]="treatmentMedication.dosage_unit" formControlName="dosage_unit">
-                        <option *ngFor="let option of medicationDosageUnits" [value]="option">{{option}}</option>
-                    </select>
-                </div>
-            </div>
-            <div class="row">
-                <div class="large-4 columns">
-                    <label class="middle" for="reg_nl"> {{ 'REG NL' | translate }}
-                            <i class="fa fa-info-circle"
-                               aria-hidden="true"
-                               title="{{'LEAVE EMPTY FOR NON (OFFICIAL) MEDICATION' | translate}}">
-                            </i></label>
-                </div>
-                <div class="large-8 columns">
-                    <input type="text" id="reg_nl" [(ngModel)]="treatmentMedication.reg_nl" formControlName="reg_nl" maxlength="250" (keydown)="resetValidation()">
-                </div>
-            </div>
-            <div class="row">
-                <div class="large-4 columns">
-                    <label class="middle" for="waiting_days"> {{ 'WAITING DAYS' | translate }} * </label>
-                </div>
-                <div class="large-8 columns">
-                    <input type="number" id="waiting_days" [(ngModel)]="treatmentMedication.waiting_days" formControlName="waiting_days" maxlength="250" (keydown)="resetValidation()">
-                </div>
-            </div>
-            <div class="row">
-                <div class="large-4 columns">
-                    <label class="middle" for="treatment_duration"> {{ 'TREATMENT DURATION' | translate }} * </label>
-                </div>
-                <div class="large-8 columns">
-                    <select id="treatment_duration" [(ngModel)]="treatmentMedication.treatment_duration" formControlName="treatment_duration">
-                        <option *ngFor="let option of treatmentDurationOptions" value="{{ option.value }}">{{ option.display | translate }}</option>
-                    </select>
-                </div>
-            </div>
+
+
         </div>
+
         <div class="modal-footer">
+            <hr>
+
             <div class="row">
-                <div class="large-12 columns">
+                <div class="large-offset-4 large-4 small-offset-2 small-6 column">
                     <span class="pull-right required-description"> * {{ 'IS A REQUIRED FIELD' | translate }} </span>
                 </div>
+                <div class="large-4 small-4 column"></div>
             </div>
-            <span class="pull-left">
-                <label *ngIf="!isValidForm" class="input-error-msg">{{ 'FILL IN ALL THE REQUIRED FIELDS' | translate }}</label>
-                <label *ngIf="errorMessage" class="input-error-msg">{{ errorMessage | translate }}</label>
-            </span>
-            <span class="pull-right">
-                <button *ngIf="!isModalEditMode" [disabled]="isSaving" (click)="addTreatmentMedication()" class="tiny primary button">
-                    <span *ngIf="!isSaving">
-                        {{ 'ADD' | translate}}
+            <div class="row">
+                <div class="large-offset-4 large-4 small-offset-2 small-6 column">
+                    <span class="pull-left">
+                        <label *ngIf="!isValidForm" class="input-error-msg">{{ 'FILL IN ALL THE REQUIRED FIELDS' | translate }}</label>
+                        <label *ngIf="errorMessage" class="input-error-msg">{{ errorMessage | translate }}</label>
                     </span>
-                    <span *ngIf="isSaving">
-                        <i class="fa fa-gear fa-spin fa-fw"></i>
+                </div>
+                <div class="large-4 small-4 column"></div>
+            </div>
+            <div class="row">
+                <div class="large-offset-4 medium-offset-4 large-4 medium-4 small-offset-2 small-6 column">
+                    <span class="pull-right">
+                        <button *ngIf="!isModalEditMode" [disabled]="isSaving" (click)="addTreatmentMedication()" class="tiny primary button">
+                            <span *ngIf="!isSaving">
+                                {{ 'ADD' | translate}}
+                            </span>
+                            <span *ngIf="isSaving">
+                                <i class="fa fa-gear fa-spin fa-fw"></i>
+                            </span>
+                        </button>
+                        <button *ngIf="isModalEditMode" [disabled]="isSaving" (click)="editTreatmentMedication()" class="tiny primary button">
+                            <span *ngIf="!isSaving">
+                                {{ 'EDIT' | translate}}
+                            </span>
+                            <span *ngIf="isSaving">
+                                <i class="fa fa-gear fa-spin fa-fw"></i>
+                            </span>
+                        </button>
+                        <button (click)="closeModal()" [disabled]="isSaving" class="tiny alert button">{{ 'CANCEL' | translate}}</button>
                     </span>
-                </button>
-                <button *ngIf="isModalEditMode" [disabled]="isSaving" (click)="editTreatmentMedication()" class="tiny primary button">
-                    <span *ngIf="!isSaving">
-                        {{ 'EDIT' | translate}}
-                    </span>
-                    <span *ngIf="isSaving">
-                        <i class="fa fa-gear fa-spin fa-fw"></i>
-                    </span>
-                </button>
-                <button (click)="closeModal()" [disabled]="isSaving" class="tiny alert button">{{ 'CANCEL' | translate}}</button>
-            </span>
+                </div>
+                <div class="large-4 small-4 column"></div>
+            </div>
+
         </div>
     </div>
 </div>
