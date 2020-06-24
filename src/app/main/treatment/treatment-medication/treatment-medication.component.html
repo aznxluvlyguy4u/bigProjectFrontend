@@ -257,3 +257,30 @@
         </div>
     </div>
 </div>
+
+<!--REACTIVATE MODAL-->
+<div class="reveal-overlay" [ngStyle]="{'display': displayUnlinkedTemplatesModal}">
+    <div class="tiny reveal" [ngStyle]="{'display': displayUnlinkedTemplatesModal}">
+        <div class="modal-header">
+            <button type="button" (click)="closeUnlinkedTreatmentTemplatesModal()" class="pull-right" aria-label="Close modal">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <hr>
+            <h5>Middel</h5>
+            <p>{{ unlinkedMedicationName }}</p>
+            <hr>
+            <h5>{{ 'UNLINKED TREATMENT TEMPLATES' | translate }}</h5>
+            <ul>
+                <li *ngFor="let unlinkedTemplate of unlinkedTemplates">{{unlinkedTemplate}}</li>
+            </ul>
+            <hr>
+        </div>
+        <div class="modal-footer">
+            <span class="pull-right">
+                <button class="tiny primary button" [disabled]="isSaving" (click)="closeUnlinkedTreatmentTemplatesModal()">{{ 'CLOSE' | translate}}</button>
+            </span>
+        </div>
+    </div>
+</div>

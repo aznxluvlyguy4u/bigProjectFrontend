@@ -51,11 +51,15 @@ export class TreatmentMedicationComponent {
 	public treatmentMedication: TreatmentMedication = new TreatmentMedication();
 	private treatmentMedicationTemp: TreatmentMedication = new TreatmentMedication();
 
+	public unlinkedTemplates: string[] = [];
+	public unlinkedMedicationName: string = '';
+
 	// FORM
 	public form: FormGroup;
 	public displayModal: string = 'none';
 	public displayRemoveModal: string = 'none';
 	public displayReactivateModal: string = 'none';
+	public displayUnlinkedTemplatesModal: string = 'none';
 	public isModalEditMode: boolean = false;
 	public isValidForm: boolean = true;
 	public errorMessage: string = '';
@@ -171,11 +175,13 @@ export class TreatmentMedicationComponent {
 			.pipe(takeUntil(this.onDestroy$))
 			.subscribe(
 				res => {
-					this.treatmentMedication = res.result;
+					this.treatmentMedication = res.result.medication;
 					this.treatmentMedications.push(this.treatmentMedication);
 					this.isSaving = false;
 					this.sortByColumn();
+
 					this.closeRemoveModal();
+					this.openUnlinkedTreatmentTemplatesModal(res.result.unlinkedTemplates, this.treatmentMedication.name);
 				},
 				err => {
 					this.isSaving = false;
@@ -191,7 +197,7 @@ export class TreatmentMedicationComponent {
 		this.closeReactivateModal();
 	}
 
-	private openModal(editMode: boolean, treatmentMedication: TreatmentMedication = new TreatmentMedication()): void {
+	public openModal(editMode: boolean, treatmentMedication: TreatmentMedication = new TreatmentMedication()): void {
 			this.isModalEditMode = editMode;
 			this.displayModal = 'block';
 			this.isValidForm = true;
@@ -203,34 +209,50 @@ export class TreatmentMedicationComponent {
 			}
 	}
 
-	private closeModal(): void {
+	public closeModal(): void {
 			this.displayModal = 'none';
 			this.errorMessage = '';
 			this.treatmentMedication = new TreatmentMedication();
 			this.resetValidation();
 	}
 
-	private openRemoveModal(treatmentMedication: TreatmentMedication) {
+	public openRemoveModal(treatmentMedication: TreatmentMedication) {
 			this.treatmentMedication = treatmentMedication;
 			this.displayRemoveModal = 'block';
 	}
 
-	private closeRemoveModal() {
+	public closeRemoveModal() {
 			this.errorMessage = '';
 			this.displayRemoveModal = 'none';
 	}
 
-	private openReactivateModal(treatmentMedication: TreatmentMedication) {
+	public openReactivateModal(treatmentMedication: TreatmentMedication) {
 		this.treatmentMedication = treatmentMedication;
 		this.displayReactivateModal = 'block';
 	}
 
-	private closeReactivateModal() {
+	public closeReactivateModal() {
 		this.errorMessage = '';
 		this.displayReactivateModal = 'none';
 	}
 
-	private resetValidation(): void {
+	public openUnlinkedTreatmentTemplatesModal(unlinkedTemplates: string[], medicationName: string) {
+		this.unlinkedTemplates = unlinkedTemplates;
+		this.unlinkedMedicationName = medicationName;
+		if (this.unlinkedTemplates.length > 0) {
+			this.displayUnlinkedTemplatesModal = 'block';
+		}
+	}
+
+	public closeUnlinkedTreatmentTemplatesModal() {
+		this.errorMessage = '';
+		this.displayUnlinkedTemplatesModal = 'none';
+		this.unlinkedTemplates = [];
+		this.unlinkedMedicationName = '';
+	}
+
+
+	public resetValidation(): void {
 		this.isValidForm = true;
 	}
 
