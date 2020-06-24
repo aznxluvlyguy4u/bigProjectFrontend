@@ -260,8 +260,8 @@ export class TreatmentTemplateComponent implements OnInit {
 		const hasValidLocationData = this.newIsDefaultTemplate === true ? this.newSelectedUbn == null : this.newSelectedUbn != null;
 
 		let hasCompleteMedicationData = true;
-		for (let medication of this.newTreatmentTemplate.treatment_medications) {
-			if (medication.dosage == null) {
+		for(let medication of this.newTreatmentTemplate.treatment_medications) {
+			if (medication.name == null) {
 				hasCompleteMedicationData = false;
 			}
 		}
