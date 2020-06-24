@@ -9,8 +9,19 @@
 
 <ng-template *ngIf="!isLoadingGeneralData()">
     <div class="row table-options-container" style="margin-top: 1rem">
+        <div class="large-3 medium-3 small-12 columns end" style="margin-top: 1.5rem">
+            <button type="button" (click)="openModal(false)" class="button">
+                <i class="fa fa-user-plus fa-fw" aria-hidden="true"></i>
+                {{ 'ADD TREATMENT TEMPLATE' | translate }}
+            </button>
+        </div>
+    </div>
 
-        <div class="large-2 medium-2 small-12 columns">
+    <hr>
+
+    <div class="row table-options-container" style="margin-top: 1rem">
+
+        <div class="large-4 medium-4 small-12 columns">
             <label class="left">
                 {{ 'DEFAULT TEMPLATES FOR ALL UBNS' | translate }}
                 <div class="switch large">
@@ -64,12 +75,7 @@
                     (click)="onCaseSelection()"
             >{{ 'GET TREATMENT TEMPLATES' | translate }}</button>
         </div>
-        <div class="large-3 medium-3 small-12 columns end" style="margin-top: 1.5rem">
-            <button type="button" (click)="openModal(false)" class="button">
-                <i class="fa fa-user-plus fa-fw" aria-hidden="true"></i>
-                {{ 'ADD TREATMENT TEMPLATE' | translate }}
-            </button>
-        </div>
+
     </div>
 </ng-template>
 
