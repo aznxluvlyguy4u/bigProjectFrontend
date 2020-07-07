@@ -17,11 +17,13 @@ import { StnInputComponent } from '../../../global/components/stninput/stn-input
 import { CreateAnimalModalComponent } from './create-animal-modal/create-animal-modal.component';
 import { EditGenderModalComponent } from './edit-gender-modal/edit-gender-modal.component';
 import { AnimalEditService } from './animal-edit.service';
+import { AnimalResidenceHistoryComponent } from './animal-residence-history/animal-residence-history.component';
+import {Subscription} from "rxjs/Subscription";
 
 @Component({
 		directives: [REACTIVE_FORM_DIRECTIVES, DatepickerV2Component, UlnInputComponent,
 			UbnDropdownComponent, PedigreeRegisterDropdownComponent, ParentSelectorComponent,
-			StnInputComponent, CreateAnimalModalComponent, EditGenderModalComponent],
+			StnInputComponent, CreateAnimalModalComponent, EditGenderModalComponent, AnimalResidenceHistoryComponent],
 		template: require('./animal-edit.component.html'),
 		providers: [AnimalEditService],
 		pipes: [TranslatePipe]
@@ -35,6 +37,8 @@ export class AnimalEditComponent implements OnInit, OnDestroy {
     public displayNewAnimalModal = 'none';
 		@Input()
     public openGenderEdit: boolean;
+
+	private requestSub: Subscription;
 
     constructor(
     		private fb: FormBuilder,
@@ -57,6 +61,9 @@ export class AnimalEditComponent implements OnInit, OnDestroy {
 
 	ngOnDestroy() {
 		this.parentStorage.clear();
+		if (this.requestSub) {
+			this.requestSub.unsubscribe();
+		}
 	}
 
 	getGeneralData() {
@@ -70,7 +77,7 @@ export class AnimalEditComponent implements OnInit, OnDestroy {
                 uln: this.findForm.controls['uln'].value,
             };
             this.isSearching = true;
-            this.nsfo.doPostRequest(this.nsfo.URI_ANIMALS_FIND, body)
+            this.requestSub = this.nsfo.doPostRequest(this.nsfo.URI_ANIMALS_FIND, body)
               .finally(()=>{
 								this.isSearching = false;
               })
@@ -78,6 +85,7 @@ export class AnimalEditComponent implements OnInit, OnDestroy {
                     res => {
                         this.animalEditService.foundAnimal = res.result;
                         this.resetFindForm();
+                        this.animalEditService.doGetAnimalResidences();
                     }, error => {
                         alert(this.nsfo.getErrorMessage(error));
                     }

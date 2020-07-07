@@ -7,6 +7,7 @@ import { TranslateService } from 'ng2-translate';
 import { Country } from '../../models/country.model';
 import { Animal } from '../../components/livestock/livestock.model';
 import { SortService } from '../utils/sort.service';
+import {Subscription} from "rxjs/Subscription";
 
 
 @Injectable()
@@ -23,6 +24,7 @@ export class NSFOService {
     public URI_ANIMALS_CREATE = '/v1/animals/create';
     public URI_ANIMALS_FIND = '/v1/animals/find';
     public URI_ANIMALS_UPDATE_GENDER = '/v1/animals-gender';
+    public URI_ANIMAL_RESIDENCES = '/v1/animal-residences';
     public URI_GET_COLLAR_COLORS = '/v1/collars';
 
     public URI_GHOST_LOGIN: string = '/v1/admins/ghost';
@@ -35,7 +37,7 @@ export class NSFOService {
     public URI_INVOICE_SENDER_DETAILS = '/v1/invoice-sender-details';
     public URI_LEDGER_CATEGORIES = '/v1/ledger-categories';
 
-    public URI_TWINFIELD = '/v1/twinfield';
+    public URI_EXTERNAL_PROVIDER = '/v1/external-provider';
 
     public URI_GET_COUNTRY_CODES = '/v1/countries?continent=europe';
     public URI_CMS: string = '/v1/cms';
@@ -79,23 +81,38 @@ export class NSFOService {
     public URI_ERRORS_HIDDEN_STATUS: string = '/v1/errors-hidden-status';
     public URI_ERRORS_NON_IR: string = '/v1/errors/non-ir';
 
-	  public URI_TECHNICAL_LOG = '/v1/log/action';
+    public URI_TECHNICAL_LOG = '/v1/log/action';
 
-	  public URI_PEDIGREE_REGISTERS = '/v1/pedigreeregisters';
+    public URI_PEDIGREE_REGISTERS = '/v1/pedigreeregisters';
     public API_URI_GET_REPORTS = '/v1/reports';
 
-		//REPORT
-		public URI_GET_LINEAGE_PROOF = '/v1/reports/pedigree-certificates';
-		public URI_GET_INBREEDING_COEFFICIENT = '/v1/reports/inbreeding-coefficients';
-		public URI_GET_LIVESTOCK_DOCUMENT = '/v1/reports/livestock';
-		public URI_GET_OFFSPRING = '/v1/reports/offspring';
-		public URI_GET_ANIMALS_OVERVIEW_REPORT = '/v1/reports/animals-overview';
-		public URI_GET_ANNUAL_TE100_UBN_PRODUCTION_REPORT = '/v1/reports/annual-te100-ubn-production';
-		public URI_GET_ANNUAL_ACTIVE_LIVESTOCK_REPORT = '/v1/reports/annual-active-livestock';
-		public URI_GET_ANNUAL_ACTIVE_LIVESTOCK_RAM_MATES_REPORT = '/v1/reports/annual-active-livestock-ram-mates';
+    //REPORT
+    public URI_GET_LINEAGE_PROOF = '/v1/reports/pedigree-certificates';
+    public URI_GET_INBREEDING_COEFFICIENT = '/v1/reports/inbreeding-coefficients';
+    public URI_GET_LIVESTOCK_DOCUMENT = '/v1/reports/livestock';
+    public URI_GET_OFFSPRING = '/v1/reports/offspring';
+    public URI_GET_ANIMALS_OVERVIEW_REPORT = '/v1/reports/animals-overview';
+    public URI_GET_ANNUAL_TE100_UBN_PRODUCTION_REPORT = '/v1/reports/annual-te100-ubn-production';
+    public URI_GET_ANNUAL_ACTIVE_LIVESTOCK_REPORT = '/v1/reports/annual-active-livestock';
+    public URI_GET_ANNUAL_ACTIVE_LIVESTOCK_RAM_MATES_REPORT = '/v1/reports/annual-active-livestock-ram-mates';
+    public URI_GET_ANIMAL_HEALTH_STATUS_REPORT = '/v1/reports/animal-health-status';
+    public URI_GET_ANIMAL_FEATURES_PER_YEAR_OF_BIRTH_REPORT = '/v1/reports/animal-features-per-year-of-birth';
+    public URI_GET_ANIMAL_TREATMENTS_PER_YEAR_REPORT = '/v1/reports/animal-treatments-per-year';
+    public URI_POST_WEIGHTS_PER_YEAR_OF_BIRTH_REPORT = '/v1/reports/weights-per-year-of-birth';
+    public URI_POST_MEMBERS_AND_USERS_OVERVIEW = '/v1/reports/members-and-users-overview';
+    public URI_POST_CLIENT_NOTES_OVERVIEW = '/v1/reports/client-notes-overview';
+    public URI_POST_POPREP_INPUT_FILE = '/v1/reports/poprep-input-file';
 
-	  public URI_TREATMENTS = '/v1/treatments';
-	  public URI_TREATMENT_TYPES = '/v1/treatment-types';
+    //TASKS
+    public URI_GET_TASKS = '/v1/tasks';
+    public URI_GET_STAR_EWES_CALCULATIONS_TASK = '/v1/tasks/star-ewes-calculation';
+    public URI_GET_INBREEDING_COEFFICIENT_CALCULATIONS_TASK = '/v1/tasks/inbreeding-coefficient-calculation';
+    public URI_GET_INBREEDING_COEFFICIENT_RECALCULATIONS_TASK = '/v1/tasks/inbreeding-coefficient-recalculation';
+    public URI_DELETE_INBREEDING_COEFFICIENT_RECALCULATIONS_TASK = '/v1/tasks/inbreeding-coefficient-calculation';
+
+    public URI_TREATMENTS = '/v1/treatments';
+    public URI_TREATMENT_TYPES = '/v1/treatment-types';
+    public URI_TREATMENT_MEDICINES = '/v1/treatment-medications';
 
     public URI_VWA_EMPLOYEE: string = '/v1/vwa-employee';
 
@@ -103,27 +120,44 @@ export class NSFOService {
     private authorization: string = "Authorization";
     public access_token: string = "AccessToken";
 
+    private requestSub: Subscription;
+
     private ACCESS_TOKEN_NAMESPACE: string = 'access_token';
 
 		countryCodeList: Country[] = [];
 		countries: Country[] = [];
 
     constructor(private http:Http, private translate: TranslateService, private sort: SortService) {
-				this.doGetCountryCodeList(); // if in OnInit it is loaded too late
-		}
+        if (this.isLoggedIn()) {
+            this.doGetCountryCodeList(); // if in OnInit it is loaded too late
+        }
+    }
 
-		private doGetCountryCodeList() {
-			this.doGetRequest(this.URI_GET_COUNTRY_CODES)
-				.subscribe(
-					res => {
-						this.countryCodeList = this.sort.sortCountries(res.result, 'code');
-						this.countries = this.sort.sortCountries(res.result, 'name');
-					},
-					error => {
-						alert(this.getErrorMessage(error));
-					}
-				);
-		}
+    ngOnDestroy() {
+        if (this.requestSub) {
+            this.requestSub.unsubscribe();
+        }
+    }
+
+    public retrieveDataAfterLogin() {
+        this.doGetCountryCodeList();
+    }
+
+    private doGetCountryCodeList() {
+        this.requestSub = this.doGetRequest(this.URI_GET_COUNTRY_CODES)
+            .subscribe(
+                res => {
+                    const countriesForCountryCodeList = _.cloneDeep(res.result);
+                    const countries = _.cloneDeep(res.result);
+                    this.countryCodeList = this.sort.sortCountries(countriesForCountryCodeList, 'code', false);
+                    this.countries = this.sort.sortCountries(countries, 'name', true);
+                },
+                error => {
+                    alert(this.getErrorMessage(error));
+                }
+            );
+    }
+
     public doLoginRequest(username:string, password:string) {
         let headers = new Headers();
         headers.append(this.content_type, "application/json");
@@ -139,6 +173,10 @@ export class NSFOService {
 			headers.append(this.access_token, localStorage[this.ACCESS_TOKEN_NAMESPACE]);
 			return headers;
 	  }
+
+	private isLoggedIn(): boolean {
+        return localStorage[this.ACCESS_TOKEN_NAMESPACE] != null;
+    }
 
     public doPostRequest(uri:string, data) {
         return this.http.post(this.API_SERVER_URL + uri, JSON.stringify(data), {headers: this.getHeadersWithToken()})
@@ -215,7 +253,6 @@ export class NSFOService {
 			switch (err.status) {
 				case 500: return this.translate.instant("SOMETHING WENT WRONG. TRY ANOTHER TIME.");
 				case 524: return this.translate.instant("A TIMEOUT OCCURED. TRY AGAIN LATER, PERHAPS WHEN THE SERVER IS LESS BUSY OR TRY IT WITH LESS DATA.");
-
 				default:
 					if (err.json() && err.json().result && err.json().result.message) {
 						return this.translate.instant(err.json().result.message);

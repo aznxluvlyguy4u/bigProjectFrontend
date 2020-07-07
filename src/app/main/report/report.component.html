@@ -24,6 +24,9 @@
                     </i>
                 </a>
             </li>
+            <li class="tabs-title">
+                <a routerLink="/report/client-reports" routerLinkActive="active">{{ 'CLIENT REPORTS' | translate }}</a>
+            </li>
         </ul>
     </div>
 
@@ -32,6 +35,7 @@
         <label> {{ 'TAB' | translate }}
             <select [(ngModel)]="selectedRoute" (change)="navigateTo($event.target.value)">
                 <option value="/report/animal-reports">{{ 'ANIMAL REPORTS' | translate }}</option>
+                <option value="/report/client-reports">{{ 'CLIENT REPORTS' | translate }}</option>
             </select>
             <div *ngIf="selectedRoute === '/report/animal-reports'" class="centered-tab-tooltip">
                 <i class="fa fa-info-circle" aria-hidden="true"

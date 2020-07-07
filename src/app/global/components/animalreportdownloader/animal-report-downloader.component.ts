@@ -43,7 +43,9 @@ export class AnimalReportDownloaderComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy() {
-		this.isModalActiveSubscription.unsubscribe();
+		if (this.isModalActiveSubscription) {
+			this.isModalActiveSubscription.unsubscribe();
+		}
 	}
 
 	areAnimalsSelected(): boolean {

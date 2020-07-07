@@ -1,6 +1,7 @@
 import { Invoice } from '../invoice/invoice.model';
 import { Person } from '../../global/models/person.model';
 import { PedigreeRegisterRegistration } from '../../global/models/pedigree-register-registration.model';
+import { Country } from '../../global/models/country.model';
 
 export class Client {
 	  public id: number;
@@ -20,21 +21,29 @@ export class Client {
     public address: Address = new Address();
     public billing_address: Address = new Address();
     public locations: Location[] = [];
+    public locations_details: LocationDetails[] = [];
     public deleted_locations: Location[] = [];
     public users: User[] = [];
     public deleted_users: User[] = [];
-	  public invoices: Invoice[] = [];
+    public twinfield_administration_code: string;
+    public twinfield_code: number;
+    public invoices: Invoice[] = [];
 }
 
 export class Location {
-	  public id: number;
+	public id ?: number;
     public location_id ?: string;
     public ubn: string;
     public address ?: Address = new Address();
     public is_active ?: boolean;
-	  public location_holder: string;
+	public location_holder ?: string;
     public company ?: Client;
-    public pedigree_register_registrations: PedigreeRegisterRegistration[] = [];
+    public pedigree_register_registrations ?: PedigreeRegisterRegistration[] = [];
+}
+
+export class LocationDetails {
+    public ubn: string;
+    public country_details: Country;
 }
 
 
@@ -45,9 +54,9 @@ export class NestedAnnouncementLocationOutput extends Location {
 }
 
 export class User extends Person {
-    public primary_contactperson: string | boolean;
-    public relation_number_keeper: string;
-    public companies: Client[]
+    public primary_contactperson ?: string | boolean;
+    public relation_number_keeper ?: string;
+    public companies ?: Client[]
 }
 
 export class ActionLog {
@@ -64,7 +73,7 @@ export class ActionLog {
 
 export class Address {
     public street_name: string;
-    public address_number: string;
+    public address_number: number;
     public address_number_suffix: string;
     public suffix: string; // WARNING 'suffix' is indirectly linked to address_number_suffix in API
     public postal_code: string;
@@ -116,8 +125,8 @@ export class LocationHealthStatus {
 }
 
 class BreederNumber {
-    public code: string;
-    public number: string;
+    public pedigree_register_abbreviation: string;
+    public breeder_number: string;
 }
 
 class AnimalHealth {
@@ -157,6 +166,16 @@ export class ClientNote {
 export class QueryParam {
     public key: string;
     public value: any;
+}
+
+export class TwinfieldOffice {
+    public name: string;
+    public countryCode: string;
+    public code: string;
+}
+
+export class TwinfieldCustomer {
+    public code: string;
 }
 
 export const MAEDI_VISNA_STATUS_OPTIONS = [

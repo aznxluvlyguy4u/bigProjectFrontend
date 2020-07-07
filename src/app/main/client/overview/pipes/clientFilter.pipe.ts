@@ -1,15 +1,16 @@
 import {Pipe, PipeTransform} from "@angular/core";
+import { Client } from '../../client.model';
 
 @Pipe({
     name: 'clientFilter'
 })
-
 export class ClientFilterPipe implements PipeTransform {
 
     transform(list: any, args: string[]): any {
         let search_input: string = args[0];
         let invoices_option: string = args[1];
-        
+        let countryName: string = args[2];
+
         let filtered = list;
 
         // FILTER: INVOICES
@@ -38,6 +39,29 @@ export class ClientFilterPipe implements PipeTransform {
                 (client.billing_address != null ? client.billing_address.country : '')
             ).indexOf(search_input) !== -1);
         }
+
+			// FILTER: COUNTRY NAME
+			if (countryName !== 'ALL') {
+				filtered = filtered.filter(client => (
+          ClientFilterPipe.getClientCountryNamesAsString(client)
+				).indexOf(countryName) !== -1);
+			}
+
         return filtered
     }
+
+    private static getClientCountryNamesAsString(client: Client): string {
+      let countryNamesString = client.address != null ?
+					(client.address.country != null && client.address.country != undefined && client.address.country != '') ?
+						client.address.country
+						: '' : '';
+      for (const locationDetails of client.locations_details) {
+          if (locationDetails.country_details != null && locationDetails.country_details.name != null
+            && locationDetails.country_details.name != undefined && locationDetails.country_details.name != '')
+          {
+              countryNamesString += locationDetails.country_details.name;
+          }
+      }
+      return countryNamesString;
+		}
 }

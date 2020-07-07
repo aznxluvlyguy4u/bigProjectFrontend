@@ -4,8 +4,10 @@ import {DownloadRequest} from './download-request.model';
 
 import _ = require("lodash");
 import {
+    COMPANY_ID,
+    MUST_HAVE_ANIMAL_HEALTH_SUBSCRIPTION, PEDIGREE_REGISTER,
     QUERY_PARAM_CONCAT_VALUE_AND_ACCURACY, QUERY_PARAM_FILE_TYPE, REFERENCE_DATE,
-    YEAR
+    YEAR, YEAR_OF_BIRTH
 } from '../../variables/query-param.constant';
 import {QueryParamsService} from '../utils/query-params.service';
 import {Ewe} from '../../models/ewe.model';
@@ -20,6 +22,8 @@ import {
 import {CSV, PDF} from '../../variables/file-type.enum';
 import {Invoice} from "../../../main/invoice/invoice.model";
 import {ReportService} from "../report/report.service";
+import {END_DATE, START_DATE} from "../../constants/query-params.constant";
+import { takeUntil } from 'rxjs/operators';
 
 export const INBREEDING_COEFFICIENT_REPORT = 'INBREEDING_COEFFICIENT_REPORT';
 export const INVOICE_PDF = "INVOICE_PDF";
@@ -41,11 +45,18 @@ export class DownloadService {
 
     failedDownloadsCount: number;
 
+    private onDestroy$: Subject<void> = new Subject<void>();
+
     constructor(
         private nsfo: NSFOService,
         private reportService: ReportService,
     ) {
         this.resetDownloadList();
+    }
+
+    ngOnDestroy() {
+        this.onDestroy$.next();
+        this.onDestroy$.complete();
     }
 
     resetDownloadList() {
@@ -178,32 +189,117 @@ export class DownloadService {
         this.failedDownloadsCount = _.filter(this.downloadRequests, {isFailed: true}).length;
     }
 
-    private doDownloadPostRequest(uri: string, request: any) {
+    private doDownloadPostRequestAndStoreInModal(uri: string, request: any, download: DownloadRequest) {
+
+        if (download == null) {
+            return;
+        }
+
+        this.addDownload(download);
 
         this.nsfo.doPostRequest(uri, request)
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(
-                res => {
-                    //download.url = res.result;
-                    //this.completeDownloadPreparation(download);
-                    this.reportService.fetchReports();
-                },
-                error => {
-									alert(this.nsfo.getErrorMessage(error));
-                }
-            );
+            res => {
+							download.url = res.result;
+              this.completeDownloadPreparation(download);
+            },
+            error => {
+                this.failDownload(download, error);
+            }
+          );
     }
 
-    private doDownloadGetRequest(uri: string) {
+    private doDownloadGetRequestAndStoreInModal(uri: string, download: DownloadRequest) {
+
+        if (download == null) {
+            return;
+        }
+
+        this.addDownload(download);
+
         this.nsfo.doGetRequest(uri)
-            .subscribe(
-                res => {
-                    //this.completeDownloadPreparation(download);
-                    this.reportService.fetchReports();
-                },
-                error => {
-									alert(this.nsfo.getErrorMessage(error));
-                }
-            );
+            .pipe(takeUntil(this.onDestroy$))
+        .subscribe(
+        res => {
+                download.url = res.result;
+                this.completeDownloadPreparation(download);
+            },
+        error => {
+                this.failDownload(download, error);
+            }
+        );
+    }
+
+    private doDownloadPostRequestByReportWorker(uri: string, request: any) {
+
+        this.nsfo.doPostRequest(uri, request)
+            .pipe(takeUntil(this.onDestroy$))
+        .subscribe(
+            res => {
+                this.reportService.fetchReports();
+            },
+            error => {
+                alert(this.nsfo.getErrorMessage(error));
+            }
+        );
+    }
+
+	/**
+	 * @param {string} uri
+	 * @param {boolean} openInNewTab use true for for example PDFs
+	 */
+	private doDownloadGetWithImmediateDownload(uri: string, openInNewTab: boolean) {
+		const newTabUrl = openInNewTab ? '/loading' : '/downloaded';
+		const win = window.open(newTabUrl, '_blank');
+
+		this.nsfo.doGetRequest(uri)
+            .pipe(takeUntil(this.onDestroy$))
+			.subscribe(
+				res => {
+				    const downloadUrl = res.result;
+					  win.location.href = downloadUrl;
+				},
+				error => {
+					alert(this.nsfo.getErrorMessage(error));
+				}
+			);
+    }
+
+
+	/**
+	 * @param {string} uri
+	 * @param request
+	 * @param {boolean} openInNewTab use true for for example PDFs
+	 */
+	private doDownloadPostWithImmediateDownload(uri: string, request: any, openInNewTab: boolean) {
+		const newTabUrl = openInNewTab ? '/loading' : '/downloaded';
+		const win = window.open(newTabUrl, '_blank');
+
+		this.nsfo.doPostRequest(uri, request)
+            .pipe(takeUntil(this.onDestroy$))
+			.subscribe(
+				res => {
+					const downloadUrl = res.result;
+					win.location.href = downloadUrl;
+				},
+				error => {
+					alert(this.nsfo.getErrorMessage(error));
+				}
+			);
+	}
+
+    private doDownloadGetRequestByReportWorker(uri: string) {
+        this.nsfo.doGetRequest(uri)
+            .pipe(takeUntil(this.onDestroy$))
+        .subscribe(
+            res => {
+                this.reportService.fetchReports();
+            },
+            error => {
+                alert(this.nsfo.getErrorMessage(error));
+            }
+        );
     }
 
     doLineageProofPostRequest(animals: Animal[], fileType: string = 'PDF') {
@@ -214,7 +310,7 @@ export class DownloadService {
 
         const queryParam = typeof fileType === "string" ? '?' + QUERY_PARAM_FILE_TYPE + '=' + fileType.toLowerCase() : '';
 
-        this.doDownloadPostRequest(this.nsfo.URI_GET_LINEAGE_PROOF + queryParam, request);
+        this.doDownloadPostRequestByReportWorker(this.nsfo.URI_GET_LINEAGE_PROOF + queryParam, request);
     }
 
     doOffspringRequest(animals: Animal[], concatBreedValueAndAccuracyColumns: boolean) {
@@ -226,7 +322,7 @@ export class DownloadService {
         const concatBooleanString = UtilsService.getBoolValAsString(concatBreedValueAndAccuracyColumns);
         let queryParam = '?' + QUERY_PARAM_CONCAT_VALUE_AND_ACCURACY + '=' + concatBooleanString;
 
-        this.doDownloadPostRequest(this.nsfo.URI_GET_OFFSPRING + queryParam, request);
+        this.doDownloadPostRequestByReportWorker(this.nsfo.URI_GET_OFFSPRING + queryParam, request);
     }
 
     doLivestockReportPostRequest(animals: Animal[], fileType: string, concatBreedValueAndAccuracyColumns: boolean) {
@@ -242,7 +338,7 @@ export class DownloadService {
         let queryParam = '?' + QUERY_PARAM_CONCAT_VALUE_AND_ACCURACY + '=' + concatBooleanString;
         queryParam += typeof fileType === "string" ? '&' + QUERY_PARAM_FILE_TYPE + '=' + fileType.toLowerCase() : '';
 
-        this.doDownloadPostRequest(this.nsfo.URI_GET_LIVESTOCK_DOCUMENT + queryParam, data);
+        this.doDownloadPostRequestByReportWorker(this.nsfo.URI_GET_LIVESTOCK_DOCUMENT + queryParam, data);
     }
 
 
@@ -251,7 +347,7 @@ export class DownloadService {
         const concatBooleanString = UtilsService.getBoolValAsString(concatBreedValueAndAccuracyColumns);
         let queryParam = '?' + REFERENCE_DATE + '=' + referenceDateString + '&' + QUERY_PARAM_CONCAT_VALUE_AND_ACCURACY + '=' + concatBooleanString;
 
-        this.doDownloadGetRequest(this.nsfo.URI_GET_ANIMALS_OVERVIEW_REPORT + queryParam);
+        this.doDownloadGetRequestByReportWorker(this.nsfo.URI_GET_ANIMALS_OVERVIEW_REPORT + queryParam);
     }
 
 
@@ -259,22 +355,86 @@ export class DownloadService {
 
         let queryParam = '?' + YEAR + '=' + year;
 
-        this.doDownloadGetRequest(this.nsfo.URI_GET_ANNUAL_TE100_UBN_PRODUCTION_REPORT + queryParam);
+        this.doDownloadGetRequestByReportWorker(this.nsfo.URI_GET_ANNUAL_TE100_UBN_PRODUCTION_REPORT + queryParam);
     }
 
+    doWeightsPerYearOfBirthReportGetRequest(yearOfBirth: number) {
+
+        let queryParam = '?' + YEAR_OF_BIRTH + '=' + yearOfBirth;
+
+        this.doDownloadPostRequestByReportWorker(this.nsfo.URI_POST_WEIGHTS_PER_YEAR_OF_BIRTH_REPORT + queryParam, '{}');
+    }
+
+    doAnimalFeaturesPerYearOfBirthReportGetRequest(yearOfBirth: number) {
+
+        let queryParam = '?' + YEAR_OF_BIRTH + '=' + yearOfBirth;
+
+        this.doDownloadPostRequestByReportWorker(this.nsfo.URI_GET_ANIMAL_FEATURES_PER_YEAR_OF_BIRTH_REPORT + queryParam, '{}');
+    }
+
+    doAnimalTreatmentsPerYearReportGetRequest(year: number) {
+        let queryParam = '?' + YEAR + '=' + year + '&process_as_worker_task=true';
+        this.doDownloadGetRequestByReportWorker(this.nsfo.URI_GET_ANIMAL_TREATMENTS_PER_YEAR_REPORT + queryParam);
+    }
+
+    doPopRepInputFileReportGetRequest(
+        pedigreeRegister: string = null
+    ) {
+        const pedigreeRegisterQueryString = pedigreeRegister != null && pedigreeRegister != '' ? PEDIGREE_REGISTER + '=' + pedigreeRegister : '';
+
+        let queryParam = '?' + pedigreeRegisterQueryString;
+
+        this.doDownloadPostRequestByReportWorker(this.nsfo.URI_POST_POPREP_INPUT_FILE + queryParam, '{}');
+    }
+
+    doAnimalHealthStatusReportGetRequest() {
+
+        this.doDownloadGetRequestByReportWorker(this.nsfo.URI_GET_ANIMAL_HEALTH_STATUS_REPORT);
+    }
 
     doAnnualActiveLivestockReportGetRequest(year: number) {
 
         let queryParam = '?' + YEAR + '=' + year;
 
-        this.doDownloadGetRequest(this.nsfo.URI_GET_ANNUAL_ACTIVE_LIVESTOCK_REPORT + queryParam);
+        this.doDownloadGetRequestByReportWorker(this.nsfo.URI_GET_ANNUAL_ACTIVE_LIVESTOCK_REPORT + queryParam);
     }
 
 
     doAnnualActiveLivestockRamMatesReportGetRequest(year: number) {
 
         let queryParam = '?' + YEAR + '=' + year;
-        this.doDownloadGetRequest(this.nsfo.URI_GET_ANNUAL_ACTIVE_LIVESTOCK_RAM_MATES_REPORT + queryParam);
+        this.doDownloadGetRequestByReportWorker(this.nsfo.URI_GET_ANNUAL_ACTIVE_LIVESTOCK_RAM_MATES_REPORT + queryParam);
+    }
+
+
+    doMembersAndUsersOverviewReportRequest(
+        referenceDateString: string,
+        mustHaveAnimalHealthSubscription: boolean = true,
+        pedigreeRegister: string = null
+    ) {
+
+        const concatBooleanString = UtilsService.getBoolValAsString(mustHaveAnimalHealthSubscription);
+        const pedigreeRegisterQueryString = pedigreeRegister != null && pedigreeRegister != '' ?
+            '&' + PEDIGREE_REGISTER + '=' + pedigreeRegister : '';
+
+        let queryParam = '?' + REFERENCE_DATE + '=' + referenceDateString
+            + '&' + MUST_HAVE_ANIMAL_HEALTH_SUBSCRIPTION + '=' + concatBooleanString
+            + pedigreeRegisterQueryString
+        ;
+
+        this.doDownloadPostRequestByReportWorker(this.nsfo.URI_POST_MEMBERS_AND_USERS_OVERVIEW + queryParam,'{}');
+	}
+
+	doClientNotesOverviewReportRequest(
+        startDate: string,
+        endDate: string,
+        companyId?: string
+    ) {
+        let queryParam = "?" + START_DATE + '=' + startDate + '&' + END_DATE + '=' + endDate + '&' + QUERY_PARAM_FILE_TYPE + '=' + CSV.toLowerCase();
+        const companyQueryParam = companyId != null && companyId != '' ? '&' + COMPANY_ID + '=' + companyId : '';
+        queryParam = queryParam + companyQueryParam;
+
+        this.doDownloadPostRequestByReportWorker(this.nsfo.URI_POST_CLIENT_NOTES_OVERVIEW + queryParam, '{}');
     }
 
 
@@ -300,7 +460,7 @@ export class DownloadService {
             "ewes": ewes
         };
 
-        this.doDownloadPostRequest(this.nsfo.URI_GET_INBREEDING_COEFFICIENT + QueryParamsService.getFileTypeQueryParam(fileType), request);
+        this.doDownloadPostRequestByReportWorker(this.nsfo.URI_GET_INBREEDING_COEFFICIENT + QueryParamsService.getFileTypeQueryParam(fileType), request);
     }
 
     static generateHash(downloadType: string, fileType: string, reportCount: number | string = 0, jsonBody: any, queryParam: string): string {
@@ -309,6 +469,6 @@ export class DownloadService {
 
     doInvoicePdfGetRequest(invoice: Invoice) {
         let uri = this.nsfo.URI_INVOICE + "/" + invoice.id + "/pdf";
-        this.doDownloadGetRequest(uri);
+        this.doDownloadGetWithImmediateDownload(uri, true);
     }
 }

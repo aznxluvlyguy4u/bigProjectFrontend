@@ -6,6 +6,11 @@
     <a routerLink="/dashboard" class="brand-name"> NSFO <span>Online</span></a>
     <span class="subtitle">{{'ADMIN'}}</span>
     <div class="empty-block"></div>
+    <ng-template *ngIf="!isTaskModalEmpty()">
+        <button type="button" (click)="toggleTaskModal()" [class.active]="isActiveTaskModal" class="download-toggle">
+            <i class="fa fa-tasks"><span *ngIf="taskCount() > 0"> {{ taskCount() }}</span></i>
+        </button>
+    </ng-template>
     <ng-template *ngIf="!isDownloadModalEmpty()">
         <button type="button" (click)="toggleDownloadModal()" [class.active]="isActiveDownloadModal" class="download-toggle">
             <i class="fa fa-download"><span *ngIf="downloadCount() > 0"> {{ downloadCount() }}</span></i>
@@ -42,7 +47,7 @@
                 {{ 'REPORTS' | translate }}
             </a>
         </li>
-        <li>
+        <li *ngIf="isInvoicesActive">
             <a routerLink="/invoice" routerLinkActive="active">
                 <i class="fa fa-file-text-o fa-fw" aria-hidden="true"></i>
                 {{ 'INVOICES' | translate }}
@@ -91,6 +96,12 @@
                 {{ 'PROFILE' | translate }}
             </a>
         </li>
+        <li>
+            <a routerLink="/calculations" routerLinkActive="active">
+                <i class="fa fa-calculator fa-fw" aria-hidden="true"></i>
+                {{ 'CALCULATIONS' | translate }}
+            </a>
+        </li>
     </ul>
 </div>
 
@@ -107,3 +118,4 @@
 
 <app-download-modal></app-download-modal>
 <app-report-modal></app-report-modal>
+<app-task-modal></app-task-modal>

@@ -49,6 +49,16 @@ import { AnnualActiveLivestockComponent } from './main/report/animals-overviews/
 import { AnnualActiveLivestockRamMatesComponent } from './main/report/animals-overviews/annual-active-livestock-ram-mates/annual-active-livestock-ram-mates.component';
 import { DownloadLandingPageComponent } from './download/download-landing-page.component';
 import {AnimalEditComponent} from "./main/animals/animals-edit/animal-edit.component";
+import {MembersAndUsersOverviewComponent} from "./main/report/clients-overviews/members-and-users-overview/members-and-users-overview.component";
+import {ClientReportsComponent} from "./main/report/clients-overviews/client-reports.component";
+import {AnimalHealthStatusComponent} from "./main/report/clients-overviews/animal-health-status/animal-health-status.component";
+import {WeightsPerYearOfBirthComponent} from "./main/report/animals-overviews/weights-per-year-of-birth/weights-per-year-of-birth.component";
+import {PopRepInputFileComponent} from "./main/report/animals-overviews/poprep-input-file/poprep-input-file.component";
+import {ClientNotesOverviewComponent} from "./main/report/clients-overviews/client-notes-overview/client-notes-overview.component";
+import {AnimalFeaturesPerYearOfBirthComponent} from "./main/report/animals-overviews/animal-features-per-year-of-birth/animal-features-per-year-of-birth.component";
+import {CalculationsComponent} from "./main/calculations/calculations.component";
+import {TreatmentMedicationComponent} from "./main/treatment/treatment-medication/treatment-medication.component";
+import {AnimalTreatmentsPerYearComponent} from "./main/report/animals-overviews/animal-treatments-per-year/animal-treatments-per-year.component";
 
 const routes: RouterConfig = [
     {
@@ -126,27 +136,42 @@ const routes: RouterConfig = [
                 ]},
             {path: 'report', component: ReportComponent,
                 children: [
-									{path: '', terminal: true, redirectTo: 'animal-reports'},
-									{path: 'animal-reports', component: AnimalReportsComponent,
-										children: [
-											{path: '', terminal: true, redirectTo: 'all-animals-overview'},
-											{path: 'all-animals-overview', component: AllAnimalsOverviewComponent},
-											{path: 'annual-te100-production', component: AnnualTe100ProductionComponent},
-											{path: 'annual-active-livestock', component: AnnualActiveLivestockComponent},
-											{path: 'annual-active-livestock-ram-mates', component: AnnualActiveLivestockRamMatesComponent},
-										]},
-                ]},
-					  {path: 'log', terminal: true, component: TechnicalLogOverviewComponent},
-					  {path: 'error-log', terminal: true, component: ErrorLogOverviewComponent},
+                    {path: '', terminal: true, redirectTo: 'animal-reports'},
+                    {path: 'animal-reports', component: AnimalReportsComponent,
+                        children: [
+                            {path: '', terminal: true, redirectTo: 'all-animals-overview'},
+                            {path: 'all-animals-overview', component: AllAnimalsOverviewComponent},
+                            {path: 'annual-te100-production', component: AnnualTe100ProductionComponent},
+                            {path: 'annual-active-livestock', component: AnnualActiveLivestockComponent},
+                            {path: 'annual-active-livestock-ram-mates', component: AnnualActiveLivestockRamMatesComponent},
+                            {path: 'weights-per-year-of-birth', component: WeightsPerYearOfBirthComponent},
+                            {path: 'poprep-input-file', component: PopRepInputFileComponent},
+                            {path: 'animal-features-per-year-of-birth', component: AnimalFeaturesPerYearOfBirthComponent},
+                            {path: 'animal-treatments-per-year', component: AnimalTreatmentsPerYearComponent}
+                        ]
+                    },
+                    {path: 'client-reports', component: ClientReportsComponent,
+                        children: [
+                            {path: '', terminal: true, redirectTo: 'members-and-users-overview'},
+                            {path: 'members-and-users-overview', component: MembersAndUsersOverviewComponent},
+                            {path: 'animal-health-status', component: AnimalHealthStatusComponent},
+                            {path: 'client-notes-overview', component: ClientNotesOverviewComponent},
+                        ]
+                    },
+                ]
+            },
+			{path: 'log', terminal: true, component: TechnicalLogOverviewComponent},
+			{path: 'error-log', terminal: true, component: ErrorLogOverviewComponent},
             {path: 'profile', terminal: true, component: ProfileComponent},
-					  // {path: 'treatment', terminal: true, component: TreatmentMainComponent}
-					  {path: 'treatment', component: TreatmentMainComponent,
-							children: [
-								{path: '', terminal: true, redirectTo: 'templates'},
-								{path: 'prescriptions', component: TreatmentPrescriptionComponent},
-								{path: 'templates', component: TreatmentTemplateComponent},
-								{path: 'types', component: TreatmentTypeComponent},
-							]},
+            {path: 'treatment', component: TreatmentMainComponent,
+                children: [
+                    {path: '', terminal: true, redirectTo: 'templates'},
+                    {path: 'prescriptions', component: TreatmentPrescriptionComponent},
+                    {path: 'templates', component: TreatmentTemplateComponent},
+                    {path: 'types', component: TreatmentTypeComponent},
+                    {path: 'medications', component: TreatmentMedicationComponent},
+                ]},
+            {path: 'calculations', terminal: true, component: CalculationsComponent},
         ]
     },
     {path: 'ghostlogin/:person', component: GhostLoginComponent, canActivate: [AuthenticatedGuard]},

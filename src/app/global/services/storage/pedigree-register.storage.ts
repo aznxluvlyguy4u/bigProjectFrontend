@@ -3,13 +3,22 @@ import { PedigreeRegister } from '../../models/pedigree-register.model';
 import { Injectable } from '@angular/core';
 
 import _ = require('lodash');
+import {Subscription} from "rxjs/Subscription";
 
 @Injectable()
 export class PedigreeRegisterStorage {
 
 	pedigreeRegisters: PedigreeRegister[] = [];
 
+	private requestSub: Subscription;
+
 	constructor(private api: NSFOService) {}
+
+	ngOnDestroy() {
+		if (this.requestSub) {
+			this.requestSub.unsubscribe();
+		}
+	}
 
 	initialize() {
 		if (this.pedigreeRegisters.length === 0) {
@@ -22,7 +31,7 @@ export class PedigreeRegisterStorage {
 	}
 
 	private doGetPedigreeRegisters() {
-		this.api.doGetRequest(this.api.URI_PEDIGREE_REGISTERS)
+		this.requestSub = this.api.doGetRequest(this.api.URI_PEDIGREE_REGISTERS)
 			.subscribe(
 				res => {
 					this.pedigreeRegisters = res.result;

@@ -16,9 +16,13 @@ import {REACTIVE_FORM_DIRECTIVES} from "@angular/forms";
 import {ControlGroup, FormBuilder} from "@angular/common";
 import {DownloadService} from "../../../global/services/download/download.service";
 import {Invoice} from "../../invoice/invoice.model";
+import { SpinnerBounceComponent } from '../../../global/components/spinner-bounce/spinner-bounce.component';
+import { IS_INVOICES_ACTIVE } from '../../../global/constants/feature.activation';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
-    directives: [REACTIVE_FORM_DIRECTIVES, Datepicker],
+    directives: [REACTIVE_FORM_DIRECTIVES, Datepicker, SpinnerBounceComponent],
     template: require('./client.details.html'),
     pipes: [TranslatePipe]
 })
@@ -38,6 +42,11 @@ export class ClientDetailsComponent {
     animalHealthSubscription = false;
     showScrapieDatePicker: boolean;
     showMaediVisnaDatePicker: boolean;
+
+    public loadingClientDetails = false;
+    public loadingHealthStatusses = false;
+    public loadingClientNotes = false;
+
     private healthStatusses: LocationHealthStatus[] = [];
     private selectedLocation: LocationHealthStatus = new LocationHealthStatus();
     private tempSelectedLocation: LocationHealthStatus = new LocationHealthStatus();
@@ -48,6 +57,13 @@ export class ClientDetailsComponent {
     private selectedHealthStatus:any;
 
 
+
+    private scrapieStatus = '';
+
+    public isInvoicesActive = IS_INVOICES_ACTIVE;
+
+    private onDestroy$: Subject<void> = new Subject<void>();
+    
     constructor(
         private downloadService: DownloadService,
         private router: Router,
@@ -83,29 +99,56 @@ export class ClientDetailsComponent {
     }
     
     ngOnDestroy() {
-        this.dataSub.unsubscribe()
+        if (this.dataSub) {
+            this.dataSub.unsubscribe();
+        }
+        this.onDestroy$.next();
+        this.onDestroy$.complete();
     }
 
     private getClientDetails(): void {
+        this.loadingClientDetails = true;
         this.nsfo.doGetRequest(this.nsfo.URI_CLIENTS + '/' + this.clientId + '/details')
             .subscribe(res => {
                 this.clientDetails = <ClientDetails> res.result;
-            });
+            },
+              error => {
+                alert(this.nsfo.getErrorMessage(error));
+              },
+              () => {
+                this.loadingClientDetails = false;
+              });
     }
 
     private getClientNotes(): void {
+        this.loadingClientNotes = true;
         this.nsfo.doGetRequest(this.nsfo.URI_CLIENTS + '/' + this.clientId  + '/notes')
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(res => {
                 this.clientNotes = <ClientNote[]> res.result;
                 this.clientNotes = _.orderBy(this.clientNotes, ['creation_date'], ['desc']);
-            });
+            },
+							error => {
+								alert(this.nsfo.getErrorMessage(error));
+							},
+							() => {
+								this.loadingClientNotes = false;
+							});
     }
 
     private getHealthStatusses(): void {
+        this.loadingHealthStatusses = true;
         this.nsfo.doGetRequest(this.nsfo.URI_HEALTH_COMPANY + '/' + this.clientId)
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(res => {
                 this.setHealthResults(res);
-            });
+            },
+							error => {
+								alert(this.nsfo.getErrorMessage(error));
+							},
+							() => {
+								this.loadingHealthStatusses = false;
+							});
     }
 
     private setHealthResults(healthStatusResult: any) {
@@ -138,6 +181,7 @@ export class ClientDetailsComponent {
         this.form.controls['maedi_visna_check_date'].updateValue(LocationHealthStatus.maedi_visna_check_date);
         this.form.controls['scrapie_reason_of_edit'].updateValue(LocationHealthStatus.scrapie_reason_of_edit);
         this.form.controls['maedi_visna_reason_of_edit'].updateValue(LocationHealthStatus.maedi_visna_reason_of_edit);
+        this.scrapieStatus = LocationHealthStatus.scrapie_status;
     }
     
     private addClientNote(): void {
@@ -148,6 +192,7 @@ export class ClientDetailsComponent {
             };
 
             this.nsfo.doPostRequest(this.nsfo.URI_CLIENTS + '/' + this.clientId + '/notes', request)
+                .pipe(takeUntil(this.onDestroy$))
                 .subscribe(res => {
                     let note: ClientNote = res.result;
                     this.clientNote.creator.first_name = note.creator.first_name;
@@ -172,6 +217,7 @@ export class ClientDetailsComponent {
         };
 
         this.nsfo.doPutRequest(this.nsfo.URI_CLIENTS + '/' + this.clientDetails.company_id + '/status', request)
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(res => {
                 this.clientDetails.status = is_active;
                 this.isSending = false;
@@ -187,7 +233,7 @@ export class ClientDetailsComponent {
             let request = {
                 "maedi_visna_status": this.selectedLocation.maedi_visna_status,
                 "maedi_visna_check_date": maediVisnaCheckDate,
-                "scrapie_status": this.selectedLocation.scrapie_status,
+                "scrapie_status": this.scrapieStatus,
                 "scrapie_check_date": scrapieCheckDate,
                 "maedi_visna_reason_of_edit": this.form.controls['maedi_visna_reason_of_edit'].value,
                 "scrapie_reason_of_edit": this.form.controls['scrapie_reason_of_edit'].value,
@@ -209,6 +255,7 @@ export class ClientDetailsComponent {
 			this.isChangingLocationHealth = true;
 
 			this.nsfo.doPutRequest(this.nsfo.URI_HEALTH_UBN + '/' + this.selectedLocation.ubn, request)
+                .pipe(takeUntil(this.onDestroy$))
 				.subscribe(
 					res => {
 						this.setHealthResults(res);
@@ -225,14 +272,26 @@ export class ClientDetailsComponent {
     private getLocationHealthErrorMessage(err: any): string {
         const body = err.json();
 
-        if (body.code === 500) {
+        if (typeof body === 'undefined') {
             return "SOMETHING WENT WRONG. TRY ANOTHER TIME.";
         }
 
-			  const errors = body.errors;
-			  let errorMessages = (Object.keys(errors).length === 1 ? 'Error': 'Errors') + ': ';
-			  let i = 1;
-			  console.log(Object.keys(errors).length);
+        if (typeof body.result !== 'undefined' && (body.code === 500 || body.result.code === 500)) {
+            return "SOMETHING WENT WRONG. TRY ANOTHER TIME.";
+        }
+
+        if (
+            typeof body.result !== 'undefined' &&
+            (body.result.message !== '' || body.result.message !== null) &&
+            typeof body.errors === 'undefined'
+        ) {
+            return this.translate.instant(body.result.message);
+        }
+
+        const errors = body.errors;
+        let errorMessages = (Object.keys(errors).length === 1 ? 'Error': 'Errors') + ': ';
+        let i = 1;
+        console.log(Object.keys(errors).length);
         for (let errorMessageKey in errors) {
 					  errorMessages += i + '. ' + this.translate.instant(errors[errorMessageKey]) + '.   ';
 					  i++;

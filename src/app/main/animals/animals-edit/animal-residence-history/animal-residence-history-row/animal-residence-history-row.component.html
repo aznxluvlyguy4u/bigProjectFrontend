@@ -1,0 +1,186 @@
+<td class="text-center">
+    <span *ngIf="!tempResidence" title="{{ residence.start_date | date: 'dd-MM-yyyy HH:mm:ss' }}">
+        {{ residence.start_date | date: 'dd-MM-yyyy' }}
+    </span>
+    <span *ngIf="tempResidence">
+        <app-datepicker-v2
+                [dateString]="tempResidence.start_date"
+                [modelFormat]="settings.getModelDateTimeFormat()"
+                [disabled]="isSaving"
+                (isDateStringChanged)="tempResidence.start_date = $event"
+        ></app-datepicker-v2>
+    </span>
+</td>
+<td class="text-center">
+    <span *ngIf="!tempResidence" title="{{ residence.end_date | date: 'dd-MM-yyyy HH:mm:ss' }}">
+        {{ residence.end_date | date: 'dd-MM-yyyy' }}
+    </span>
+    <span *ngIf="tempResidence">
+        <app-datepicker-v2
+                [dateString]="tempResidence.end_date"
+                [modelFormat]="settings.getModelDateTimeFormat()"
+                [disabled]="isSaving"
+                (isDateStringChanged)="tempResidence.end_date = $event"
+        ></app-datepicker-v2>
+    </span>
+</td>
+<td class="text-center">
+    <span *ngIf="!tempResidence">
+        {{ residence?.location?.ubn }}
+    </span>
+    <span *ngIf="tempResidence">
+        <button class="button primary" type="button" (click)="openLocationEditModal()">{{ tempUbnDisplayValue() }}</button>
+    </span>
+</td>
+<td class="text-center">
+    <span *ngIf="!tempResidence">
+        {{ residence.country }}
+    </span>
+    <select *ngIf="getCountryCodeList().length > 0 && tempResidence"
+            id="component-input-country-code"
+            class="country-code"
+            [(ngModel)]="tempResidence.country"
+            title="ulnCountryCode" [disabled]="isSaving"
+            [ngClass]="{'ng-dirty': false}"
+    >
+        <option
+                *ngFor="let countryCode of getCountryCodeList()"
+                value="{{ countryCode.code }}"
+        >{{ countryCode.code }}</option>
+    </select>
+</td>
+<td class="text-center">
+    <span *ngIf="!tempResidence">
+        <app-check-mark [boolVal]="!residence.is_pending"></app-check-mark>
+    </span>
+    <span *ngIf="tempResidence">
+        <app-boolean-input
+                [allowNull]="false"
+                [boolVal]="!tempResidence.is_pending"
+                (boolValChanged)="tempResidence.is_pending = !$event"
+                [disabled]="isSaving"
+        ></app-boolean-input>
+    </span>
+</td>
+<td class="text-center">
+    <span *ngIf="areEditOptionsActive()" class="overview-controls">
+        <a (click)="startEdit()"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true" style="margin-top: 0"></i></a>
+    </span>
+    <button *ngIf="isEditValidationActive()" class="button primary" (click)="applyChanges()">{{ 'OK' | translate}}</button>
+    <span *ngIf="isEditOptionsSpinning()" class="pull-right overview-controls">
+        <app-spinner></app-spinner>
+    </span>
+</td>
+<td class="text-center">
+    <button *ngIf="isEditValidationActive()" class="button alert" (click)="cancelChanges()">{{ 'CANCEL' | translate}}</button>
+    <span *ngIf="isDeleteOptionActive()">
+        <a (click)="openRemoveConfirmationModal()" class="remove-button"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+    </span>
+    <span *ngIf="isDeleteOptionInactive()">
+        <a class="remove-button"><i class="fa fa-trash-o fa-fw" style="color: lightslategrey" aria-hidden="true"></i></a>
+    </span>
+    <span *ngIf="isDeleteOptionSpinning()">
+        <app-spinner></app-spinner>
+    </span>
+</td>
+
+
+<!-- CURRENT LOCATION MODAL-->
+<div class="reveal-overlay" [ngStyle]="{'display': displayLocationEditModal}">
+    <div class="tiny reveal" [ngStyle]="{'display': displayLocationEditModal}">
+        <div class="modal-header">
+            {{ 'UBN' | translate }}
+            <button type="button" (click)="closeLocationEditModal()" class="pull-right" aria-label="Close modal">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <app-ubn-dropdown
+                    [labelText]="'CURRENT UBN'"
+                    (selectedLocationChange)="modalSelectedLocation = $event;"
+            ></app-ubn-dropdown>
+            <div class="modal-footer">
+                   <span class="pull-left">
+                        <button
+                                class="tiny primary button"
+                                (click)="closeLocationEditModal(); tempResidence.location = modalSelectedLocation;"
+                        >{{ 'OK' | translate}}</button>
+                    </span>
+
+                <span class="pull-right">
+                        <button
+                                class="tiny alert button"
+                                (click)="closeLocationEditModal();"
+                        >{{ 'CANCEL' | translate}}</button>
+                    </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- REMOVE CONFIRMATION MODAL-->
+<div class="reveal-overlay" [ngStyle]="{'display': displayRemoveConfirmationModal}">
+    <div class="tiny reveal" [ngStyle]="{'display': displayRemoveConfirmationModal}">
+        <div class="modal-header">
+            {{ 'DELETE ANIMAL RESIDENCE' | translate }}
+            <button type="button" class="pull-right" aria-label="Close modal" (click)="cancelRemove()">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            {{ 'DELETE THE SELECTED ANIMAL RESIDENCE?' | translate }}
+
+            <table>
+                <tr>
+                    <td class="text-center">
+                        {{ 'START DATE' | translate }}
+                    </td>
+                    <td class="text-center">
+                        {{ residence.start_date | date: 'dd-MM-yyyy' }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-center">
+                        {{ 'END DATE' | translate }}
+                    </td>
+                    <td class="text-center">
+                        {{ residence.end_date | date: 'dd-MM-yyyy' }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-center">
+                        {{ 'UBN' | translate }}
+                    </td>
+                    <td class="text-center">
+                        {{ residence?.location?.ubn }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-center">
+                        {{ 'COUNTRY' | translate }}
+                    </td>
+                    <td class="text-center">
+                        {{ residence.country }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-center">
+                        {{ 'IS COMPLETED' | translate }}
+                    </td>
+                    <td class="text-center">
+                        <app-check-mark [boolVal]="!residence.is_pending"></app-check-mark>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <span class="pull-left">
+                <button class="tiny alert button" (click)="remove()">{{ 'YES' | translate}}</button>
+            </span>
+            <span class="pull-right">
+                <button class="tiny primary button" (click)="cancelRemove()">{{ 'NO' | translate}}</button>
+            </span>
+        </div>
+    </div>
+</div>

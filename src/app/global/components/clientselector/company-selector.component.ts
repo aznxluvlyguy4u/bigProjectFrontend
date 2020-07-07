@@ -7,6 +7,7 @@ import { ClientFilterPipe } from '../../../main/client/overview/pipes/clientFilt
 import { PaginationComponent } from '../pagination/pagination.component';
 import { PaginatePipe, PaginationService } from 'ng2-pagination';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
 	selector: 'app-company-selector',
@@ -16,15 +17,17 @@ import { Router } from '@angular/router';
 	pipes: [TranslatePipe, ClientFilterPipe, PaginatePipe]
 })
 export class CompanySelectorComponent implements OnInit {
-	isLoaded: boolean;
+	public isLoaded: boolean;
 
-	filterSearch: string;
-	filterInvoices: string;
-	filterAmount: number;
+	public filterSearch: string;
+	public filterInvoices: string;
+	public filterCountryName: string = 'ALL';
+	public filterAmount: number;
 
-	displayModal: string;
-	initialSelectedClient: Client;
+	public displayModal: string;
+	public initialSelectedClient: Client;
 
+	private clientStorageSub: Subscription;
 
 	@Input() selectedClient: Client;
 	@Input() disabled: boolean = false;
@@ -40,7 +43,7 @@ export class CompanySelectorComponent implements OnInit {
 
 		if (this.clientsStorage.clients.length === 0) {
 
-			this.clientsStorage.clientsChanged.takeLast(1)
+			this.clientStorageSub =  this.clientsStorage.clientsChanged.takeLast(1)
 				.subscribe(
 					res => {
 						this.isLoaded = true;
@@ -53,6 +56,12 @@ export class CompanySelectorComponent implements OnInit {
 		}
 
 		this.clientsStorage.refresh();
+	}
+
+	ngOnDestroy() {
+		if (this.clientStorageSub) {
+			this.clientStorageSub.unsubscribe();
+		}
 	}
 
 	private setInitialValues() {
@@ -112,6 +121,7 @@ export class CompanySelectorComponent implements OnInit {
 
 	selectClient(client: Client) {
 		this.selectedClient = client;
+		this.clickOK();
 	}
 
 	buttonText(): string {

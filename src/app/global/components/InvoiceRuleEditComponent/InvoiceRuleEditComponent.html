@@ -27,7 +27,7 @@
                     <label class="middle"> {{ 'DESCRIPTION' | translate }} * </label>
                 </div>
                 <div class="large-8 columns">
-                    <input type="text" [(ngModel)]="selectedRule.description" formControlName="description" maxlength="20">
+                    <input type="text" [(ngModel)]="selectedRule.description" formControlName="description" maxlength="40">
                 </div>
             </div>
             <div class="row">
@@ -51,6 +51,22 @@
                     <select [(ngModel)]="selectedRule.vat_percentage_rate" formControlName="vat_percentage_rate">
                         <option *ngFor="let percentageValue of getVatPercentages()" [value]="percentageValue"> {{percentageValue}}% </option>
                     </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-4 columns">
+                    <label class="middle">{{ 'ARTICLE CODE' | translate }} * </label>
+                </div>
+                <div class="large-8 columns">
+                    <input type="text" [(ngModel)]="selectedRule.article_code" formControlName="article_code">
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-4 columns">
+                    <label class="middle">{{ 'SUB ARTICLE CODE' | translate }} </label>
+                </div>
+                <div class="large-8 columns">
+                    <input type="text" [(ngModel)]="selectedRule.sub_article_code" [disabled]="disableSubArticle" formControlName="sub_article_code">
                 </div>
             </div>
         </div>

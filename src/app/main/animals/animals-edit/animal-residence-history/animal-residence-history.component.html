@@ -1,0 +1,62 @@
+<h3>{{ 'ANIMAL RESIDENCE HISTORY' | translate }}</h3>
+
+<table>
+    <thead>
+    <tr>
+        <td class="text-center">{{ 'START DATE' | translate }}</td>
+        <td class="text-center">{{ 'END DATE' | translate }}</td>
+        <td class="text-center">{{ 'UBN' | translate }}</td>
+        <td class="text-center">{{ 'COUNTRY' | translate }}</td>
+        <td class="text-center">{{ 'IS COMPLETED' | translate }} <i class="fa fa-info-circle" aria-hidden="true" title="{{ 'ANIMAL RESIDENCE IS COMPLETED INFO' | translate }}"></i></td>
+        <td class="text-center">
+            <app-spinner *ngIf="animalEditService.isProcessingChanges"></app-spinner>
+            <span *ngIf="!getIsSearchingResidences() && getAnimal() != undefined && !areDeleteResidenceOptionsActive()
+            && !animalEditService.isEditingResidences" class="pull-right overview-controls">
+                <a *ngIf="newResidence == undefined" (click)="refreshAnimalResidences()"><i class="fa fa-refresh fa-fw" aria-hidden="true"></i></a>
+                <a (click)="startCreateNewResidence()"><i class="fa fa-plus fa-fw" aria-hidden="true"></i></a>
+            </span>
+        </td>
+        <td class="text-center">
+
+            <ng-template *ngIf="!getIsSearchingResidences() && getAnimal() != undefined
+            && !animalEditService.isEditingResidences && !animalEditService.isDeleting">
+                <div class="switch delete-switch"
+                     title="{{'TOGGLE DELETE OPTION'|translate}}"
+                >
+                    <input class="switch-input" id="yes-no" type="checkbox" name="boolean-switch" [(ngModel)]="animalEditService.areDeleteResidenceOptionsActive" (click)="animalEditService.toggleDeleteMode()">
+                    <label class="switch-paddle" for="yes-no">
+                        <span class="switch-active" aria-hidden="true" value="true">
+                            <i class="fa fa-trash-o fa-fw" aria-hidden="true"></i>
+                        </span>
+                        <span class="switch-inactive" aria-hidden="true" value="false">
+                            <i class="fa fa-trash-o fa-fw" aria-hidden="true"></i>
+                        </span>
+                    </label>
+                </div>
+            </ng-template>
+
+            <span *ngIf="animalEditService.isEditingResidences || animalEditService.isDeleting" class="fa-stack">
+                <i class="fa fa-trash-o fa-stack-1x" aria-hidden="true"></i>
+                <i class="fa fa-ban fa-stack-2x text-danger" aria-hidden="true"></i>
+            </span>
+        </td>
+    </tr>
+    </thead>
+    <tbody *ngIf="getIsSearchingResidences()">
+    <tr>
+        <td>
+            <div class="loader-spinner"></div>
+        </td>
+    </tr>
+    </tbody>
+    <tbody *ngIf="!getIsSearchingResidences() && getAnimal()?.animal_residence_history != undefined">
+    <tr *ngIf="animalEditService.newResidence != undefined"
+        app-animal-residence-history-row [residence]="animalEditService.newResidence"
+        [isCreate]="true" [isForm]="true"
+    ></tr>
+    <tr app-animal-residence-history-row *ngFor="let residence of getAnimal().animal_residence_history | animalResidenceSortPipe:sortResidencesAscending | paginate: {itemsPerPage: filterResidenceAmount, currentPage: residencePage}" [residence]="residence">
+    </tr>
+    </tbody>
+</table>
+
+<pagination *ngIf="getAnimal()?.animal_residence_history != undefined && getAnimal()?.animal_residence_history.length > filterResidenceAmount" (pageChange)="residencePage = $event"></pagination>

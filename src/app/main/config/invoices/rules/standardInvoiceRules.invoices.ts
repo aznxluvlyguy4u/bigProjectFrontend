@@ -15,6 +15,7 @@ import { InvoiceDetailsComponent } from '../../../invoice/details/invoice.detail
 import { InvoiceRuleStorage } from '../../../../global/services/storage/invoice-rule.storage';
 import { LocalNumberFormat } from '../../../../global/pipes/local-number-format';
 import {InvoiceRuleEditComponent} from "../../../../global/components/InvoiceRuleEditComponent/InvoiceRuleEditComponent";
+import {Subscription} from "rxjs/Subscription";
 
 @Component({
     directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, LedgerCategoryDropdownComponent,
@@ -41,6 +42,8 @@ export class InvoicesRuleTemplatesComponent implements OnDestroy {
 
 	  isLoadedEvent = new EventEmitter<boolean>();
 
+    private requestSub: Subscription;
+
     constructor(private fb: FormBuilder, private nsfo: NSFOService, private settings: SettingsService,
 								private invoiceRuleStorage: InvoiceRuleStorage) {
         this.form = fb.group({
@@ -53,10 +56,11 @@ export class InvoicesRuleTemplatesComponent implements OnDestroy {
 
     ngOnDestroy() {
     	this.invoiceRuleStorage.refresh();
-		}
+        this.requestSub.unsubscribe();
+    }
 
     private getInvoiceRules() {
-        this.nsfo
+       this.requestSub = this.nsfo
             .doGetRequest(this.nsfo.URI_INVOICE_RULE + "?type=standard&active_only=true")
             .subscribe(
                 res => {

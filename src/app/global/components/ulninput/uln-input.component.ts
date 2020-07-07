@@ -1,10 +1,12 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { TranslatePipe } from 'ng2-translate';
 import { NSFOService } from '../../services/nsfo/nsfo.service';
+import { SpinnerComponent } from '../spinner/spinner.component';
 
 @Component({
 	selector: 'app-uln-input',
 	template: require('./uln-input.component.html'),
+	directives: [SpinnerComponent],
 	pipes: [TranslatePipe]
 })
 export class UlnInputComponent implements OnInit, OnChanges {

@@ -10,6 +10,9 @@ import {SettingsService} from "../../services/settings/settings.service";
 import {InvoiceDetailsComponent} from "../../../main/invoice/details/invoice.details";
 import {FormBuilder, FormGroup, REACTIVE_FORM_DIRECTIVES, Validators} from "@angular/forms";
 import {ROUTER_DIRECTIVES} from "@angular/router";
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
 @Component({
     selector: 'invoice-rule-edit-component',
     directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, LedgerCategoryDropdownComponent],
@@ -19,17 +22,21 @@ import {ROUTER_DIRECTIVES} from "@angular/router";
 
 export class InvoiceRuleEditComponent {
 
+
     constructor(private fb: FormBuilder, private nsfo: NSFOService, private settings: SettingsService) {
         this.form = fb.group({
             description: ['', Validators.required],
             price_excl_vat: ['', Validators.required],
             vat_percentage_rate: ['', Validators.required],
+            article_code: ['', Validators.required],
+            sub_article_code: ['']
         });
     }
 
     @Input() selectedRule: InvoiceRule;
     @Input() selectedLedgerCategory: LedgerCategory;
     @Input() isModalEditMode: boolean;
+    @Input() disableSubArticle: boolean;
     @Input() displayModal: string = "none";
     @Output() sendRule = new EventEmitter<InvoiceRule>();
     @Output() newRule = new EventEmitter<InvoiceRule>();
@@ -38,6 +45,13 @@ export class InvoiceRuleEditComponent {
     private isValidForm: boolean = true;
     private isSending: boolean = false;
     private form: FormGroup;
+
+    private onDestroy$: Subject<void> = new Subject<void>();
+
+    ngOnDestroy() {
+        this.onDestroy$.next();
+        this.onDestroy$.complete();
+    }
 
     getVatPercentages(): number[] {
         return this.settings.getVatPercentages();
@@ -50,6 +64,7 @@ export class InvoiceRuleEditComponent {
         this.selectedRule.sort_order = 1;
         this.nsfo
             .doPostRequest(this.nsfo.URI_INVOICE_RULE , this.selectedRule)
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(
                 res => {
                     let rule = res.result;
@@ -72,6 +87,7 @@ export class InvoiceRuleEditComponent {
 
         this.nsfo
             .doPutRequest(this.nsfo.URI_INVOICE_RULE, this.selectedRule)
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(
                 res => {
                     let invoiceRule = res.result;

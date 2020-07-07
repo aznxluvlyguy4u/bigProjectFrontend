@@ -4,7 +4,8 @@ import { FormBuilder, FormControl, FormGroup, REACTIVE_FORM_DIRECTIVES, Validato
 import { Animal } from '../../../../global/components/livestock/livestock.model';
 import { NSFOService } from '../../../../global/services/nsfo/nsfo.service';
 import { AnimalEditService } from '../animal-edit.service';
-import { Subscription } from 'rxjs/Subscription';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
 	selector: 'app-edit-gender-modal',
@@ -17,7 +18,7 @@ export class EditGenderModalComponent implements OnInit, OnDestroy {
 	public editAnimal: Animal;
 	isUpdating = false;
 
-	private isOpenModalButtonClickedSubscription: Subscription;
+	private onDestroy$: Subject<void> = new Subject<void>();
 
 	constructor(private nsfo: NSFOService, private fb: FormBuilder,
 							private animalEditService: AnimalEditService) {
@@ -28,7 +29,9 @@ export class EditGenderModalComponent implements OnInit, OnDestroy {
 			gender: ['', Validators.required],
 		});
 
-		this.isOpenModalButtonClickedSubscription = this.animalEditService.genderEditModalButtonClicked.subscribe(
+		this.animalEditService.genderEditModalButtonClicked
+			.pipe(takeUntil(this.onDestroy$))
+			.subscribe(
 			(isModalOpened: boolean) => {
 				if (isModalOpened) {
 					this.setAnimal();
@@ -37,13 +40,14 @@ export class EditGenderModalComponent implements OnInit, OnDestroy {
 		);
 	}
 
+	ngOnDestroy(): void {
+		this.onDestroy$.next();
+		this.onDestroy$.complete();
+	}
+
 	private setAnimal() {
 		this.editAnimal = this.animalEditService.foundAnimal;
 		(<FormControl>this.editForm.controls['gender']).updateValue(this.editAnimal.type.toUpperCase());
-	}
-
-	ngOnDestroy() {
-		this.isOpenModalButtonClickedSubscription.unsubscribe();
 	}
 
 	public updateAnimal(): void {
@@ -59,6 +63,7 @@ export class EditGenderModalComponent implements OnInit, OnDestroy {
 				.finally(()=>{
 					this.isUpdating = false;
 				})
+				.pipe(takeUntil(this.onDestroy$))
 				.subscribe(
 					(res: Animal) => {
 						this.editAnimal.gender = res.gender;

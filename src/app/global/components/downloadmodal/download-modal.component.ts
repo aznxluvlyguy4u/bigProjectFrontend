@@ -4,6 +4,8 @@ import { DownloadRequest } from '../../services/download/download-request.model'
 import { DownloadService } from '../../services/download/download.service';
 import { CSV, PDF } from '../../variables/file-type.enum';
 import { Subscription } from 'rxjs/Subscription';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
 	selector: 'app-download-modal',
@@ -19,21 +21,26 @@ export class DownloadModalComponent implements OnInit, OnDestroy {
 	private isModalActiveSubscription: Subscription;
 	private toggleModalSubscription: Subscription;
 
+	private onDestroy$: Subject<void> = new Subject<void>();
+
 	constructor(private downloadService: DownloadService) {}
 
 
 	ngOnInit() {
-
-		this.downloadRequestSubscription = this.downloadService.downloadsShownInModalChanged.subscribe(
+		this.downloadRequestSubscription = this.downloadService.downloadsShownInModalChanged
+			.pipe(takeUntil(this.onDestroy$))
+			.subscribe(
 			(downloadRequests: DownloadRequest[]) => {
 				this.downloadRequestsShownInModal = downloadRequests;
 				this.closeIfEmpty();
 			}
 		);
+
 		this.downloadRequestsShownInModal = this.downloadService.getDownloadRequestsShownInModal();
 
-
-		this.isModalActiveSubscription = this.downloadService.isModalActive.subscribe(
+		this.isModalActiveSubscription = this.downloadService.isModalActive
+			.pipe(takeUntil(this.onDestroy$))
+			.subscribe(
 			(notifyUser: boolean) => {
 				if (notifyUser) {
 					this.openModal();
@@ -43,8 +50,9 @@ export class DownloadModalComponent implements OnInit, OnDestroy {
 			}
 		);
 
-
-		this.toggleModalSubscription = this.downloadService.toggleIsModalActive.subscribe(
+		this.toggleModalSubscription = this.downloadService.toggleIsModalActive
+			.pipe(takeUntil(this.onDestroy$))
+			.subscribe(
 			(toggleModal: boolean) => {
 					if (toggleModal) {
 						this.toggleModal();
@@ -54,15 +62,14 @@ export class DownloadModalComponent implements OnInit, OnDestroy {
 	}
 
 	closeIfEmpty() {
-			if (this.downloadRequestsShownInModal.length === 0) {
-					this.closeModal();
-			}
+		if (this.downloadRequestsShownInModal.length === 0) {
+				this.closeModal();
+		}
 	}
 
 	ngOnDestroy() {
-		this.downloadRequestSubscription.unsubscribe();
-		this.isModalActiveSubscription.unsubscribe();
-		this.toggleModalSubscription.unsubscribe();
+		this.onDestroy$.next();
+		this.onDestroy$.complete();
 	}
 
 	public openModal() {
@@ -81,7 +88,6 @@ export class DownloadModalComponent implements OnInit, OnDestroy {
 		}
 	}
 
-
 	public downloadFile(downloadRequest: DownloadRequest) {
 
 		if (downloadRequest.fileType === PDF) {
@@ -94,7 +100,6 @@ export class DownloadModalComponent implements OnInit, OnDestroy {
 
 		this.downloadService.downloadFile(downloadRequest);
 	}
-
 
 	public resetDownloadList() {
 		this.downloadService.resetDownloadList();

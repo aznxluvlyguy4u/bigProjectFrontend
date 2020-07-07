@@ -2,11 +2,12 @@ import {Component} from "@angular/core";
 import { Router, ROUTER_DIRECTIVES } from '@angular/router';
 import { TranslatePipe } from 'ng2-translate';
 import { AnimalReportsComponent } from './animals-overviews/animal-reports.component';
+import {ClientReportsComponent} from "./clients-overviews/client-reports.component";
 
 @Component({
 	  selector: 'app-report-main',
     template: require('./report.component.html'),
-		directives: [ROUTER_DIRECTIVES, AnimalReportsComponent],
+		directives: [ROUTER_DIRECTIVES, AnimalReportsComponent, ClientReportsComponent],
 	  pipes: [TranslatePipe],
 })
 export class ReportComponent {

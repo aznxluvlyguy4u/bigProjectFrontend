@@ -1,11 +1,50 @@
 <div class="page-header">
-    <div class="page-title">{{ 'INVOICE OVERVIEW' | translate }}</div>
+    <div class="row">
+        <div class="large-8 columns">
+            <div class="page-title">{{ 'INVOICE OVERVIEW' | translate }}</div>
+        </div>
+        <div class="large-2 columns table-options-container">
+            <label>
+                &nbsp;
+                <button (click)="navigateTo('/invoice/batch')" class="medium primary button expanded">
+                    <i class="fa fa-file-text-o fa-fw" aria-hidden="true"></i>
+                    {{ 'BATCH INVOICE' | translate }}
+                </button>
+            </label>
+        </div>
+        <div class="large-2 columns table-options-container">
+            <label>
+                &nbsp;
+                <button (click)="navigateTo('/invoice/details/new')" class="medium primary button expanded">
+                    <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
+                    {{ 'NEW INVOICE' | translate }}
+                </button>
+            </label>
+        </div>
+    </div>
+
 </div>
 
 <div class="row table-options-container">
     <div class="large-2 columns">
         <label>
-            {{ 'INVOICES' | translate }}
+            {{ 'SEARCH' | translate }}
+            <input type="text" [(ngModel)]="filterSearch" (keydown)="page = 1" placeholder="{{ 'SEARCH' | translate }}" maxlength="50">
+        </label>
+    </div>
+    <div class="large-2 columns">
+        <label>
+            {{ 'DISPLAY INVOICE TYPE' | translate }}
+            <select [(ngModel)]="showBatch" (change)="page = 1">
+                <option value="all">{{ "ALL" | translate }}</option>
+                <option value="only-automatic">{{ "ONLY AUTOMATIC" | translate }}</option>
+                <option value="only-manual">{{ "ONLY MANUAL" | translate }}</option>
+            </select>
+        </label>
+    </div>
+    <div class="large-2 columns">
+        <label>
+            {{ 'STATUS' | translate }}
             <select [(ngModel)]="status" (change)="page = 1">
                 <option value="ALL">{{ 'ALL' | translate }}</option>
                 <option value="NOT SEND INVOICES">{{'NOT SEND INVOICES' | translate}}</option>
@@ -18,8 +57,14 @@
     </div>
     <div class="large-2 columns">
         <label>
-            {{ 'SEARCH' | translate }}
-            <input type="text" [(ngModel)]="filterSearch" (keydown)="page = 1" placeholder="{{ 'SEARCH' | translate }}" maxlength="50">
+            {{ 'MIN' | translate }} {{ 'TOTAL EXCL VAT' | translate }}
+            <input type="number" [(ngModel)]="filterTotalExclVatMin" (keydown)="page = 1" placeholder="{{ 'MIN' | translate }}" max="100000000" min="-100000000">
+        </label>
+    </div>
+    <div class="large-2 columns end">
+        <label>
+            {{ 'MAX' | translate }} {{ 'TOTAL EXCL VAT' | translate }}
+            <input type="number" [(ngModel)]="filterTotalExclVatMax" (keydown)="page = 1" placeholder="{{ 'MAX' | translate }}" max="100000000" min="-100000000">
         </label>
     </div>
     <div class="large-2 columns">
@@ -32,35 +77,7 @@
             </select>
         </label>
     </div>
-    <div class="large-2 columns">
-        <label>
-            {{ 'BATCH INVOICES' | translate }}
-            <select [(ngModel)]="showBatch" (change)="page = 1">
-                <option value="no">{{ "NO" | translate }}</option>
-                <option value="yes">{{ "YES" | translate }}</option>
-            </select>
-        </label>
-    </div>
-    <div class="large-2 columns">
-        <label>
-            &nbsp;
-            <button (click)="navigateTo('/invoice/batch')" class="medium primary button expanded">
-                <i class="fa fa-file-text-o fa-fw" aria-hidden="true"></i>
-                {{ 'BATCH INVOICE' | translate }}
-            </button>
-        </label>
-    </div>
-    <div class="large-2 columns">
-        <label>
-            &nbsp;
-            <button (click)="navigateTo('/invoice/details/new')" class="medium primary button expanded">
-                <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
-                {{ 'NEW INVOICE' | translate }}
-            </button>
-        </label>
-    </div>
 </div>
-
 <div class="row">
     <div class="large-12 columns">
         <table class="stack invoice-overview">
@@ -72,7 +89,7 @@
                     <td>{{ 'NAME' | translate }}</td>
                     <td>{{ 'INVOICE DATE' | translate }}</td>
                     <td>{{ 'STATUS' | translate }}</td>
-                    <td>{{ 'REMINDER(S)' | translate }}</td>
+                    <td class="price-column">{{ 'TOTAL EXCL VAT' | translate }}</td>
                     <td>{{ 'ACTIONS' | translate}}</td>
                 </tr>
             </thead>
@@ -86,7 +103,7 @@
                     </div>
                 </td>
             </tr>
-                <tr *ngFor="let invoice of invoices | invoiceFilter:[filterSearch, status, showBatch] | paginate: {itemsPerPage: filterAmount, currentPage: page}">
+                <tr *ngFor="let invoice of invoices | invoiceFilter:[filterSearch, status, showBatch, filterTotalExclVatMin, filterTotalExclVatMax] | invoiceSort | paginate: {itemsPerPage: filterAmount, currentPage: page}">
                     <td>
                         <span *ngIf="invoice.invoice_number">
                             {{ invoice.invoice_number }}
@@ -144,11 +161,11 @@
                             {{ 'CANCELLED' | translate }} ({{ calculateDays(invoice.invoice_date)}} {{ 'DAYS' | translate }})
                         </span>
                     </td>
-                    <td>
-                        <span *ngIf="invoice.reminders > 0" class="alert label">
-                            {{ invoice.reminders }} {{ 'REMINDER(S)' | translate }}
+                    <td class="price-column">
+                        <span *ngIf="invoice.vat_breakdown && invoice.vat_breakdown.total_excl_vat !== undefined" >
+                            {{ invoice.vat_breakdown.total_excl_vat | localNumberFormat:3 }}
                         </span>
-                        <span *ngIf="!invoice.reminders > 0" class="alert label">
+                        <span *ngIf="!invoice.vat_breakdown || invoice.vat_breakdown.total_excl_vat == undefined">
                             --
                         </span>
                     </td>

@@ -118,6 +118,16 @@ module.exports = {
             },
             {
                 context: 'src/assets',
+                from: 'favicon.ico',
+                to: 'assets'
+            },
+            {
+                context: 'src',
+                from: 'favicon.ico',
+                dot: 'true'
+            },
+            {
+                context: 'src',
                 from: '.htaccess',
                 dot: true
             },

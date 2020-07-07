@@ -7,6 +7,7 @@ import { PaginatePipe, PaginationService } from 'ng2-pagination';
 import { SpinnerComponent } from '../spinner/spinner.component';
 import { LedgerCategoryPipe } from '../../pipes/ledger-category.pipe';
 import { CheckMarkComponent } from '../checkmark/check-mark.component';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
 	selector: 'app-ledger-category-dropdown',
@@ -33,6 +34,8 @@ export class LedgerCategoryDropdownComponent implements OnInit {
 
 	isLoadedEvent = new EventEmitter<boolean>();
 
+	private ledgerCategorySub: Subscription;
+
 	constructor(private ledgerCategoryStorage: LedgerCategoryStorage) {}
 
 	ngOnInit() {
@@ -41,7 +44,7 @@ export class LedgerCategoryDropdownComponent implements OnInit {
 
 		if (this.isLedgerCategoriesEmpty()) {
 
-			this.ledgerCategoryStorage.ledgerCategoriesChanged.takeLast(1)
+			this.ledgerCategorySub = this.ledgerCategoryStorage.ledgerCategoriesChanged.takeLast(1)
 				.subscribe(
 					res => {
 						this.isLoaded = true;
@@ -58,6 +61,12 @@ export class LedgerCategoryDropdownComponent implements OnInit {
 
 			this.isLoaded = true;
 			this.isLoadedEvent.emit(true);
+		}
+	}
+
+	ngOnDestroy() {
+		if (this.ledgerCategorySub) {
+			this.ledgerCategorySub.unsubscribe();
 		}
 	}
 
@@ -81,6 +90,7 @@ export class LedgerCategoryDropdownComponent implements OnInit {
 
 	selectLedgerCategory(ledgerCategory: LedgerCategory) {
 		this.selectedLedgerCategory = ledgerCategory;
+		this.clickOK();
 	}
 
 	buttonText(): string {

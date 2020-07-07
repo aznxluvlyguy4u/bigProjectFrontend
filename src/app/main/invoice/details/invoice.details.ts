@@ -12,12 +12,14 @@ import { CompanySelectorComponent } from '../../../global/components/clientselec
 import { Address, Client } from '../../client/client.model';
 import { SettingsService } from '../../../global/services/settings/settings.service';
 import { LedgerCategoryDropdownComponent } from '../../../global/components/ledgercategorydropdown/ledger-category-dropdown.component';
-import { FormatService } from '../../../global/services/utils/format.service';
+import { FormatService, MAX_CURRENCY_DECIMAL_COUNT } from '../../../global/services/utils/format.service';
 import { ClientsStorage } from '../../../global/services/storage/clients.storage';
 import { StandardInvoiceRuleSelectorComponent } from '../../../global/components/standardinvoiceruleselector/standard-invoice-rule-selector.component';
 import { LocalNumberFormat } from '../../../global/pipes/local-number-format';
 import {Datepicker} from "../../../global/components/datepicker/datepicker.component";
 import {DownloadService} from "../../../global/services/download/download.service";
+import { SpinnerComponent } from '../../../global/components/spinner/spinner.component';
+import { UtilsService } from '../../../global/services/utils/utils.service';
 
 @Component({
     selector: 'ng-select',
@@ -46,6 +48,7 @@ export class InvoiceDetailsComponent {
     private pageMode: string;
     private invoiceId: number;
     private selectedUbn: string;
+    private companyTwinfieldError: boolean = false;
     private form1: FormGroup;
     private selectedCompany: Client;
     clientUbns: string[] = [];
@@ -54,10 +57,12 @@ export class InvoiceDetailsComponent {
     temporaryRuleAmount: number;
     temporaryRuleDate: string = moment().format(this.settings.getViewDateFormat());
 	temporaryRuleDate2: string = moment().format(this.settings.getViewDateFormat());
-    minRuleAmount = 1;
+    public minRuleAmount = 0;
+    public maxDecimalCountForAmount = 2;
     private invoice: Invoice = new Invoice;
     private form: FormGroup;
     private onlyView: boolean = false;
+    public loadingInvoiceForEdit = false;
     private companySelected: boolean = false;
 	private model_datetime_format;
 	private view_date_format;
@@ -76,7 +81,9 @@ export class InvoiceDetailsComponent {
             price_excl_vat: ['', Validators.required],
             vat_percentage_rate: ['', Validators.required],
             amount: ['', Validators.required],
-			date: ['', Validators.required]
+			date: ['', Validators.required],
+			article_code: ['', Validators.required],
+			sub_article_code: ['']
         });
         this.form1 = fb.group({
 			amount: ['', Validators.required],
@@ -91,6 +98,7 @@ export class InvoiceDetailsComponent {
         this.dataSub = this.activatedRoute.params.subscribe(params => {
             this.pageMode = params['mode'];
             if(this.isEditMode()) {
+            		this.loadingInvoiceForEdit = true;
                 this.pageTitle = 'EDIT INVOICE';
                 this.invoiceId = params['id'];
                 this.nsfo.doGetRequest(this.nsfo.URI_INVOICE + "/" + this.invoiceId)
@@ -105,6 +113,9 @@ export class InvoiceDetailsComponent {
                     },
 											error => {
 												alert(this.nsfo.getErrorMessage(error));
+											},
+											() => {
+                    		this.loadingInvoiceForEdit = false;
 											}
                     );
             }
@@ -198,13 +209,18 @@ export class InvoiceDetailsComponent {
 			);
   }
 
-  private updateInvoiceClientAndUbn() {
+  public updateInvoiceClientAndUbn() {
     	if (this.invoice.id === null) {
 
 		}
     	this.invoice.company = this.selectedCompany;
     	this.invoice.ubn = this.selectedUbn;
-    	this.nsfo.doPutRequest(this.nsfo.URI_INVOICE + "/" + this.invoice.id, this.invoice)
+			this.invoice.sender_details = this.senderDetails;
+    	this.updateInvoice();
+  }
+
+  private updateInvoice() {
+		this.nsfo.doPutRequest(this.nsfo.URI_INVOICE + "/" + this.invoice.id, this.invoice)
 			.subscribe(
 				res => {
 					this.invoice = res.result;
@@ -220,13 +236,17 @@ export class InvoiceDetailsComponent {
 					}
 				}
 			)
-  }
+	}
 
 	refreshSenderDetails() {
+		this.invoice.company = this.selectedCompany;
+		this.invoice.ubn = this.selectedUbn;
+		this.invoice.sender_details = this.senderDetails;
 		this.nsfo.doGetRequest(this.nsfo.URI_INVOICE_SENDER_DETAILS)
 			.subscribe(
 				res => {
 					this.senderDetails = res.result;
+					this.updateInvoice();
 				},
 				error => {
 					alert(this.nsfo.getErrorMessage(error));
@@ -244,14 +264,53 @@ export class InvoiceDetailsComponent {
 					this.invoice.company = this.clientStorage.getUpdatedClient(this.invoice.company);
 					const company = this.invoice.company;
 
-					if (!(company.locations && company.locations.indexOf(this.invoice.ubn) !== -1)) {
+					if (!InvoiceDetailsComponent.hasUbnInCollection(this.invoice.ubn, company.locations)) {
 							this.invoice.ubn = undefined;
 					}
 
 					this.invoice.company_name = company.company_name;
 					this.invoice.company_debtor_number = company.debtor_number;
 					this.invoice.company_vat_number = company.vat_number;
+
+					this.invoice.company_twinfield_office_code = company.twinfield_administration_code;
+					this.invoice.company_debtor_number = this.invoice.company.debtor_number;
+
+					if (!!company.billing_address) {
+						this.invoice.company_address_street_name = company.billing_address.street_name;
+						this.invoice.company_address_street_number = company.billing_address.address_number;
+						this.invoice.company_address_street_number_suffix = company.billing_address.address_number_suffix;
+						this.invoice.company_address_city = company.billing_address.city;
+						this.invoice.company_address_postal_code = company.billing_address.postal_code;
+						this.invoice.company_address_state = company.billing_address.state;
+						this.invoice.company_address_country = company.billing_address.country;
+					}
+
+					this.updateInvoice();
 			}
+	}
+
+	hasBillingAddressChanged(): boolean {
+		const company = this.invoice.company;
+		if (!!company.billing_address) {
+
+			let invoice_street_number_suffix = this.invoice.company_address_street_number_suffix;
+			if (this.invoice.company_address_street_number_suffix === ''
+				|| this.invoice.company_address_street_number_suffix === null) {
+				invoice_street_number_suffix = undefined;
+			}
+
+			let billing_address_number_suffix = company.billing_address.address_number_suffix;
+			if (company.billing_address.address_number_suffix === ''
+			|| company.billing_address.address_number_suffix === null) {
+				billing_address_number_suffix = undefined;
+			}
+
+			return this.invoice.company_address_street_name !== company.billing_address.street_name
+					|| this.invoice.company_address_street_number !== company.billing_address.address_number
+					|| invoice_street_number_suffix != billing_address_number_suffix
+				;
+		}
+		return false;
 	}
 
 	hasSelectedClientWithCompanyId(): boolean {
@@ -268,13 +327,19 @@ export class InvoiceDetailsComponent {
 			alert('THE SELECTED COMPANY HAS NO COMPANY_ID');
 			return;
 		}
-
-		this.navigateTo("/client/dossier/edit/" + this.invoice.company.company_id);
+		this.router.navigate(["/client/dossier/edit/" + this.invoice.company.company_id], { queryParams: {invoice_id: this.invoice.id}});
 	}
 
 	hasClientAndUbn(): boolean {
     	return this.selectedCompany != null
 				&& this.selectedUbn != null;
+	}
+
+	isStandardInvoiceRuleCreateButtonActive(): boolean {
+		return this.selectedInvoiceRule != null && this.selectedInvoiceRule != undefined
+			&& this.tempRuleAmountDecimalCountIsValid()
+			&& this.ruleAmountIsAboveAllowedMinimum()
+			;
 	}
 
 	isCustomInvoiceRuleCreateButtonActive(): boolean {
@@ -294,7 +359,7 @@ export class InvoiceDetailsComponent {
     	if (this.temporaryRuleAmount == null) {
     		return false;
 			}
-		return FormatService.isInteger(this.temporaryRuleAmount);
+		return UtilsService.countDecimals(this.temporaryRuleAmount) <= this.maxDecimalCountForAmount;
 	}
 
 	ruleAmountIsAboveAllowedMinimum(): boolean {
@@ -328,14 +393,15 @@ export class InvoiceDetailsComponent {
             rule.ledger_category = this.temporaryRule.ledger_category;
             rule.vat_percentage_rate = this.temporaryRule.vat_percentage_rate;
             rule.price_excl_vat = this.temporaryRule.price_excl_vat;
+            rule.article_code = this.temporaryRule.article_code;
+            rule.sub_article_code = this.temporaryRule.sub_article_code;
             rule.description = this.temporaryRule.description;
         }
 
 		let ruleSelection = new InvoiceRuleSelection();
         ruleSelection.invoice_rule = rule;
         ruleSelection.amount = this.temporaryRuleAmount;
-		ruleSelection.date = dateFormat;
-		console.log(dateFormat);
+				ruleSelection.date = dateFormat;
         this.postInvoiceRuleSelection(ruleSelection, type);
     }
 
@@ -353,6 +419,7 @@ export class InvoiceDetailsComponent {
                     } else {
 											this.selectedInvoiceRule = null;
 										}
+										this.temporaryRuleAmount = 1;
 					this.invoice = res.result;
                 },
                   error => {
@@ -425,41 +492,56 @@ export class InvoiceDetailsComponent {
           }
 
           // Remove selectedUbn if the old selectedUbn does not belong to the new selectedCompany
-          if (this.selectedCompany.locations) {
-			  let hasSelectedUbn = false;
-			  for (let location of this.selectedCompany.locations) {
-				  if (typeof location === 'string') {
-					  if (location === this.selectedUbn) {
-						  hasSelectedUbn = true;
-						  break;
-					  }
-				  } else {
-					  if (location.ubn != null && location.ubn === this.selectedUbn) {
-						  hasSelectedUbn = true;
-						  break;
-					  }
-				  }
-			  }
-			  if (!hasSelectedUbn) {
-				  this.selectedUbn = null;
-			  }
+					if (this.selectedCompany.locations) {
+						const hasSelectedUbn = InvoiceDetailsComponent.hasUbnInCollection(this.selectedUbn, this.selectedCompany.locations);
+						if (!hasSelectedUbn) {
+							this.autoSetSingleLocation(this.selectedCompany.locations);
+						}
 
           } else {
-				this.selectedUbn = null;
+						this.selectedUbn = null;
           }
 
         } else {
-			this.invoice.company = null;
-			this.invoice.company_id = null;
-			this.invoice.company_name = null;
-			this.invoice.company_vat_number = null;
-			this.invoice.company_debtor_number = null;
-			this.selectedUbn = null;
+					this.invoice.company = null;
+					this.invoice.company_id = null;
+					this.invoice.company_name = null;
+					this.invoice.company_vat_number = null;
+					this.invoice.company_debtor_number = null;
+					this.selectedUbn = null;
         }
 
         this.setInvoiceUbn();
         this.updateClientUbns();
     }
+
+
+	static hasUbnInCollection(ubn: any, locations: any[]): boolean {
+		if (!locations) {
+			return false;
+		}
+
+		for (let location of locations) {
+			if (typeof location === 'string') {
+				if (location === ubn) {
+					return true;
+				}
+			} else {
+				if (location.ubn != null && location.ubn === ubn) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+    autoSetSingleLocation(locations: any[]): void {
+    	if (!!locations && locations.length === 1) {
+    		this.selectedUbn = locations[0];
+			} else {
+    		this.selectedUbn = null;
+			}
+		}
 
     setInvoiceUbn() {
 			if (this.selectedUbn == null || this.selectedUbn == '' || this.selectedUbn == 'null') {
@@ -516,7 +598,7 @@ export class InvoiceDetailsComponent {
         }
     }
 
-    private saveInvoice() {
+    public saveInvoice() {
         this.invoice.sender_details = this.senderDetails;
         this.invoice.status = "NOT SEND";
 

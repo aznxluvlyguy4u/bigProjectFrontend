@@ -65,7 +65,9 @@ export class PaginationComponent {
     }
 
     ngOnDestroy() {
-        this.changeSub.unsubscribe();
+        if (this.changeSub) {
+            this.changeSub.unsubscribe();
+        }
     }
 
     /**

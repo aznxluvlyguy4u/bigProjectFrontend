@@ -1,12 +1,14 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 
 import {PDF} from '../../variables/file-type.enum';
-import { Subscription } from 'rxjs/Subscription';
+import {Subscription} from 'rxjs/Subscription';
 import {ReportRequest, ReportType} from '../../services/report/report-request.model';
 import {ReportService} from '../../services/report/report.service';
 import {TranslatePipe, TranslateService} from "ng2-translate";
 import {PaginatePipe, PaginationService} from "ng2-pagination";
 import {PaginationComponent} from "../pagination/pagination.component";
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'app-report-modal',
@@ -16,11 +18,11 @@ import {PaginationComponent} from "../pagination/pagination.component";
     pipes: [PaginatePipe, TranslatePipe]
 })
 export class ReportModalComponent implements OnInit, OnDestroy {
-  public reportRequestsShownInModal: ReportRequest[];
-  private modalDisplay = 'none';
-  private reportRequestSubscription: Subscription;
-  private isModalActiveSubscription: Subscription;
-  private toggleModalSubscription: Subscription;
+    public reportRequestsShownInModal: ReportRequest[];
+    private modalDisplay = 'none';
+
+    private onDestroy$: Subject<void> = new Subject<void>();
+
     public filterAmount: number = 5;
     public page: number =1;
 	public title = 'REPORT OVERVIEW';
@@ -33,7 +35,9 @@ export class ReportModalComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    this.reportRequestSubscription = this.reportService.reportsShownInModelChanged.subscribe(
+    this.reportService.reportsShownInModelChanged
+        .pipe(takeUntil(this.onDestroy$))
+        .subscribe(
       (downloadRequests: ReportRequest[]) => {
         this.reportRequestsShownInModal = downloadRequests;
         this.closeIfEmpty();
@@ -41,8 +45,9 @@ export class ReportModalComponent implements OnInit, OnDestroy {
     );
     this.reportRequestsShownInModal = this.reportService.getReportRequestsShownInModal();
 
-
-    this.isModalActiveSubscription = this.reportService.isModalActive.subscribe(
+    this.reportService.isModalActive
+        .pipe(takeUntil(this.onDestroy$))
+        .subscribe(
       (notifyUser: boolean) => {
         if (notifyUser) {
           this.openModal();
@@ -53,7 +58,9 @@ export class ReportModalComponent implements OnInit, OnDestroy {
     );
 
 
-    this.toggleModalSubscription = this.reportService.toggleIsModalActive.subscribe(
+   this.reportService.toggleIsModalActive
+       .pipe(takeUntil(this.onDestroy$))
+       .subscribe(
       (toggleModal: boolean) => {
         if (toggleModal) {
           this.toggleModal();
@@ -70,6 +77,8 @@ export class ReportModalComponent implements OnInit, OnDestroy {
           return this.translate.instant('REPORT_ANNUAL_ACTIVE_LIVE_STOCK');
         case ReportType.ANNUAL_TE_100:
           return this.translate.instant('REPORT_ANNUAL_TE_100');
+        case ReportType.ANIMAL_TREATMENTS_PER_YEAR_REPORT:
+            return this.translate.instant('ANIMAL TREATMENTS PER YEAR REPORT');
         case ReportType.FERTILIZER_ACCOUNTING:
           return this.translate.instant('REPORT_FERTILIZER_ACCOUNTING');
         case ReportType.INBREEDING_COEFFICIENT:
@@ -84,6 +93,20 @@ export class ReportModalComponent implements OnInit, OnDestroy {
           return this.translate.instant('REPORT_OFF_SPRING');
         case ReportType.PEDIGREE_REGISTER_OVERVIEW:
           return this.translate.instant('REPORT_PEDIGREE_REGISTER_OVERVIEW');
+        case ReportType.BIRTH_LIST:
+            return this.translate.instant('REPORT_BIRTH_LIST');
+        case ReportType.MEMBERS_AND_USERS_OVERVIEW:
+            return this.translate.instant('REPORT_MEMBERS_AND_USERS_OVERVIEW');
+        case ReportType.ANIMAL_HEALTH_STATUS_REPORT:
+            return this.translate.instant('REPORT_ANIMAL_HEALTH_STATUS');
+        case ReportType.CLIENT_NOTES_OVERVIEW:
+            return this.translate.instant('REPORT_CLIENT_NOTES_OVERVIEW');
+        case ReportType.WEIGHTS_PER_YEAR_OF_BIRTH_REPORT:
+            return this.translate.instant('WEIGHTS PER YEAR OF BIRTH REPORT');
+        case ReportType.ANIMAL_FEATURES_PER_YEAR_OF_BIRTH_REPORT:
+            return this.translate.instant('ANIMAL FEATURES PER YEAR OF BIRTH REPORT');
+        case ReportType.POPREP_INPUT_FILE:
+            return this.translate.instant('POPREP INPUT FILE');
         default:
           return this.translate.instant('REPORT_UNKNOWN');
     }
@@ -95,11 +118,10 @@ export class ReportModalComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
-    this.reportRequestSubscription.unsubscribe();
-    this.isModalActiveSubscription.unsubscribe();
-    this.toggleModalSubscription.unsubscribe();
-  }
+    ngOnDestroy() {
+        this.onDestroy$.next();
+        this.onDestroy$.complete();
+    }
 
   public openModal() {
     this.modalDisplay = 'block';

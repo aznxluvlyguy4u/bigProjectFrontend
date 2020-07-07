@@ -28,40 +28,55 @@
         </div>
     </div>
     <hr>
+
     <div *ngIf="!onlyView" class="row client-selection">
-        <div class="large-6 columns">
-            <label>
-                {{ 'FIND COMPANY' | translate }}
-            </label>
 
-            <app-company-selector
-                    [disabled]="false"
-                    [selectedClient]="selectedCompany"
-                    (selectedClientChanged)="selectedCompany = $event; setInvoiceRecipient()"
-            ></app-company-selector>
+        <ng-template *ngIf="loadingInvoiceForEdit">
+            <div style="text-align: center">
+                <div class="spinner">
+                    <div class="bounce1"></div>
+                    <div class="bounce2"></div>
+                    <div class="bounce3"></div>
+                </div>
+            </div>
+        </ng-template>
 
-        </div>
+        <ng-template *ngIf="!loadingInvoiceForEdit">
+            <div class="large-6 columns">
+                <label>
+                    {{ 'FIND COMPANY' | translate }}
+                </label>
 
-        <div *ngIf="selectedCompany != null" class="large-6 columns">
-            <label>
-                {{'LOCATION SELECTION' | translate }}
-            </label>
-            <select
-                    name=""
-                    [(ngModel)]="selectedUbn"
-                    id="locations"
-                    (click)="setInvoiceUbn()"
-                    title="{{'SELECT LOCATION' | translate}}"
-            >
-                <option [value]=null>{{'NONE' | translate}}</option>
-                <option *ngFor="let ubn of clientUbns" [value]="ubn">{{ubn}}</option>
-            </select>
-            <button [disabled]="!hasClientAndUbn()" (click)="updateInvoiceClientAndUbn()" class="small primary button confirm-button pull-right">
-                {{ 'CONFIRM SELECTION' | translate }}
-            </button>
-        </div>
-        <hr>
+                <app-company-selector
+                        [disabled]="false"
+                        [selectedClient]="selectedCompany"
+                        (selectedClientChanged)="selectedCompany = $event; setInvoiceRecipient()"
+                ></app-company-selector>
+
+            </div>
+
+            <div *ngIf="selectedCompany != null" class="large-6 columns">
+                <label>
+                    {{'LOCATION SELECTION' | translate }}
+                </label>
+                <select
+                        name=""
+                        [(ngModel)]="selectedUbn"
+                        id="locations"
+                        (click)="setInvoiceUbn()"
+                        title="{{'SELECT LOCATION' | translate}}"
+                >
+                    <option [value]=null>{{'NONE' | translate}}</option>
+                    <option *ngFor="let ubn of clientUbns" [value]="ubn">{{ubn}}</option>
+                </select>
+                <button [disabled]="!hasClientAndUbn()" (click)="updateInvoiceClientAndUbn()" class="small primary button confirm-button pull-right">
+                    {{ 'CONFIRM SELECTION' | translate }}
+                </button>
+            </div>
+            <hr>
+        </ng-template>
     </div>
+
     <div *ngIf="companySelected" class="row information-overview">
         <div class="large-4 columns">
             <table>
@@ -85,6 +100,26 @@
                             ><i class="fa fa-pencil-square-o fa-fw fa-2x" aria-hidden="true"></i></span>
 
                         </ng-template>
+                    </td>
+                </tr>
+                <tr class="row">
+                    <td class="large-6 columns">
+                        {{ 'TWINFIELD ADMINISTRATION CODE' | translate }}
+                    </td>
+                    <td class="large-6 columns">
+                        <span>
+                            {{ invoice.company_twinfield_office_code }}
+                        </span>
+                        <span *ngIf="!onlyView && invoice.company.twinfield_administration_code !== invoice.company_twinfield_office_code"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true" title="{{ 'REFRESH TO USE NEW VALUE' | translate }}"></i></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="large-6 columns">
+                        {{ "DEBTOR NUMBER" | translate}}
+                    </td>
+                    <td class="large-6 columns">
+                        {{ invoice.company_debtor_number && invoice.company_debtor_number != "" ? invoice.company_debtor_number : "--"}}
+                        <span *ngIf="!onlyView && invoice.company.debtor_number !== invoice.company_debtor_number"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true" title="{{ 'REFRESH TO USE NEW VALUE' | translate }}"></i></span>
                     </td>
                 </tr>
                 <tr >
@@ -113,6 +148,7 @@
                         <span>
                             {{ invoice.company_name }}
                         </span>
+                        <span *ngIf="!onlyView && invoice.company.company_name !== invoice.company_name"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true" title="{{ 'REFRESH TO USE NEW VALUE' | translate }}"></i></span>
                     </td>
                 </tr>
                 <tr class="row">
@@ -123,6 +159,42 @@
                         <span>
                             {{ invoice.company_vat_number }}
                         </span>
+                        <span *ngIf="!onlyView && invoice.company.vat_number !== invoice.company_vat_number"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true" title="{{ 'REFRESH TO USE NEW VALUE' | translate }}"></i></span>
+                    </td>
+                </tr>
+                <tr class="row">
+                    <td class="large-6 columns">
+                        {{ 'ADDRESS' | translate }}
+                    </td>
+                    <td class="large-6 columns">
+                        <span>
+                            {{ (invoice.company_address_street_name) + ' ' + (invoice.company_address_street_number)
+                            + (!!invoice.company_address_street_number_suffix ? invoice.company_address_street_number_suffix : '')
+                            }}
+                        </span>
+                        <span *ngIf="!onlyView && hasBillingAddressChanged()"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true" title="{{ 'REFRESH TO USE NEW VALUE' | translate }}"></i></span>
+                    </td>
+                </tr>
+                <tr class="row">
+                    <td class="large-6 columns">
+                        {{ 'POSTAL CODE' | translate }}
+                    </td>
+                    <td class="large-6 columns">
+                        <span>
+                            {{ invoice.company_address_postal_code }}
+                        </span>
+                        <span *ngIf="!onlyView && invoice.company?.billing_address?.postal_code !== invoice.company_address_postal_code"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true" title="{{ 'REFRESH TO USE NEW VALUE' | translate }}"></i></span>
+                    </td>
+                </tr>
+                <tr class="row">
+                    <td class="large-6 columns">
+                        {{ 'COUNTRY' | translate }}
+                    </td>
+                    <td class="large-6 columns">
+                        <span>
+                            {{ invoice.company_address_country }}
+                        </span>
+                        <span *ngIf="!onlyView && invoice.company?.billing_address?.country !== invoice.company_address_country"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true" title="{{ 'REFRESH TO USE NEW VALUE' | translate }}"></i></span>
                     </td>
                 </tr>
             </table>
@@ -262,13 +334,13 @@
                             </label>
                         </div>
                         <div class="large-8 columns">
-                            <label *ngIf="!tempRuleAmountDecimalCountIsValid()" class="input-error-msg" style="text-align: left">{{'ONLY INTEGERS ARE ALLOWED'|translate}}!</label>
+                            <label *ngIf="!tempRuleAmountDecimalCountIsValid()" class="input-error-msg" style="text-align: left">{{('AMOUNT CANNOT EXCEED THIS AMOUNT OF DECIMAL SPACES'|translate) + ' ' + maxDecimalCountForAmount}}!</label>
                             <label *ngIf="!ruleAmountIsAboveAllowedMinimum()" class="input-error-msg" style="text-align: left">{{('AMOUNT MUST BE AT LEAST'|translate) + ' ' + minRuleAmount}}!</label>
                             <input
                                     name="amount"
                                     type="number"
                                     [(ngModel)]="temporaryRuleAmount"
-                                    step="1"
+                                    step="0.01"
                                     [min]="minRuleAmount"
                             >
                         </div>
@@ -279,7 +351,7 @@
                     <div class="row">
                         <h5>&nbsp;</h5>
                         <button
-                                [disabled]="selectedInvoiceRule == undefined"
+                                [disabled]="!isStandardInvoiceRuleCreateButtonActive()"
                                 (click)="addInvoiceRule('standard', 'GENERAL')"
                                 class="small primary button"
                         ><i class="fa fa-plus fa-fw" aria-hidden="true"></i> {{ 'ADD' | translate }}
@@ -335,11 +407,22 @@
                         </div>
                     </div>
                     <div class="row">
-                        <!--<div class="large-4 columns">-->
-                            <!--<md-datepicker [(ngModel)]="temporaryRuleDate">-->
-
-                            <!--</md-datepicker>-->
-                        <!--</div>-->
+                        <div class="large-4 columns">
+                            <label class="middle">{{ 'ARTICLE CODE' | translate }} * </label>
+                        </div>
+                        <div class="large-8 columns">
+                            <input type="text" [(ngModel)]="temporaryRule.article_code" formControlName="article_code">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="large-4 columns">
+                            <label class="middle">{{ 'SUB ARTICLE CODE' | translate }} </label>
+                        </div>
+                        <div class="large-8 columns">
+                            <input type="text" [(ngModel)]="temporaryRule.sub_article_code" formControlName="sub_article_code">
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="large-4 columns">
                             <label>
                                 {{'DESCRIPTION' | translate}}
@@ -389,13 +472,13 @@
                             </label>
                         </div>
                         <div class="large-8 columns">
-                            <label *ngIf="!tempRuleAmountDecimalCountIsValid()" class="input-error-msg" style="text-align: left">{{'ONLY INTEGERS ARE ALLOWED'|translate}}!</label>
+                            <label *ngIf="!tempRuleAmountDecimalCountIsValid()" class="input-error-msg" style="text-align: left">{{('AMOUNT CANNOT EXCEED THIS AMOUNT OF DECIMAL SPACES'|translate) + ' ' + maxDecimalCountForAmount}}!</label>
                             <label *ngIf="!ruleAmountIsAboveAllowedMinimum()" class="input-error-msg" style="text-align: left">{{('AMOUNT MUST BE AT LEAST'|translate) + ' ' + minRuleAmount}}!</label>
                             <input
                                     type="number"
                                     [(ngModel)]="temporaryRuleAmount"
                                     formControlName="amount"
-                                    step="1"
+                                    step="0.01"
                                     [min]="minRuleAmount"
                             >
                         </div>
@@ -433,6 +516,12 @@
                             {{"CATEGORY" | translate }}
                         </td>
                         <td>
+                            {{"ARTICLE CODE" | translate}}
+                        </td>
+                        <td>
+                            {{"SUB ARTICLE CODE" | translate}}
+                        </td>
+                        <td>
                             {{ 'DESCRIPTION' | translate }}
                         </td>
                         <td class="text-left">
@@ -461,6 +550,12 @@
                             {{invoice_rule_selection.invoice_rule.ledger_category ? invoice_rule_selection.invoice_rule.ledger_category.code + ': ' + invoice_rule_selection.invoice_rule.ledger_category.description : ''}}
                         </td>
                         <td>
+                            {{invoice_rule_selection.invoice_rule.article_code ? invoice_rule_selection.invoice_rule.article_code : ''}}
+                        </td>
+                        <td>
+                            {{invoice_rule_selection.invoice_rule.sub_article_code ? invoice_rule_selection.invoice_rule.sub_article_code : ''}}
+                        </td>
+                        <td>
                             {{invoice_rule_selection.invoice_rule.description}}
                         </td>
                         <td class="text-left">
@@ -470,7 +565,7 @@
                             {{invoice_rule_selection.invoice_rule.price_excl_vat | localNumberFormat:3 }}
                         </td>
                         <td class="text-left">
-                            {{invoice_rule_selection.amount}}
+                            {{invoice_rule_selection.amount | localNumberFormat:2}}
                         </td>
                         <td class="text-right">
                             {{(invoice_rule_selection.invoice_rule.price_excl_vat * invoice_rule_selection.amount) | localNumberFormat:3}}
@@ -521,4 +616,31 @@
             </table>
         </div>
     </div>
+    <ng-template *ngIf="companySelected">
+        <div class="row">
+            <div class="large-12 columns">
+                <span class="pull-right">
+                    <button type="button" (click)="navigateTo('/invoice')" class="small primary button">
+                        {{ 'RETURN' | translate }}
+                    </button>
+                    <button *ngIf="!onlyView" [disabled]="!companySelected" type="button" (click)="sendInvoiceToClient()" class="small primary button">
+                        {{ 'SEND INVOICE' | translate }}
+                    </button>
+                    <button *ngIf="!onlyView" [disabled]="!companySelected" type="button" (click)="saveInvoice()" class="small primary button">
+                        {{ 'SAVE' | translate }}
+                    </button>
+                    <button type="button" (click)="downloadPdf()" [disabled]="!companySelected" class="small primary button">
+                        {{ "DOWNLOAD PDF" | translate }}
+                    </button>
+                    <button *ngIf="!onlyView"
+                            [disabled]="(invoice.status != 'NOT SEND' && invoice.status != 'INCOMPLETE') || invoiceId == null"
+                            type="button"
+                            (click)="deleteInvoice()"
+                            class="small alert button">
+                        {{'DELETE' | translate}}
+                    </button>
+                </span>
+            </div>
+        </div>
+    </ng-template>
 </div>

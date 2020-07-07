@@ -4,6 +4,7 @@ import { NSFOService } from '../nsfo/nsfo.service';
 
 import * as _ from 'lodash';
 import {ReportRequest} from './report-request.model';
+import {Subscription} from "rxjs/Subscription";
 
 @Injectable()
 export class ReportService implements OnInit {
@@ -14,6 +15,10 @@ export class ReportService implements OnInit {
   failedReportsCount: number;
   private reportRequestShownInModal: ReportRequest[];
 
+  private isFirstFetch = true;
+
+  private requestSub: Subscription;
+
   constructor(private nsfo: NSFOService) {
       this.resetReportList();
       this.fetchReports();
@@ -22,8 +27,12 @@ export class ReportService implements OnInit {
   ngOnInit() {
   }
 
+    ngOnDestroy() {
+        this.requestSub.unsubscribe();
+    }
+
   fetchReports() {
-    this.nsfo.doGetRequest(this.nsfo.API_URI_GET_REPORTS).subscribe((res) => {
+    this.requestSub = this.nsfo.doGetRequest(this.nsfo.API_URI_GET_REPORTS).subscribe((res) => {
         this.resetReportList();
         const reportRequest: ReportRequest[] = res.result;
         reportRequest.forEach((report) => {
@@ -39,10 +48,11 @@ export class ReportService implements OnInit {
                 this.fetchReports();
             }, 2000);
         } else {
-            if (this.reportRequestShownInModal.length > 0) {
+            if (this.reportRequestShownInModal.length > 0 && !this.isFirstFetch) {
                 this.updateModalNotificationStatus(true);
             }
         }
+        this.isFirstFetch = false;
     });
   }
 
