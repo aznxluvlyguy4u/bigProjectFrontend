@@ -80,6 +80,12 @@ export class TreatmentTemplateComponent implements OnInit {
 
 	public treatmentMedications: TreatmentMedication[];
 
+	public disabledLinkStyle = {
+		"cursor": "not-allowed",
+		"opacity": 0.5,
+		"text-decoration": "none"
+	};
+
 	private onDestroy$: Subject<void> = new Subject<void>();
 
 	constructor(
@@ -353,6 +359,10 @@ export class TreatmentTemplateComponent implements OnInit {
 	}
 
 	public openModal(editMode: boolean, treatmentTemplate: TreatmentTemplate = null): void {
+		if (!treatmentTemplate.is_editable) {
+			return;
+		}
+
 		this.isModalEditMode = editMode;
 		this.displayModal = 'block';
 		this.isValidForm = true;
@@ -396,6 +406,10 @@ export class TreatmentTemplateComponent implements OnInit {
 	}
 
 	public openRemoveModal(treatmentTemplate: TreatmentTemplate) {
+		if (!treatmentTemplate.is_editable) {
+			return;
+		}
+
 		this.treatmentTemplate = treatmentTemplate;
 		this.displayRemoveModal = 'block';
 	}

@@ -147,8 +147,8 @@
                             </td>
                             <td>
                                 <span *ngIf="treatmentTemplate.is_active" class="pull-right overview-controls">
-                                    <a (click)="openModal(true, treatmentTemplate)"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
-                                    <a (click)="openRemoveModal(treatmentTemplate)" class="remove-button"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+                                    <a (click)="openModal(true, treatmentTemplate)" [ngStyle]="(treatmentTemplate.is_editable == false) ? disabledLinkStyle : {}"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
+                                    <a (click)="openRemoveModal(treatmentTemplate)" [ngStyle]="(treatmentTemplate.is_editable == false) ? disabledLinkStyle : {}" class="remove-button"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
                                 </span>
                                     <span *ngIf="!treatmentTemplate.is_active" class="pull-right overview-controls">
                                     <a (click)="openReactivateModal(treatmentTemplate)"><i class="fa fa-plus fa-fw" aria-hidden="true" title="{{'REACTIVATE' | translate}}"></i></a>
@@ -160,9 +160,7 @@
                 </div>
             </div>
         </div>
-
     </ng-template>
-
 </ng-template>
 
 <!--CREATE AND EDIT MODAL-->
