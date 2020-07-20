@@ -406,6 +406,10 @@ export class TreatmentTemplateComponent implements OnInit {
 	}
 
 	public openRemoveModal(treatmentTemplate: TreatmentTemplate) {
+		if (!treatmentTemplate.is_editable) {
+			return;
+		}
+
 		this.treatmentTemplate = treatmentTemplate;
 		this.displayRemoveModal = 'block';
 	}
