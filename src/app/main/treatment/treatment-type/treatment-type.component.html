@@ -71,8 +71,8 @@
                     <td>{{ treatmentType.log_date ? (treatmentType.log_date | date: 'dd-MM-yyyy @ HH:mm:ss') : '' }}</td>
                     <td>
                         <span *ngIf="treatmentType.is_active" class="pull-right overview-controls">
-                            <a (click)="openModal(true, treatmentType)"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
-                            <a (click)="openRemoveModal(treatmentType)" class="remove-button"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
+                            <a (click)="openModal(true, treatmentType)" [ngStyle]="(treatmentType.is_editable == false) ? disabledLinkStyle : {}"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
+                            <a (click)="openRemoveModal(treatmentType)" class="remove-button" [ngStyle]="(treatmentType.is_editable == false) ? disabledLinkStyle : {}"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a>
                         </span>
                         <span *ngIf="!treatmentType.is_active" class="pull-right overview-controls">
                             <a (click)="openReactivateModal(treatmentType)"><i class="fa fa-plus fa-fw" aria-hidden="true" title="{{'REACTIVATE' | translate}}"></i></a>

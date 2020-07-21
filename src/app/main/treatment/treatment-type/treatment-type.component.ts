@@ -111,6 +111,10 @@ export class TreatmentTypeComponent {
 	}
 
 	editTreatmentType() {
+		if (!this.treatmentType.is_editable) {
+			return;
+		}
+
 		this.isSaving = true;
 		if(this.form.valid && this.isValidForm) {
 			this.nsfo.doPutRequest(this.nsfo.URI_TREATMENT_TYPES + '/' + this.treatmentType.id, this.treatmentType)
@@ -135,6 +139,10 @@ export class TreatmentTypeComponent {
 	}
 
 	removeTreatmentType() {
+		if (!this.treatmentType.is_editable) {
+			return;
+		}
+
 		this.isSaving = true;
 
 		_.remove(this.treatmentTypes, {id: this.treatmentType.id});
@@ -163,6 +171,10 @@ export class TreatmentTypeComponent {
 
 
 	private openModal(editMode: boolean, treatmentType: TreatmentType): void {
+		if (!this.treatmentType.is_editable) {
+			return;
+		}
+
 			this.isModalEditMode = editMode;
 			this.displayModal = 'block';
 			this.isValidForm = true;
@@ -181,9 +193,19 @@ export class TreatmentTypeComponent {
 			this.resetValidation();
 	}
 
+	public disabledLinkStyle = {
+		"cursor": "not-allowed",
+		"opacity": 0.5,
+		"text-decoration": "none"
+	};
+
 	private openRemoveModal(treatmentType: TreatmentType) {
-			this.treatmentType = treatmentType;
-			this.displayRemoveModal = 'block';
+		if (!this.treatmentType.is_editable) {
+			return;
+		}
+
+		this.treatmentType = treatmentType;
+		this.displayRemoveModal = 'block';
 	}
 
 	private closeRemoveModal() {

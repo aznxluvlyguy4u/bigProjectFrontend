@@ -14,5 +14,6 @@ export class TreatmentTemplate {
 	creation_by: User;
 	edited_by: User;
 	deleted_by: User;
+	is_editable: boolean;
 	type: string;
 }
