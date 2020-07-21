@@ -16,4 +16,5 @@ export class TreatmentTemplate {
 	deleted_by: User;
 	is_editable: boolean;
 	type: string;
+	templatetype: string;
 }
