@@ -1,0 +1,23 @@
+<div id="login">
+    <div class="login-container">
+
+        <!--LOGO SECTION-->
+        <section class="logo column row">
+            NSFO <span>Online</span> <br>
+            <div class="subtitle">{{'ADMIN'}}</div>
+        </section>
+
+        <section class="login column row">
+            <p *ngIf="acceptedPerson" class="text-center">
+                De gebruiker {{acceptedPerson.first_name}} {{ acceptedPerson.last_name }} met email adres {{ acceptedPerson.email_address }} is geaccepteerd.
+            </p>
+            <p *ngIf="error" class="text-center">{{ error }}</p>
+            <p class="text-center" *ngIf="acceptedPerson || error">
+                Terug naar het <a href="/dashboard" style="color:#fff;">dashboard</a>
+            </p>
+            <span *ngIf="isLoading" style="position: absolute;left:49%;font-size:45px;">
+                <app-spinner></app-spinner>
+            </span>
+        </section>
+    </div>
+</div>

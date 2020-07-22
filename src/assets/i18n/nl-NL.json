@@ -898,5 +898,6 @@
   "MEDICATION_EDIT_WARNING_TEXT_PART_2": "Het aanpassen van deze middelen hebben dus ook effect op die gelinkte historische behandelingen.",
   "MEDICATION_EDIT_WARNING_TEXT_PART_3": "Een aanpassing (die geen typo is) aan een middel wat al is gebruikt voor een behandeling, moet worden gedaan door het huidige middel te verwijderen (deactiveren) en een nieuw middel aan te maken met de nieuwe gegevens.",
   "Not all animals on the livestock list got ARR/ARR as scrapie genotype": "Niet alle dieren op de stallijst hebben ARR/ARR als scrapie genotype",
-  "This template is not editable": "Deze template is kan niet bewerkt worden"
+  "This template is not editable": "Deze template is kan niet bewerkt worden",
+  "This registration is already processed or could not be found": "Deze registratie is al verwerkt of kon niet gevonden worden"
 }

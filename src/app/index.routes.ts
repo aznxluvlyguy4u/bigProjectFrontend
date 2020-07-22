@@ -59,6 +59,7 @@ import {AnimalFeaturesPerYearOfBirthComponent} from "./main/report/animals-overv
 import {CalculationsComponent} from "./main/calculations/calculations.component";
 import {TreatmentMedicationComponent} from "./main/treatment/treatment-medication/treatment-medication.component";
 import {AnimalTreatmentsPerYearComponent} from "./main/report/animals-overviews/animal-treatments-per-year/animal-treatments-per-year.component";
+import {AcceptUserComponent} from "./acceptuser/acceptuser.component";
 
 const routes: RouterConfig = [
     {
@@ -177,7 +178,8 @@ const routes: RouterConfig = [
     {path: 'ghostlogin/:person', component: GhostLoginComponent, canActivate: [AuthenticatedGuard]},
     {path: 'login', component: LoginComponent},
     {path: 'loading', terminal: true, component: LoadingComponent},
-    {path: 'downloaded', terminal: true, component: DownloadLandingPageComponent}
+    {path: 'downloaded', terminal: true, component: DownloadLandingPageComponent},
+    {path: 'user/accept/:registrationID', component: AcceptUserComponent}
 ];
 
 export const APP_ROUTER_PROVIDERS = [
