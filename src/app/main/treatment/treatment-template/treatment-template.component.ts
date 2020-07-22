@@ -244,8 +244,15 @@ export class TreatmentTemplateComponent implements OnInit {
 			this.newTreatmentTemplate.location = {ubn: this.newSelectedUbn};
 		}
 
+		const treatmentTypeIndex = _.findIndex(this.treatmentTypes, {description: this.descriptionBase});
+
+		this.newTreatmentTemplate.templatetype = 'Default';
+
+		if (typeof this.treatmentTypes[treatmentTypeIndex] !== 'undefined' && !this.treatmentTypes[treatmentTypeIndex].is_editable) {
+			this.newTreatmentTemplate.templatetype = 'QFever';
+		}
+
 		let medications: TreatmentMedication[] = [];
-		console.log(this.newMedications);
 		for(let medication of this.newMedications) {
 			if (medication.is_active) {
 				const newMedication = new TreatmentMedication(true);
@@ -284,8 +291,6 @@ export class TreatmentTemplateComponent implements OnInit {
 
 		if(this.isValidForm) {
 			const treatmentTemplate = this.getFormattedTreatmentTypeBody();
-			// console.log(treatmentTemplate.treatment_medications);
-
 			const type = this.newTreatmentTemplate.type.toLowerCase();
 
 			this.nsfo.doPutRequest(this.nsfo.URI_TREATMENTS + '/' + type + '/template/' + treatmentTemplate.id+'?minimal_output=false', treatmentTemplate)
@@ -359,7 +364,7 @@ export class TreatmentTemplateComponent implements OnInit {
 	}
 
 	public openModal(editMode: boolean, treatmentTemplate: TreatmentTemplate = null): void {
-		if (!treatmentTemplate.is_editable) {
+		if (editMode && !treatmentTemplate.is_editable) {
 			return;
 		}
 
