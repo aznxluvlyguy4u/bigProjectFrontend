@@ -48,20 +48,20 @@
         </div>
 
         <!--ANIMAL HEALTH CARD-->
-        <!--<div class="large-4 columns">-->
-            <!--<div class="card callout">-->
-                <!--<div class="card-header">{{ 'ANIMAL HEALTH' | translate }}</div>-->
-                <!--<div class="card-body">-->
-                    <!--<div class="value">-->
-                        <!--<span> {{ dashboard.requested_inspections}} </span>-->
-                    <!--</div>-->
-                    <!--<label>{{ 'INSPECTION REQUESTS' | translate }}</label>-->
-                <!--</div>-->
-                <!--<div class="card-footer text-center">-->
-                    <!--<button (click)="navigateTo('/health/inspections')" class="tiny button">{{ 'VIEW INSPECTIONS' | translate }}</button>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
+        <div class="large-4 columns" *ngIf="isHealthModuleActive">
+            <div class="card callout">
+                <div class="card-header">{{ 'ANIMAL HEALTH' | translate }}</div>
+                <div class="card-body">
+                    <div class="value">
+                        <span> {{ dashboard.requested_inspections}} </span>
+                    </div>
+                    <label>{{ 'INSPECTION REQUESTS' | translate }}</label>
+                </div>
+                <div class="card-footer text-center">
+                    <button (click)="navigateTo('/health/inspections')" class="tiny button">{{ 'VIEW INSPECTIONS' | translate }}</button>
+                </div>
+            </div>
+        </div>
 
         <!--REPORTS-->
         <!--<div class="large-4 columns">-->

@@ -4,7 +4,7 @@ import {Dashboard} from "./dashboard.model";
 import {ROUTER_DIRECTIVES, Router} from "@angular/router";
 import {TranslatePipe} from "ng2-translate/ng2-translate";
 import { SpinnerComponent } from '../../global/components/spinner/spinner.component';
-import { IS_INVOICES_ACTIVE } from '../../global/constants/feature.activation';
+import {IS_HEALTH_MODULE_ACTIVE, IS_INVOICES_ACTIVE} from '../../global/constants/feature.activation';
 import {Subscription} from "rxjs/Subscription";
 
 @Component({
@@ -18,6 +18,7 @@ export class DashboardComponent {
     private dashboard: Dashboard = new Dashboard;
 
     public isInvoicesActive = IS_INVOICES_ACTIVE;
+    public isHealthModuleActive = IS_HEALTH_MODULE_ACTIVE;
 
     private requestSub: Subscription;
 

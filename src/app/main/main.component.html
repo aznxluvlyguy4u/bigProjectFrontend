@@ -53,7 +53,7 @@
                 {{ 'INVOICES' | translate }}
             </a>
         </li>
-        <li>
+        <li *ngIf="isHealthModuleActive">
             <a routerLink="/health" routerLinkActive="active">
                 <i class="fa fa-flask fa-fw" aria-hidden="true"></i>
                 {{ 'ANIMAL HEALTH' | translate }}

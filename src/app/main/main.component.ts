@@ -9,7 +9,7 @@ import { DownloadService } from '../global/services/download/download.service';
 import { DownloadModalComponent } from '../global/components/downloadmodal/download-modal.component';
 import {ReportModalComponent} from "../global/components/reportmodal/report-modal.component";
 import {ReportService} from "../global/services/report/report.service";
-import { IS_INVOICES_ACTIVE } from '../global/constants/feature.activation';
+import {IS_HEALTH_MODULE_ACTIVE, IS_INVOICES_ACTIVE} from '../global/constants/feature.activation';
 import {TaskService} from "../global/services/task/task.service";
 import {TaskModalComponent} from "../global/components/taskmodal/task-modal.component";
 import { Subject } from 'rxjs';
@@ -32,6 +32,7 @@ export class MainComponent {
     private adminDetails$;
 
     public isInvoicesActive = IS_INVOICES_ACTIVE;
+    public isHealthModuleActive = IS_HEALTH_MODULE_ACTIVE;
 
     private onDestroy$: Subject<void> = new Subject<void>();
 
