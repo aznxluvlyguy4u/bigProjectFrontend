@@ -37,7 +37,8 @@ export class InvoicesRuleTemplatesComponent implements OnDestroy {
     private form: FormGroup;
 
 	  filterSearch = '';
-	  filterAmount = 10;
+	  filterAmount: string = "10";
+	  perPage;
 	  page = 1;
 	  isLoading: boolean = true;
 	  isLoadedEvent = new EventEmitter<boolean>();
@@ -58,6 +59,16 @@ export class InvoicesRuleTemplatesComponent implements OnDestroy {
         this.getInvoiceRules();
     }
 
+    updatePage(page = null, perPage = "10") {
+        this.perPage = parseInt(perPage);
+
+        if (page == null) {
+            this.page = 1;
+        } else {
+            this.page = page;
+        }
+    }
+
     ngOnDestroy() {
     	this.invoiceRuleStorage.refresh();
         this.requestSub.unsubscribe();
@@ -70,6 +81,7 @@ export class InvoicesRuleTemplatesComponent implements OnDestroy {
             res => {
                 this.rules = res.result;
                 this.isLoading = false;
+                this.updatePage();
             },
             error => {
                     this.isLoading = false;

@@ -8,7 +8,7 @@
 
     <div class="large-3 columns" >
         <span>
-             <select [(ngModel)]="filterAmount" (change)="page = 1">
+             <select [(ngModel)]="filterAmount" (change)="updatePage(null, $event.target.value)">
                 <option value="5">5</option>
                 <option value="10">10</option>
                 <option value="25">25</option>
@@ -56,7 +56,7 @@
                 <tr *ngIf="!isLoading && rules.length == 0">
                     <td colspan="4" class="text-center">{{ 'NO RULES HAVE BEEN ADDED' | translate }}</td>
                 </tr>
-                <tr *ngFor="let rule of rules | invoiceRuleSearchPipe:getFilterOptions() | paginate: {itemsPerPage: filterAmount, currentPage: page}">
+                <tr *ngFor="let rule of rules | invoiceRuleSearchPipe:getFilterOptions() | paginate: {itemsPerPage: perPage, currentPage: page}">
                     <td>
                         {{ rule.article_code ? rule.article_code : '-'}}
                     </td>
@@ -79,7 +79,7 @@
             </tbody>
         </table>
 
-        <pagination (pageChange)="page = $event"></pagination>
+        <pagination (pageChange)="updatePage($event, filterAmount)"></pagination>
     </div>
 </div>
 

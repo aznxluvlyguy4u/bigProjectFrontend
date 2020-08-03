@@ -19,16 +19,8 @@ export class InvoiceRulePipe implements PipeTransform {
 
 			let haystack =
 				invoiceRule.description +
-				invoiceRule.price_excl_vat +
-				invoiceRule.vat_percentage_rate
+				invoiceRule.price_excl_vat
 			;
-
-			if (invoiceRule.ledger_category) {
-				haystack += invoiceRule.ledger_category.description
-				+ invoiceRule.ledger_category.code
-				+ '[' +invoiceRule.ledger_category.code+']'
-				;
-			}
 
 			return haystack.toLowerCase().indexOf(needle) !== -1;
 		});
