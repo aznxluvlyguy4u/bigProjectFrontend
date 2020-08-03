@@ -37,15 +37,11 @@ export class Invoice {
 }
 
 export class InvoiceRule {
-    public id: number;
     public description: string;
     public article_code: string;
     public sub_article_code: string;
-    public vat_percentage_rate: number;
     public price_excl_vat: number;
-    public sort_order: number;
     public type: string;
-    ledger_category: LedgerCategory;
     invoice_rule_selections: InvoiceRuleSelection[] = [];
 }
 

@@ -12,7 +12,7 @@ export class InvoiceRulePipe implements PipeTransform {
 			return list;
 		}
 
-		let filtered = list;
+		let filtered: InvoiceRule[];
 
 		filtered = list.filter((invoiceRule: InvoiceRule) => {
 			const needle = search_input.toLowerCase();

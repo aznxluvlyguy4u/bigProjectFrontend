@@ -8,7 +8,7 @@ import {FormGroup, FormBuilder, REACTIVE_FORM_DIRECTIVES, Validators} from "@ang
 import {NSFOService} from "../../../../global/services/nsfo/nsfo.service";
 import { LedgerCategoryDropdownComponent } from "../../../../global/components/ledgercategorydropdown/ledger-category-dropdown.component";
 import { SettingsService } from '../../../../global/services/settings/settings.service';
-import { PaginatePipe, PaginationService } from 'ng2-pagination';
+import { PaginatePipe, PaginationService, IPaginationInstance } from 'ng2-pagination';
 import { PaginationComponent } from '../../../../global/components/pagination/pagination.component';
 import { InvoiceRulePipe } from '../../../../global/pipes/invoice-rule.pipe';
 import { InvoiceDetailsComponent } from '../../../invoice/details/invoice.details';
@@ -37,15 +37,19 @@ export class InvoicesRuleTemplatesComponent implements OnDestroy {
     private form: FormGroup;
 
 	  filterSearch = '';
-		filterAmount = 10;
+	  filterAmount = 10;
+	  page = 1;
 	  isLoading: boolean = true;
-
 	  isLoadedEvent = new EventEmitter<boolean>();
 
     private requestSub: Subscription;
 
-    constructor(private fb: FormBuilder, private nsfo: NSFOService, private settings: SettingsService,
-								private invoiceRuleStorage: InvoiceRuleStorage) {
+    constructor(
+        private fb: FormBuilder,
+        private nsfo: NSFOService,
+        private settings: SettingsService,
+        private invoiceRuleStorage: InvoiceRuleStorage
+    ) {
         this.form = fb.group({
             description: ['', Validators.required],
             price_excl_vat: ['', Validators.required],
@@ -61,20 +65,18 @@ export class InvoicesRuleTemplatesComponent implements OnDestroy {
 
     private getInvoiceRules() {
        this.requestSub = this.nsfo
-            .doGetRequest(this.nsfo.URI_INVOICE_RULE + "?type=standard&active_only=true")
+            .doGetRequest(this.nsfo.URI_INVOICE_RULE)
             .subscribe(
-                res => {
-                    this.rules = res.result;
+            res => {
+                this.rules = res.result;
+                this.isLoading = false;
+            },
+            error => {
                     this.isLoading = false;
-                },
-							error => {
-									this.isLoading = false;
-									this.isLoadedEvent.emit(true);
-									alert(this.nsfo.getErrorMessage(error));
+                    this.isLoadedEvent.emit(true);
+                    alert(this.nsfo.getErrorMessage(error));
                 }
-
             );
-
     }
 
     private setModalInput(rule: InvoiceRule = null) {
@@ -85,7 +87,6 @@ export class InvoicesRuleTemplatesComponent implements OnDestroy {
         }
         else {
             this.selectedModalRule = rule;
-            this.selectedLedgerCategory = rule.ledger_category;
             this.isModalEditMode = true;
         }
         this.displayModal = "block";
@@ -120,7 +121,6 @@ export class InvoicesRuleTemplatesComponent implements OnDestroy {
             || this.selectedLedgerCategory == null
             || this.selectedRule.description == '' || this.selectedRule.description == null
             || this.selectedRule.price_excl_vat == undefined
-            || this.selectedRule.vat_percentage_rate == undefined
 						|| !this.priceHasValidDecimalCount()
           ;
     }

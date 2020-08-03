@@ -2,16 +2,17 @@
     <div class="large-3 columns sub-page-header">
         <span class="sub-page-title">
            {{ 'INVOICES VARIABLES' | translate }}
+            {{filterAmount}} {{page}}
         </span>
     </div>
 
 
     <div class="large-3 columns" >
         <span>
-            <select style="font-size:0.7rem" [(ngModel)]="filterAmount" (change)="page = 1">
-                <option value="5">{{ 'DISPLAY AMOUNT' | translate }} 5</option>
-                <option value="10">{{ 'DISPLAY AMOUNT' | translate }} 10</option>
-                <option value="25">{{ 'DISPLAY AMOUNT' | translate }} 25</option>
+             <select [(ngModel)]="filterAmount" (change)="page = 1">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="25">25</option>
             </select>
         </span>
     </div>
@@ -30,12 +31,10 @@
         <table>
             <thead>
                 <tr>
-                    <td>{{'LEDGER CATEGORY' | translate}}</td>
                     <td>{{'ARTICLE CODE' | translate}}</td>
                     <td>{{'SUB ARTICLE CODE' | translate}}</td>
                     <td>{{'DESCRIPTION' | translate}}</td>
                     <td style="text-align: right">{{'PRICE (EXCL. VAT)' | translate}}</td>
-                    <td>{{'VAT PERCENTAGE RATE' | translate}}</td>
                     <td>
                         <button type="button" (click)="setModalInput(null)" class="small primary button pull-right">
                             <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
@@ -58,11 +57,7 @@
                 <tr *ngIf="!isLoading && rules.length == 0">
                     <td colspan="4" class="text-center">{{ 'NO RULES HAVE BEEN ADDED' | translate }}</td>
                 </tr>
-
-                <tr *ngFor="let rule of rules | invoiceRuleSearchPipe:getFilterOptions()  | paginate: {itemsPerPage: filterAmount, currentPage: page}">
-                    <td>
-                        {{ rule.ledger_category ? rule.ledger_category.description : '-' }} [{{ rule.ledger_category ? rule.ledger_category.code : '-' }}]
-                    </td>
+                <tr *ngFor="let rule of rules | invoiceRuleSearchPipe:getFilterOptions() | paginate: {itemsPerPage: filterAmount, currentPage: page}">
                     <td>
                         {{ rule.article_code ? rule.article_code : '-'}}
                     </td>
@@ -73,10 +68,7 @@
                         {{ rule.description }}
                     </td>
                     <td style="text-align: right">
-                        {{ rule.price_excl_vat | localNumberFormat:3 }}
-                    </td>
-                    <td>
-                        {{ rule.vat_percentage_rate }}
+                        {{ rule.price_excl_vat | localNumberFormat:2 }}
                     </td>
                     <td>
                         <span class="pull-right">
@@ -88,7 +80,7 @@
             </tbody>
         </table>
 
-        <pagination (pageChange)="page = 1" [goToFirstPage]="(isLoadedEvent)"></pagination>
+        <pagination (pageChange)="page = $event"></pagination>
     </div>
 </div>
 
