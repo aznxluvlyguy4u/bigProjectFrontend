@@ -70,59 +70,30 @@ export class ClientDossierComponent {
         private fb: FormBuilder,
         private nsfo: NSFOService
     ) {
-        if (this.isInvoicesActive) {
-					this.form = fb.group({
-						company_name: ['', Validators.required],
-						telephone_number: [''],
-						company_relation_number: ['', Validators.required],
-						debtor_number: [''],
-						vat_number: [''],
-						chamber_of_commerce_number: [''],
-						address_street_name: ['', Validators.required],
-						address_address_number: ['', Validators.required],
-						address_suffix: [''],
-						address_postal_code: ['', Validators.required],
-						address_city: ['', Validators.required],
-						address_state: [''],
-						address_country: ['', Validators.required],
-						billing_address_street_name: ['', Validators.required],
-						billing_address_address_number: ['', Validators.required],
-						billing_address_suffix: [''],
-						billing_address_postal_code: ['', Validators.required],
-						billing_address_city: ['', Validators.required],
-						billing_address_state: [''],
-						billing_address_country: ['', Validators.required],
-						animal_health_subscription: ['NO'],
-						subscription_date: [''],
-						twinfield_code: [0, Validators.required],
-						twinfield_administration_code: ['', Validators.required]
-					});
-        } else {
-					this.form = fb.group({
-						company_name: ['', Validators.required],
-						telephone_number: [''],
-						company_relation_number: ['', Validators.required],
-						debtor_number: [''],
-						vat_number: [''],
-						chamber_of_commerce_number: [''],
-						address_street_name: ['', Validators.required],
-						address_address_number: ['', Validators.required],
-						address_suffix: [''],
-						address_postal_code: ['', Validators.required],
-						address_city: ['', Validators.required],
-						address_state: [''],
-						address_country: ['', Validators.required],
-						billing_address_street_name: ['', Validators.required],
-						billing_address_address_number: ['', Validators.required],
-						billing_address_suffix: [''],
-						billing_address_postal_code: ['', Validators.required],
-						billing_address_city: ['', Validators.required],
-						billing_address_state: [''],
-						billing_address_country: ['', Validators.required],
-						animal_health_subscription: ['NO'],
-						subscription_date: [''],
-					});
-        }
+        this.form = fb.group({
+            company_name: ['', Validators.required],
+            telephone_number: [''],
+            company_relation_number: ['', Validators.required],
+            debtor_number: [''],
+            vat_number: [''],
+            chamber_of_commerce_number: [''],
+            address_street_name: ['', Validators.required],
+            address_address_number: ['', Validators.required],
+            address_suffix: [''],
+            address_postal_code: ['', Validators.required],
+            address_city: ['', Validators.required],
+            address_state: [''],
+            address_country: ['', Validators.required],
+            billing_address_street_name: ['', Validators.required],
+            billing_address_address_number: ['', Validators.required],
+            billing_address_suffix: [''],
+            billing_address_postal_code: ['', Validators.required],
+            billing_address_city: ['', Validators.required],
+            billing_address_state: [''],
+            billing_address_country: ['', Validators.required],
+            animal_health_subscription: ['NO'],
+            subscription_date: ['']
+        });
 
         this.clearInvoiceId();
     }
